@@ -114,14 +114,27 @@ public class PrgChangeView extends AbstractView<PushControlSurface, PushConfigur
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButtons ()
+    public void updateSceneButton (final int scene)
     {
-        final boolean isPush2 = this.surface.getConfiguration ().isPush2 ();
-        final int green = isPush2 ? PushColors.PUSH2_COLOR_SCENE_GREEN : PushColors.PUSH1_COLOR_SCENE_GREEN;
-        final int yellow = isPush2 ? PushColors.PUSH2_COLOR_SCENE_YELLOW : PushColors.PUSH1_COLOR_SCENE_YELLOW;
-        final int black = isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
-        for (int i = 0; i < 8; i++)
-            this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SCENE1 + i, this.bankNumber == 7 - i ? this.isToggled ? yellow : green : black);
+        // TODO Remove
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public String getSceneButtonColor (final int scene)
+    {
+        // TODO Create constants, create a generic AbstractPrgChangeView
+
+        // final boolean isPush2 = this.surface.getConfiguration ().isPush2 ();
+        // final int green = isPush2 ? PushColors.PUSH2_COLOR_SCENE_GREEN :
+        // PushColors.PUSH1_COLOR_SCENE_GREEN;
+        // final int yellow = isPush2 ? PushColors.PUSH2_COLOR_SCENE_YELLOW :
+        // PushColors.PUSH1_COLOR_SCENE_YELLOW;
+        // final int black = isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
+        // this.bankNumber == 7 - scene ? this.isToggled ? yellow : green : black;
+
+        return ColorManager.BUTTON_STATE_ON;
     }
 
 

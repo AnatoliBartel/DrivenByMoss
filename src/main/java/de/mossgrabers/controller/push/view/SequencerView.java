@@ -15,7 +15,6 @@ import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.mode.Modes;
 import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.view.AbstractNoteSequencerView;
-import de.mossgrabers.framework.view.AbstractSequencerView;
 import de.mossgrabers.framework.view.Views;
 
 
@@ -145,25 +144,6 @@ public class SequencerView extends AbstractNoteSequencerView<PushControlSurface,
         }
 
         super.onGridNote (note, velocity);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButtons ()
-    {
-        if (!this.isActive ())
-        {
-            for (int i = PushControlSurface.PUSH_BUTTON_SCENE1; i <= PushControlSurface.PUSH_BUTTON_SCENE8; i++)
-                this.surface.updateTrigger (i, AbstractSequencerView.COLOR_RESOLUTION_OFF);
-            return;
-        }
-
-        final ColorManager colorManager = this.model.getColorManager ();
-        final int colorResolution = colorManager.getColor (AbstractSequencerView.COLOR_RESOLUTION);
-        final int colorSelectedResolution = colorManager.getColor (AbstractSequencerView.COLOR_RESOLUTION_SELECTED);
-        for (int i = PushControlSurface.PUSH_BUTTON_SCENE1; i <= PushControlSurface.PUSH_BUTTON_SCENE8; i++)
-            this.surface.updateTrigger (i, i == PushControlSurface.PUSH_BUTTON_SCENE1 + this.selectedResolutionIndex ? colorSelectedResolution : colorResolution);
     }
 
 

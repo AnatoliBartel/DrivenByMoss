@@ -238,7 +238,10 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
         final APCminiControlSurface surface = this.getSurface ();
         final View activeView = surface.getViewManager ().getActiveView ();
         if (activeView != null)
-            ((SceneView) activeView).updateSceneButtons ();
+        {
+            for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
+                ((SceneView) activeView).updateSceneButton (i);
+        }
     }
 
 

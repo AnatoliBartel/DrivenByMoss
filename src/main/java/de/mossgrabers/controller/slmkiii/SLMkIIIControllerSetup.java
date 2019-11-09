@@ -364,7 +364,10 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
         {
             ((CursorCommand<?, ?>) activeView.getTriggerCommand (TriggerCommandID.ARROW_LEFT)).updateArrows ();
             if (activeView instanceof SceneView)
-                ((SceneView) activeView).updateSceneButtons ();
+            {
+                for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
+                    ((SceneView) activeView).updateSceneButton (i);
+            }
         }
 
         this.updateSoloMuteButtons ();

@@ -166,6 +166,22 @@ public abstract class AbstractMode<S extends IControlSurface<C>, C extends Confi
 
     /** {@inheritDoc} */
     @Override
+    public int getFirstRowColor (final int index)
+    {
+        return 0;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public int getSecondRowColor (final int index)
+    {
+        return 0;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void onButton (final int row, final int index, final ButtonEvent event)
     {
         // Intentionally empty

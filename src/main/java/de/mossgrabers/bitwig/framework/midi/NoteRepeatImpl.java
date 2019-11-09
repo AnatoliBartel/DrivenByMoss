@@ -188,7 +188,7 @@ public class NoteRepeatImpl implements INoteRepeat
     @Override
     public void changeMode (final boolean increase)
     {
-        final ArpeggiatorMode mode = getMode ();
+        final ArpeggiatorMode mode = this.getMode ();
         if (mode == null)
             return;
 

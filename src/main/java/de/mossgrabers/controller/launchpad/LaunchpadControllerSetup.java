@@ -322,7 +322,8 @@ public class LaunchpadControllerSetup extends AbstractControllerSetup<LaunchpadC
         if (activeView != null)
         {
             ((LaunchpadCursorCommand) activeView.getTriggerCommand (TriggerCommandID.ARROW_DOWN)).updateArrows ();
-            ((SceneView) activeView).updateSceneButtons ();
+            for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
+                ((SceneView) activeView).updateSceneButton (i);
         }
 
         final boolean isShift = surface.isShiftPressed ();

@@ -91,40 +91,35 @@ public abstract class DrumViewBase extends AbstractDrumView<PushControlSurface, 
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButtons ()
+    public void updateSceneButton (final int scene)
     {
-        if (!this.isActive ())
-        {
-            for (int i = PushControlSurface.PUSH_BUTTON_SCENE1; i <= PushControlSurface.PUSH_BUTTON_SCENE8; i++)
-                this.surface.updateTrigger (i, AbstractSequencerView.COLOR_RESOLUTION_OFF);
-            return;
-        }
+        // TODO Remove
+    }
 
-        final ColorManager colorManager = this.model.getColorManager ();
 
+    /** {@inheritDoc} */
+    @Override
+    public String getSceneButtonColor (final int scene)
+    {
         if (this.surface.isShiftPressed ())
         {
-            final int colorOff = colorManager.getColor (AbstractSequencerView.COLOR_RESOLUTION_OFF);
-            for (int i = 4; i < 8; i++)
-                this.surface.updateTrigger (this.surface.getSceneTrigger (i), colorOff);
-            this.updateLowerSceneButtons ();
-            return;
+            if (scene >= 4)
+                return AbstractSequencerView.COLOR_RESOLUTION_OFF;
+            return this.updateLowerSceneButtons (scene);
         }
 
-        final int colorResolution = colorManager.getColor (AbstractSequencerView.COLOR_RESOLUTION);
-        final int colorSelectedResolution = colorManager.getColor (AbstractSequencerView.COLOR_RESOLUTION_SELECTED);
-        for (int i = PushControlSurface.PUSH_BUTTON_SCENE1; i <= PushControlSurface.PUSH_BUTTON_SCENE8; i++)
-            this.surface.updateTrigger (i, i == PushControlSurface.PUSH_BUTTON_SCENE1 + this.selectedResolutionIndex ? colorSelectedResolution : colorResolution);
+        return super.getSceneButtonColor (scene);
     }
 
 
     /**
      * Update the lower scene button LEDs.
+     * 
+     * @param scene The lower scene 0-3
+     * @return The color ID
      */
-    protected void updateLowerSceneButtons ()
+    protected String updateLowerSceneButtons (final int scene)
     {
-        final int colorOff = this.model.getColorManager ().getColor (AbstractSequencerView.COLOR_RESOLUTION_OFF);
-        for (int i = 0; i < 4; i++)
-            this.surface.updateTrigger (this.surface.getSceneTrigger (i), colorOff);
+        return AbstractSequencerView.COLOR_RESOLUTION_OFF;
     }
 }

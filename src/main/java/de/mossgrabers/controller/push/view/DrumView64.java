@@ -148,20 +148,21 @@ public class DrumView64 extends AbstractDrumView64<PushControlSurface, PushConfi
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButtons ()
+    public void updateSceneButton (final int scene)
     {
-        final ColorManager colorManager = this.model.getColorManager ();
-        final int colorScene = colorManager.getColor (AbstractSessionView.COLOR_SCENE);
-        final int colorSceneSelected = colorManager.getColor (AbstractSessionView.COLOR_SELECTED_SCENE);
-        final int colorSceneOff = colorManager.getColor (AbstractSessionView.COLOR_SCENE_OFF);
+        // TODO remove
+    }
 
+
+    /** {@inheritDoc} */
+    @Override
+    public String getSceneButtonColor (final int scene)
+    {
         final ISceneBank sceneBank = this.model.getSceneBank ();
-        for (int i = 0; i < 8; i++)
-        {
-            final IScene scene = sceneBank.getItem (7 - i);
-            final int color = scene.doesExist () ? scene.isSelected () ? colorSceneSelected : colorScene : colorSceneOff;
-            this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SCENE1 + i, color);
-        }
+        final IScene s = sceneBank.getItem (7 - scene);
+        if (s.doesExist ())
+            return s.isSelected () ? AbstractSessionView.COLOR_SELECTED_SCENE : AbstractSessionView.COLOR_SCENE;
+        return AbstractSessionView.COLOR_SCENE_OFF;
     }
 
 

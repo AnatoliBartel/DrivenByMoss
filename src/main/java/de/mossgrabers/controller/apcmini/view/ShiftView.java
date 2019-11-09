@@ -8,6 +8,7 @@ import de.mossgrabers.controller.apcmini.APCminiConfiguration;
 import de.mossgrabers.controller.apcmini.controller.APCminiColors;
 import de.mossgrabers.controller.apcmini.controller.APCminiControlSurface;
 import de.mossgrabers.framework.command.trigger.transport.PlayCommand;
+import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.IClip;
 import de.mossgrabers.framework.daw.ICursorDevice;
@@ -372,8 +373,10 @@ public class ShiftView extends AbstractView<APCminiControlSurface, APCminiConfig
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButtons ()
+    public void updateSceneButton (final int scene)
     {
+        // TODO
+
         // Draw the track states on the scene buttons
         final int trackState = this.surface.getTrackState ();
         this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1, trackState == APCminiControlSurface.TRACK_STATE_CLIP_STOP ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
@@ -398,6 +401,14 @@ public class ShiftView extends AbstractView<APCminiControlSurface, APCminiConfig
         this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON7, Modes.isSendMode (mode) ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
         this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON8, Modes.DEVICE_PARAMS.equals (mode) ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
 
+    }
+
+
+    @Override
+    public String getSceneButtonColor (int scene)
+    {
+        // TODO Auto-generated method stub
+        return ColorManager.BUTTON_STATE_OFF;
     }
 
 

@@ -7,6 +7,7 @@ package de.mossgrabers.controller.apcmini.view;
 import de.mossgrabers.controller.apcmini.APCminiConfiguration;
 import de.mossgrabers.controller.apcmini.controller.APCminiColors;
 import de.mossgrabers.controller.apcmini.controller.APCminiControlSurface;
+import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.IBrowser;
 import de.mossgrabers.framework.daw.IModel;
@@ -197,12 +198,17 @@ public class BrowserView extends AbstractView<APCminiControlSurface, APCminiConf
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButtons ()
+    public void updateSceneButton (final int scene)
     {
-        for (int i = 0; i < 8; i++)
-        {
-            this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + i, APCminiControlSurface.APC_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON1 + i, APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        }
+        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + scene, APCminiControlSurface.APC_BUTTON_STATE_OFF);
+        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON1 + scene, APCminiControlSurface.APC_BUTTON_STATE_OFF);
+    }
+
+
+    @Override
+    public String getSceneButtonColor (int scene)
+    {
+        // TODO Auto-generated method stub
+        return ColorManager.BUTTON_STATE_OFF;
     }
 }

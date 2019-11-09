@@ -395,7 +395,15 @@ public class CursorClipImpl implements INoteClip
     public StepInfoImpl getStep (final int channel, final int step, final int row)
     {
         final StepInfoImpl [] [] [] stepInfo = this.launcherClip.exists ().get () ? this.launcherData : this.arrangerData;
-        return stepInfo[channel][step][row];
+        try
+        {
+            return stepInfo[channel][step][row];
+        }
+        catch (final ArrayIndexOutOfBoundsException ex)
+        {
+            this.host.errorln (ex.getLocalizedMessage ());
+            return new StepInfoImpl ();
+        }
     }
 
 

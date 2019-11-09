@@ -147,6 +147,7 @@ public enum Modes
     private static final Set<Modes> TRACK_MODES = EnumSet.range (Modes.TRACK, Modes.STOP_CLIP);
     private static final Set<Modes> LAYER_MODES = EnumSet.range (Modes.DEVICE_LAYER, Modes.DEVICE_LAYER_DETAILS);
     private static final Set<Modes> SEND_MODES  = EnumSet.range (Modes.SEND1, Modes.SEND8);
+    private static final Set<Modes> MIX_MODES   = EnumSet.range (Modes.TRACK, Modes.SEND);
 
     static
     {
@@ -184,6 +185,18 @@ public enum Modes
     public static boolean isTrackMode (final Modes modeId)
     {
         return TRACK_MODES.contains (modeId);
+    }
+
+
+    /**
+     * Returns true if the given mode ID is one of the mix modes.
+     *
+     * @param modeId The mode ID to test
+     * @return True if it is a mix mode
+     */
+    public static boolean isMixMode (final Modes modeId)
+    {
+        return MIX_MODES.contains (modeId);
     }
 
 

@@ -18,7 +18,7 @@ import com.bitwig.extension.controller.api.MidiIn;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-class MidiInputImpl implements IMidiInput
+public class MidiInputImpl implements IMidiInput
 {
     private MidiIn        port;
     private NoteInputImpl defaultNoteInput;
@@ -83,5 +83,16 @@ class MidiInputImpl implements IMidiInput
     public INoteInput getDefaultNoteInput ()
     {
         return this.defaultNoteInput;
+    }
+
+
+    /**
+     * Get the Bitwig input port.
+     *
+     * @return The input port
+     */
+    public MidiIn getPort ()
+    {
+        return this.port;
     }
 }

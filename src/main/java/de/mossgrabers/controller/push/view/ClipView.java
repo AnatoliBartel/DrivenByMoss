@@ -144,16 +144,19 @@ public class ClipView extends AbstractSequencerView<PushControlSurface, PushConf
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButtons ()
+    public void updateSceneButton (final int scene)
     {
-        final ColorManager colorManager = this.model.getColorManager ();
-        final int colorResolution = colorManager.getColor (AbstractSequencerView.COLOR_RESOLUTION);
-        final int colorSelectedResolution = colorManager.getColor (AbstractSequencerView.COLOR_RESOLUTION_SELECTED);
-        final int colorOff = colorManager.getColor (AbstractSequencerView.COLOR_RESOLUTION_OFF);
-        for (int i = 0; i < 3; i++)
-            this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SCENE1 + i, i == this.padResolution ? colorSelectedResolution : colorResolution);
-        for (int i = 3; i < 8; i++)
-            this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SCENE1 + i, colorOff);
+        // TODO Remove
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public String getSceneButtonColor (final int scene)
+    {
+        if (scene < 3)
+            return scene == this.padResolution ? AbstractSequencerView.COLOR_RESOLUTION_SELECTED : AbstractSequencerView.COLOR_RESOLUTION;
+        return AbstractSequencerView.COLOR_RESOLUTION_OFF;
     }
 
 

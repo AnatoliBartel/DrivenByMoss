@@ -61,11 +61,12 @@ public class RaindropsView extends AbstractRaindropsView<APCminiControlSurface, 
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButtons ()
+    public void updateSceneButton (final int scene)
     {
         final boolean isKeyboardEnabled = this.model.canSelectedTrackHoldNotes ();
-        for (int i = 0; i < 8; i++)
-            this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + i, isKeyboardEnabled && i == 7 - this.selectedResolutionIndex ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
+        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + scene, isKeyboardEnabled && scene == 7 - this.selectedResolutionIndex ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
+
+        // TODO
 
         this.canScrollUp = this.offsetY + AbstractRaindropsView.NUM_OCTAVE <= this.getClip ().getNumRows () - AbstractRaindropsView.NUM_OCTAVE;
         this.canScrollDown = this.offsetY - AbstractRaindropsView.NUM_OCTAVE >= 0;

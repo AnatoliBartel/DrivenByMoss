@@ -66,8 +66,10 @@ public class SequencerView extends AbstractNoteSequencerView<APCminiControlSurfa
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButtons ()
+    public void updateSceneButton (final int scene)
     {
+        // TODO
+
         final boolean isKeyboardEnabled = this.model.canSelectedTrackHoldNotes ();
         for (int i = 0; i < 8; i++)
             this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + i, isKeyboardEnabled && i == 7 - this.selectedResolutionIndex ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);

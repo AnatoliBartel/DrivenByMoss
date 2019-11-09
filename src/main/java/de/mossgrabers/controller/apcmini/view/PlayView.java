@@ -6,6 +6,7 @@ package de.mossgrabers.controller.apcmini.view;
 
 import de.mossgrabers.controller.apcmini.APCminiConfiguration;
 import de.mossgrabers.controller.apcmini.controller.APCminiControlSurface;
+import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.view.AbstractPlayView;
@@ -46,12 +47,20 @@ public class PlayView extends AbstractPlayView<APCminiControlSurface, APCminiCon
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButtons ()
+    public void updateSceneButton (final int scene)
     {
-        for (int i = 0; i < 8; i++)
-            this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + i, i == 2 ? APCminiControlSurface.APC_BUTTON_STATE_OFF : APCminiControlSurface.APC_BUTTON_STATE_ON);
+        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + scene, scene == 2 ? APCminiControlSurface.APC_BUTTON_STATE_OFF : APCminiControlSurface.APC_BUTTON_STATE_ON);
 
+        // TODO
         this.extensions.updateTrackButtons ();
+    }
+
+
+    @Override
+    public String getSceneButtonColor (int scene)
+    {
+        // TODO Auto-generated method stub
+        return ColorManager.BUTTON_STATE_OFF;
     }
 
 

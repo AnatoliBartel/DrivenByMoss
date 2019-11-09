@@ -109,16 +109,18 @@ public class DrumView8 extends DrumViewBase
 
     /** {@inheritDoc} */
     @Override
-    protected void updateLowerSceneButtons ()
+    protected String updateLowerSceneButtons (final int scene)
     {
-        final ColorManager colorManager = this.model.getColorManager ();
-        final int colorTranspose = colorManager.getColor (AbstractSequencerView.COLOR_TRANSPOSE);
-        final int colorSelectedTranspose = colorManager.getColor (AbstractSequencerView.COLOR_TRANSPOSE_SELECTED);
-        final int colorOff = colorManager.getColor (AbstractSequencerView.COLOR_RESOLUTION_OFF);
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SCENE1, this.soundOffset == 0 ? colorSelectedTranspose : colorTranspose);
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SCENE2, this.soundOffset == 8 ? colorSelectedTranspose : colorTranspose);
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SCENE3, colorOff);
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SCENE4, colorOff);
+        if (scene > 1)
+            return AbstractSequencerView.COLOR_RESOLUTION_OFF;
+
+        final int [] offsets =
+        {
+            0,
+            8
+        };
+
+        return this.soundOffset == offsets[scene] ? AbstractSequencerView.COLOR_TRANSPOSE_SELECTED : AbstractSequencerView.COLOR_TRANSPOSE;
     }
 
 
