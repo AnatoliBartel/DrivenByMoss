@@ -9,7 +9,6 @@ import de.mossgrabers.controller.push.controller.PushColors;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.controller.push.mode.BaseMode;
 import de.mossgrabers.controller.push.view.ColorView;
-import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.daw.IModel;
@@ -206,13 +205,9 @@ public class TrackDetailsMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public void updateSecondRow ()
+    protected String getSecondRowColorID (final int index)
     {
-        final ColorManager colorManager = this.model.getColorManager ();
-        for (int i = 0; i < 6; i++)
-            this.surface.updateTrigger (102 + i, colorManager.getColor (AbstractMode.BUTTON_COLOR_OFF));
-        this.surface.updateTrigger (108, colorManager.getColor (AbstractMode.BUTTON_COLOR_ON));
-        this.surface.updateTrigger (109, colorManager.getColor (AbstractMode.BUTTON_COLOR_ON));
+        return index < 6 ? AbstractMode.BUTTON_COLOR_OFF : AbstractMode.BUTTON_COLOR_ON;
     }
 
 

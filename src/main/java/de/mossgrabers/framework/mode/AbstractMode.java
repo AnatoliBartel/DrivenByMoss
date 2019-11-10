@@ -170,7 +170,7 @@ public abstract class AbstractMode<S extends IControlSurface<C>, C extends Confi
     @Override
     public int getFirstRowColor (final int index)
     {
-        return 0;
+        return this.model.getColorManager ().getColor (this.getFirstRowColorID (index));
     }
 
 
@@ -178,7 +178,31 @@ public abstract class AbstractMode<S extends IControlSurface<C>, C extends Confi
     @Override
     public int getSecondRowColor (final int index)
     {
-        return 0;
+        return this.model.getColorManager ().getColor (this.getSecondRowColorID (index));
+    }
+
+
+    /**
+     * Get the color ID of the 1st row button. Overwrite for a different state than off.
+     *
+     * @param index The index of the button in the row
+     * @return The color ID
+     */
+    protected String getFirstRowColorID (final int index)
+    {
+        return AbstractMode.BUTTON_COLOR_OFF;
+    }
+
+
+    /**
+     * Get the color ID of the 2nd row button. Overwrite for a different state than off.
+     *
+     * @param index The index of the button in the row
+     * @return The color ID
+     */
+    protected String getSecondRowColorID (final int index)
+    {
+        return AbstractMode.BUTTON_COLOR_OFF;
     }
 
 
