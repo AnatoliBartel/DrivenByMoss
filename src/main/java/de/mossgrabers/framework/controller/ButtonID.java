@@ -442,7 +442,7 @@ public enum ButtonID
 
     /**
      * Get an offset button ID, e.g. to get F4 set F1 and 3 as parameters.
-     * 
+     *
      * @param bid The base button ID
      * @param offset The offset
      * @return The offset button

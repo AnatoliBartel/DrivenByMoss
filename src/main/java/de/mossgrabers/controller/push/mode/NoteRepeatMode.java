@@ -216,12 +216,12 @@ public class NoteRepeatMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public int getFirstRowColor (int index)
+    public int getFirstRowColor (final int index)
     {
         final ColorManager colorManager = this.model.getColorManager ();
-        int offColor = colorManager.getColor (AbstractMode.BUTTON_COLOR_OFF);
-        int onColor = colorManager.getColor (AbstractMode.BUTTON_COLOR_ON);
-        int hiColor = colorManager.getColor (AbstractMode.BUTTON_COLOR_HI);
+        final int offColor = colorManager.getColor (AbstractMode.BUTTON_COLOR_OFF);
+        final int onColor = colorManager.getColor (AbstractMode.BUTTON_COLOR_ON);
+        final int hiColor = colorManager.getColor (AbstractMode.BUTTON_COLOR_HI);
 
         switch (index)
         {
@@ -257,7 +257,7 @@ public class NoteRepeatMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public int getSecondRowColor (int index)
+    public int getSecondRowColor (final int index)
     {
         final ColorManager colorManager = this.model.getColorManager ();
         if (index < 7)

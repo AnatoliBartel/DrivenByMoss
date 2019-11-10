@@ -198,17 +198,24 @@ public class BrowserView extends AbstractView<APCminiControlSurface, APCminiConf
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButton (final int scene)
+    public int getTrackButtonColor (final int index)
     {
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + scene, APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON1 + scene, APCminiControlSurface.APC_BUTTON_STATE_OFF);
+        return APCminiColors.APC_COLOR_BLACK;
     }
 
 
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (int scene)
+    public String getSceneButtonColor (final int scene)
     {
-        // TODO Auto-generated method stub
         return ColorManager.BUTTON_STATE_OFF;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void updateSceneButton (int scene)
+    {
+        // TODO Remove
     }
 }

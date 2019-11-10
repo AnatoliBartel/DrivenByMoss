@@ -88,7 +88,7 @@ public abstract class DrumViewBase extends AbstractDrumView<PushControlSurface, 
 
     /**
      * Update the lower scene button LEDs.
-     * 
+     *
      * @param scene The lower scene 0-3
      * @return The color ID
      */

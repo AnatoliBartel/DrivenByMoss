@@ -20,7 +20,7 @@ import de.mossgrabers.framework.view.SceneView;
  */
 public class PlayView extends AbstractPlayView<APCminiControlSurface, APCminiConfiguration> implements APCminiView, SceneView
 {
-    private TrackButtons extensions;
+    private final TrackButtons trackButtons;
 
 
     /**
@@ -28,12 +28,13 @@ public class PlayView extends AbstractPlayView<APCminiControlSurface, APCminiCon
      *
      * @param surface The controller
      * @param model The model
+     * @param trackButtons The track button control
      */
-    public PlayView (final APCminiControlSurface surface, final IModel model)
+    public PlayView (final APCminiControlSurface surface, final IModel model, final TrackButtons trackButtons)
     {
         super (surface, model, false);
 
-        this.extensions = new TrackButtons (surface, model);
+        this.trackButtons = trackButtons;
     }
 
 
@@ -41,7 +42,15 @@ public class PlayView extends AbstractPlayView<APCminiControlSurface, APCminiCon
     @Override
     public void onSelectTrack (final int index, final ButtonEvent event)
     {
-        this.extensions.onSelectTrack (index, event);
+        this.trackButtons.onSelectTrack (index, event);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public int getTrackButtonColor (final int index)
+    {
+        return this.trackButtons.getTrackButtonColor (index);
     }
 
 
@@ -49,18 +58,15 @@ public class PlayView extends AbstractPlayView<APCminiControlSurface, APCminiCon
     @Override
     public void updateSceneButton (final int scene)
     {
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + scene, scene == 2 ? APCminiControlSurface.APC_BUTTON_STATE_OFF : APCminiControlSurface.APC_BUTTON_STATE_ON);
-
-        // TODO
-        this.extensions.updateTrackButtons ();
+        // TODO Remove
     }
 
 
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (int scene)
+    public String getSceneButtonColor (final int scene)
     {
-        // TODO Auto-generated method stub
-        return ColorManager.BUTTON_STATE_OFF;
+        return scene == 2 ? ColorManager.BUTTON_STATE_OFF : ColorManager.BUTTON_STATE_ON;
     }
 
 

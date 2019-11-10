@@ -6,12 +6,14 @@ package de.mossgrabers.bitwig.framework.hardware;
 
 import de.mossgrabers.bitwig.framework.midi.MidiInputImpl;
 import de.mossgrabers.framework.command.core.TriggerCommand;
+import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.controller.hardware.IButton;
 import de.mossgrabers.framework.controller.hardware.ILight;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.utils.ButtonEvent;
 
 import com.bitwig.extension.controller.api.ControllerHost;
+import com.bitwig.extension.controller.api.HardwareActionMatcher;
 import com.bitwig.extension.controller.api.HardwareButton;
 import com.bitwig.extension.controller.api.MidiIn;
 
@@ -85,19 +87,33 @@ public class ButtonImpl implements IButton
 
     /** {@inheritDoc} */
     @Override
-    public void bind (final IMidiInput input, final int cc)
+    public void bind (final IMidiInput input, final BindType type, final int value)
     {
-        this.bind (input, 0, cc);
+        this.bind (input, type, 0, value);
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public void bind (final IMidiInput input, final int channel, final int cc)
+    public void bind (final IMidiInput input, final BindType type, final int channel, final int value)
     {
         final MidiIn midiInPort = ((MidiInputImpl) input).getPort ();
-        this.hardwareButton.pressedAction ().setActionMatcher (midiInPort.createCCActionMatcher (channel, cc, 127));
-        this.hardwareButton.releasedAction ().setActionMatcher (midiInPort.createCCActionMatcher (channel, cc, 0));
+        final HardwareActionMatcher pressedMatcher;
+        final HardwareActionMatcher releasedMatcher;
+        switch (type)
+        {
+            default:
+            case CC:
+                pressedMatcher = midiInPort.createCCActionMatcher (channel, value, 127);
+                releasedMatcher = midiInPort.createCCActionMatcher (channel, value, 0);
+                break;
+            case NOTE:
+                pressedMatcher = midiInPort.createNoteOnActionMatcher (channel, value);
+                releasedMatcher = midiInPort.createNoteOffActionMatcher (channel, value);
+                break;
+        }
+        this.hardwareButton.pressedAction ().setActionMatcher (pressedMatcher);
+        this.hardwareButton.releasedAction ().setActionMatcher (releasedMatcher);
     }
 
 

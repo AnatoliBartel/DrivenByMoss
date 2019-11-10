@@ -6,7 +6,6 @@ package de.mossgrabers.controller.push.controller;
 
 import de.mossgrabers.controller.push.PushConfiguration;
 import de.mossgrabers.framework.controller.AbstractControlSurface;
-import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGridImpl;
 import de.mossgrabers.framework.daw.DAWColors;
@@ -1114,18 +1113,6 @@ public class PushControlSurface extends AbstractControlSurface<PushConfiguration
     public PushControlSurface (final IHost host, final ColorManager colorManager, final PushConfiguration configuration, final IMidiOutput output, final IMidiInput input)
     {
         super (host, configuration, colorManager, output, input, new PadGridImpl (colorManager, output));
-
-        this.setTriggerId (ButtonID.SHIFT, PUSH_BUTTON_SHIFT);
-        this.setTriggerId (ButtonID.SELECT, PUSH_BUTTON_SELECT);
-
-        this.setTriggerId (ButtonID.LEFT, PUSH_BUTTON_LEFT);
-        this.setTriggerId (ButtonID.RIGHT, PUSH_BUTTON_RIGHT);
-        this.setTriggerId (ButtonID.UP, PUSH_BUTTON_UP);
-        this.setTriggerId (ButtonID.DOWN, PUSH_BUTTON_DOWN);
-
-        this.setTriggerId (ButtonID.DELETE, PUSH_BUTTON_DELETE);
-        this.setTriggerId (ButtonID.SOLO, PUSH_BUTTON_SOLO);
-        this.setTriggerId (ButtonID.MUTE, PUSH_BUTTON_MUTE);
 
         this.input.setSysexCallback (this::handleSysEx);
     }

@@ -25,7 +25,7 @@ public interface SceneView
 
     /**
      * Update a scene button.
-     * 
+     *
      * @param scene The scene
      */
     @Deprecated
@@ -34,7 +34,7 @@ public interface SceneView
 
     /**
      * Get scene button color.
-     * 
+     *
      * @param scene The scene
      * @return A color ID
      */

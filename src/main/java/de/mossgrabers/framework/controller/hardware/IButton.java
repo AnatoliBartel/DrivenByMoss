@@ -26,21 +26,23 @@ public interface IButton
 
     /**
      * Bind a midi CC coming from an MIDI input to the button.
-     * 
+     *
      * @param input The MIDI input
-     * @param cc The MIDI CC
+     * @param type How to bind
+     * @param value The MIDI CC or note to bind
      */
-    void bind (IMidiInput input, int cc);
+    void bind (IMidiInput input, BindType type, int value);
 
 
     /**
      * Bind a midi CC coming from an MIDI input to the button.
-     * 
+     *
      * @param input The MIDI input
      * @param channel The MIDI channel
-     * @param cc The MIDI CC
+     * @param type How to bind
+     * @param value The MIDI CC or note to bind
      */
-    void bind (IMidiInput input, int channel, int cc);
+    void bind (IMidiInput input, BindType type, int channel, int value);
 
 
     /**
@@ -79,5 +81,10 @@ public interface IButton
     void setConsumed ();
 
 
+    /**
+     * Get the trigger command,
+     *
+     * @return The command or null if not bound
+     */
     TriggerCommand getTriggerCommand ();
 }

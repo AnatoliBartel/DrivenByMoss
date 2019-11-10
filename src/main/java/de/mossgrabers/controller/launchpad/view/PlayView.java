@@ -109,7 +109,7 @@ public class PlayView extends AbstractPlayView<LaunchpadControlSurface, Launchpa
 
 
     @Override
-    public String getSceneButtonColor (int scene)
+    public String getSceneButtonColor (final int scene)
     {
         // TODO Auto-generated method stub
         return ColorManager.BUTTON_STATE_OFF;

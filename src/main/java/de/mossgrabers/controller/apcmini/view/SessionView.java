@@ -32,11 +32,12 @@ public class SessionView extends AbstractSessionView<APCminiControlSurface, APCm
      *
      * @param surface The surface
      * @param model The model
+     * @param trackButtons The track button control
      */
-    public SessionView (final APCminiControlSurface surface, final IModel model)
+    public SessionView (final APCminiControlSurface surface, final IModel model, final TrackButtons trackButtons)
     {
         super ("Session", surface, model, 8, 8, false);
-        this.extensions = new TrackButtons (surface, model);
+        this.extensions = trackButtons;
     }
 
 
@@ -88,18 +89,15 @@ public class SessionView extends AbstractSessionView<APCminiControlSurface, APCm
     @Override
     public void updateSceneButton (final int scene)
     {
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + scene, this.surface.getNoteVelocity (scene) > 0 ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-
-        // TODO
-        this.extensions.updateTrackButtons ();
+        // TODO Remove
     }
 
 
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (int scene)
+    public String getSceneButtonColor (final int scene)
     {
-        // TODO Auto-generated method stub
-        return ColorManager.BUTTON_STATE_OFF;
+        return this.surface.getNoteVelocity (scene) > 0 ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
     }
 
 
@@ -108,5 +106,13 @@ public class SessionView extends AbstractSessionView<APCminiControlSurface, APCm
     public void onSelectTrack (final int index, final ButtonEvent event)
     {
         this.extensions.onSelectTrack (index, event);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public int getTrackButtonColor (final int index)
+    {
+        return this.extensions.getTrackButtonColor (index);
     }
 }

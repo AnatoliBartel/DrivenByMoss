@@ -176,7 +176,7 @@ public class ModeManager
      */
     public boolean isActiveOrTempMode (final Modes... modeIds)
     {
-        for (Modes modeID: modeIds)
+        for (final Modes modeID: modeIds)
         {
             if (this.isActiveOrTempMode (modeID))
                 return true;

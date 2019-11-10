@@ -32,7 +32,7 @@ public interface TransposeView
 
     /**
      * Test if the up button is enabled.
-     * 
+     *
      * @return True if enabled
      */
     boolean isOctaveUpButtonOn ();
@@ -40,7 +40,7 @@ public interface TransposeView
 
     /**
      * Test if the up button is enabled.
-     * 
+     *
      * @return True if enabled
      */
     boolean isOctaveDownButtonOn ();

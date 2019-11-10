@@ -67,7 +67,7 @@ public class AutomationMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public String getFirstRowColorID (int index)
+    public String getFirstRowColorID (final int index)
     {
         final String writeMode = this.model.getTransport ().getAutomationWriteMode ();
         if (index < TransportConstants.AUTOMATION_MODES_VALUES.length)

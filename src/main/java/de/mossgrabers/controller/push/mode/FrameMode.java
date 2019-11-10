@@ -262,7 +262,7 @@ public class FrameMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public String getFirstRowColorID (int index)
+    public String getFirstRowColorID (final int index)
     {
         return this.getFirstRowButtonState (index) ? AbstractMode.BUTTON_COLOR_HI : AbstractMode.BUTTON_COLOR_ON;
     }
@@ -270,7 +270,7 @@ public class FrameMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public String getSecondRowColorID (int index)
+    public String getSecondRowColorID (final int index)
     {
         final int state = this.getSecondRowButtonState (index);
         return state == 1 ? AbstractMode.BUTTON_COLOR2_HI : state == 0 ? AbstractMode.BUTTON_COLOR2_ON : AbstractMode.BUTTON_COLOR_OFF;

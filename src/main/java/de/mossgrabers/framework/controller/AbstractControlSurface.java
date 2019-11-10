@@ -476,6 +476,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     }
 
 
+    @Deprecated
     protected void setTriggerId (final ButtonID trigger, final int cc)
     {
         this.buttonIDs.put (trigger, Integer.valueOf (cc));

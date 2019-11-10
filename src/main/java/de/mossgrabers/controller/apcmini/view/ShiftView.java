@@ -375,40 +375,67 @@ public class ShiftView extends AbstractView<APCminiControlSurface, APCminiConfig
     @Override
     public void updateSceneButton (final int scene)
     {
-        // TODO
-
-        // Draw the track states on the scene buttons
-        final int trackState = this.surface.getTrackState ();
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1, trackState == APCminiControlSurface.TRACK_STATE_CLIP_STOP ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON2, trackState == APCminiControlSurface.TRACK_STATE_SOLO ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON3, trackState == APCminiControlSurface.TRACK_STATE_REC_ARM ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON4, trackState == APCminiControlSurface.TRACK_STATE_MUTE ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON5, trackState == APCminiControlSurface.TRACK_STATE_SELECT ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON6, this.model.isEffectTrackBankActive () ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON7, APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_SCENE_BUTTON8, APCminiControlSurface.APC_BUTTON_STATE_OFF);
-
-        final ITrackBank tb = this.model.getCurrentTrackBank ();
-        final ISceneBank sceneBank = tb.getSceneBank ();
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON1, sceneBank.canScrollPageBackwards () ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON2, sceneBank.canScrollPageForwards () ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON3, tb.canScrollPageBackwards () ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON4, tb.canScrollPageForwards () ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-
-        final Modes mode = this.surface.getModeManager ().getActiveOrTempModeId ();
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON5, Modes.VOLUME.equals (mode) ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON6, Modes.PAN.equals (mode) ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON7, Modes.isSendMode (mode) ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (APCminiControlSurface.APC_BUTTON_TRACK_BUTTON8, Modes.DEVICE_PARAMS.equals (mode) ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF);
-
+        // TODO Remove
     }
 
 
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (int scene)
+    public int getTrackButtonColor (int index)
     {
-        // TODO Auto-generated method stub
-        return ColorManager.BUTTON_STATE_OFF;
+        final ITrackBank tb = this.model.getCurrentTrackBank ();
+        final ISceneBank sceneBank = tb.getSceneBank ();
+        final Modes mode = this.surface.getModeManager ().getActiveOrTempModeId ();
+
+        switch (index)
+        {
+            case 0:
+                return sceneBank.canScrollPageBackwards () ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF;
+            case 1:
+                return sceneBank.canScrollPageForwards () ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF;
+            case 2:
+                return tb.canScrollPageBackwards () ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF;
+            case 3:
+                return tb.canScrollPageForwards () ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF;
+            case 4:
+                return Modes.VOLUME.equals (mode) ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF;
+            case 5:
+                return Modes.PAN.equals (mode) ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF;
+            case 6:
+                return Modes.isSendMode (mode) ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF;
+            case 7:
+                return Modes.DEVICE_PARAMS.equals (mode) ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF;
+        }
+
+        return APCminiColors.APC_COLOR_BLACK;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public String getSceneButtonColor (final int scene)
+    {
+
+        // Draw the track states on the scene buttons
+        final int trackState = this.surface.getTrackState ();
+
+        switch (scene)
+        {
+            case 0:
+                return trackState == APCminiControlSurface.TRACK_STATE_CLIP_STOP ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
+            case 1:
+                return trackState == APCminiControlSurface.TRACK_STATE_SOLO ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
+            case 2:
+                return trackState == APCminiControlSurface.TRACK_STATE_REC_ARM ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
+            case 3:
+                return trackState == APCminiControlSurface.TRACK_STATE_MUTE ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
+            case 4:
+                return trackState == APCminiControlSurface.TRACK_STATE_SELECT ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
+            case 5:
+                return this.model.isEffectTrackBankActive () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
+            default:
+                return ColorManager.BUTTON_STATE_OFF;
+        }
     }
 
 

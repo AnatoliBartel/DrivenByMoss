@@ -323,7 +323,7 @@ public class DeviceBrowserMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public String getFirstRowColorID (int index)
+    public String getFirstRowColorID (final int index)
     {
         if (index == 7)
             return AbstractMode.BUTTON_COLOR_ON;
@@ -334,7 +334,7 @@ public class DeviceBrowserMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public String getSecondRowColorID (int index)
+    public String getSecondRowColorID (final int index)
     {
         if (index < 7)
         {

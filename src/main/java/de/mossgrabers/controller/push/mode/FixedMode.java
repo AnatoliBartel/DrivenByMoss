@@ -60,7 +60,7 @@ public class FixedMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public String getFirstRowColorID (int index)
+    public String getFirstRowColorID (final int index)
     {
         final Configuration configuration = this.surface.getConfiguration ();
         return configuration.getNewClipLength () == index ? AbstractMode.BUTTON_COLOR_HI : AbstractMode.BUTTON_COLOR_ON;
@@ -69,7 +69,7 @@ public class FixedMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public String getSecondRowColorID (int index)
+    public String getSecondRowColorID (final int index)
     {
         return AbstractMode.BUTTON_COLOR_ON;
     }
