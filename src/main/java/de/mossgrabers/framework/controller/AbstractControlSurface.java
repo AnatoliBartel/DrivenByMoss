@@ -370,6 +370,14 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
+    public IButton getButton (final ButtonID buttonID)
+    {
+        return this.buttons.get (buttonID);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public boolean isShiftPressed ()
     {
         return this.isPressed (ButtonID.SHIFT);

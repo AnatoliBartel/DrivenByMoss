@@ -30,7 +30,6 @@ import de.mossgrabers.framework.command.continuous.KnobRowModeCommand;
 import de.mossgrabers.framework.command.core.NopCommand;
 import de.mossgrabers.framework.command.trigger.ShiftCommand;
 import de.mossgrabers.framework.command.trigger.mode.ButtonRowModeCommand;
-import de.mossgrabers.framework.command.trigger.mode.CursorCommand;
 import de.mossgrabers.framework.command.trigger.mode.ModeCursorCommand.Direction;
 import de.mossgrabers.framework.command.trigger.mode.ModeSelectCommand;
 import de.mossgrabers.framework.command.trigger.transport.PlayCommand;
@@ -362,7 +361,8 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
         final View activeView = viewManager.getActiveView ();
         if (activeView != null)
         {
-            ((CursorCommand<?, ?>) activeView.getTriggerCommand (TriggerCommandID.ARROW_LEFT)).updateArrows ();
+            // TODO ((CursorCommand<?, ?>) activeView.getTriggerCommand
+            // (TriggerCommandID.ARROW_LEFT)).updateArrows ();
             if (activeView instanceof SceneView)
             {
                 for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)

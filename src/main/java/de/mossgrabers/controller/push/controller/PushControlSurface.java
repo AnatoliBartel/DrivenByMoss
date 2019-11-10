@@ -15,7 +15,6 @@ import de.mossgrabers.framework.daw.midi.DeviceInquiry;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
 import de.mossgrabers.framework.utils.StringUtils;
-import de.mossgrabers.framework.view.View;
 
 
 /**
@@ -109,7 +108,7 @@ public class PushControlSurface extends AbstractControlSurface<PushConfiguration
     /** The master button. */
     public static final int          PUSH_BUTTON_MASTER            = 28;
     /** The clip stop button. */
-    public static final int          PUSH_BUTTON_CLIP_STOP         = 29;
+    public static final int          PUSH_BUTTON_STOP_CLIP         = 29;
     /** The setup button - only Push 2. */
     public static final int          PUSH_BUTTON_SETUP             = 30;
     /** The layout button - only Push 2. */
@@ -265,22 +264,6 @@ public class PushControlSurface extends AbstractControlSurface<PushConfiguration
     public static final int          PUSH_SMALL_KNOB1_TOUCH        = 10;
     /** The note sent when touching the small knob 2. */
     public static final int          PUSH_SMALL_KNOB2_TOUCH        = 9;
-
-    private static final int []      PUSH_BUTTON_UPDATE            =
-    {
-        PUSH_BUTTON_TAP,
-        PUSH_BUTTON_SELECT,
-        PUSH_BUTTON_SHIFT,
-        PUSH_BUTTON_ADD_EFFECT,
-        PUSH_BUTTON_ADD_TRACK,
-        PUSH_BUTTON_NEW,
-        PUSH_BUTTON_DUPLICATE,
-        PUSH_BUTTON_QUANTIZE,
-        PUSH_BUTTON_DOUBLE,
-        PUSH_BUTTON_DELETE,
-        PUSH_BUTTON_UNDO,
-        PUSH_BUTTON_LAYOUT
-    };
 
     /** The midi note which is sent when touching the ribbon. */
     public static final int          PUSH_RIBBON_TOUCH             = 12;
@@ -1721,18 +1704,5 @@ public class PushControlSurface extends AbstractControlSurface<PushConfiguration
             }
 
         }, 1000);
-    }
-
-
-    /**
-     * Update all view controlled button states.
-     */
-    public void updateButtons ()
-    {
-        final View view = this.viewManager.getActiveView ();
-        if (view == null)
-            return;
-        for (final int button: PUSH_BUTTON_UPDATE)
-            this.setTrigger (button, view.usesButton (button) ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
     }
 }

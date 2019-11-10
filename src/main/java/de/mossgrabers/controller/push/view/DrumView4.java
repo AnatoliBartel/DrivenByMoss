@@ -6,7 +6,6 @@ package de.mossgrabers.controller.push.view;
 
 import de.mossgrabers.controller.push.controller.PushColors;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
-import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.INoteClip;
 import de.mossgrabers.framework.view.AbstractSequencerView;
@@ -102,15 +101,6 @@ public class DrumView4 extends DrumViewBase
     public void updateNoteMapping ()
     {
         this.surface.setKeyTranslationTable (this.scales.translateMatrixToGrid (EMPTY_TABLE));
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateButtons ()
-    {
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_OCTAVE_UP, ColorManager.BUTTON_STATE_ON);
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_OCTAVE_DOWN, ColorManager.BUTTON_STATE_ON);
     }
 
 

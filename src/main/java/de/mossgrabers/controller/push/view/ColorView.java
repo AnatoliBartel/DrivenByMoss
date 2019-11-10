@@ -66,22 +66,6 @@ public class ColorView extends AbstractView<PushControlSurface, PushConfiguratio
 
     /** {@inheritDoc} */
     @Override
-    public boolean usesButton (final int buttonID)
-    {
-        switch (buttonID)
-        {
-            case PushControlSurface.PUSH_BUTTON_OCTAVE_UP:
-            case PushControlSurface.PUSH_BUTTON_OCTAVE_DOWN:
-                return false;
-
-            default:
-                return true;
-        }
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public void drawGrid ()
     {
         final PadGrid padGrid = this.surface.getPadGrid ();

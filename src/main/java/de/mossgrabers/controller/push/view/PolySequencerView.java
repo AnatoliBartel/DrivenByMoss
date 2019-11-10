@@ -6,7 +6,6 @@ package de.mossgrabers.controller.push.view;
 
 import de.mossgrabers.controller.push.PushConfiguration;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
-import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.INoteClip;
@@ -51,14 +50,6 @@ public class PolySequencerView extends AbstractSequencerView<PushControlSurface,
 
         this.sequencerSteps = NUM_SEQUENCER_LINES * GRID_COLUMNS;
         this.useTrackColor = useTrackColor;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean usesButton (final int buttonID)
-    {
-        return true;
     }
 
 
@@ -111,6 +102,22 @@ public class PolySequencerView extends AbstractSequencerView<PushControlSurface,
         this.scales.incOctave ();
         this.updateNoteMapping ();
         this.surface.getDisplay ().notify (this.scales.getRangeText ());
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isOctaveUpButtonOn ()
+    {
+        return true;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isOctaveDownButtonOn ()
+    {
+        return true;
     }
 
 
@@ -175,15 +182,6 @@ public class PolySequencerView extends AbstractSequencerView<PushControlSurface,
                 }
             }
         }
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateButtons ()
-    {
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_OCTAVE_UP, ColorManager.BUTTON_STATE_ON);
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_OCTAVE_DOWN, ColorManager.BUTTON_STATE_ON);
     }
 
 

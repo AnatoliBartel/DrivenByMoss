@@ -50,9 +50,10 @@ public class ButtonImpl implements IButton
 
     /** {@inheritDoc} */
     @Override
-    public IButton trigger (final TriggerCommand command)
+    public IButton bind (final TriggerCommand command)
     {
         this.command = command;
+        // TODO
         this.hardwareButton.pressedAction ().addBinding (this.host.createAction (this::handleButtonDown, () -> "TODO"));
         this.hardwareButton.releasedAction ().addBinding (this.host.createAction (this::handleButtonRelease, () -> "TODO"));
         return this;
@@ -130,6 +131,23 @@ public class ButtonImpl implements IButton
     public void setConsumed ()
     {
         this.isConsumed = true;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void trigger ()
+    {
+        this.command.execute (ButtonEvent.DOWN);
+        this.command.execute (ButtonEvent.UP);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public TriggerCommand getTriggerCommand ()
+    {
+        return this.command;
     }
 
 

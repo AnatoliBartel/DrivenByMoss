@@ -9,11 +9,9 @@ import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.framework.configuration.AbstractConfiguration;
 import de.mossgrabers.framework.configuration.Configuration;
 import de.mossgrabers.framework.controller.ButtonID;
-import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.daw.data.IScene;
-import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.view.AbstractPlayView;
 import de.mossgrabers.framework.view.AbstractSessionView;
@@ -54,33 +52,6 @@ public class PlayView extends AbstractPlayView<PushControlSurface, PushConfigura
         final Configuration configuration = this.surface.getConfiguration ();
         configuration.addSettingObserver (AbstractConfiguration.ACTIVATE_FIXED_ACCENT, this::initMaxVelocity);
         configuration.addSettingObserver (AbstractConfiguration.FIXED_ACCENT_VALUE, this::initMaxVelocity);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void onActivate ()
-    {
-        super.onActivate ();
-        this.initMaxVelocity ();
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean usesButton (final int buttonID)
-    {
-        return true;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateButtons ()
-    {
-        final int octave = this.scales.getOctave ();
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_OCTAVE_UP, octave < Scales.OCTAVE_RANGE ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_OCTAVE_DOWN, octave > -Scales.OCTAVE_RANGE ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
     }
 
 

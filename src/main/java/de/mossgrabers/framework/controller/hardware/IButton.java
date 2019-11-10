@@ -21,7 +21,7 @@ public interface IButton
      * @param command The command to assign
      * @return The button for fluent interface
      */
-    IButton trigger (TriggerCommand command);
+    IButton bind (TriggerCommand command);
 
 
     /**
@@ -68,7 +68,16 @@ public interface IButton
 
 
     /**
+     * Manually triggers a button press and release.
+     */
+    void trigger ();
+
+
+    /**
      * Set the consumed state, which means the UP event is not fired on button release.
      */
     void setConsumed ();
+
+
+    TriggerCommand getTriggerCommand ();
 }

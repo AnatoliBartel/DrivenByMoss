@@ -6,7 +6,6 @@ package de.mossgrabers.controller.push.view;
 
 import de.mossgrabers.controller.push.PushConfiguration;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
-import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.utils.ButtonEvent;
@@ -41,14 +40,6 @@ public abstract class DrumViewBase extends AbstractDrumView<PushControlSurface, 
 
     /** {@inheritDoc} */
     @Override
-    public boolean usesButton (final int buttonID)
-    {
-        return true;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public void onScene (final int index, final ButtonEvent event)
     {
         if (event != ButtonEvent.DOWN)
@@ -77,23 +68,6 @@ public abstract class DrumViewBase extends AbstractDrumView<PushControlSurface, 
     protected void onLowerScene (final int index)
     {
         // Intentionally empty
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateButtons ()
-    {
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_OCTAVE_UP, this.scales.canScrollDrumOctaveUp () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_OCTAVE_DOWN, this.scales.canScrollDrumOctaveDown () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO Remove
     }
 
 

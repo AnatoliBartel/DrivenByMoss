@@ -321,7 +321,8 @@ public class LaunchpadControllerSetup extends AbstractControllerSetup<LaunchpadC
         final View activeView = viewManager.getActiveView ();
         if (activeView != null)
         {
-            ((LaunchpadCursorCommand) activeView.getTriggerCommand (TriggerCommandID.ARROW_DOWN)).updateArrows ();
+            // TODO ((LaunchpadCursorCommand) activeView.getTriggerCommand
+            // (TriggerCommandID.ARROW_DOWN)).updateArrows ();
             for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
                 ((SceneView) activeView).updateSceneButton (i);
         }

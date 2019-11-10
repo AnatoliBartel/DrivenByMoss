@@ -7,7 +7,6 @@ package de.mossgrabers.controller.push.mode.track;
 import de.mossgrabers.controller.push.controller.PushColors;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.controller.push.mode.BaseMode;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IValueChanger;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -158,7 +157,7 @@ public class MasterMode extends BaseMode
         switch (index)
         {
             case 0:
-                this.surface.getViewManager ().getActiveView ().executeTriggerCommand (TriggerCommandID.DEVICE, ButtonEvent.DOWN);
+                this.surface.getButton (ButtonID.DEVICE).trigger ();
                 break;
 
             case 4:

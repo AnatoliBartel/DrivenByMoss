@@ -131,7 +131,9 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
     @Override
     public void flush ()
     {
-        this.flushSurfaces ();
+        for (final S surface: this.surfaces)
+            surface.flush ();
+
         this.updateButtons ();
     }
 
@@ -139,19 +141,10 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
     /**
      * Update all button LEDs, except the ones controlled by the views. Refreshed on flush.
      */
+    @Deprecated
     protected void updateButtons ()
     {
         // Overwrite to update button LEDs
-    }
-
-
-    /**
-     * Flush all surfaces.
-     */
-    public void flushSurfaces ()
-    {
-        for (final S surface: this.surfaces)
-            surface.flush ();
     }
 
 
@@ -423,7 +416,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
     protected void setupButton (final S surface, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiCC, final IntSupplier supplier, final String... colorIds)
     {
         final IButton button = surface.createButton (buttonID, label);
-        button.trigger (command).bind (surface.getInput (), midiCC);
+        button.bind (command).bind (surface.getInput (), midiCC);
         final IntSupplier supp = supplier == null ? () -> button.isPressed () ? 1 : 0 : supplier;
         button.addLight (surface.createLight ( () -> {
             final int state = supp.getAsInt ();
@@ -447,7 +440,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
     protected void setupButton (final S surface, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiCC, final IntSupplier supplier)
     {
         final IButton button = surface.createButton (buttonID, label);
-        button.trigger (command).bind (surface.getInput (), midiCC);
+        button.bind (command).bind (surface.getInput (), midiCC);
         final IntSupplier supp = supplier == null ? () -> button.isPressed () ? 1 : 0 : supplier;
         button.addLight (surface.createLight (supp, color -> surface.setTrigger (midiCC, color)));
     }

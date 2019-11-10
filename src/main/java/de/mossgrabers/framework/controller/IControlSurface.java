@@ -393,6 +393,7 @@ public interface IControlSurface<C extends Configuration>
      *
      * @param cc The trigger to set as consumed
      */
+    @Deprecated
     void setTriggerConsumed (int cc);
 
 
@@ -403,6 +404,7 @@ public interface IControlSurface<C extends Configuration>
      * @param channel The midi channel to use
      * @param cc The trigger to test
      */
+    @Deprecated
     void setTriggerConsumed (int channel, int cc);
 
 
@@ -412,6 +414,7 @@ public interface IControlSurface<C extends Configuration>
      * @param cc The trigger to set as consumed
      * @return The consumed flag
      */
+    @Deprecated
     boolean isTriggerConsumed (int cc);
 
 
@@ -422,6 +425,7 @@ public interface IControlSurface<C extends Configuration>
      * @param cc The trigger to set as consumed
      * @return The consumed flag
      */
+    @Deprecated
     boolean isTriggerConsumed (int channel, int cc);
 
 
@@ -519,6 +523,15 @@ public interface IControlSurface<C extends Configuration>
      * @return The created button
      */
     IButton createButton (ButtonID buttonID, String label);
+
+
+    /**
+     * Get a button the was created with the given ID.
+     *
+     * @param buttonID The button ID
+     * @return The button or null if not created
+     */
+    IButton getButton (ButtonID buttonID);
 
 
     /**

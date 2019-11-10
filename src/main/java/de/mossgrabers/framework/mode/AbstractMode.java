@@ -142,6 +142,7 @@ public abstract class AbstractMode<S extends IControlSurface<C>, C extends Confi
 
     /** {@inheritDoc} */
     @Override
+    @Deprecated
     public void updateFirstRow ()
     {
         // Intentionally empty
@@ -150,6 +151,7 @@ public abstract class AbstractMode<S extends IControlSurface<C>, C extends Confi
 
     /** {@inheritDoc} */
     @Override
+    @Deprecated
     public void updateSecondRow ()
     {
         // Intentionally empty

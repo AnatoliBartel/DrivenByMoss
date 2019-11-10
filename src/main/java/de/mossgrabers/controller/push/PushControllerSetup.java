@@ -142,6 +142,7 @@ import de.mossgrabers.framework.mode.Modes;
 import de.mossgrabers.framework.view.AbstractSequencerView;
 import de.mossgrabers.framework.view.AbstractView;
 import de.mossgrabers.framework.view.SceneView;
+import de.mossgrabers.framework.view.TransposeView;
 import de.mossgrabers.framework.view.View;
 import de.mossgrabers.framework.view.ViewManager;
 import de.mossgrabers.framework.view.Views;
@@ -496,40 +497,72 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
         }
 
         this.setupButton (ButtonID.SHIFT, "Shift", new ShiftCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_SHIFT);
-        this.addTriggerCommand (TriggerCommandID.LAYOUT, PushControlSurface.PUSH_BUTTON_LAYOUT, new LayoutCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SELECT, PushControlSurface.PUSH_BUTTON_SELECT, new SelectCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.TAP_TEMPO, PushControlSurface.PUSH_BUTTON_TAP, new TapTempoCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.METRONOME, PushControlSurface.PUSH_BUTTON_METRONOME, new MetronomeCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.MASTERTRACK, PushControlSurface.PUSH_BUTTON_MASTER, new MastertrackCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.PAGE_LEFT, PushControlSurface.PUSH_BUTTON_DEVICE_LEFT, new PageLeftCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.PAGE_RIGHT, PushControlSurface.PUSH_BUTTON_DEVICE_RIGHT, new PageRightCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.MUTE, PushControlSurface.PUSH_BUTTON_MUTE, new MuteCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SOLO, PushControlSurface.PUSH_BUTTON_SOLO, new SoloCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SCALES, PushControlSurface.PUSH_BUTTON_SCALES, new ScalesCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ACCENT, PushControlSurface.PUSH_BUTTON_ACCENT, new AccentCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ADD_EFFECT, PushControlSurface.PUSH_BUTTON_ADD_EFFECT, new AddEffectCommand<> (Modes.BROWSER, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ADD_TRACK, PushControlSurface.PUSH_BUTTON_ADD_TRACK, new AddTrackCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SELECT_PLAY_VIEW, PushControlSurface.PUSH_BUTTON_NOTE, new SelectPlayViewCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_DOWN, PushControlSurface.PUSH_BUTTON_DOWN, new CursorCommand<> (Direction.DOWN, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_UP, PushControlSurface.PUSH_BUTTON_UP, new CursorCommand<> (Direction.UP, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_LEFT, PushControlSurface.PUSH_BUTTON_LEFT, new CursorCommand<> (Direction.LEFT, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_RIGHT, PushControlSurface.PUSH_BUTTON_RIGHT, new CursorCommand<> (Direction.RIGHT, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.OCTAVE_DOWN, PushControlSurface.PUSH_BUTTON_OCTAVE_DOWN, new OctaveCommand (false, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.OCTAVE_UP, PushControlSurface.PUSH_BUTTON_OCTAVE_UP, new OctaveCommand (true, this.model, surface));
+        this.setupButton (ButtonID.SELECT, "Select", new SelectCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_SELECT);
+        this.setupButton (ButtonID.LAYOUT, "Layout", new LayoutCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_LAYOUT);
+        this.setupButton (ButtonID.TAP_TEMPO, "Tap Tempo", new TapTempoCommand<> (this.model, surface), PushControlSurface.PUSH_BUTTON_TAP);
+        this.setupButton (ButtonID.METRONOME, "Metronome", new MetronomeCommand<> (this.model, surface), PushControlSurface.PUSH_BUTTON_METRONOME, t::isMetronomeOn);
+        this.setupButton (ButtonID.MASTERTRACK, "Mastertrack", new MastertrackCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_MASTER, () -> Modes.isMasterMode (modeManager.getActiveOrTempModeId ()));
+        this.setupButton (ButtonID.PAGE_LEFT, "Page Left", new PageLeftCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_DEVICE_LEFT, () -> {
 
-        viewManager.registerTriggerCommand (TriggerCommandID.SETUP, new SetupCommand (this.isPush2, this.model, surface));
+            if (viewManager.isActiveView (Views.SESSION))
+                return this.model.getCurrentTrackBank ().canScrollPageBackwards ();
+            final View activeView = viewManager.getActiveView ();
+            final INoteClip clip = activeView instanceof AbstractSequencerView && !(activeView instanceof ClipView) ? ((AbstractSequencerView<?, ?>) activeView).getClip () : null;
+            return clip != null && clip.doesExist () && clip.canScrollStepsBackwards ();
+
+        }, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        this.setupButton (ButtonID.PAGE_RIGHT, "Page Right", new PageRightCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_DEVICE_RIGHT, () -> {
+
+            if (viewManager.isActiveView (Views.SESSION))
+                return this.model.getCurrentTrackBank ().canScrollPageForwards ();
+            final View activeView = viewManager.getActiveView ();
+            final INoteClip clip = activeView instanceof AbstractSequencerView && !(activeView instanceof ClipView) ? ((AbstractSequencerView<?, ?>) activeView).getClip () : null;
+            return clip != null && clip.doesExist () && clip.canScrollStepsForwards ();
+
+        }, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+
+        this.setupButton (ButtonID.MUTE, "Mute", new MuteCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_MUTE, this::getMuteState, PushColors.PUSH_BUTTON_STATE_MUTE_ON, PushColors.PUSH_BUTTON_STATE_MUTE_HI);
+        this.setupButton (ButtonID.SOLO, "Solo", new SoloCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_SOLO, this::getSoloState, PushColors.PUSH_BUTTON_STATE_SOLO_ON, PushColors.PUSH_BUTTON_STATE_SOLO_HI);
+        this.setupButton (ButtonID.SCALES, "Scale", new ScalesCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_SCALES, () -> modeManager.isActiveOrTempMode (Modes.SCALES));
+        this.setupButton (ButtonID.ACCENT, "Accent", new AccentCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_ACCENT, this.configuration::isAccentActive);
+        this.setupButton (ButtonID.ADD_EFFECT, "Add Device", new AddEffectCommand<> (Modes.BROWSER, this.model, surface), PushControlSurface.PUSH_BUTTON_ADD_EFFECT);
+        this.setupButton (ButtonID.ADD_TRACK, "Add Track", new AddTrackCommand<> (this.model, surface), PushControlSurface.PUSH_BUTTON_ADD_TRACK);
+        this.setupButton (ButtonID.NOTE, "Note", new SelectPlayViewCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_NOTE, () -> !Views.isSessionView (viewManager.getActiveViewId ()));
+
+        final CursorCommand<PushControlSurface, PushConfiguration> cursorDownCommand = new CursorCommand<> (Direction.DOWN, this.model, surface);
+        this.setupButton (ButtonID.ARROW_DOWN, "Down", cursorDownCommand, PushControlSurface.PUSH_BUTTON_DOWN, cursorDownCommand::canScroll, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        final CursorCommand<PushControlSurface, PushConfiguration> cursorUpCommand = new CursorCommand<> (Direction.UP, this.model, surface);
+        this.setupButton (ButtonID.ARROW_UP, "Up", cursorUpCommand, PushControlSurface.PUSH_BUTTON_UP, cursorUpCommand::canScroll, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        final CursorCommand<PushControlSurface, PushConfiguration> cursorLeftCommand = new CursorCommand<> (Direction.LEFT, this.model, surface);
+        this.setupButton (ButtonID.ARROW_LEFT, "Left", cursorLeftCommand, PushControlSurface.PUSH_BUTTON_LEFT, cursorLeftCommand::canScroll, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        final CursorCommand<PushControlSurface, PushConfiguration> cursorRightCommand = new CursorCommand<> (Direction.RIGHT, this.model, surface);
+        this.setupButton (ButtonID.ARROW_RIGHT, "Right", cursorRightCommand, PushControlSurface.PUSH_BUTTON_RIGHT, cursorRightCommand::canScroll, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+
+        this.setupButton (ButtonID.OCTAVE_DOWN, "Octave Down", new OctaveCommand (false, this.model, surface), PushControlSurface.PUSH_BUTTON_OCTAVE_DOWN, () -> {
+
+            final View activeView = viewManager.getActiveView ();
+            return activeView instanceof TransposeView ? ((TransposeView) activeView).isOctaveDownButtonOn () : false;
+
+        }, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        this.setupButton (ButtonID.OCTAVE_UP, "Octave Up", new OctaveCommand (true, this.model, surface), PushControlSurface.PUSH_BUTTON_OCTAVE_UP, () -> {
+
+            final View activeView = viewManager.getActiveView ();
+            return activeView instanceof TransposeView ? ((TransposeView) activeView).isOctaveUpButtonOn () : false;
+
+        }, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+
         if (this.isPush2)
         {
-            surface.assignTriggerCommand (PushControlSurface.PUSH_BUTTON_SETUP, TriggerCommandID.SETUP);
-            this.addTriggerCommand (TriggerCommandID.CONVERT, PushControlSurface.PUSH_BUTTON_CONVERT, new ConvertCommand<> (this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.USER, PushControlSurface.PUSH_BUTTON_USER_MODE, this.host.hasUserParameters () ? new ModeSelectCommand<> (this.model, surface, Modes.USER) : NopCommand.INSTANCE);
+            this.setupButton (ButtonID.SETUP, "Setup", new SetupCommand (this.isPush2, this.model, surface), PushControlSurface.PUSH_BUTTON_SETUP, () -> modeManager.isActiveOrTempMode (Modes.SETUP));
+            this.setupButton (ButtonID.CONVERT, "Convert", new ConvertCommand<> (this.model, surface), PushControlSurface.PUSH_BUTTON_CONVERT, this.model::canConvertClip);
+            this.setupButton (ButtonID.USER, "User", this.host.hasUserParameters () ? new ModeSelectCommand<> (this.model, surface, Modes.USER) : NopCommand.INSTANCE, PushControlSurface.PUSH_BUTTON_USER_MODE, () -> this.host.hasUserParameters () && modeManager.isActiveOrTempMode (Modes.USER));
         }
         else
-            surface.assignTriggerCommand (PushControlSurface.PUSH_BUTTON_USER_MODE, TriggerCommandID.SETUP);
+            this.setupButton (ButtonID.SETUP, "User", new SetupCommand (this.isPush2, this.model, surface), PushControlSurface.PUSH_BUTTON_USER_MODE, () -> modeManager.isActiveOrTempMode (Modes.SETUP));
 
-        this.addTriggerCommand (TriggerCommandID.STOP_CLIP, PushControlSurface.PUSH_BUTTON_CLIP_STOP, new StopAllClipsCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SELECT_SESSION_VIEW, PushControlSurface.PUSH_BUTTON_SESSION, new SelectSessionViewCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.REPEAT, PushControlSurface.PUSH_BUTTON_REPEAT, new NoteRepeatCommand<> (this.model, surface));
+        this.setupButton (ButtonID.STOP_CLIP, "Stop Clip", new StopAllClipsCommand<> (this.model, surface), PushControlSurface.PUSH_BUTTON_STOP_CLIP, () -> surface.isPressed (ButtonID.STOP_CLIP), PushColors.PUSH_BUTTON_STATE_STOP_ON, PushColors.PUSH_BUTTON_STATE_STOP_HI);
+        this.setupButton (ButtonID.SESSION, "Session", new SelectSessionViewCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_SESSION, () -> Views.isSessionView (viewManager.getActiveViewId ()));
+        this.setupButton (ButtonID.REPEAT, "Repeat", new NoteRepeatCommand<> (this.model, surface), PushControlSurface.PUSH_BUTTON_REPEAT, surface.getInput ().getDefaultNoteInput ().getNoteRepeat ()::isActive);
     }
 
 
@@ -613,7 +646,6 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
     private void onViewChange ()
     {
         final PushControlSurface surface = this.getSurface ();
-        surface.updateButtons ();
 
         // Update ribbon mode
         if (surface.getViewManager ().isActiveView (Views.SESSION))
@@ -625,99 +657,10 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
     }
 
 
-    /** {@inheritDoc} */
-    @Override
-    protected void updateButtons ()
-    {
-        final ITransport t = this.model.getTransport ();
-        final PushControlSurface surface = this.getSurface ();
-        surface.updateTrigger (PushControlSurface.PUSH_BUTTON_METRONOME, t.isMetronomeOn () ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-
-        final String repeatState = this.getSurface ().getInput ().getDefaultNoteInput ().getNoteRepeat ().isActive () ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON;
-        surface.updateTrigger (PushControlSurface.PUSH_BUTTON_REPEAT, repeatState);
-        surface.updateTrigger (PushControlSurface.PUSH_BUTTON_ACCENT, this.configuration.isAccentActive () ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-
-        final PushConfiguration config = surface.getConfiguration ();
-        if (this.isPush2)
-        {
-            final ModeManager modeManager = surface.getModeManager ();
-            if (modeManager.isActiveOrTempMode (Modes.DEVICE_LAYER))
-            {
-                final ICursorDevice cd = this.model.getCursorDevice ();
-                final IChannel layer = cd.getLayerOrDrumPadBank ().getSelectedItem ();
-                surface.updateTrigger (PushControlSurface.PUSH_BUTTON_MUTE, layer != null && layer.isMute () ? PushColors.PUSH_BUTTON_STATE_MUTE_HI : PushColors.PUSH_BUTTON_STATE_MUTE_ON);
-                surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SOLO, layer != null && layer.isSolo () ? PushColors.PUSH_BUTTON_STATE_SOLO_HI : PushColors.PUSH_BUTTON_STATE_SOLO_ON);
-            }
-            else
-            {
-                final ITrack selTrack = modeManager.isActiveOrTempMode (Modes.MASTER) ? this.model.getMasterTrack () : this.model.getSelectedTrack ();
-                surface.updateTrigger (PushControlSurface.PUSH_BUTTON_MUTE, selTrack != null && selTrack.isMute () ? PushColors.PUSH_BUTTON_STATE_MUTE_HI : PushColors.PUSH_BUTTON_STATE_MUTE_ON);
-                surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SOLO, selTrack != null && selTrack.isSolo () ? PushColors.PUSH_BUTTON_STATE_SOLO_HI : PushColors.PUSH_BUTTON_STATE_SOLO_ON);
-            }
-
-            surface.updateTrigger (PushControlSurface.PUSH_BUTTON_CONVERT, this.model.canConvertClip () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        }
-        else
-        {
-            final boolean isMuteState = config.isMuteState ();
-            surface.updateTrigger (PushControlSurface.PUSH_BUTTON_MUTE, isMuteState ? PushColors.PUSH_BUTTON_STATE_MUTE_HI : PushColors.PUSH_BUTTON_STATE_MUTE_ON);
-            surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SOLO, !isMuteState ? PushColors.PUSH_BUTTON_STATE_SOLO_HI : PushColors.PUSH_BUTTON_STATE_SOLO_ON);
-        }
-
-        final ViewManager viewManager = surface.getViewManager ();
-        final boolean isSessionView = Views.isSessionView (viewManager.getActiveViewId ());
-        surface.updateTrigger (PushControlSurface.PUSH_BUTTON_NOTE, isSessionView ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_HI);
-        surface.updateTrigger (PushControlSurface.PUSH_BUTTON_CLIP_STOP, surface.isPressed (PushControlSurface.PUSH_BUTTON_CLIP_STOP) ? PushColors.PUSH_BUTTON_STATE_STOP_HI : PushColors.PUSH_BUTTON_STATE_STOP_ON);
-        surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SESSION, isSessionView ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-        surface.updateTrigger (PushControlSurface.PUSH_BUTTON_ACCENT, config.isAccentActive () ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-
-        final View activeView = viewManager.getActiveView ();
-        if (activeView != null)
-            ((CursorCommand<?, ?>) activeView.getTriggerCommand (TriggerCommandID.ARROW_DOWN)).updateArrows ();
-
-        boolean isDeviceLeftOn = false;
-        boolean isDeviceRightOn = false;
-
-        if (viewManager.isActiveView (Views.SESSION))
-        {
-            final ITrackBank currentTrackBank = this.model.getCurrentTrackBank ();
-            isDeviceLeftOn = currentTrackBank.canScrollPageBackwards ();
-            isDeviceRightOn = currentTrackBank.canScrollPageForwards ();
-        }
-        else
-        {
-            final INoteClip clip = activeView instanceof AbstractSequencerView && !(activeView instanceof ClipView) ? ((AbstractSequencerView<?, ?>) activeView).getClip () : null;
-            isDeviceLeftOn = clip != null && clip.doesExist () && clip.canScrollStepsBackwards ();
-            isDeviceRightOn = clip != null && clip.doesExist () && clip.canScrollStepsForwards ();
-        }
-
-        surface.updateTrigger (PushControlSurface.PUSH_BUTTON_DEVICE_LEFT, isDeviceLeftOn ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        surface.updateTrigger (PushControlSurface.PUSH_BUTTON_DEVICE_RIGHT, isDeviceRightOn ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-    }
-
-
     private void updateMode (final Modes mode)
     {
-        if (mode == null)
-            return;
-
-        this.updateIndication (mode);
-
-        final boolean isMasterOn = Modes.MASTER == mode || Modes.MASTER_TEMP == mode || Modes.FRAME == mode;
-
-        // TODO oben einbauen
-
-        final PushControlSurface surface = this.getSurface ();
-        surface.updateTrigger (PushControlSurface.PUSH_BUTTON_MASTER, isMasterOn ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-        surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SCALES, Modes.SCALES == mode ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-
-        if (this.host.hasUserParameters ())
-            surface.updateTrigger (PushControlSurface.PUSH_BUTTON_USER_MODE, Modes.USER == mode ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-        else
-            surface.updateTrigger (PushControlSurface.PUSH_BUTTON_USER_MODE, this.isPush2 ? ColorManager.BUTTON_STATE_OFF : ColorManager.BUTTON_STATE_ON);
-
-        if (this.isPush2)
-            surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SETUP, Modes.SETUP == mode ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
+        if (mode != null)
+            this.updateIndication (mode);
     }
 
 
@@ -833,5 +776,43 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
                 surface.setRibbonMode (PushControlSurface.PUSH_RIBBON_PITCHBEND);
                 break;
         }
+    }
+
+
+    private boolean getMuteState ()
+    {
+        final PushControlSurface surface = this.getSurface ();
+        if (this.isPush2)
+        {
+            final ModeManager modeManager = surface.getModeManager ();
+            if (modeManager.isActiveOrTempMode (Modes.DEVICE_LAYER))
+            {
+                final ICursorDevice cd = this.model.getCursorDevice ();
+                final IChannel layer = cd.getLayerOrDrumPadBank ().getSelectedItem ();
+                return layer != null && layer.isMute ();
+            }
+            final ITrack selTrack = modeManager.isActiveOrTempMode (Modes.MASTER) ? this.model.getMasterTrack () : this.model.getSelectedTrack ();
+            return selTrack != null && selTrack.isMute ();
+        }
+        return surface.getConfiguration ().isMuteState ();
+    }
+
+
+    private boolean getSoloState ()
+    {
+        final PushControlSurface surface = this.getSurface ();
+        if (this.isPush2)
+        {
+            final ModeManager modeManager = surface.getModeManager ();
+            if (modeManager.isActiveOrTempMode (Modes.DEVICE_LAYER))
+            {
+                final ICursorDevice cd = this.model.getCursorDevice ();
+                final IChannel layer = cd.getLayerOrDrumPadBank ().getSelectedItem ();
+                return layer != null && layer.isSolo ();
+            }
+            final ITrack selTrack = modeManager.isActiveOrTempMode (Modes.MASTER) ? this.model.getMasterTrack () : this.model.getSelectedTrack ();
+            return selTrack != null && selTrack.isSolo ();
+        }
+        return surface.getConfiguration ().isSoloState ();
     }
 }

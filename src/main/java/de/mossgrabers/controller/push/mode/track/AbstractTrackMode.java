@@ -9,7 +9,6 @@ import de.mossgrabers.controller.push.controller.Push1Display;
 import de.mossgrabers.controller.push.controller.PushColors;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.controller.push.mode.BaseMode;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IValueChanger;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
@@ -80,9 +79,9 @@ public abstract class AbstractTrackMode extends BaseMode
                 return;
             }
 
-            if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_CLIP_STOP))
+            if (this.surface.isPressed (ButtonID.STOP_CLIP))
             {
-                this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_CLIP_STOP);
+                this.surface.setTriggerConsumed (ButtonID.STOP_CLIP);
                 track.stop ();
                 return;
             }
@@ -102,7 +101,7 @@ public abstract class AbstractTrackMode extends BaseMode
                 if (selTrack.isGroup ())
                     selTrack.enter ();
                 else
-                    this.surface.getViewManager ().getActiveView ().executeTriggerCommand (TriggerCommandID.DEVICE, ButtonEvent.DOWN);
+                    this.surface.getButton (ButtonID.DEVICE).trigger ();
             }
             else
                 track.select ();
@@ -127,7 +126,7 @@ public abstract class AbstractTrackMode extends BaseMode
 
         final ITrackBank tb = this.model.getCurrentTrackBank ();
         final ITrack track = tb.getItem (index);
-        if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_CLIP_STOP))
+        if (this.surface.isPressed (ButtonID.STOP_CLIP))
         {
             track.stop ();
             return;
@@ -242,7 +241,7 @@ public abstract class AbstractTrackMode extends BaseMode
         final ITrack track = tb.getItem (index);
         if (this.isPush2)
         {
-            if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_CLIP_STOP))
+            if (this.surface.isPressed (ButtonID.STOP_CLIP))
                 return track.doesExist () && track.isPlaying () ? PushColors.PUSH2_COLOR_RED_HI : PushColors.PUSH2_COLOR_BLACK;
 
             if (config.isMuteLongPressed () || config.isSoloLongPressed () || config.isMuteSoloLocked ())
@@ -349,7 +348,7 @@ public abstract class AbstractTrackMode extends BaseMode
 
     protected void updateMenuItems (final int selectedMenu)
     {
-        if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_CLIP_STOP))
+        if (this.surface.isPressed (ButtonID.STOP_CLIP))
         {
             this.updateStopMenu ();
             return;

@@ -77,22 +77,6 @@ public class PrgChangeView extends AbstractView<PushControlSurface, PushConfigur
 
     /** {@inheritDoc} */
     @Override
-    public boolean usesButton (final int buttonID)
-    {
-        switch (buttonID)
-        {
-            case PushControlSurface.PUSH_BUTTON_OCTAVE_DOWN:
-            case PushControlSurface.PUSH_BUTTON_OCTAVE_UP:
-                return false;
-
-            default:
-                return true;
-        }
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public void onScene (final int index, final ButtonEvent event)
     {
         if (event != ButtonEvent.DOWN)
@@ -164,14 +148,5 @@ public class PrgChangeView extends AbstractView<PushControlSurface, PushConfigur
             return;
         this.programNumber = note - 36 + (this.isToggled ? 64 : 0);
         this.surface.sendMidiEvent (0xC0, this.programNumber, 0);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateArrows ()
-    {
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_OCTAVE_UP, ColorManager.BUTTON_STATE_OFF);
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_OCTAVE_DOWN, ColorManager.BUTTON_STATE_OFF);
     }
 }

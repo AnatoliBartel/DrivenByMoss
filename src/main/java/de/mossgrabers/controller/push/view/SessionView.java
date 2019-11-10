@@ -8,9 +8,8 @@ import de.mossgrabers.controller.push.PushConfiguration;
 import de.mossgrabers.controller.push.command.trigger.SelectSessionViewCommand;
 import de.mossgrabers.controller.push.controller.PushColors;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.command.core.TriggerCommand;
-import de.mossgrabers.framework.controller.color.ColorManager;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.daw.ITrackBank;
@@ -19,9 +18,10 @@ import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.mode.BrowserActivator;
 import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.mode.Modes;
+import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.view.AbstractSessionView;
 import de.mossgrabers.framework.view.SessionColor;
-import de.mossgrabers.framework.view.Views;
+import de.mossgrabers.framework.view.TransposeView;
 
 
 /**
@@ -29,7 +29,7 @@ import de.mossgrabers.framework.view.Views;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class SessionView extends AbstractSessionView<PushControlSurface, PushConfiguration>
+public class SessionView extends AbstractSessionView<PushControlSurface, PushConfiguration> implements TransposeView
 {
     private final BrowserActivator<PushControlSurface, PushConfiguration> browserModeActivator;
 
@@ -72,7 +72,7 @@ public class SessionView extends AbstractSessionView<PushControlSurface, PushCon
     {
         if (velocity == 0)
         {
-            final TriggerCommand triggerCommand = this.surface.getViewManager ().getView (Views.SESSION).getTriggerCommand (TriggerCommandID.SELECT_SESSION_VIEW);
+            final TriggerCommand triggerCommand = this.surface.getButton (ButtonID.SESSION).getTriggerCommand ();
             ((SelectSessionViewCommand) triggerCommand).setTemporary ();
             return;
         }
@@ -105,9 +105,9 @@ public class SessionView extends AbstractSessionView<PushControlSurface, PushCon
         }
 
         // Stop clip
-        if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_CLIP_STOP))
+        if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_STOP_CLIP))
         {
-            this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_CLIP_STOP);
+            this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_STOP_CLIP);
             track.stop ();
             return;
         }
@@ -131,16 +131,6 @@ public class SessionView extends AbstractSessionView<PushControlSurface, PushCon
 
     /** {@inheritDoc} */
     @Override
-    public void updateButtons ()
-    {
-        final ISceneBank sceneBank = this.model.getCurrentTrackBank ().getSceneBank ();
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_OCTAVE_UP, sceneBank.canScrollPageBackwards () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_OCTAVE_DOWN, sceneBank.canScrollPageForwards () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public void updateSceneButton (final int scene)
     {
         // TODO REmove
@@ -156,5 +146,39 @@ public class SessionView extends AbstractSessionView<PushControlSurface, PushCon
         if (s.doesExist ())
             return s.isSelected () ? AbstractSessionView.COLOR_SELECTED_SCENE : AbstractSessionView.COLOR_SCENE;
         return AbstractSessionView.COLOR_SCENE_OFF;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void onOctaveDown (final ButtonEvent event)
+    {
+        if (event == ButtonEvent.DOWN)
+            this.model.getCurrentTrackBank ().getSceneBank ().selectNextPage ();
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void onOctaveUp (final ButtonEvent event)
+    {
+        if (event == ButtonEvent.DOWN)
+            this.model.getCurrentTrackBank ().getSceneBank ().selectPreviousPage ();
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isOctaveUpButtonOn ()
+    {
+        return this.model.getCurrentTrackBank ().getSceneBank ().canScrollPageForwards ();
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isOctaveDownButtonOn ()
+    {
+        return this.model.getCurrentTrackBank ().getSceneBank ().canScrollPageBackwards ();
     }
 }
