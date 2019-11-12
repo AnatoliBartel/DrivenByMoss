@@ -5,14 +5,16 @@
 package de.mossgrabers.framework.controller.hardware;
 
 /**
- * Interface for a proxy to a light / LED on a hardware controller.
+ * A control on a hardware controller.
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public interface ILight extends IControl
+public class ControlImpl implements IControl
 {
-    /**
-     * Switch off the light.
-     */
-    void turnOff ();
+    /** {@index} */
+    @Override
+    public void update ()
+    {
+        // Intentionally empty, overwrite for update functionality
+    }
 }

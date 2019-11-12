@@ -14,6 +14,7 @@ import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.controller.hardware.IButton;
+import de.mossgrabers.framework.controller.hardware.IFader;
 import de.mossgrabers.framework.controller.hardware.ILight;
 import de.mossgrabers.framework.controller.hardware.ISurfaceFactory;
 import de.mossgrabers.framework.daw.IHost;
@@ -487,7 +488,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public IButton createButton (final ButtonID buttonID, final String label)
     {
-        final IButton button = this.surfaceFactory.createButton (label);
+        final IButton button = this.surfaceFactory.createButton (buttonID, label);
         this.buttons.put (buttonID, button);
         return button;
     }
@@ -498,6 +499,14 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     public ILight createLight (final IntSupplier supplier, final IntConsumer sendConsumer)
     {
         return this.surfaceFactory.createLight (supplier, sendConsumer);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public IFader createFader (final String label)
+    {
+        return this.surfaceFactory.createFader (label);
     }
 
 

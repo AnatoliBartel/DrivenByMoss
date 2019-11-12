@@ -17,7 +17,6 @@ import de.mossgrabers.controller.apcmini.view.SequencerView;
 import de.mossgrabers.controller.apcmini.view.SessionView;
 import de.mossgrabers.controller.apcmini.view.ShiftView;
 import de.mossgrabers.controller.apcmini.view.TrackButtons;
-import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.command.SceneCommand;
 import de.mossgrabers.framework.command.continuous.KnobRowModeCommand;
 import de.mossgrabers.framework.command.continuous.MasterFaderAbsoluteCommand;
@@ -230,10 +229,9 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
     protected void registerContinuousCommands ()
     {
         final APCminiControlSurface surface = this.getSurface ();
-        this.addContinuousCommand (ContinuousCommandID.MASTER_KNOB, APCminiControlSurface.APC_KNOB_MASTER_LEVEL, new MasterFaderAbsoluteCommand<> (this.model, surface));
-
+        this.setupFader ("Master", new MasterFaderAbsoluteCommand<> (this.model, surface), BindType.CC, APCminiControlSurface.APC_KNOB_MASTER_LEVEL);
         for (int i = 0; i < 8; i++)
-            this.addContinuousCommand (ContinuousCommandID.get (ContinuousCommandID.FADER1, i), APCminiControlSurface.APC_KNOB_TRACK_LEVEL1 + i, new KnobRowModeCommand<> (i, this.model, surface));
+            this.setupFader ("Fader " + (i + 1), new KnobRowModeCommand<> (i, this.model, surface), BindType.CC, APCminiControlSurface.APC_KNOB_TRACK_LEVEL1 + i);
     }
 
 

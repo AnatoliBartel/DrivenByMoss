@@ -101,7 +101,7 @@ public abstract class AbstractTrackMode extends BaseMode
                 if (selTrack.isGroup ())
                     selTrack.enter ();
                 else
-                    this.surface.getButton (ButtonID.DEVICE).trigger ();
+                    this.surface.getButton (ButtonID.DEVICE).trigger (ButtonEvent.DOWN);
             }
             else
                 track.select ();

@@ -4,6 +4,8 @@
 
 package de.mossgrabers.framework.controller.hardware;
 
+import de.mossgrabers.framework.controller.ButtonID;
+
 import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 
@@ -18,10 +20,11 @@ public interface ISurfaceFactory
     /**
      * Create a proxy to a hardware button.
      *
+     * @param buttonID The button ID to use
      * @param label The label of the button
      * @return The created button
      */
-    IButton createButton (String label);
+    IButton createButton (ButtonID buttonID, String label);
 
 
     /**
@@ -32,6 +35,15 @@ public interface ISurfaceFactory
      * @return The created light
      */
     ILight createLight (IntSupplier supplier, IntConsumer sendValueConsumer);
+
+
+    /**
+     * Create a proxy to a hardware fader.
+     *
+     * @param label The label of the button
+     * @return The created fader
+     */
+    IFader createFader (String label);
 
 
     /**

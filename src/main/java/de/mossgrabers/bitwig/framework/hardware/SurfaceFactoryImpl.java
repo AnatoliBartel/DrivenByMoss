@@ -4,12 +4,15 @@
 
 package de.mossgrabers.bitwig.framework.hardware;
 
+import de.mossgrabers.bitwig.framework.daw.HostImpl;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.hardware.IButton;
+import de.mossgrabers.framework.controller.hardware.IFader;
 import de.mossgrabers.framework.controller.hardware.ILight;
 import de.mossgrabers.framework.controller.hardware.ISurfaceFactory;
 
 import com.bitwig.extension.api.Color;
-import com.bitwig.extension.controller.api.ControllerHost;
+import com.bitwig.extension.controller.api.HardwareSlider;
 import com.bitwig.extension.controller.api.HardwareSurface;
 import com.bitwig.extension.controller.api.MultiStateHardwareLight;
 
@@ -24,27 +27,27 @@ import java.util.function.IntSupplier;
  */
 public class SurfaceFactoryImpl implements ISurfaceFactory
 {
-    private final ControllerHost  host;
+    private final HostImpl        host;
     private final HardwareSurface hardwareSurface;
 
 
     /**
      * Constructor.
      *
-     * @param host The Bitwig controller host
+     * @param host The host
      */
-    public SurfaceFactoryImpl (final ControllerHost host)
+    public SurfaceFactoryImpl (final HostImpl host)
     {
         this.host = host;
-        this.hardwareSurface = host.createHardwareSurface ();
+        this.hardwareSurface = host.getControllerHost ().createHardwareSurface ();
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public IButton createButton (final String label)
+    public IButton createButton (final ButtonID buttonID, final String label)
     {
-        return new ButtonImpl (this.host, this.hardwareSurface.createHardwareButton (), label);
+        return new ButtonImpl (this.host, this.hardwareSurface.createHardwareButton (buttonID.name ()), label);
     }
 
 
@@ -57,6 +60,16 @@ public class SurfaceFactoryImpl implements ISurfaceFactory
         hardwareLight.state ().setValueSupplier (supplier);
         hardwareLight.state ().onUpdateHardware (sendValueConsumer);
         return new LightImpl (hardwareLight);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public IFader createFader (final String label)
+    {
+        // TODO Replace the label with an ID
+        final HardwareSlider fader = this.hardwareSurface.createHardwareSlider (label);
+        return new FaderImpl (this.host, fader, label);
     }
 
 

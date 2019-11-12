@@ -4,12 +4,21 @@
 
 package de.mossgrabers.bitwig.framework.midi;
 
+import de.mossgrabers.bitwig.framework.hardware.ButtonImpl;
+import de.mossgrabers.bitwig.framework.hardware.FaderImpl;
+import de.mossgrabers.framework.controller.hardware.BindException;
+import de.mossgrabers.framework.controller.hardware.BindType;
+import de.mossgrabers.framework.controller.hardware.IButton;
+import de.mossgrabers.framework.controller.hardware.IFader;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.INoteInput;
 import de.mossgrabers.framework.daw.midi.MidiShortCallback;
 import de.mossgrabers.framework.daw.midi.MidiSysExCallback;
 
 import com.bitwig.extension.controller.api.ControllerHost;
+import com.bitwig.extension.controller.api.HardwareActionMatcher;
+import com.bitwig.extension.controller.api.HardwareButton;
+import com.bitwig.extension.controller.api.HardwareSlider;
 import com.bitwig.extension.controller.api.MidiIn;
 
 
@@ -86,13 +95,41 @@ public class MidiInputImpl implements IMidiInput
     }
 
 
-    /**
-     * Get the Bitwig input port.
-     *
-     * @return The input port
-     */
-    public MidiIn getPort ()
+    /** {@inheritDoc} */
+    @Override
+    public void bind (final IButton button, final BindType type, final int channel, final int value)
     {
-        return this.port;
+        final HardwareButton hardwareButton = ((ButtonImpl) button).getHardwareButton ();
+        final HardwareActionMatcher pressedMatcher;
+        final HardwareActionMatcher releasedMatcher;
+        switch (type)
+        {
+            case CC:
+                pressedMatcher = this.port.createCCActionMatcher (channel, value, 127);
+                releasedMatcher = this.port.createCCActionMatcher (channel, value, 0);
+                break;
+            case NOTE:
+                pressedMatcher = this.port.createNoteOnActionMatcher (channel, value);
+                releasedMatcher = this.port.createNoteOffActionMatcher (channel, value);
+                break;
+            default:
+                throw new BindException (type);
+        }
+        hardwareButton.pressedAction ().setActionMatcher (pressedMatcher);
+        hardwareButton.releasedAction ().setActionMatcher (releasedMatcher);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void bind (final IFader fader, final BindType type, final int channel, final int value)
+    {
+        final HardwareSlider hardwareFader = ((FaderImpl) fader).getHardwareFader ();
+
+        // TODO Support pitchbend
+        if (type == BindType.CC)
+            hardwareFader.setAdjustValueMatcher (this.port.createAbsoluteCCValueMatcher (channel, value));
+        else
+            throw new BindException (type);
     }
 }

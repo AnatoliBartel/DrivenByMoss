@@ -157,7 +157,7 @@ public class MasterMode extends BaseMode
         switch (index)
         {
             case 0:
-                this.surface.getButton (ButtonID.DEVICE).trigger ();
+                this.surface.getButton (ButtonID.DEVICE).trigger (ButtonEvent.DOWN);
                 break;
 
             case 4:

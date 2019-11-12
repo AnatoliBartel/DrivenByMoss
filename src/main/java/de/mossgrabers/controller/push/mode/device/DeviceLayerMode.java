@@ -196,7 +196,7 @@ public class DeviceLayerMode extends BaseMode
         final ICursorDevice cd = this.model.getCursorDevice ();
         if (!cd.doesExist ())
         {
-            this.surface.getButton (ButtonID.TRACK).trigger ();
+            this.surface.getButton (ButtonID.TRACK).trigger (ButtonEvent.DOWN);
             return;
         }
 

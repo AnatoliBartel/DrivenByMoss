@@ -278,6 +278,17 @@ public class HostImpl implements IHost
     @Override
     public ISurfaceFactory createSurfaceFactory ()
     {
-        return new SurfaceFactoryImpl (this.host);
+        return new SurfaceFactoryImpl (this);
+    }
+
+
+    /**
+     * Get the Bitwig controller host.
+     *
+     * @return The host
+     */
+    public ControllerHost getControllerHost ()
+    {
+        return this.host;
     }
 }

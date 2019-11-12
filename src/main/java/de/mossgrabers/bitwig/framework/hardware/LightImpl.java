@@ -4,6 +4,7 @@
 
 package de.mossgrabers.bitwig.framework.hardware;
 
+import de.mossgrabers.framework.controller.hardware.ControlImpl;
 import de.mossgrabers.framework.controller.hardware.ILight;
 
 import com.bitwig.extension.controller.api.MultiStateHardwareLight;
@@ -14,7 +15,7 @@ import com.bitwig.extension.controller.api.MultiStateHardwareLight;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class LightImpl implements ILight
+public class LightImpl extends ControlImpl implements ILight
 {
     final MultiStateHardwareLight hardwareLight;
 

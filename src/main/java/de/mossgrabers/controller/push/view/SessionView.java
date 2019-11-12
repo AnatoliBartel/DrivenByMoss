@@ -72,7 +72,7 @@ public class SessionView extends AbstractSessionView<PushControlSurface, PushCon
     {
         if (velocity == 0)
         {
-            final TriggerCommand triggerCommand = this.surface.getButton (ButtonID.SESSION).getTriggerCommand ();
+            final TriggerCommand triggerCommand = this.surface.getButton (ButtonID.SESSION).getCommand ();
             ((SelectSessionViewCommand) triggerCommand).setTemporary ();
             return;
         }

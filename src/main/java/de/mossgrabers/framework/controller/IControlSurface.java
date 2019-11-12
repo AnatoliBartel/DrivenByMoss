@@ -12,6 +12,7 @@ import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.controller.hardware.IButton;
+import de.mossgrabers.framework.controller.hardware.IFader;
 import de.mossgrabers.framework.controller.hardware.ILight;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
@@ -542,6 +543,15 @@ public interface IControlSurface<C extends Configuration>
      * @return The created light
      */
     ILight createLight (IntSupplier supplier, IntConsumer sendConsumer);
+
+
+    /**
+     * Create a fader for the surface.
+     *
+     * @param label The label of the fader
+     * @return The created fader
+     */
+    IFader createFader (String label);
 
 
     /**

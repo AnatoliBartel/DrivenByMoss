@@ -6,6 +6,7 @@ package de.mossgrabers.framework.controller.hardware;
 
 import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
+import de.mossgrabers.framework.utils.ButtonEvent;
 
 
 /**
@@ -13,7 +14,7 @@ import de.mossgrabers.framework.daw.midi.IMidiInput;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public interface IButton
+public interface IButton extends IControl
 {
     /**
      * Assign a command to a button, which is triggered by the button.
@@ -25,7 +26,7 @@ public interface IButton
 
 
     /**
-     * Bind a midi CC coming from an MIDI input to the button.
+     * Bind a midi command coming from a MIDI input to the button.
      *
      * @param input The MIDI input
      * @param type How to bind
@@ -35,7 +36,7 @@ public interface IButton
 
 
     /**
-     * Bind a midi CC coming from an MIDI input to the button.
+     * Bind a midi command coming from a MIDI input to the button.
      *
      * @param input The MIDI input
      * @param channel The MIDI channel
@@ -71,8 +72,10 @@ public interface IButton
 
     /**
      * Manually triggers a button press and release.
+     *
+     * @param event The button event
      */
-    void trigger ();
+    void trigger (ButtonEvent event);
 
 
     /**
@@ -86,5 +89,5 @@ public interface IButton
      *
      * @return The command or null if not bound
      */
-    TriggerCommand getTriggerCommand ();
+    TriggerCommand getCommand ();
 }

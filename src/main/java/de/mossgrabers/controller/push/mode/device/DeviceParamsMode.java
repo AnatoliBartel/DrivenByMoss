@@ -198,7 +198,7 @@ public class DeviceParamsMode extends BaseMode
         final ICursorDevice cd = this.model.getCursorDevice ();
         if (!cd.doesExist ())
         {
-            this.surface.getButton (ButtonID.TRACK).trigger ();
+            this.surface.getButton (ButtonID.TRACK).trigger (ButtonEvent.DOWN);
             return;
         }
 
@@ -227,9 +227,9 @@ public class DeviceParamsMode extends BaseMode
 
         // Move up to the track
         if (this.model.isCursorDeviceOnMasterTrack ())
-            this.surface.getButton (ButtonID.MASTERTRACK).trigger ();
+            this.surface.getButton (ButtonID.MASTERTRACK).trigger (ButtonEvent.DOWN);
         else
-            this.surface.getButton (ButtonID.TRACK).trigger ();
+            this.surface.getButton (ButtonID.TRACK).trigger (ButtonEvent.DOWN);
     }
 
 

@@ -38,11 +38,11 @@ public class TrackButtons
 
     /**
      * Update track button LEDs.
-     * 
+     *
      * @param index The index of the button
      * @return The color
      */
-    public int getTrackButtonColor (int index)
+    public int getTrackButtonColor (final int index)
     {
         final ITrackBank tb = this.model.getCurrentTrackBank ();
         final int trackState = this.surface.getTrackState ();

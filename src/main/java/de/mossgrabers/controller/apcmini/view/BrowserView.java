@@ -214,7 +214,7 @@ public class BrowserView extends AbstractView<APCminiControlSurface, APCminiConf
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButton (int scene)
+    public void updateSceneButton (final int scene)
     {
         // TODO Remove
     }

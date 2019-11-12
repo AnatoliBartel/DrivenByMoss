@@ -232,6 +232,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param midiCC The midi CC
      * @param command The command to register
      */
+    @Deprecated
     protected void addTriggerCommand (final TriggerCommandID commandID, final int midiCC, final TriggerCommand command)
     {
         this.addTriggerCommand (commandID, midiCC, command, 0);
@@ -246,6 +247,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param command The command to register
      * @param deviceIndex The index of the device
      */
+    @Deprecated
     protected void addTriggerCommand (final TriggerCommandID commandID, final int midiCC, final TriggerCommand command, final int deviceIndex)
     {
         final S surface = this.surfaces.get (deviceIndex);
@@ -262,6 +264,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param midiChannel The midi channel to assign to
      * @param command The command to register
      */
+    @Deprecated
     protected void addTriggerCommand (final TriggerCommandID commandID, final int midiCC, final int midiChannel, final TriggerCommand command)
     {
         this.addTriggerCommand (commandID, midiCC, midiChannel, command, 0);
@@ -277,6 +280,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param command The command to register
      * @param deviceIndex The index of the device
      */
+    @Deprecated
     protected void addTriggerCommand (final TriggerCommandID commandID, final int midiCC, final int midiChannel, final TriggerCommand command, final int deviceIndex)
     {
         final S surface = this.surfaces.get (deviceIndex);
@@ -459,6 +463,37 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
 
 
     /**
+     * Create a hardware fader proxy on controller device 1, bind a continuous command to it and
+     * bind it to a MIDI CC on MIDI channel 1.
+     *
+     * @param label The label of the fader
+     * @param midiValue The MIDI CC or note
+     * @param command The command to bind
+     * @param bindType The MIDI bind type
+     */
+    protected void setupFader (final String label, final ContinuousCommand command, final BindType bindType, final int midiValue)
+    {
+        this.setupFader (this.getSurface (), label, command, bindType, midiValue);
+    }
+
+
+    /**
+     * Create a hardware fader proxy on a controller, bind a continuous command to it and bind it to
+     * a MIDI CC on MIDI channel 1.
+     *
+     * @param surface The control surface
+     * @param label The label of the fader
+     * @param midiValue The MIDI CC or note
+     * @param command The command to bind
+     * @param bindType The MIDI bind type
+     */
+    protected void setupFader (final S surface, final String label, final ContinuousCommand command, final BindType bindType, final int midiValue)
+    {
+        surface.createFader (label).bind (command).bind (surface.getInput (), bindType, midiValue);
+    }
+
+
+    /**
      * Register a (global) continuous command for all views and assign it to a MIDI CC.
      *
      * @param commandID The ID of the command to register
@@ -466,6 +501,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param midiChannel The midi channel to assign to
      * @param command The command to register
      */
+    @Deprecated
     protected void addContinuousCommand (final ContinuousCommandID commandID, final int midiCC, final int midiChannel, final ContinuousCommand command)
     {
         final S surface = this.surfaces.get (0);
@@ -481,6 +517,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param midiCC The midi CC
      * @param command The command to register
      */
+    @Deprecated
     protected void addContinuousCommand (final ContinuousCommandID commandID, final int midiCC, final ContinuousCommand command)
     {
         final S surface = this.surfaces.get (0);
@@ -496,6 +533,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param note The midi note
      * @param command The command to register
      */
+    @Deprecated
     protected void addNoteCommand (final TriggerCommandID commandID, final int note, final TriggerCommand command)
     {
         final S surface = this.surfaces.get (0);
