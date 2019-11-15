@@ -170,7 +170,7 @@ public abstract class AbstractMode<S extends IControlSurface<C>, C extends Confi
     @Override
     public int getFirstRowColor (final int index)
     {
-        return this.model.getColorManager ().getColor (this.getFirstRowColorID (index));
+        return this.model.getColorManager ().getColorIndex (this.getFirstRowColorID (index));
     }
 
 
@@ -178,7 +178,7 @@ public abstract class AbstractMode<S extends IControlSurface<C>, C extends Confi
     @Override
     public int getSecondRowColor (final int index)
     {
-        return this.model.getColorManager ().getColor (this.getSecondRowColorID (index));
+        return this.model.getColorManager ().getColorIndex (this.getSecondRowColorID (index));
     }
 
 

@@ -90,14 +90,6 @@ public abstract class AbstractDrumView64<S extends IControlSurface<C>, C extends
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO remove
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public void onActivate ()
     {
         super.onActivate ();
@@ -320,14 +312,14 @@ public abstract class AbstractDrumView64<S extends IControlSurface<C>, C extends
 
     protected void handleMuteButton (final int playedPad)
     {
-        this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.MUTE));
+        this.surface.setTriggerConsumed (ButtonID.MUTE);
         this.model.getDrumDevice64 ().getDrumPadBank ().getItem (playedPad).toggleMute ();
     }
 
 
     protected void handleSoloButton (final int playedPad)
     {
-        this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.SOLO));
+        this.surface.setTriggerConsumed (ButtonID.SOLO);
         this.model.getDrumDevice64 ().getDrumPadBank ().getItem (playedPad).toggleSolo ();
     }
 

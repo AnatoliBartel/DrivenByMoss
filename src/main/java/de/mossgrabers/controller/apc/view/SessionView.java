@@ -63,20 +63,24 @@ public class SessionView extends AbstractSessionView<APCControlSurface, APCConfi
         if (event == ButtonEvent.DOWN)
         {
             this.model.getCurrentTrackBank ().getSceneBank ().getItem (scene).launch ();
-            this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene, ColorManager.BUTTON_STATE_ON);
+            // TODO this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene,
+            // ColorManager.BUTTON_STATE_ON);
         }
-        else if (event == ButtonEvent.UP)
-            this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene, ColorManager.BUTTON_STATE_OFF);
+        // TODO
+        // else if (event == ButtonEvent.UP)
+        // this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene,
+        // ColorManager.BUTTON_STATE_OFF);
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        final int green = this.surface.isMkII () ? APCColors.APC_MKII_COLOR_GREEN : APCColors.APC_COLOR_GREEN;
-        this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene, green);
-    }
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // final int green = this.surface.isMkII () ? APCColors.APC_MKII_COLOR_GREEN :
+    // APCColors.APC_COLOR_GREEN;
+    // TODO this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene,
+    // green);
+    // }
 
 
     @Override

@@ -85,68 +85,68 @@ public class SLMkIIIColors
      */
     public static void addColors (final ColorManager colorManager)
     {
-        colorManager.registerColor (Scales.SCALE_COLOR_OFF, SLMKIII_BLACK);
-        colorManager.registerColor (Scales.SCALE_COLOR_OCTAVE, SLMKIII_BLUE);
-        colorManager.registerColor (Scales.SCALE_COLOR_NOTE, SLMKIII_WHITE);
-        colorManager.registerColor (Scales.SCALE_COLOR_OUT_OF_SCALE, SLMKIII_BLACK);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OFF, SLMKIII_BLACK);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OCTAVE, SLMKIII_BLUE);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_NOTE, SLMKIII_WHITE);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OUT_OF_SCALE, SLMKIII_BLACK);
 
-        colorManager.registerColor (AbstractMode.BUTTON_COLOR_OFF, SLMKIII_BLACK);
-        colorManager.registerColor (AbstractMode.BUTTON_COLOR_ON, SLMKIII_WHITE);
-        colorManager.registerColor (AbstractMode.BUTTON_COLOR_HI, SLMKIII_WHITE_HALF);
+        colorManager.registerColorIndex (AbstractMode.BUTTON_COLOR_OFF, SLMKIII_BLACK);
+        colorManager.registerColorIndex (AbstractMode.BUTTON_COLOR_ON, SLMKIII_WHITE);
+        colorManager.registerColorIndex (AbstractMode.BUTTON_COLOR_HI, SLMKIII_WHITE_HALF);
 
-        colorManager.registerColor (AbstractSequencerView.COLOR_RESOLUTION, SLMkIIIColors.SLMKIII_ORANGE_HALF);
-        colorManager.registerColor (AbstractSequencerView.COLOR_RESOLUTION_SELECTED, SLMkIIIColors.SLMKIII_ORANGE);
-        colorManager.registerColor (AbstractSequencerView.COLOR_RESOLUTION_OFF, SLMKIII_BLACK);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_RESOLUTION, SLMkIIIColors.SLMKIII_ORANGE_HALF);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_RESOLUTION_SELECTED, SLMkIIIColors.SLMKIII_ORANGE);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_RESOLUTION_OFF, SLMKIII_BLACK);
 
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_OFF, SLMKIII_BLACK);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_RECORD, SLMKIII_RED);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_PLAY, SLMKIII_GREEN);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_SELECTED, SLMKIII_BLUE);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_MUTED, SLMKIII_AMBER_HALF);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_HAS_CONTENT, SLMKIII_YELLOW);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_NO_CONTENT, SLMKIII_YELLOW_HALF);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_OFF, SLMKIII_BLACK);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_RECORD, SLMKIII_RED);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_PLAY, SLMKIII_GREEN);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_SELECTED, SLMKIII_BLUE);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_MUTED, SLMKIII_AMBER_HALF);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_HAS_CONTENT, SLMKIII_YELLOW);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_NO_CONTENT, SLMKIII_YELLOW_HALF);
 
-        colorManager.registerColor (AbstractSessionView.COLOR_SCENE, SLMKIII_GREEN_LIGHT);
-        colorManager.registerColor (AbstractSessionView.COLOR_SELECTED_SCENE, SLMKIII_GREEN);
-        colorManager.registerColor (AbstractSessionView.COLOR_SCENE_OFF, SLMKIII_BLACK);
+        colorManager.registerColorIndex (AbstractSessionView.COLOR_SCENE, SLMKIII_GREEN_LIGHT);
+        colorManager.registerColorIndex (AbstractSessionView.COLOR_SELECTED_SCENE, SLMKIII_GREEN);
+        colorManager.registerColorIndex (AbstractSessionView.COLOR_SCENE_OFF, SLMKIII_BLACK);
 
-        colorManager.registerColor (PadGrid.GRID_OFF, SLMKIII_BLACK);
+        colorManager.registerColorIndex (PadGrid.GRID_OFF, SLMKIII_BLACK);
 
-        colorManager.registerColor (DAWColors.COLOR_OFF, SLMKIII_BLACK);
-        colorManager.registerColor (DAWColors.DAW_COLOR_GRAY_HALF, SLMKIII_BLACK);
+        colorManager.registerColorIndex (DAWColors.COLOR_OFF, SLMKIII_BLACK);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_GRAY_HALF, SLMKIII_BLACK);
 
-        colorManager.registerColor (DAWColors.DAW_COLOR_DARK_GRAY, SLMKIII_DARK_GREY);
-        colorManager.registerColor (DAWColors.DAW_COLOR_GRAY, SLMKIII_WHITE_HALF);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_GRAY, SLMKIII_WHITE);
-        colorManager.registerColor (DAWColors.DAW_COLOR_SILVER, SLMKIII_GREY);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_DARK_GRAY, SLMKIII_DARK_GREY);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_GRAY, SLMKIII_WHITE_HALF);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GRAY, SLMKIII_WHITE);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_SILVER, SLMKIII_GREY);
 
-        colorManager.registerColor (DAWColors.DAW_COLOR_DARK_BROWN, SLMKIII_BROWN_DARK);
-        colorManager.registerColor (DAWColors.DAW_COLOR_BROWN, SLMKIII_BROWN);
-        colorManager.registerColor (DAWColors.DAW_COLOR_DARK_BLUE, SLMKIII_DARK_BLUE);
-        colorManager.registerColor (DAWColors.DAW_COLOR_PURPLE_BLUE, SLMKIII_BLUE_PURPLISH);
-        colorManager.registerColor (DAWColors.DAW_COLOR_PURPLE, SLMKIII_PURPLE_HALF);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_DARK_BROWN, SLMKIII_BROWN_DARK);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_BROWN, SLMKIII_BROWN);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_DARK_BLUE, SLMKIII_DARK_BLUE);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_PURPLE_BLUE, SLMKIII_BLUE_PURPLISH);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_PURPLE, SLMKIII_PURPLE_HALF);
 
-        colorManager.registerColor (DAWColors.DAW_COLOR_PINK, SLMKIII_PINK);
-        colorManager.registerColor (DAWColors.DAW_COLOR_RED, SLMKIII_RED);
-        colorManager.registerColor (DAWColors.DAW_COLOR_ORANGE, SLMKIII_ORANGE);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_ORANGE, SLMKIII_AMBER);
-        colorManager.registerColor (DAWColors.DAW_COLOR_MOSS_GREEN, SLMKIII_GREEN_GRASS);
-        colorManager.registerColor (DAWColors.DAW_COLOR_GREEN, SLMKIII_GREEN);
-        colorManager.registerColor (DAWColors.DAW_COLOR_COLD_GREEN, SLMKIII_GREEN_LIGHT);
-        colorManager.registerColor (DAWColors.DAW_COLOR_BLUE, SLMKIII_BLUE);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_PURPLE, SLMKIII_PURPLE);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_PINK, SLMKIII_PINK);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_RED, SLMKIII_RED);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_ORANGE, SLMKIII_ORANGE);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_ORANGE, SLMKIII_AMBER);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_MOSS_GREEN, SLMKIII_GREEN_GRASS);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_GREEN, SLMKIII_GREEN);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_COLD_GREEN, SLMKIII_GREEN_LIGHT);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_BLUE, SLMKIII_BLUE);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PURPLE, SLMKIII_PURPLE);
 
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_PINK, SLMKIII_PINK_LIGHT);
-        colorManager.registerColor (DAWColors.DAW_COLOR_SKIN, SLMKIII_SKIN);
-        colorManager.registerColor (DAWColors.DAW_COLOR_REDDISH_BROWN, SLMKIII_DARK_RED);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_BROWN, SLMKIII_AMBER_HALF);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_GREEN, SLMKIII_GREEN_LIGHT);
-        colorManager.registerColor (DAWColors.DAW_COLOR_BLUISH_GREEN, SLMKIII_MINT);
-        colorManager.registerColor (DAWColors.DAW_COLOR_GREEN_BLUE, SLMKIII_LIGHT_BLUE);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_BLUE, SLMKIII_SKY_BLUE);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PINK, SLMKIII_PINK_LIGHT);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_SKIN, SLMKIII_SKIN);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_REDDISH_BROWN, SLMKIII_DARK_RED);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BROWN, SLMKIII_AMBER_HALF);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GREEN, SLMKIII_GREEN_LIGHT);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_BLUISH_GREEN, SLMKIII_MINT);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_GREEN_BLUE, SLMKIII_LIGHT_BLUE);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BLUE, SLMKIII_SKY_BLUE);
 
-        colorManager.registerColor (ColorManager.BUTTON_STATE_OFF, SLMKIII_BLACK);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_ON, SLMKIII_WHITE);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_HI, SLMKIII_WHITE_HALF);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_OFF, SLMKIII_BLACK);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_ON, SLMKIII_WHITE);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_HI, SLMKIII_WHITE_HALF);
     }
 }

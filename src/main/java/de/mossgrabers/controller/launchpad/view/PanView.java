@@ -72,7 +72,7 @@ public class PanView extends AbstractFaderView
         for (int i = 0; i < 8; i++)
         {
             final ITrack track = tb.getItem (i);
-            final int color = cm.getColor (DAWColors.getColorIndex (track.getColor ()));
+            final int color = cm.getColorIndex (DAWColors.getColorIndex (track.getColor ()));
             if (this.trackColors[i] != color)
             {
                 this.trackColors[i] = color;
@@ -88,6 +88,6 @@ public class PanView extends AbstractFaderView
     public void setupFader (final int index)
     {
         final ITrack track = this.model.getCurrentTrackBank ().getItem (index);
-        this.surface.setupFader (index, this.model.getColorManager ().getColor (DAWColors.getColorIndex (track.getColor ())), true);
+        this.surface.setupFader (index, this.model.getColorManager ().getColorIndex (DAWColors.getColorIndex (track.getColor ())), true);
     }
 }

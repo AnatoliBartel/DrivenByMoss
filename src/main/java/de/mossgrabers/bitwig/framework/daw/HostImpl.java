@@ -6,12 +6,12 @@ package de.mossgrabers.bitwig.framework.daw;
 
 import de.mossgrabers.bitwig.framework.graphics.BitmapImpl;
 import de.mossgrabers.bitwig.framework.graphics.ImageImpl;
-import de.mossgrabers.bitwig.framework.hardware.SurfaceFactoryImpl;
+import de.mossgrabers.bitwig.framework.hardware.HwSurfaceFactoryImpl;
 import de.mossgrabers.bitwig.framework.osc.OpenSoundControlClientImpl;
 import de.mossgrabers.bitwig.framework.osc.OpenSoundControlMessageImpl;
 import de.mossgrabers.bitwig.framework.osc.OpenSoundControlServerImpl;
 import de.mossgrabers.bitwig.framework.usb.UsbDeviceImpl;
-import de.mossgrabers.framework.controller.hardware.ISurfaceFactory;
+import de.mossgrabers.framework.controller.hardware.IHwSurfaceFactory;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.IMemoryBlock;
 import de.mossgrabers.framework.daw.constants.EditCapability;
@@ -276,9 +276,9 @@ public class HostImpl implements IHost
 
     /** {@inheritDoc} */
     @Override
-    public ISurfaceFactory createSurfaceFactory ()
+    public IHwSurfaceFactory createSurfaceFactory (final double width, final double height)
     {
-        return new SurfaceFactoryImpl (this);
+        return new HwSurfaceFactoryImpl (this, width, height);
     }
 
 

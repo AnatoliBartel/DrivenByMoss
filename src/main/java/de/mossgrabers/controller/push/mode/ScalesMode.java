@@ -83,11 +83,11 @@ public class ScalesMode extends BaseMode
     {
         final ColorManager cm = this.model.getColorManager ();
         if (index == 7)
-            return cm.getColor (AbstractMode.BUTTON_COLOR_OFF);
+            return cm.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
 
         final int offset = this.scales.getScaleOffset ();
         final boolean isFirstOrLast = index == 0 || index == 7;
-        return isFirstOrLast ? this.isPush2 ? PushColors.PUSH2_COLOR_ORANGE_LO : PushColors.PUSH1_COLOR_ORANGE_LO : cm.getColor (offset == index - 1 ? AbstractMode.BUTTON_COLOR_HI : AbstractMode.BUTTON_COLOR_ON);
+        return isFirstOrLast ? this.isPush2 ? PushColors.PUSH2_COLOR_ORANGE_LO : PushColors.PUSH1_COLOR_ORANGE_LO : cm.getColorIndex (offset == index - 1 ? AbstractMode.BUTTON_COLOR_HI : AbstractMode.BUTTON_COLOR_ON);
     }
 
 
@@ -121,7 +121,7 @@ public class ScalesMode extends BaseMode
         if (isFirstOrLast)
             return this.isPush2 ? PushColors.PUSH2_COLOR2_AMBER : PushColors.PUSH1_COLOR2_AMBER;
         final ColorManager cm = this.model.getColorManager ();
-        return cm.getColor (offset == index - 1 + 6 ? AbstractMode.BUTTON_COLOR2_HI : AbstractMode.BUTTON_COLOR2_ON);
+        return cm.getColorIndex (offset == index - 1 + 6 ? AbstractMode.BUTTON_COLOR2_HI : AbstractMode.BUTTON_COLOR2_ON);
     }
 
 

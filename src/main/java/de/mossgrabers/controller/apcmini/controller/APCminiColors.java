@@ -4,6 +4,7 @@
 
 package de.mossgrabers.controller.apcmini.controller;
 
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.scale.Scales;
@@ -51,36 +52,44 @@ public class APCminiColors
      */
     public static void addColors (final ColorManager colorManager)
     {
-        colorManager.registerColor (Scales.SCALE_COLOR_OFF, APC_COLOR_BLACK);
-        colorManager.registerColor (Scales.SCALE_COLOR_OCTAVE, APC_COLOR_YELLOW);
-        colorManager.registerColor (Scales.SCALE_COLOR_NOTE, APC_COLOR_BLACK);
-        colorManager.registerColor (Scales.SCALE_COLOR_OUT_OF_SCALE, APC_COLOR_BLACK);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OFF, APC_COLOR_BLACK);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OCTAVE, APC_COLOR_YELLOW);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_NOTE, APC_COLOR_BLACK);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OUT_OF_SCALE, APC_COLOR_BLACK);
 
-        colorManager.registerColor (ColorManager.BUTTON_STATE_OFF, APC_COLOR_BLACK);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_ON, APC_COLOR_GREEN);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_HI, APC_COLOR_GREEN_BLINK);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_OFF, APC_COLOR_BLACK);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_ON, APC_COLOR_GREEN);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_HI, APC_COLOR_GREEN_BLINK);
 
-        colorManager.registerColor (AbstractSequencerView.COLOR_STEP_HILITE_NO_CONTENT, APC_COLOR_GREEN);
-        colorManager.registerColor (AbstractSequencerView.COLOR_STEP_HILITE_CONTENT, APC_COLOR_GREEN);
-        colorManager.registerColor (AbstractSequencerView.COLOR_NO_CONTENT, APC_COLOR_BLACK);
-        colorManager.registerColor (AbstractSequencerView.COLOR_CONTENT, APC_COLOR_RED);
-        colorManager.registerColor (AbstractSequencerView.COLOR_CONTENT_CONT, APC_COLOR_RED);
-        colorManager.registerColor (AbstractSequencerView.COLOR_PAGE, APC_COLOR_YELLOW);
-        colorManager.registerColor (AbstractSequencerView.COLOR_ACTIVE_PAGE, APC_COLOR_GREEN);
-        colorManager.registerColor (AbstractSequencerView.COLOR_SELECTED_PAGE, APC_COLOR_RED);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_STEP_HILITE_NO_CONTENT, APC_COLOR_GREEN);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_STEP_HILITE_CONTENT, APC_COLOR_GREEN);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_NO_CONTENT, APC_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_CONTENT, APC_COLOR_RED);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_CONTENT_CONT, APC_COLOR_RED);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_PAGE, APC_COLOR_YELLOW);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_ACTIVE_PAGE, APC_COLOR_GREEN);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_SELECTED_PAGE, APC_COLOR_RED);
 
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_OFF, APC_COLOR_BLACK);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_RECORD, APC_COLOR_RED);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_PLAY, APC_COLOR_GREEN);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_SELECTED, APC_COLOR_YELLOW_BLINK);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_MUTED, APC_COLOR_YELLOW);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_HAS_CONTENT, APC_COLOR_YELLOW);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_NO_CONTENT, APC_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_OFF, APC_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_RECORD, APC_COLOR_RED);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_PLAY, APC_COLOR_GREEN);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_SELECTED, APC_COLOR_YELLOW_BLINK);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_MUTED, APC_COLOR_YELLOW);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_HAS_CONTENT, APC_COLOR_YELLOW);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_NO_CONTENT, APC_COLOR_BLACK);
 
-        colorManager.registerColor (AbstractPlayView.COLOR_PLAY, APC_COLOR_GREEN);
-        colorManager.registerColor (AbstractPlayView.COLOR_RECORD, APC_COLOR_RED);
-        colorManager.registerColor (AbstractPlayView.COLOR_OFF, APC_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_PLAY, APC_COLOR_GREEN);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_RECORD, APC_COLOR_RED);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_OFF, APC_COLOR_BLACK);
 
-        colorManager.registerColor (PadGrid.GRID_OFF, APC_COLOR_BLACK);
+        colorManager.registerColorIndex (PadGrid.GRID_OFF, APC_COLOR_BLACK);
+
+        colorManager.registerColor (APC_COLOR_BLACK, ColorEx.BLACK);
+        colorManager.registerColor (APC_COLOR_GREEN, ColorEx.GREEN);
+        colorManager.registerColor (APC_COLOR_GREEN_BLINK, ColorEx.GREEN);
+        colorManager.registerColor (APC_COLOR_RED, ColorEx.RED);
+        colorManager.registerColor (APC_COLOR_RED_BLINK, ColorEx.RED);
+        colorManager.registerColor (APC_COLOR_YELLOW, ColorEx.YELLOW);
+        colorManager.registerColor (APC_COLOR_YELLOW_BLINK, ColorEx.YELLOW);
     }
 }

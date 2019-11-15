@@ -146,7 +146,7 @@ public class DrumView extends AbstractDrumView<SLMkIIIControlSurface, SLMkIIICon
         if (!drumPad.doesExist () || !drumPad.isActivated ())
             return SLMkIIIColors.SLMKIII_BLACK;
 
-        return this.model.getColorManager ().getColor (DAWColors.getColorIndex (drumPad.getColor ()));
+        return this.model.getColorManager ().getColorIndex (DAWColors.getColorIndex (drumPad.getColor ()));
     }
 
 
@@ -157,19 +157,22 @@ public class DrumView extends AbstractDrumView<SLMkIIIControlSurface, SLMkIIICon
         return hilite ? SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_BLACK;
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        if (scene == 0)
-            this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_1, this.isPlayMode ? SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_BLUE);
-        else
-        {
-            final int value = this.surface.getModeManager ().isActiveOrTempMode (Modes.GROOVE) ? SLMkIIIColors.SLMKIII_PINK : SLMkIIIColors.SLMKIII_DARK_GREY;
-            this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_2, this.isActive () ? value : SLMkIIIColors.SLMKIII_BLACK);
-        }
-    }
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // TODO
+    // if (scene == 0)
+    // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_1, this.isPlayMode ?
+    // SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_BLUE);
+    // else
+    // {
+    // final int value = this.surface.getModeManager ().isActiveOrTempMode (Modes.GROOVE) ?
+    // SLMkIIIColors.SLMKIII_PINK : SLMkIIIColors.SLMKIII_DARK_GREY;
+    // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_2, this.isActive () ? value
+    // : SLMkIIIColors.SLMKIII_BLACK);
+    // }
+    // }
 
 
     /** {@inheritDoc} */

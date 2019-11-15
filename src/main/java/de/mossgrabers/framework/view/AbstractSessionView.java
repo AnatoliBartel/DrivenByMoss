@@ -87,7 +87,7 @@ public abstract class AbstractSessionView<S extends IControlSurface<C>, C extend
 
         if (this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             scene.remove ();
             return;
         }
@@ -111,7 +111,7 @@ public abstract class AbstractSessionView<S extends IControlSurface<C>, C extend
         // Delete selected clip
         if (this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             slot.remove ();
             return;
         }
@@ -320,28 +320,28 @@ public abstract class AbstractSessionView<S extends IControlSurface<C>, C extend
         if (slot.isRecording ())
         {
             if (this.useClipColor && colorIndex != null)
-                return new SessionColor (cm.getColor (colorIndex), this.clipColorIsRecording.getBlink (), this.clipColorIsRecording.isFast ());
+                return new SessionColor (cm.getColorIndex (colorIndex), this.clipColorIsRecording.getBlink (), this.clipColorIsRecording.isFast ());
             return this.clipColorIsRecording;
         }
 
         if (slot.isPlayingQueued ())
         {
             if (this.useClipColor && colorIndex != null)
-                return new SessionColor (cm.getColor (colorIndex), this.clipColorIsPlayingQueued.getBlink (), this.clipColorIsPlayingQueued.isFast ());
+                return new SessionColor (cm.getColorIndex (colorIndex), this.clipColorIsPlayingQueued.getBlink (), this.clipColorIsPlayingQueued.isFast ());
             return this.clipColorIsPlayingQueued;
         }
 
         if (slot.isPlaying ())
         {
             if (this.useClipColor && colorIndex != null)
-                return new SessionColor (cm.getColor (colorIndex), this.clipColorIsPlaying.getBlink (), this.clipColorIsPlaying.isFast ());
+                return new SessionColor (cm.getColorIndex (colorIndex), this.clipColorIsPlaying.getBlink (), this.clipColorIsPlaying.isFast ());
             return this.clipColorIsPlaying;
         }
 
         if (slot.hasContent ())
         {
             if (this.useClipColor && colorIndex != null)
-                return new SessionColor (cm.getColor (colorIndex), this.clipColorHasContent.getBlink (), this.clipColorHasContent.isFast ());
+                return new SessionColor (cm.getColorIndex (colorIndex), this.clipColorHasContent.getBlink (), this.clipColorHasContent.isFast ());
             return this.clipColorHasContent;
         }
 

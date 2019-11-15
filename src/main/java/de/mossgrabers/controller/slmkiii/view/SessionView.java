@@ -7,11 +7,11 @@ package de.mossgrabers.controller.slmkiii.view;
 import de.mossgrabers.controller.slmkiii.SLMkIIIConfiguration;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.daw.ITrackBank;
-import de.mossgrabers.framework.daw.data.IScene;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.view.AbstractSessionView;
 import de.mossgrabers.framework.view.SessionColor;
@@ -77,9 +77,9 @@ public class SessionView extends AbstractSessionView<SLMkIIIControlSurface, SLMk
 
         // Duplicate a clip
         final ITrack track = tb.getItem (t);
-        if (this.surface.isPressed (SLMkIIIControlSurface.MKIII_DUPLICATE))
+        if (this.surface.isPressed (ButtonID.DUPLICATE))
         {
-            this.surface.setTriggerConsumed (SLMkIIIControlSurface.MKIII_DUPLICATE);
+            this.surface.setTriggerConsumed (ButtonID.DUPLICATE);
             if (track.doesExist ())
                 track.getSlotBank ().getItem (s).duplicate ();
             return;
@@ -88,21 +88,22 @@ public class SessionView extends AbstractSessionView<SLMkIIIControlSurface, SLMk
         super.onGridNote (note, velocity);
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        final ColorManager colorManager = this.model.getColorManager ();
-        final int colorScene = colorManager.getColor (AbstractSessionView.COLOR_SCENE);
-        final int colorSceneSelected = colorManager.getColor (AbstractSessionView.COLOR_SELECTED_SCENE);
-        final int colorSceneOff = colorManager.getColor (AbstractSessionView.COLOR_SCENE_OFF);
-
-        final ISceneBank sceneBank = this.model.getSceneBank ();
-        final IScene s = sceneBank.getItem (scene);
-        final int color = s.doesExist () ? s.isSelected () ? colorSceneSelected : colorScene : colorSceneOff;
-        this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_1 + scene, color);
-    }
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // final ColorManager colorManager = this.model.getColorManager ();
+    // final int colorScene = colorManager.getColor (AbstractSessionView.COLOR_SCENE);
+    // final int colorSceneSelected = colorManager.getColor
+    // (AbstractSessionView.COLOR_SELECTED_SCENE);
+    // final int colorSceneOff = colorManager.getColor (AbstractSessionView.COLOR_SCENE_OFF);
+    //
+    // final ISceneBank sceneBank = this.model.getSceneBank ();
+    // final IScene s = sceneBank.getItem (scene);
+    // final int color = s.doesExist () ? s.isSelected () ? colorSceneSelected : colorScene :
+    // colorSceneOff;
+    // TODO this.surface.updateTrigger (ButtonID.SCENE_1 + scene, color);
+    // }
 
 
     @Override

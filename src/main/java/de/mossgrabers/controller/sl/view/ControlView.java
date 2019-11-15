@@ -9,7 +9,6 @@ import de.mossgrabers.controller.sl.command.trigger.ButtonRowSelectCommand;
 import de.mossgrabers.controller.sl.command.trigger.P2ButtonCommand;
 import de.mossgrabers.controller.sl.controller.SLControlSurface;
 import de.mossgrabers.controller.sl.mode.device.DeviceParamsMode;
-import de.mossgrabers.controller.sl.mode.device.DevicePresetsMode;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISlotBank;
@@ -372,70 +371,132 @@ public class ControlView extends ControlOnlyView<SLControlSurface, SLConfigurati
         final boolean isDevice = Modes.DEVICE_PARAMS.equals (mode);
         final boolean isFunctions = Modes.FUNCTIONS.equals (mode);
 
-        if (Modes.VIEW_SELECT.equals (mode))
-        {
-            for (int i = 0; i < 8; i++)
-                this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_1 + i, SLControlSurface.MKII_BUTTON_STATE_OFF);
-        }
-        else
-        {
-            // Button row 1: Clip length or functions
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_1, !isFunctions && clipLength == 0 ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_2, !isFunctions && clipLength == 1 ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_3, !isFunctions && clipLength == 2 ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_4, !isFunctions && clipLength == 3 ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_5, !isFunctions && clipLength == 4 ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_6, isFunctions && this.model.getCursorDevice ().isWindowOpen () || !isFunctions && clipLength == 5 ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_7, isFunctions && transport.isMetronomeOn () || !isFunctions && clipLength == 6 ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_8, !isFunctions && clipLength == 7 ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-        }
-
-        // Button row 2: Track toggles / Browse
-        if (Modes.BROWSER.equals (mode))
-        {
-            final int selMode = ((DevicePresetsMode) this.surface.getModeManager ().getMode (Modes.BROWSER)).getSelectionMode ();
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_1, SLControlSurface.MKII_BUTTON_STATE_ON);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_2, SLControlSurface.MKII_BUTTON_STATE_ON);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_3, selMode == DevicePresetsMode.SELECTION_OFF ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_4, selMode == DevicePresetsMode.SELECTION_OFF ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_5, selMode == DevicePresetsMode.SELECTION_OFF ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_6, selMode == DevicePresetsMode.SELECTION_OFF ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_7, selMode == DevicePresetsMode.SELECTION_OFF ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_8, SLControlSurface.MKII_BUTTON_STATE_ON);
-        }
-        else
-        {
-            final boolean isNoOverlayMode = !Modes.FRAME.equals (mode) && !Modes.BROWSER.equals (mode);
-            final ITrack track = tb.getSelectedItem ();
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_1, isNoOverlayMode && track != null && track.isMute () ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_2, isNoOverlayMode && track != null && track.isSolo () ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_3, isNoOverlayMode && track != null && track.isRecArm () ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_4, transport.isWritingArrangerAutomation () ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_5, SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_6, this.model.getCursorDevice ().isEnabled () ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_7, isNoOverlayMode && cd.canSelectPreviousFX () ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_8, isNoOverlayMode && cd.canSelectNextFX () ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-        }
-
-        // Button row 3: Selected track indication
-        for (int i = 0; i < 8; i++)
-            this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW3_1 + i, tb.getItem (i).isSelected () ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-
-        // LED indications for device parameters
-        ((DeviceParamsMode) this.surface.getModeManager ().getMode (Modes.DEVICE_PARAMS)).setLEDs ();
-
-        // Transport buttons
-        this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW4_3, !transport.isPlaying () ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW4_4, transport.isPlaying () ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW4_5, transport.isLoop () ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW4_6, transport.isRecording () ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-
-        this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL1, isFunctions || isFixed ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL2, isDevice ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL3, isTrackToggles || isFrame || isPreset ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL4, isTrack || isMaster ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL6, isVolume ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
-        this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL7, SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // TODO Update button LEDs
+        // if (Modes.VIEW_SELECT.equals (mode))
+        // {
+        // for (int i = 0; i < 8; i++)
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_1 + i,
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // }
+        // else
+        // {
+        // // Button row 1: Clip length or functions
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_1, !isFunctions &&
+        // clipLength == 0 ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_2, !isFunctions &&
+        // clipLength == 1 ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_3, !isFunctions &&
+        // clipLength == 2 ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_4, !isFunctions &&
+        // clipLength == 3 ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_5, !isFunctions &&
+        // clipLength == 4 ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_6, isFunctions &&
+        // this.model.getCursorDevice ().isWindowOpen () || !isFunctions && clipLength == 5 ?
+        // SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_7, isFunctions &&
+        // transport.isMetronomeOn () || !isFunctions && clipLength == 6 ?
+        // SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW1_8, !isFunctions &&
+        // clipLength == 7 ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // }
+        //
+        // // Button row 2: Track toggles / Browse
+        // if (Modes.BROWSER.equals (mode))
+        // {
+        // final int selMode = ((DevicePresetsMode) this.surface.getModeManager ().getMode
+        // (Modes.BROWSER)).getSelectionMode ();
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_1,
+        // SLControlSurface.MKII_BUTTON_STATE_ON);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_2,
+        // SLControlSurface.MKII_BUTTON_STATE_ON);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_3, selMode ==
+        // DevicePresetsMode.SELECTION_OFF ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_4, selMode ==
+        // DevicePresetsMode.SELECTION_OFF ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_5, selMode ==
+        // DevicePresetsMode.SELECTION_OFF ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_6, selMode ==
+        // DevicePresetsMode.SELECTION_OFF ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_7, selMode ==
+        // DevicePresetsMode.SELECTION_OFF ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_8,
+        // SLControlSurface.MKII_BUTTON_STATE_ON);
+        // }
+        // else
+        // {
+        // final boolean isNoOverlayMode = !Modes.FRAME.equals (mode) && !Modes.BROWSER.equals
+        // (mode);
+        // final ITrack track = tb.getSelectedItem ();
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_1, isNoOverlayMode && track
+        // != null && track.isMute () ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_2, isNoOverlayMode && track
+        // != null && track.isSolo () ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_3, isNoOverlayMode && track
+        // != null && track.isRecArm () ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_4,
+        // transport.isWritingArrangerAutomation () ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_5,
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_6,
+        // this.model.getCursorDevice ().isEnabled () ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_7, isNoOverlayMode &&
+        // cd.canSelectPreviousFX () ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW2_8, isNoOverlayMode &&
+        // cd.canSelectNextFX () ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // }
+        //
+        // // Button row 3: Selected track indication
+        // for (int i = 0; i < 8; i++)
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW3_1 + i, tb.getItem
+        // (i).isSelected () ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        //
+        // // LED indications for device parameters
+        // ((DeviceParamsMode) this.surface.getModeManager ().getMode (Modes.DEVICE_PARAMS)).setLEDs
+        // ();
+        //
+        // // Transport buttons
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW4_3, !transport.isPlaying ()
+        // ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW4_4, transport.isPlaying () ?
+        // SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW4_5, transport.isLoop () ?
+        // SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROW4_6, transport.isRecording ()
+        // ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
+        //
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL1, isFunctions || isFixed
+        // ? SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL2, isDevice ?
+        // SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL3, isTrackToggles ||
+        // isFrame || isPreset ? SLControlSurface.MKII_BUTTON_STATE_ON :
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL4, isTrack || isMaster ?
+        // SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL6, isVolume ?
+        // SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
+        // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL7,
+        // SLControlSurface.MKII_BUTTON_STATE_OFF);
     }
 
 

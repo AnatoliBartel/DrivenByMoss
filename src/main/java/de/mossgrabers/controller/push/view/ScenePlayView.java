@@ -72,16 +72,16 @@ public class ScenePlayView extends AbstractView<PushControlSurface, PushConfigur
 
         final IScene scene = this.sceneBank.getItem (note - 36);
 
-        if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_DUPLICATE))
+        if (this.surface.isPressed (ButtonID.DUPLICATE))
         {
-            this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_DUPLICATE);
+            this.surface.setTriggerConsumed (ButtonID.DUPLICATE);
             scene.duplicate ();
             return;
         }
 
         if (this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             scene.remove ();
             return;
         }
@@ -96,14 +96,6 @@ public class ScenePlayView extends AbstractView<PushControlSurface, PushConfigur
     public void onScene (final int scene, final ButtonEvent event)
     {
         // Intentionally empty
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO Remove
     }
 
 

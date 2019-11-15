@@ -70,7 +70,7 @@ public class GenericFlexiControlSurface extends AbstractControlSurface<GenericFl
      */
     public GenericFlexiControlSurface (final IHost host, final IModel model, final ColorManager colorManager, final GenericFlexiConfiguration configuration, final IMidiOutput output, final IMidiInput input)
     {
-        super (host, configuration, colorManager, output, input, null);
+        super (host, configuration, colorManager, output, input, null, 0, 0);
 
         this.model = model;
 

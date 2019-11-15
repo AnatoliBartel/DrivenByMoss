@@ -127,14 +127,6 @@ public class ClipView extends AbstractSequencerView<PushControlSurface, PushConf
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO Remove
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public String getSceneButtonColor (final int scene)
     {
         if (scene < 3)

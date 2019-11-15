@@ -6,6 +6,7 @@ package de.mossgrabers.controller.push.mode.device;
 
 import de.mossgrabers.controller.push.controller.PushColors;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.daw.DAWColors;
@@ -71,7 +72,7 @@ public class DeviceChainsMode extends DeviceParamsMode
         }
 
         // LONG press - move upwards
-        this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_ROW1_1 + index);
+        this.surface.setTriggerConsumed (ButtonID.get (ButtonID.ROW1_1, index));
         this.moveUp ();
     }
 

@@ -371,14 +371,6 @@ public class ShiftView extends AbstractView<APCminiControlSurface, APCminiConfig
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO Remove
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public int getTrackButtonColor (final int index)
     {
         final ITrackBank tb = this.model.getCurrentTrackBank ();

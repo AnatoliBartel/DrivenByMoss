@@ -11,11 +11,8 @@ import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefi
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.daw.DAWColors;
 import de.mossgrabers.framework.daw.IModel;
-import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.daw.ITrackBank;
-import de.mossgrabers.framework.daw.data.IScene;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.mode.Modes;
@@ -75,9 +72,13 @@ public class SessionView extends AbstractSessionView<LaunchpadControlSurface, La
 
     protected void delayedUpdateArrowButtons ()
     {
-        this.surface.setTrigger (this.surface.getTriggerId (ButtonID.SESSION), LaunchpadColors.LAUNCHPAD_COLOR_LIME);
-        this.surface.setTrigger (this.surface.getTriggerId (ButtonID.NOTE), LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        this.surface.setTrigger (this.surface.getTriggerId (ButtonID.DEVICE), LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+        // TODO
+        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.SESSION),
+        // LaunchpadColors.LAUNCHPAD_COLOR_LIME);
+        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.NOTE),
+        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.DEVICE),
+        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
         if (this.surface.isPro ())
             this.surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER, this.model.getHost ().hasUserParameters () ? LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO : LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
     }
@@ -104,10 +105,9 @@ public class SessionView extends AbstractSessionView<LaunchpadControlSurface, La
             final int t = index % this.columns;
 
             // Duplicate a clip
-            final int duplicateTriggerId = this.surface.getTriggerId (ButtonID.DUPLICATE);
-            if (this.surface.isPressed (duplicateTriggerId))
+            if (this.surface.isPressed (ButtonID.DUPLICATE))
             {
-                this.surface.setTriggerConsumed (duplicateTriggerId);
+                this.surface.setTriggerConsumed (ButtonID.DUPLICATE);
                 final ITrackBank tb = this.model.getCurrentTrackBank ();
                 final ITrack track = tb.getItem (t);
                 if (track.doesExist ())
@@ -182,20 +182,22 @@ public class SessionView extends AbstractSessionView<LaunchpadControlSurface, La
         this.isBirdsEyeViewActive = isBirdsEyeActive;
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        final ITrackBank tb = this.model.getCurrentTrackBank ();
-        final ISceneBank sceneBank = tb.getSceneBank ();
-        final IScene s = sceneBank.getItem (scene);
-
-        if (s.doesExist ())
-            this.surface.setTrigger (this.surface.getSceneTrigger (scene), DAWColors.getColorIndex (s.getColor ()));
-        else
-            this.surface.setTrigger (this.surface.getSceneTrigger (scene), LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-    }
+    // TODO
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // final ITrackBank tb = this.model.getCurrentTrackBank ();
+    // final ISceneBank sceneBank = tb.getSceneBank ();
+    // final IScene s = sceneBank.getItem (scene);
+    //
+    // if (s.doesExist ())
+    // this.surface.setTrigger (this.surface.getSceneTrigger (scene), DAWColors.getColorIndex
+    // (s.getColor ()));
+    // else
+    // this.surface.setTrigger (this.surface.getSceneTrigger (scene),
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // }
 
 
     @Override
@@ -276,10 +278,9 @@ public class SessionView extends AbstractSessionView<LaunchpadControlSurface, La
         final int index = note - 36;
         final ITrack track = this.model.getCurrentTrackBank ().getItem (index);
 
-        final int duplicateTriggerId = this.surface.getTriggerId (ButtonID.DUPLICATE);
-        if (this.surface.isPressed (duplicateTriggerId))
+        if (this.surface.isPressed (ButtonID.DUPLICATE))
         {
-            this.surface.setTriggerConsumed (duplicateTriggerId);
+            this.surface.setTriggerConsumed (ButtonID.DUPLICATE);
             track.duplicate ();
             return;
         }

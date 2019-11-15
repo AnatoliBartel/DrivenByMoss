@@ -71,7 +71,7 @@ public class NoteMode extends BaseMode
     {
         if (isTouched && this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             switch (index)
             {
                 case 0:

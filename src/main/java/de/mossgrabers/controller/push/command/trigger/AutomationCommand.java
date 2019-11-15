@@ -41,7 +41,7 @@ public class AutomationCommand extends AbstractTriggerCommand<PushControlSurface
     {
         if (this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             if (event == ButtonEvent.DOWN)
                 this.model.getTransport ().resetAutomationOverrides ();
             return;

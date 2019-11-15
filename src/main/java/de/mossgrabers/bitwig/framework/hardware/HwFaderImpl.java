@@ -6,9 +6,9 @@ package de.mossgrabers.bitwig.framework.hardware;
 
 import de.mossgrabers.bitwig.framework.daw.HostImpl;
 import de.mossgrabers.framework.command.core.ContinuousCommand;
+import de.mossgrabers.framework.controller.hardware.AbstractHwContinuousControl;
 import de.mossgrabers.framework.controller.hardware.BindType;
-import de.mossgrabers.framework.controller.hardware.ControlImpl;
-import de.mossgrabers.framework.controller.hardware.IFader;
+import de.mossgrabers.framework.controller.hardware.IHwFader;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 
 import com.bitwig.extension.controller.api.ControllerHost;
@@ -20,11 +20,10 @@ import com.bitwig.extension.controller.api.HardwareSlider;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class FaderImpl extends ControlImpl implements IFader
+public class HwFaderImpl extends AbstractHwContinuousControl implements IHwFader
 {
     private final HardwareSlider hardwareFader;
-    private final ControllerHost host;
-    private ContinuousCommand    command;
+    private final ControllerHost controllerHost;
 
 
     /**
@@ -34,9 +33,11 @@ public class FaderImpl extends ControlImpl implements IFader
      * @param hardwareFader The Bitwig hardware fader
      * @param label The label of the fader
      */
-    public FaderImpl (final HostImpl host, final HardwareSlider hardwareFader, final String label)
+    public HwFaderImpl (final HostImpl host, final HardwareSlider hardwareFader, final String label)
     {
-        this.host = host.getControllerHost ();
+        super (host, label);
+
+        this.controllerHost = host.getControllerHost ();
         this.hardwareFader = hardwareFader;
         this.hardwareFader.setLabel (label);
     }
@@ -44,20 +45,10 @@ public class FaderImpl extends ControlImpl implements IFader
 
     /** {@inheritDoc} */
     @Override
-    public IFader bind (final ContinuousCommand command)
+    public void bind (final ContinuousCommand command)
     {
-        this.command = command;
-
-        this.hardwareFader.addBinding (this.host.createAbsoluteHardwareControlAdjustmentTarget (this::handleValue));
-        return this;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void bind (final IMidiInput input, final BindType type, final int value)
-    {
-        this.bind (input, type, 0, value);
+        super.bind (command);
+        this.hardwareFader.addBinding (this.controllerHost.createAbsoluteHardwareControlAdjustmentTarget (this::handleValue));
     }
 
 
@@ -78,14 +69,6 @@ public class FaderImpl extends ControlImpl implements IFader
     }
 
 
-    /** {@inheritDoc} */
-    @Override
-    public ContinuousCommand getCommand ()
-    {
-        return this.command;
-    }
-
-
     /**
      * Get the Bitwig hardware fader proxy.
      *
@@ -94,5 +77,13 @@ public class FaderImpl extends ControlImpl implements IFader
     public HardwareSlider getHardwareFader ()
     {
         return this.hardwareFader;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void setBounds (double x, double y, double width, double height)
+    {
+        this.hardwareFader.setBounds (x, y, width, height);
     }
 }

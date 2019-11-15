@@ -10,7 +10,6 @@ import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
 import de.mossgrabers.framework.configuration.AbstractConfiguration;
 import de.mossgrabers.framework.configuration.Configuration;
-import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.daw.IModel;
@@ -69,43 +68,62 @@ public class PlayView extends AbstractPlayView<LaunchpadControlSurface, Launchpa
 
     private void delayedUpdateArrowButtons ()
     {
-        this.surface.setTrigger (this.surface.getTriggerId (ButtonID.SESSION), LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        this.surface.setTrigger (this.surface.getTriggerId (ButtonID.NOTE), LaunchpadColors.LAUNCHPAD_COLOR_OCEAN_HI);
-        this.surface.setTrigger (this.surface.getTriggerId (ButtonID.DEVICE), LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+        // TODO
+        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.SESSION),
+        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.NOTE),
+        // LaunchpadColors.LAUNCHPAD_COLOR_OCEAN_HI);
+        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.DEVICE),
+        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
         if (this.surface.isPro ())
             this.surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER, this.model.getHost ().hasUserParameters () ? LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO : LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO
-
-        if (this.model.canSelectedTrackHoldNotes ())
-        {
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE1, LaunchpadColors.LAUNCHPAD_COLOR_OCEAN_HI);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE2, LaunchpadColors.LAUNCHPAD_COLOR_OCEAN_HI);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE3, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE4, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE5, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE6, LaunchpadColors.LAUNCHPAD_COLOR_WHITE);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7, LaunchpadColors.LAUNCHPAD_COLOR_OCEAN_HI);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8, LaunchpadColors.LAUNCHPAD_COLOR_OCEAN_HI);
-        }
-        else
-        {
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE1, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE2, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE3, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE4, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE5, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE6, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-        }
-    }
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // TODO
+    //
+    // if (this.model.canSelectedTrackHoldNotes ())
+    // {
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE1,
+    // LaunchpadColors.LAUNCHPAD_COLOR_OCEAN_HI);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE2,
+    // LaunchpadColors.LAUNCHPAD_COLOR_OCEAN_HI);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE3,
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE4,
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE5,
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE6,
+    // LaunchpadColors.LAUNCHPAD_COLOR_WHITE);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7,
+    // LaunchpadColors.LAUNCHPAD_COLOR_OCEAN_HI);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8,
+    // LaunchpadColors.LAUNCHPAD_COLOR_OCEAN_HI);
+    // }
+    // else
+    // {
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE1,
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE2,
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE3,
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE4,
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE5,
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE6,
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7,
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8,
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // }
+    // }
 
 
     @Override

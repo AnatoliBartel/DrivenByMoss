@@ -5,7 +5,6 @@
 package de.mossgrabers.framework.controller.hardware;
 
 import de.mossgrabers.framework.command.core.TriggerCommand;
-import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.utils.ButtonEvent;
 
 
@@ -14,36 +13,22 @@ import de.mossgrabers.framework.utils.ButtonEvent;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public interface IButton extends IControl
+public interface IHwButton extends IHwInputControl
 {
     /**
      * Assign a command to a button, which is triggered by the button.
      *
      * @param command The command to assign
-     * @return The button for fluent interface
      */
-    IButton bind (TriggerCommand command);
+    void bind (TriggerCommand command);
 
 
     /**
-     * Bind a midi command coming from a MIDI input to the button.
+     * Get the trigger command,
      *
-     * @param input The MIDI input
-     * @param type How to bind
-     * @param value The MIDI CC or note to bind
+     * @return The command or null if not bound
      */
-    void bind (IMidiInput input, BindType type, int value);
-
-
-    /**
-     * Bind a midi command coming from a MIDI input to the button.
-     *
-     * @param input The MIDI input
-     * @param channel The MIDI channel
-     * @param type How to bind
-     * @param value The MIDI CC or note to bind
-     */
-    void bind (IMidiInput input, BindType type, int channel, int value);
+    TriggerCommand getCommand ();
 
 
     /**
@@ -51,7 +36,7 @@ public interface IButton extends IControl
      *
      * @param light The light to assign
      */
-    void addLight (ILight light);
+    void addLight (IHwLight light);
 
 
     /**
@@ -59,15 +44,23 @@ public interface IButton extends IControl
      *
      * @return The light or null
      */
-    ILight getLight ();
+    IHwLight getLight ();
 
 
     /**
      * Test if the button is in pressed state.
      *
-     * @return True if pressed
+     * @return True if pressed (or long pressed)
      */
     boolean isPressed ();
+
+
+    /**
+     * Test if the button is in long pressed state.
+     *
+     * @return True if long pressed
+     */
+    boolean isLongPressed ();
 
 
     /**
@@ -85,9 +78,9 @@ public interface IButton extends IControl
 
 
     /**
-     * Get the trigger command,
+     * Test if the consumed state is set.
      *
-     * @return The command or null if not bound
+     * @return True if set
      */
-    TriggerCommand getCommand ();
+    boolean isConsumed ();
 }

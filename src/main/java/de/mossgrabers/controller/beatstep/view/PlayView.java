@@ -107,6 +107,6 @@ public class PlayView extends AbstractPlayView<BeatstepControlSurface, BeatstepC
         if (this.keyManager.isKeyPressed (pad))
             return BeatstepColors.BEATSTEP_BUTTON_STATE_PINK;
         final ColorManager colorManager = this.model.getColorManager ();
-        return colorManager.getColor (this.keyManager.getColor (pad));
+        return colorManager.getColorIndex (this.keyManager.getColor (pad));
     }
 }

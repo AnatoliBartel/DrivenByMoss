@@ -159,15 +159,10 @@ public class APCControlSurface extends AbstractControlSurface<APCConfiguration>
      */
     public APCControlSurface (final IHost host, final ColorManager colorManager, final APCConfiguration configuration, final IMidiOutput output, final IMidiInput input, final boolean isMkII)
     {
-        super (host, configuration, colorManager, output, input, new APCPadGrid (colorManager, output, isMkII));
+        // TODO size
+        super (host, configuration, colorManager, output, input, new APCPadGrid (colorManager, output, isMkII), 100, 80);
 
         this.isMkII = isMkII;
-
-        this.setTriggerId (ButtonID.SHIFT, APC_BUTTON_SHIFT);
-        this.setTriggerId (ButtonID.LEFT, APC_BUTTON_LEFT);
-        this.setTriggerId (ButtonID.RIGHT, APC_BUTTON_RIGHT);
-        this.setTriggerId (ButtonID.UP, APC_BUTTON_UP);
-        this.setTriggerId (ButtonID.DOWN, APC_BUTTON_DOWN);
 
         // Set Mode 2
         this.output.sendSysex ("F0 47 7F " + (isMkII ? ID_APC_40_MKII : ID_APC_40) + " 60 00 04 41 08 02 01 F7");
@@ -268,7 +263,7 @@ public class APCControlSurface extends AbstractControlSurface<APCConfiguration>
                 if (commandID != null)
                     view.executeContinuousCommand (commandID, data2);
                 if (data1 == APCControlSurface.APC_FOOTSWITCH_2)
-                    view.executeTriggerCommand (this.getTriggerCommand (APCControlSurface.APC_FOOTSWITCH_2), data2 > 0 ? ButtonEvent.DOWN : ButtonEvent.UP);
+                    this.getButton (ButtonID.NEW).getCommand ().execute (data2 > 0 ? ButtonEvent.DOWN : ButtonEvent.UP);
                 break;
 
             default:

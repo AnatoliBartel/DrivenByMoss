@@ -103,18 +103,21 @@ public class DrumConfigView extends AbstractView<LaunchkeyMiniMk3ControlSurface,
         padGrid.lightEx (7, 1, this.scales.canScrollDrumOctaveDown () ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_CYAN_HI : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_CYAN_LO);
     }
 
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // TODO
+    // if (scene == 0)
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1,
+    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
+    // else
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
+    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE);
+    // }
+
 
     /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        if (scene == 0)
-            this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
-        else
-            this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE);
-    }
-
-
     @Override
     public String getSceneButtonColor (final int scene)
     {

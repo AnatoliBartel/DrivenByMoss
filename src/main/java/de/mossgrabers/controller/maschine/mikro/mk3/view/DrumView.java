@@ -69,14 +69,6 @@ public class DrumView extends AbstractDrumView<MaschineMikroMk3ControlSurface, M
     }
 
 
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        // Not used
-    }
-
-
     protected void updateScale ()
     {
         this.surface.getDisplay ().notify (this.scales.getScale ().getName ());

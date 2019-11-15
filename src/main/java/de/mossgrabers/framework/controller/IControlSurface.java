@@ -5,21 +5,25 @@
 package de.mossgrabers.framework.controller;
 
 import de.mossgrabers.framework.command.ContinuousCommandID;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.configuration.Configuration;
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.display.IDisplay;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.controller.hardware.IButton;
-import de.mossgrabers.framework.controller.hardware.IFader;
-import de.mossgrabers.framework.controller.hardware.ILight;
+import de.mossgrabers.framework.controller.hardware.IHwAbsoluteKnob;
+import de.mossgrabers.framework.controller.hardware.IHwButton;
+import de.mossgrabers.framework.controller.hardware.IHwContinuousControl;
+import de.mossgrabers.framework.controller.hardware.IHwFader;
+import de.mossgrabers.framework.controller.hardware.IHwLight;
+import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
 import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.view.ViewManager;
 
 import java.util.function.IntConsumer;
+import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 
 
@@ -139,45 +143,6 @@ public interface IControlSurface<C extends Configuration>
 
 
     /**
-     * Assigns a command to a midi CC on the default midi channel. When the midi CC is received the
-     * command is executed.
-     *
-     * @param cc The midi CC
-     * @param commandID The command ID
-     */
-    void assignTriggerCommand (int cc, TriggerCommandID commandID);
-
-
-    /**
-     * Assigns a command to a midi CC. When the midi CC is received the command is executed.
-     *
-     * @param channel The midi channel to assign to (0-15)
-     * @param cc The midi CC
-     * @param commandID The command ID
-     */
-    void assignTriggerCommand (int channel, int cc, TriggerCommandID commandID);
-
-
-    /**
-     * Get the ID of an assigned command on the default midi channel.
-     *
-     * @param cc The midi CC
-     * @return The command ID or null if none is assigned to the given midi CC
-     */
-    TriggerCommandID getTriggerCommand (int cc);
-
-
-    /**
-     * Get the ID of an assigned command.
-     *
-     * @param channel The midi channel to which it was assign to (0-15)
-     * @param cc The midi CC
-     * @return The command ID or null if none is assigned to the given midi CC
-     */
-    TriggerCommandID getTriggerCommand (int channel, int cc);
-
-
-    /**
      * Assigns a continuous command to a midi CC on the default midi channel. When the midi CC is
      * received the command is executed.
      *
@@ -215,25 +180,6 @@ public interface IControlSurface<C extends Configuration>
      * @return The command ID or null if none is assigned to the given midi CC
      */
     ContinuousCommandID getContinuousCommand (int channel, int cc);
-
-
-    /**
-     * Assigns a note (continuous) command to a midi note on all midi channels. When the midi note
-     * is received the command is executed.
-     *
-     * @param note The midi note
-     * @param commandID The command ID
-     */
-    void assignNoteCommand (final int note, final TriggerCommandID commandID);
-
-
-    /**
-     * Get the ID of an assigned note (continuous) command on all midi channels.
-     *
-     * @param note The midi note
-     * @return The command ID or null if none is assigned to the given midi CC
-     */
-    TriggerCommandID getNoteCommand (final int note);
 
 
     /**
@@ -314,15 +260,6 @@ public interface IControlSurface<C extends Configuration>
 
 
     /**
-     * Get the midi cc of the given trigger ID.
-     *
-     * @param trigger The button ID of the trigger
-     * @return The midi cc or -1 if not set
-     */
-    int getTriggerId (ButtonID trigger);
-
-
-    /**
      * Get the midi cc of one of the scene triggers.
      *
      *
@@ -333,50 +270,21 @@ public interface IControlSurface<C extends Configuration>
 
 
     /**
-     * Test if the trigger with the given midi CC on the default midi channel is pressed.
+     * Test if the trigger with the given button ID is pressed.
      *
-     * @param buttonID The trigger to test (as a button ID)
+     * @param buttonID The ID of the button to test
      * @return True if pressed
      */
     boolean isPressed (ButtonID buttonID);
 
 
     /**
-     * Test if the trigger with the given midi CC on the default midi channel is pressed.
+     * Test if the trigger with the given button ID is long pressed.
      *
-     * @param cc The trigger to test
-     * @return True if pressed
-     */
-    boolean isPressed (int cc);
-
-
-    /**
-     * Test if the trigger with the given midi CC is pressed.
-     *
-     * @param channel The midi channel to use
-     * @param cc The trigger to test
-     * @return True if pressed
-     */
-    boolean isPressed (int channel, int cc);
-
-
-    /**
-     * Test if the trigger with the given midi CC is long pressed.
-     *
-     * @param cc The trigger to test
+     * @param buttonID The ID of the button to test
      * @return True if long pressed
      */
-    boolean isLongPressed (int cc);
-
-
-    /**
-     * Test if the trigger with the given midi CC is long pressed.
-     *
-     * @param channel The midi channel to use
-     * @param cc The trigger to test
-     * @return True if long pressed
-     */
-    boolean isLongPressed (int channel, int cc);
+    boolean isLongPressed (ButtonID buttonID);
 
 
     /**
@@ -389,91 +297,12 @@ public interface IControlSurface<C extends Configuration>
 
 
     /**
-     * Sets a trigger as consumed which prevents LONG and UP events following a DOWN event for a
-     * trigger.
-     *
-     * @param cc The trigger to set as consumed
-     */
-    @Deprecated
-    void setTriggerConsumed (int cc);
-
-
-    /**
-     * Sets a trigger as consumed which prevents LONG and UP events following a DOWN event for a
-     * trigger.
-     *
-     * @param channel The midi channel to use
-     * @param cc The trigger to test
-     */
-    @Deprecated
-    void setTriggerConsumed (int channel, int cc);
-
-
-    /**
      * Test if the consumed flag is set for a trigger.
      *
-     * @param cc The trigger to set as consumed
+     * @param buttonID The trigger to set as consumed
      * @return The consumed flag
      */
-    @Deprecated
-    boolean isTriggerConsumed (int cc);
-
-
-    /**
-     * Test if the consumed flag is set for a trigger.
-     *
-     * @param channel The midi channel to use
-     * @param cc The trigger to set as consumed
-     * @return The consumed flag
-     */
-    @Deprecated
-    boolean isTriggerConsumed (int channel, int cc);
-
-
-    /**
-     * Update the lighting of a trigger (if the trigger has light), sending on the default midi
-     * channel. This method caches the state of the trigger and sends only updates to the controller
-     * if the state has changed, in contrast to setTrigger.
-     *
-     * @param cc The trigger
-     * @param value The color / brightness depending on the controller
-     */
-    void updateTrigger (int cc, int value);
-
-
-    /**
-     * Update the lighting of a trigger (if the trigger has light). This method caches the state of
-     * the trigger and sends only updates to the controller if the state has changed, in contrast to
-     * setTrigger.
-     *
-     * @param channel The midi channel to use
-     * @param cc The trigger
-     * @param value The color / brightness depending on the controller
-     */
-    void updateTrigger (int channel, int cc, int value);
-
-
-    /**
-     * Update the lighting of a trigger (if the trigger has light), sending on the default midi
-     * channel. This method caches the state of the trigger and sends only updates to the controller
-     * if the state has changed, in contrast to setTrigger.
-     *
-     * @param cc The trigger
-     * @param colorID A registered color ID of the color / brightness depending on the controller
-     */
-    void updateTrigger (int cc, String colorID);
-
-
-    /**
-     * Update the lighting of a trigger (if the trigger has light). This method caches the state of
-     * the trigger and sends only updates to the controller if the state has changed, in contrast to
-     * setTrigger.
-     *
-     * @param channel The midi channel to use
-     * @param cc The trigger
-     * @param colorID A registered color ID of the color / brightness depending on the controller
-     */
-    void updateTrigger (int channel, int cc, String colorID);
+    boolean isTriggerConsumed (ButtonID buttonID);
 
 
     /**
@@ -523,7 +352,7 @@ public interface IControlSurface<C extends Configuration>
      * @param label The label of the button
      * @return The created button
      */
-    IButton createButton (ButtonID buttonID, String label);
+    IHwButton createButton (ButtonID buttonID, String label);
 
 
     /**
@@ -532,7 +361,7 @@ public interface IControlSurface<C extends Configuration>
      * @param buttonID The button ID
      * @return The button or null if not created
      */
-    IButton getButton (ButtonID buttonID);
+    IHwButton getButton (ButtonID buttonID);
 
 
     /**
@@ -540,41 +369,56 @@ public interface IControlSurface<C extends Configuration>
      *
      * @param supplier Callback for retrieving the state of the light
      * @param sendConsumer Callback for sending the update command to the controller surface
+     * @param stateToColorFunction Convert the state of the light to a color, which can be displayed
+     *            in the simulated GUI
      * @return The created light
      */
-    ILight createLight (IntSupplier supplier, IntConsumer sendConsumer);
+    IHwLight createLight (IntSupplier supplier, IntConsumer sendConsumer, IntFunction<ColorEx> stateToColorFunction);
 
 
     /**
      * Create a fader for the surface.
      *
+     * @param faderID The fader ID
      * @param label The label of the fader
      * @return The created fader
      */
-    IFader createFader (String label);
+    IHwFader createFader (ContinuousID faderID, String label);
+
+
+    /**
+     * Create an absolute knob for the surface.
+     *
+     * @param knobID The knob ID
+     * @param label The label of the knob
+     * @return The created knob
+     */
+    IHwAbsoluteKnob createAbsoluteKnob (ContinuousID knobID, String label);
+
+
+    /**
+     * Create a relative knob for the surface.
+     *
+     * @param knobID The knob ID
+     * @param label The label of the knob
+     * @return The created knob
+     */
+    IHwRelativeKnob createRelativeKnob (ContinuousID knobID, String label);
+
+
+    /**
+     * Get a continuous control (fader or knob) that was created with the given ID.
+     *
+     * @param continuousID The continuous ID
+     * @return The button or null if not created
+     */
+    IHwContinuousControl getContinuous (ContinuousID continuousID);
 
 
     /**
      * Clear the cached lighting state of all triggers.
      */
     void clearTriggerCache ();
-
-
-    /**
-     * Clear the cached lighting state of a trigger of the default MIDI channel.
-     *
-     * @param cc The trigger
-     */
-    void clearTriggerCache (int cc);
-
-
-    /**
-     * Clear the cached lighting state of a trigger of the given MIDI channel.
-     *
-     * @param channel The midi channel
-     * @param cc The trigger
-     */
-    void clearTriggerCache (int channel, int cc);
 
 
     /**
@@ -598,25 +442,6 @@ public interface IControlSurface<C extends Configuration>
      * @param cc The trigger
      */
     void clearContinuousCache (int channel, int cc);
-
-
-    /**
-     * Check if the midi CC on the default midi channel belongs to a trigger.
-     *
-     * @param cc The CC to check
-     * @return True if it belongs to a trigger
-     */
-    boolean isTrigger (int cc);
-
-
-    /**
-     * Check if the midi CC belongs to a trigger.
-     *
-     * @param channel The midi channel
-     * @param cc The CC to check
-     * @return True if it belongs to a trigger
-     */
-    boolean isTrigger (int channel, int cc);
 
 
     /**

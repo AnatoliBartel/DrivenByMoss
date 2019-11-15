@@ -98,14 +98,6 @@ public class PrgChangeView extends AbstractView<PushControlSurface, PushConfigur
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO Remove
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public String getSceneButtonColor (final int scene)
     {
         // TODO Create constants, create a generic AbstractPrgChangeView

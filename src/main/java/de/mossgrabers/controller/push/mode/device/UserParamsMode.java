@@ -60,7 +60,7 @@ public class UserParamsMode extends BaseMode
         final IParameter param = this.model.getUserParameterBank ().getItem (index);
         if (isTouched && this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             param.resetValue ();
         }
         param.touchValue (isTouched);

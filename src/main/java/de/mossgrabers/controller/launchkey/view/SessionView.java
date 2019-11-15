@@ -62,55 +62,62 @@ public class SessionView extends AbstractSessionView<LaunchkeyMiniMk3ControlSurf
         this.setColors (isRecording, isRecordingQueued, isPlaying, isPlayingQueued, hasContent, noContent, recArmed);
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        final ColorManager colorManager = this.model.getColorManager ();
-        final int colorScene = colorManager.getColor (AbstractSessionView.COLOR_SCENE);
-        final int colorSceneSelected = colorManager.getColor (AbstractSessionView.COLOR_SELECTED_SCENE);
-        final int colorSceneOff = colorManager.getColor (AbstractSessionView.COLOR_SCENE_OFF);
-
-        final ISceneBank sceneBank = this.model.getSceneBank ();
-        IScene s = sceneBank.getItem (0);
-
-        if (scene == 0)
-        {
-            this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1, s.doesExist () ? s.isSelected () ? colorSceneSelected : colorScene : colorSceneOff);
-            return;
-        }
-
-        if (this.padMode == null)
-        {
-            s = sceneBank.getItem (1);
-            this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2, s.doesExist () ? s.isSelected () ? colorSceneSelected : colorScene : colorSceneOff);
-            return;
-        }
-
-        switch (this.padMode)
-        {
-            case REC_ARM:
-                this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED_HI);
-                break;
-            case TRACK_SELECT:
-                this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE);
-                break;
-            case MUTE:
-                this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_AMBER_HI);
-                break;
-            case SOLO:
-                this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_YELLOW_HI);
-                break;
-            case STOP_CLIP:
-                this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_ROSE);
-                break;
-            default:
-                // Unused
-                break;
-        }
-
-    }
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // final ColorManager colorManager = this.model.getColorManager ();
+    // final int colorScene = colorManager.getColor (AbstractSessionView.COLOR_SCENE);
+    // final int colorSceneSelected = colorManager.getColor
+    // (AbstractSessionView.COLOR_SELECTED_SCENE);
+    // final int colorSceneOff = colorManager.getColor (AbstractSessionView.COLOR_SCENE_OFF);
+    //
+    // final ISceneBank sceneBank = this.model.getSceneBank ();
+    // IScene s = sceneBank.getItem (0);
+    //
+    // TODO
+    // if (scene == 0)
+    // {
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1, s.doesExist
+    // () ? s.isSelected () ? colorSceneSelected : colorScene : colorSceneOff);
+    // return;
+    // }
+    //
+    // if (this.padMode == null)
+    // {
+    // s = sceneBank.getItem (1);
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2, s.doesExist
+    // () ? s.isSelected () ? colorSceneSelected : colorScene : colorSceneOff);
+    // return;
+    // }
+    //
+    // switch (this.padMode)
+    // {
+    // case REC_ARM:
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
+    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED_HI);
+    // break;
+    // case TRACK_SELECT:
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
+    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE);
+    // break;
+    // case MUTE:
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
+    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_AMBER_HI);
+    // break;
+    // case SOLO:
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
+    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_YELLOW_HI);
+    // break;
+    // case STOP_CLIP:
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
+    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_ROSE);
+    // break;
+    // default:
+    // // Unused
+    // break;
+    // }
+    // }
 
 
     @Override

@@ -96,14 +96,6 @@ public class DrumView extends AbstractDrumView<APCminiControlSurface, APCminiCon
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO Remove
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public String getSceneButtonColor (final int index)
     {
         final boolean isKeyboardEnabled = this.model.canSelectedTrackHoldNotes ();

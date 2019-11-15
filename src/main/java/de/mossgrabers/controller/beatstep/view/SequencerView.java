@@ -145,7 +145,7 @@ public class SequencerView extends BaseSequencerView
         {
             for (int i = 36; i < 52; i++)
             {
-                padGrid.light (i, this.keyManager.isKeyPressed (i) || this.selectedPad == i - 36 ? BeatstepColors.BEATSTEP_BUTTON_STATE_PINK : this.model.getColorManager ().getColor (this.keyManager.getColor (i)));
+                padGrid.light (i, this.keyManager.isKeyPressed (i) || this.selectedPad == i - 36 ? BeatstepColors.BEATSTEP_BUTTON_STATE_PINK : this.model.getColorManager ().getColorIndex (this.keyManager.getColor (i)));
             }
         }
         else

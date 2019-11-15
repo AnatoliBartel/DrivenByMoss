@@ -124,14 +124,6 @@ public class ColorView extends AbstractView<PushControlSurface, PushConfiguratio
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO Remove
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public String getSceneButtonColor (final int scene)
     {
         return AbstractSequencerView.COLOR_RESOLUTION_OFF;

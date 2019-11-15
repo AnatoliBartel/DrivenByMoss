@@ -81,7 +81,7 @@ public class MasterMode extends BaseMode
 
         if (isTouched && this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             if (index == 0)
                 this.model.getMasterTrack ().resetVolume ();
             else if (index == 1)
@@ -147,9 +147,9 @@ public class MasterMode extends BaseMode
         if (event != ButtonEvent.UP)
             return;
 
-        if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_RECORD))
+        if (this.surface.isPressed (ButtonID.RECORD))
         {
-            this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_RECORD);
+            this.surface.setTriggerConsumed (ButtonID.RECORD);
             this.model.getMasterTrack ().toggleRecArm ();
             return;
         }
@@ -186,14 +186,15 @@ public class MasterMode extends BaseMode
         final ColorManager colorManager = this.model.getColorManager ();
 
         final boolean isPush2 = this.surface.getConfiguration ().isPush2 ();
-        this.surface.updateTrigger (20, this.getTrackButtonColor ());
+        if (index == 0)
+            return this.getTrackButtonColor ();
         if (index < 4 || index == 5)
-            return colorManager.getColor (AbstractMode.BUTTON_COLOR_OFF);
+            return colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
         if (index > 5)
-            return colorManager.getColor (AbstractMode.BUTTON_COLOR_ON);
+            return colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON);
 
         final int red = isPush2 ? PushColors.PUSH2_COLOR_RED_HI : PushColors.PUSH1_COLOR_RED_HI;
-        return this.model.getApplication ().isEngineActive () ? colorManager.getColor (AbstractMode.BUTTON_COLOR_ON) : red;
+        return this.model.getApplication ().isEngineActive () ? colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON) : red;
     }
 
 

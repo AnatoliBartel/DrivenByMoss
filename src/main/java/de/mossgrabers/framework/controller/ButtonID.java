@@ -327,6 +327,8 @@ public enum ButtonID
     /** Button select row 8 button. */
     ROW_SELECT_8,
 
+    /** The automation off button. */
+    AUTOMATION_OFF,
     /** The automation read button. */
     AUTOMATION_READ,
     /** The automation write button. */

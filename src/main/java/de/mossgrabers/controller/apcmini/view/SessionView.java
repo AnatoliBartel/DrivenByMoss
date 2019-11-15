@@ -87,14 +87,6 @@ public class SessionView extends AbstractSessionView<APCminiControlSurface, APCm
 
     /** {@inheritDoc} */
     @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO Remove
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public String getSceneButtonColor (final int scene)
     {
         return this.surface.getNoteVelocity (scene) > 0 ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;

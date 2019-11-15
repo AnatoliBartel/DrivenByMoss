@@ -5,18 +5,21 @@
 package de.mossgrabers.framework.controller;
 
 import de.mossgrabers.framework.command.ContinuousCommandID;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.configuration.Configuration;
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.display.DummyDisplay;
 import de.mossgrabers.framework.controller.display.IDisplay;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.controller.hardware.IButton;
-import de.mossgrabers.framework.controller.hardware.IFader;
-import de.mossgrabers.framework.controller.hardware.ILight;
-import de.mossgrabers.framework.controller.hardware.ISurfaceFactory;
+import de.mossgrabers.framework.controller.hardware.IHwAbsoluteKnob;
+import de.mossgrabers.framework.controller.hardware.IHwButton;
+import de.mossgrabers.framework.controller.hardware.IHwContinuousControl;
+import de.mossgrabers.framework.controller.hardware.IHwFader;
+import de.mossgrabers.framework.controller.hardware.IHwLight;
+import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
+import de.mossgrabers.framework.controller.hardware.IHwSurfaceFactory;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
@@ -25,7 +28,6 @@ import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.utils.ContinuousInfo;
 import de.mossgrabers.framework.utils.LatestTaskExecutor;
-import de.mossgrabers.framework.utils.TriggerInfo;
 import de.mossgrabers.framework.view.View;
 import de.mossgrabers.framework.view.ViewManager;
 
@@ -36,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.IntConsumer;
+import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 
 
@@ -57,16 +60,15 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     protected final ColorManager                                    colorManager;
     protected final IMidiOutput                                     output;
     protected final IMidiInput                                      input;
-    protected final ISurfaceFactory                                 surfaceFactory;
+    protected final IHwSurfaceFactory                               surfaceFactory;
 
     protected final ViewManager                                     viewManager           = new ViewManager ();
     protected final ModeManager                                     modeManager           = new ModeManager ();
 
     protected int                                                   defaultMidiChannel    = 0;
 
-    private Map<ButtonID, IButton>                                  buttons               = new HashMap<> ();
-    protected final EnumMap<ButtonID, Integer>                      buttonIDs             = new EnumMap<> (ButtonID.class);
-    private final TriggerInfo [] []                                 triggerInfos          = new TriggerInfo [16] [NUM_INFOS];
+    private Map<ButtonID, IHwButton>                                buttons               = new EnumMap<> (ButtonID.class);
+    private Map<ContinuousID, IHwContinuousControl>                 continuous            = new EnumMap<> (ContinuousID.class);
     private final ContinuousInfo [] []                              continuousInfos       = new ContinuousInfo [16] [NUM_INFOS];
     private final int []                                            noteVelocities;
 
@@ -74,9 +76,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     protected List<IGraphicDisplay>                                 graphicsDisplays      = new ArrayList<> (1);
 
     protected final PadGrid                                         pads;
-    protected final Map<Integer, Map<Integer, TriggerCommandID>>    triggerCommands       = new HashMap<> ();
     protected final Map<Integer, Map<Integer, ContinuousCommandID>> continuousCommands    = new HashMap<> ();
-    protected final Map<Integer, TriggerCommandID>                  noteCommands          = new HashMap<> ();
 
     private final boolean []                                        gridNoteConsumed;
     private final ButtonEvent []                                    gridNoteStates;
@@ -96,15 +96,17 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
      * @param output The midi output
      * @param input The midi input
      * @param padGrid The pads if any, may be null
+     * @param width The width of the controller device
+     * @param height The height of the controller device
      */
-    public AbstractControlSurface (final IHost host, final C configuration, final ColorManager colorManager, final IMidiOutput output, final IMidiInput input, final PadGrid padGrid)
+    public AbstractControlSurface (final IHost host, final C configuration, final ColorManager colorManager, final IMidiOutput output, final IMidiInput input, final PadGrid padGrid, final double width, final double height)
     {
         this.host = host;
         this.configuration = configuration;
         this.colorManager = colorManager;
         this.pads = padGrid;
 
-        this.surfaceFactory = host.createSurfaceFactory ();
+        this.surfaceFactory = host.createSurfaceFactory (width, height);
 
         this.dummyDisplay = new DummyDisplay (host);
 
@@ -202,6 +204,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public void addTextDisplay (final ITextDisplay display)
     {
+        display.setHardwareDisplay (this.surfaceFactory.createTextDisplay (OutputID.DISPLAY1, display.getNoOfLines ()));
         this.textDisplays.add (display);
     }
 
@@ -240,40 +243,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public void assignTriggerCommand (final int cc, final TriggerCommandID commandID)
-    {
-        this.assignTriggerCommand (this.defaultMidiChannel, cc, commandID);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void assignTriggerCommand (final int channel, final int cc, final TriggerCommandID commandID)
-    {
-        this.triggerInfos[channel][cc] = new TriggerInfo ();
-        this.triggerCommands.computeIfAbsent (Integer.valueOf (cc), k -> new HashMap<> ()).put (Integer.valueOf (channel), commandID);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public TriggerCommandID getTriggerCommand (final int cc)
-    {
-        return this.getTriggerCommand (this.defaultMidiChannel, cc);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public TriggerCommandID getTriggerCommand (final int channel, final int cc)
-    {
-        final Map<Integer, TriggerCommandID> channelMap = this.triggerCommands.get (Integer.valueOf (cc));
-        return channelMap == null ? null : channelMap.get (Integer.valueOf (channel));
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public void assignContinuousCommand (final int cc, final ContinuousCommandID commandID)
     {
         this.assignContinuousCommand (this.defaultMidiChannel, cc, commandID);
@@ -303,22 +272,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     {
         final Map<Integer, ContinuousCommandID> channelMap = this.continuousCommands.get (Integer.valueOf (cc));
         return channelMap == null ? null : channelMap.get (Integer.valueOf (channel));
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void assignNoteCommand (final int note, final TriggerCommandID commandID)
-    {
-        this.noteCommands.put (Integer.valueOf (note), commandID);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public TriggerCommandID getNoteCommand (final int note)
-    {
-        return this.noteCommands.get (Integer.valueOf (note));
     }
 
 
@@ -371,9 +324,17 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public IButton getButton (final ButtonID buttonID)
+    public IHwButton getButton (final ButtonID buttonID)
     {
         return this.buttons.get (buttonID);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public IHwContinuousControl getContinuous (ContinuousID continuousID)
+    {
+        return this.continuous.get (continuousID);
     }
 
 
@@ -421,74 +382,25 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public boolean isPressed (final ButtonID buttonID)
     {
-        final IButton button = this.buttons.get (buttonID);
-        if (button != null)
-            return button.isPressed ();
-
-        final Integer cc = this.buttonIDs.get (buttonID);
-        return cc != null && this.isPressed (cc.intValue ());
+        final IHwButton button = this.buttons.get (buttonID);
+        return button != null && button.isPressed ();
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public boolean isPressed (final int cc)
+    public boolean isLongPressed (final ButtonID buttonID)
     {
-        return this.isPressed (this.defaultMidiChannel, cc);
+        final IHwButton button = this.buttons.get (buttonID);
+        return button != null && button.isLongPressed ();
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public boolean isPressed (final int channel, final int cc)
+    public IHwButton createButton (final ButtonID buttonID, final String label)
     {
-        final TriggerInfo info = this.getTriggerInfo (channel, cc);
-        if (info == null)
-            return false;
-        return info.getState () != ButtonEvent.UP;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean isLongPressed (final int cc)
-    {
-        return this.isLongPressed (this.defaultMidiChannel, cc);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean isLongPressed (final int channel, final int cc)
-    {
-        final TriggerInfo info = this.getTriggerInfo (channel, cc);
-        if (info == null)
-            return false;
-        return info.getState () == ButtonEvent.LONG;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public int getTriggerId (final ButtonID trigger)
-    {
-        final Integer cc = this.buttonIDs.get (trigger);
-        return cc == null ? -1 : cc.intValue ();
-    }
-
-
-    @Deprecated
-    protected void setTriggerId (final ButtonID trigger, final int cc)
-    {
-        this.buttonIDs.put (trigger, Integer.valueOf (cc));
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public IButton createButton (final ButtonID buttonID, final String label)
-    {
-        final IButton button = this.surfaceFactory.createButton (buttonID, label);
+        final IHwButton button = this.surfaceFactory.createButton (buttonID, label);
         this.buttons.put (buttonID, button);
         return button;
     }
@@ -496,17 +408,39 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public ILight createLight (final IntSupplier supplier, final IntConsumer sendConsumer)
+    public IHwLight createLight (final IntSupplier supplier, final IntConsumer sendConsumer, IntFunction<ColorEx> stateToColorFunction)
     {
-        return this.surfaceFactory.createLight (supplier, sendConsumer);
+        return this.surfaceFactory.createLight (supplier, sendConsumer, stateToColorFunction);
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public IFader createFader (final String label)
+    public IHwFader createFader (final ContinuousID faderID, final String label)
     {
-        return this.surfaceFactory.createFader (label);
+        final IHwFader fader = this.surfaceFactory.createFader (faderID, label);
+        this.continuous.put (faderID, fader);
+        return fader;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public IHwAbsoluteKnob createAbsoluteKnob (final ContinuousID knobID, final String label)
+    {
+        final IHwAbsoluteKnob knob = this.surfaceFactory.createAbsoluteKnob (knobID, label);
+        this.continuous.put (knobID, knob);
+        return knob;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public IHwRelativeKnob createRelativeKnob (final ContinuousID knobID, final String label)
+    {
+        final IHwRelativeKnob knob = this.surfaceFactory.createRelativeKnob (knobID, label);
+        this.continuous.put (knobID, knob);
+        return knob;
     }
 
 
@@ -515,42 +449,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     public int getSceneTrigger (final int index)
     {
         return -1;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateTrigger (final int cc, final String colorID)
-    {
-        this.updateTrigger (cc, this.colorManager.getColor (colorID));
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateTrigger (final int cc, final int value)
-    {
-        this.updateTrigger (this.defaultMidiChannel, cc, value);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateTrigger (final int channel, final int cc, final String colorID)
-    {
-        this.updateTrigger (channel, cc, this.colorManager.getColor (colorID));
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateTrigger (final int channel, final int cc, final int value)
-    {
-        final TriggerInfo info = this.getTriggerInfo (channel, cc);
-        if (info == null || info.getLedValue () == value)
-            return;
-        this.setTrigger (channel, cc, value);
-        info.setLedValue (value);
     }
 
 
@@ -566,7 +464,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public void setTrigger (final int cc, final String colorID)
     {
-        this.setTrigger (cc, this.colorManager.getColor (colorID));
+        this.setTrigger (cc, this.colorManager.getColorIndex (colorID));
     }
 
 
@@ -574,7 +472,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public void setTrigger (final int channel, final int cc, final String colorID)
     {
-        this.setTrigger (channel, cc, this.colorManager.getColor (colorID));
+        this.setTrigger (channel, cc, this.colorManager.getColorIndex (colorID));
     }
 
 
@@ -598,48 +496,8 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public void clearTriggerCache ()
     {
-        for (int channel = 0; channel < 16; channel++)
-        {
-            for (int cc = 0; cc < NUM_INFOS; cc++)
-            {
-                if (this.triggerInfos[channel][cc] != null)
-                    this.triggerInfos[channel][cc].setLedValue (-1);
-            }
-        }
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void clearTriggerCache (final int cc)
-    {
-        this.clearTriggerCache (this.defaultMidiChannel, cc);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void clearTriggerCache (final int channel, final int cc)
-    {
-        final TriggerInfo info = this.getTriggerInfo (channel, cc);
-        if (info != null)
-            info.setLedValue (-1);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean isTrigger (final int cc)
-    {
-        return this.isTrigger (this.defaultMidiChannel, cc);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean isTrigger (final int channel, final int cc)
-    {
-        return this.triggerInfos[channel][cc] != null;
+        // TODO Correct? Remove completely?
+        this.turnOffTriggers ();
     }
 
 
@@ -647,48 +505,18 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public void setTriggerConsumed (final ButtonID buttonID)
     {
-        final IButton button = this.buttons.get (buttonID);
+        final IHwButton button = this.buttons.get (buttonID);
         if (button != null)
             button.setConsumed ();
-
-        final Integer cc = this.buttonIDs.get (buttonID);
-        if (cc != null)
-            this.setTriggerConsumed (cc.intValue ());
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public void setTriggerConsumed (final int cc)
+    public boolean isTriggerConsumed (final ButtonID buttonID)
     {
-        this.setTriggerConsumed (this.defaultMidiChannel, cc);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void setTriggerConsumed (final int channel, final int cc)
-    {
-        final TriggerInfo triggerInfo = this.getTriggerInfo (channel, cc);
-        if (triggerInfo != null)
-            triggerInfo.setConsumed (true);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean isTriggerConsumed (final int cc)
-    {
-        return this.isTriggerConsumed (this.defaultMidiChannel, cc);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean isTriggerConsumed (final int channel, final int cc)
-    {
-        final TriggerInfo info = this.getTriggerInfo (channel, cc);
-        return info != null && info.isConsumed ();
+        final IHwButton button = this.buttons.get (buttonID);
+        return button != null && button.isConsumed ();
     }
 
 
@@ -696,17 +524,8 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public void turnOffTriggers ()
     {
-        for (int channel = 0; channel < 16; channel++)
-        {
-            for (int cc = 0; cc < 128; cc++)
-            {
-                if (this.isTrigger (channel, cc))
-                    this.setTrigger (channel, cc, 0);
-            }
-        }
-
         this.buttons.values ().forEach (button -> {
-            final ILight light = button.getLight ();
+            final IHwLight light = button.getLight ();
             if (light != null)
                 light.turnOff ();
         });
@@ -1062,26 +881,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
      */
     protected void handleCC (final int channel, final int cc, final int value)
     {
-        if (this.triggerInfos[channel][cc] != null)
-        {
-            if (value > 0)
-            {
-                this.triggerInfos[channel][cc].setState (ButtonEvent.DOWN);
-                this.scheduleTask ( () -> this.checkButtonState (channel, cc), AbstractControlSurface.BUTTON_STATE_INTERVAL);
-            }
-            else
-            {
-                this.triggerInfos[channel][cc].setState (ButtonEvent.UP);
-
-                // If consumed flag is set ignore the UP event
-                if (this.triggerInfos[channel][cc].isConsumed ())
-                {
-                    this.triggerInfos[channel][cc].setConsumed (false);
-                    return;
-                }
-            }
-        }
-
         this.handleCCEvent (channel, cc, value);
     }
 
@@ -1095,19 +894,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     protected void handleNoteEvent (final int note, final int velocity)
     {
         this.noteVelocities[note] = velocity;
-
-        final View view = this.viewManager.getActiveView ();
-        if (view == null)
-            return;
-
-        final TriggerCommandID commandID = this.getNoteCommand (note);
-        if (commandID != null)
-        {
-            view.executeNoteCommand (commandID, velocity);
-            return;
-        }
-
-        this.println ("Unsupported Midi Note: " + note);
     }
 
 
@@ -1123,14 +909,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
         final View view = this.viewManager.getActiveView ();
         if (view == null)
             return;
-
-        final TriggerCommandID triggerCommandID = this.getTriggerCommand (channel, cc);
-        if (triggerCommandID != null)
-        {
-            final ButtonEvent event = this.triggerInfos[channel][cc] == null ? null : this.triggerInfos[channel][cc].getState ();
-            view.executeTriggerCommand (triggerCommandID, event);
-            return;
-        }
 
         final ContinuousCommandID commandID = this.getContinuousCommand (channel, cc);
         if (commandID != null)
@@ -1168,37 +946,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
         view.drawGrid ();
         if (this.pads != null)
             this.pads.flush ();
-    }
-
-
-    /**
-     * If the state of the given button is still down, the state is set to long and an event gets
-     * fired.
-     *
-     * @param channel The MIDI channel
-     * @param cc The button CC to check
-     */
-    protected void checkButtonState (final int channel, final int cc)
-    {
-        final TriggerInfo info = this.getTriggerInfo (channel, cc);
-        if (info == null || info.getState () != ButtonEvent.DOWN)
-            return;
-        info.setState (ButtonEvent.LONG);
-        this.handleCCEvent (channel, cc, 127);
-    }
-
-
-    private TriggerInfo getTriggerInfo (final int channel, final int cc)
-    {
-        if (channel < 0 || cc < 0)
-            return null;
-
-        if (this.triggerInfos[channel][cc] == null)
-        {
-            this.errorln ("Unregistered CC trigger: " + cc);
-            return null;
-        }
-        return this.triggerInfos[channel][cc];
     }
 
 

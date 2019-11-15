@@ -9,7 +9,7 @@ package de.mossgrabers.framework.controller.hardware;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public interface ILight extends IControl
+public interface IHwLight extends IHwControl
 {
     /**
      * Switch off the light.

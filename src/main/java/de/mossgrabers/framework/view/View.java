@@ -5,12 +5,9 @@
 package de.mossgrabers.framework.view;
 
 import de.mossgrabers.framework.command.ContinuousCommandID;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.command.core.AftertouchCommand;
 import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.command.core.PitchbendCommand;
-import de.mossgrabers.framework.command.core.TriggerCommand;
-import de.mossgrabers.framework.utils.ButtonEvent;
 
 
 /**
@@ -42,33 +39,6 @@ public interface View
 
 
     /**
-     * Registers a command for this view.
-     *
-     * @param commandID The ID of the command
-     * @param command The command
-     */
-    void registerTriggerCommand (TriggerCommandID commandID, TriggerCommand command);
-
-
-    /**
-     * Execute a command which has been registered before.
-     *
-     * @param commandID The ID of the command
-     * @param event A button event which triggered the command
-     */
-    void executeTriggerCommand (TriggerCommandID commandID, ButtonEvent event);
-
-
-    /**
-     * Get a registered trigger command.
-     *
-     * @param commandID The ID of the command
-     * @return The command or null if not registered
-     */
-    TriggerCommand getTriggerCommand (TriggerCommandID commandID);
-
-
-    /**
      * Registers a continuous command for this view.
      *
      * @param commandID The ID of the command
@@ -93,33 +63,6 @@ public interface View
      * @param value The updated value
      */
     void executeContinuousCommand (ContinuousCommandID commandID, int value);
-
-
-    /**
-     * Registers a note (trigger) command for this view.
-     *
-     * @param commandID The ID of the command
-     * @param command The command
-     */
-    void registerNoteCommand (TriggerCommandID commandID, TriggerCommand command);
-
-
-    /**
-     * Execute a note (continuous) command which has been registered before.
-     *
-     * @param commandID The ID of the command
-     * @param value The updated value
-     */
-    void executeNoteCommand (TriggerCommandID commandID, int value);
-
-
-    /**
-     * Get a registered note command.
-     *
-     * @param commandID The ID of the command
-     * @return The command or null if not registered
-     */
-    TriggerCommand getNoteCommand (TriggerCommandID commandID);
 
 
     /**

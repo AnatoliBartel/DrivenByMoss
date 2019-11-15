@@ -73,14 +73,12 @@ public class LaunchpadControlSurface extends AbstractControlSurface<LaunchpadCon
      */
     public LaunchpadControlSurface (final IHost host, final ColorManager colorManager, final LaunchpadConfiguration configuration, final IMidiOutput output, final IMidiInput input, final ILaunchpadControllerDefinition definition)
     {
-        super (host, configuration, colorManager, output, input, new LaunchpadPadGrid (colorManager, output, definition));
+        // TODO size
+        super (host, configuration, colorManager, output, input, new LaunchpadPadGrid (colorManager, output, definition), 100, 100);
 
         this.definition = definition;
 
-        this.buttonIDs.putAll (this.definition.getButtonIDs ());
-
         this.input.setSysexCallback (this::handleSysEx);
-
         this.output.sendSysex (DeviceInquiry.createQuery ());
     }
 

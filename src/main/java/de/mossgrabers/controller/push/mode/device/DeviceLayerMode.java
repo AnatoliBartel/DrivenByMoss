@@ -104,7 +104,7 @@ public class DeviceLayerMode extends BaseMode
             final ISendBank sendBank = channel.getSendBank ();
             if (this.surface.isDeletePressed ())
             {
-                this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+                this.surface.setTriggerConsumed (ButtonID.DELETE);
                 switch (index)
                 {
                     case 0:
@@ -182,7 +182,7 @@ public class DeviceLayerMode extends BaseMode
         }
 
         // LONG press
-        this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_ROW1_1 + index);
+        this.surface.setTriggerConsumed (ButtonID.get (ButtonID.ROW1_1, index));
         this.moveUp ();
     }
 

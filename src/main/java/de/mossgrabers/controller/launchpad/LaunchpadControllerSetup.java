@@ -6,15 +6,11 @@ package de.mossgrabers.controller.launchpad;
 
 import de.mossgrabers.controller.launchpad.command.continuous.FaderCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.ClickCommand;
-import de.mossgrabers.controller.launchpad.command.trigger.LaunchpadCursorCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.LaunchpadDuplicateCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.MuteCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.PanCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.PlayAndNewCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.RecordArmCommand;
-import de.mossgrabers.controller.launchpad.command.trigger.SelectDeviceViewCommand;
-import de.mossgrabers.controller.launchpad.command.trigger.SelectNoteViewCommand;
-import de.mossgrabers.controller.launchpad.command.trigger.SelectSessionViewCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.SendsCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.ShiftCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.SoloCommand;
@@ -47,15 +43,10 @@ import de.mossgrabers.controller.launchpad.view.ShiftView;
 import de.mossgrabers.controller.launchpad.view.UserView;
 import de.mossgrabers.controller.launchpad.view.VolumeView;
 import de.mossgrabers.framework.command.ContinuousCommandID;
-import de.mossgrabers.framework.command.SceneCommand;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.command.aftertouch.AftertouchAbstractViewCommand;
 import de.mossgrabers.framework.command.trigger.application.DeleteCommand;
 import de.mossgrabers.framework.command.trigger.application.UndoCommand;
-import de.mossgrabers.framework.command.trigger.clip.NewCommand;
 import de.mossgrabers.framework.command.trigger.clip.QuantizeCommand;
-import de.mossgrabers.framework.command.trigger.mode.ModeCursorCommand.Direction;
-import de.mossgrabers.framework.command.trigger.transport.PlayCommand;
 import de.mossgrabers.framework.command.trigger.transport.RecordCommand;
 import de.mossgrabers.framework.command.trigger.view.ViewMultiSelectCommand;
 import de.mossgrabers.framework.configuration.ISettingsUI;
@@ -84,7 +75,6 @@ import de.mossgrabers.framework.mode.track.SoloMode;
 import de.mossgrabers.framework.mode.track.VolumeMode;
 import de.mossgrabers.framework.utils.StringUtils;
 import de.mossgrabers.framework.view.AbstractView;
-import de.mossgrabers.framework.view.SceneView;
 import de.mossgrabers.framework.view.View;
 import de.mossgrabers.framework.view.ViewManager;
 import de.mossgrabers.framework.view.Views;
@@ -214,64 +204,104 @@ public class LaunchpadControllerSetup extends AbstractControllerSetup<LaunchpadC
     {
         final LaunchpadControlSurface surface = this.getSurface ();
 
-        this.addTriggerCommand (TriggerCommandID.SHIFT, surface.getTriggerId (ButtonID.SHIFT), new ShiftCommand (this.model, surface));
+        this.addButton (ButtonID.SHIFT, "Shift", new ShiftCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_SHIFT);
 
         if (this.definition.isPro () && this.host.hasUserParameters ())
-            this.addTriggerCommand (TriggerCommandID.USER, surface.getTriggerId (ButtonID.USER), new ViewMultiSelectCommand<> (this.model, surface, true, Views.CONTROL));
+            this.addButton (ButtonID.USER, "User", new ViewMultiSelectCommand<> (this.model, surface, true, Views.CONTROL), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER);
 
         final ViewManager viewManager = surface.getViewManager ();
-        viewManager.registerTriggerCommand (TriggerCommandID.PLAY, new PlayCommand<> (this.model, surface));
-        viewManager.registerTriggerCommand (TriggerCommandID.NEW, new NewCommand<> (this.model, surface));
+        // TODO
+        // viewManager.registerTriggerCommand (TriggerCommandID.PLAY, new PlayCommand<> (this.model,
+        // surface));
+        // viewManager.registerTriggerCommand (TriggerCommandID.NEW, new NewCommand<> (this.model,
+        // surface));
 
-        this.addTriggerCommand (TriggerCommandID.ARROW_DOWN, surface.getTriggerId (ButtonID.DOWN), new LaunchpadCursorCommand (Direction.DOWN, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_UP, surface.getTriggerId (ButtonID.UP), new LaunchpadCursorCommand (Direction.UP, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_LEFT, surface.getTriggerId (ButtonID.LEFT), new LaunchpadCursorCommand (Direction.LEFT, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_RIGHT, surface.getTriggerId (ButtonID.RIGHT), new LaunchpadCursorCommand (Direction.RIGHT, this.model, surface));
-
-        this.addTriggerCommand (TriggerCommandID.SELECT_SESSION_VIEW, surface.getTriggerId (ButtonID.SESSION), new SelectSessionViewCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SELECT_PLAY_VIEW, surface.getTriggerId (ButtonID.NOTE), new SelectNoteViewCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.DEVICE, surface.getTriggerId (ButtonID.DEVICE), new SelectDeviceViewCommand (this.model, surface));
+        // TODO buttons need to be configured per controller model
+        // this.setupButton (ButtonID.ARROW_DOWN,
+        // LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DOWN, new LaunchpadCursorCommand
+        // (Direction.DOWN, this.model, surface));
+        // this.setupButton (ButtonID.ARROW_UP,
+        // LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_UP, new LaunchpadCursorCommand
+        // (Direction.UP, this.model, surface));
+        // this.setupButton (ButtonID.ARROW_LEFT,
+        // LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_LEFT, new LaunchpadCursorCommand
+        // (Direction.LEFT, this.model, surface));
+        // this.setupButton (ButtonID.ARROW_RIGHT,
+        // LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_RIGHT, new LaunchpadCursorCommand
+        // (Direction.RIGHT, this.model, surface));
+        //
+        // this.setupButton (ButtonID.SELECT_SESSION_VIEW, surface.getTriggerId
+        // (ButtonID.SESSION), new SelectSessionViewCommand (this.model, surface));
+        // this.setupButton (ButtonID.SELECT_PLAY_VIEW, surface.getTriggerId
+        // (ButtonID.NOTE), new SelectNoteViewCommand (this.model, surface));
+        // this.setupButton (ButtonID.DEVICE, surface.getTriggerId (ButtonID.DEVICE),
+        // new SelectDeviceViewCommand (this.model, surface));
 
         // The following buttons are only available on the Pro but the commands are used by all
         // Launchpad models!
-        this.addTriggerCommand (TriggerCommandID.METRONOME, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_CLICK, new ClickCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.UNDO, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_UNDO, new UndoCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.DELETE, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DELETE, new DeleteCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.QUANTIZE, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_QUANTIZE, new QuantizeCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.DUPLICATE, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DUPLICATE, new LaunchpadDuplicateCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.DOUBLE, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DOUBLE, new PlayAndNewCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.RECORD, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_RECORD, new RecordCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.REC_ARM, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_REC_ARM, new RecordArmCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.TRACK, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_TRACK, new TrackSelectCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.MUTE, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_MUTE, new MuteCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SOLO, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_SOLO, new SoloCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.VOLUME, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_VOLUME, new VolumeCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.PAN_SEND, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_PAN, new PanCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SENDS, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_SENDS, new SendsCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.STOP_CLIP, LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_STOP_CLIP, new StopClipCommand (this.model, surface));
+        this.addButton (ButtonID.METRONOME, "Metronome", new ClickCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_CLICK);
+        this.addButton (ButtonID.UNDO, "Undo", new UndoCommand<> (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_UNDO);
+        this.addButton (ButtonID.DELETE, "Delete", new DeleteCommand<> (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DELETE);
+        this.addButton (ButtonID.QUANTIZE, "Quantize", new QuantizeCommand<> (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_QUANTIZE);
+        this.addButton (ButtonID.DUPLICATE, "Duplicate", new LaunchpadDuplicateCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DUPLICATE);
+        this.addButton (ButtonID.DOUBLE, "Double", new PlayAndNewCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DOUBLE);
+        this.addButton (ButtonID.RECORD, "Record", new RecordCommand<> (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_RECORD);
+        this.addButton (ButtonID.REC_ARM, "Rec Arm", new RecordArmCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_REC_ARM);
+        this.addButton (ButtonID.TRACK, "Track", new TrackSelectCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_TRACK);
+        this.addButton (ButtonID.MUTE, "Mute", new MuteCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_MUTE);
+        this.addButton (ButtonID.SOLO, "Solo", new SoloCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_SOLO);
+        this.addButton (ButtonID.VOLUME, "Volume", new VolumeCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_VOLUME);
+        this.addButton (ButtonID.PAN_SEND, "Panorama", new PanCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_PAN);
+        this.addButton (ButtonID.SENDS, "Sends", new SendsCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_SENDS);
+        this.addButton (ButtonID.STOP_CLIP, "Stop Clip", new StopClipCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_STOP_CLIP);
 
-        if (this.definition.sceneButtonsUseCC ())
-        {
-            this.addTriggerCommand (TriggerCommandID.SCENE1, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE1, new SceneCommand<> (0, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.SCENE2, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE2, new SceneCommand<> (1, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.SCENE3, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE3, new SceneCommand<> (2, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.SCENE4, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE4, new SceneCommand<> (3, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.SCENE5, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE5, new SceneCommand<> (4, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.SCENE6, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE6, new SceneCommand<> (5, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.SCENE7, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7, new SceneCommand<> (6, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.SCENE8, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8, new SceneCommand<> (7, this.model, surface));
-        }
-        else
-        {
-            this.addNoteCommand (TriggerCommandID.SCENE1, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE1, new SceneCommand<> (0, this.model, surface));
-            this.addNoteCommand (TriggerCommandID.SCENE2, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE2, new SceneCommand<> (1, this.model, surface));
-            this.addNoteCommand (TriggerCommandID.SCENE3, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE3, new SceneCommand<> (2, this.model, surface));
-            this.addNoteCommand (TriggerCommandID.SCENE4, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE4, new SceneCommand<> (3, this.model, surface));
-            this.addNoteCommand (TriggerCommandID.SCENE5, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE5, new SceneCommand<> (4, this.model, surface));
-            this.addNoteCommand (TriggerCommandID.SCENE6, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE6, new SceneCommand<> (5, this.model, surface));
-            this.addNoteCommand (TriggerCommandID.SCENE7, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7, new SceneCommand<> (6, this.model, surface));
-            this.addNoteCommand (TriggerCommandID.SCENE8, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8, new SceneCommand<> (7, this.model, surface));
-        }
+        // TODO
+        // if (this.definition.sceneButtonsUseCC ())
+        // {
+        // this.setupButton (ButtonID.SCENE1, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE1, new
+        // SceneCommand<> (0, this.model, surface));
+        // this.setupButton (ButtonID.SCENE2, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE2, new
+        // SceneCommand<> (1, this.model, surface));
+        // this.setupButton (ButtonID.SCENE3, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE3, new
+        // SceneCommand<> (2, this.model, surface));
+        // this.setupButton (ButtonID.SCENE4, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE4, new
+        // SceneCommand<> (3, this.model, surface));
+        // this.setupButton (ButtonID.SCENE5, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE5, new
+        // SceneCommand<> (4, this.model, surface));
+        // this.setupButton (ButtonID.SCENE6, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE6, new
+        // SceneCommand<> (5, this.model, surface));
+        // this.setupButton (ButtonID.SCENE7, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7, new
+        // SceneCommand<> (6, this.model, surface));
+        // this.setupButton (ButtonID.SCENE8, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8, new
+        // SceneCommand<> (7, this.model, surface));
+        // }
+        // else
+        // {
+        // this.addNoteCommand (TriggerCommandID.SCENE1,
+        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE1, new SceneCommand<> (0, this.model,
+        // surface));
+        // this.addNoteCommand (TriggerCommandID.SCENE2,
+        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE2, new SceneCommand<> (1, this.model,
+        // surface));
+        // this.addNoteCommand (TriggerCommandID.SCENE3,
+        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE3, new SceneCommand<> (2, this.model,
+        // surface));
+        // this.addNoteCommand (TriggerCommandID.SCENE4,
+        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE4, new SceneCommand<> (3, this.model,
+        // surface));
+        // this.addNoteCommand (TriggerCommandID.SCENE5,
+        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE5, new SceneCommand<> (4, this.model,
+        // surface));
+        // this.addNoteCommand (TriggerCommandID.SCENE6,
+        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE6, new SceneCommand<> (5, this.model,
+        // surface));
+        // this.addNoteCommand (TriggerCommandID.SCENE7,
+        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7, new SceneCommand<> (6, this.model,
+        // surface));
+        // this.addNoteCommand (TriggerCommandID.SCENE8,
+        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8, new SceneCommand<> (7, this.model,
+        // surface));
+        // }
     }
 
 
@@ -323,18 +353,20 @@ public class LaunchpadControllerSetup extends AbstractControllerSetup<LaunchpadC
         {
             // TODO ((LaunchpadCursorCommand) activeView.getTriggerCommand
             // (TriggerCommandID.ARROW_DOWN)).updateArrows ();
-            for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
-                ((SceneView) activeView).updateSceneButton (i);
+            // for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
+            // ((SceneView) activeView).updateSceneButton (i);
         }
 
         final boolean isShift = surface.isShiftPressed ();
-        surface.setTrigger (surface.getTriggerId (ButtonID.SHIFT), isShift ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+        // TODO needs to be configured per controller model
+        // surface.setTrigger (surface.getTriggerId (ButtonID.SHIFT), isShift ?
+        // LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
 
         // Update the front or logo LED with the color of the current track
         final ITrack selTrack = this.model.getSelectedTrack ();
         final int index = selTrack == null ? -1 : selTrack.getIndex ();
         final ITrack track = index == -1 ? null : this.model.getCurrentTrackBank ().getItem (index);
-        final int color = track != null && track.doesExist () ? this.colorManager.getColor (DAWColors.getColorIndex (track.getColor ())) : 0;
+        final int color = track != null && track.doesExist () ? this.colorManager.getColorIndex (DAWColors.getColorIndex (track.getColor ())) : 0;
         if (this.definition.isPro ())
         {
             if (color != this.frontColor)

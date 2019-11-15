@@ -7,7 +7,6 @@ package de.mossgrabers.controller.launchkey.controller;
 import de.mossgrabers.controller.launchkey.LaunchkeyMiniMk3Configuration;
 import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.controller.AbstractControlSurface;
-import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.DeviceInquiry;
@@ -74,11 +73,10 @@ public class LaunchkeyMiniMk3ControlSurface extends AbstractControlSurface<Launc
      */
     public LaunchkeyMiniMk3ControlSurface (final IHost host, final ColorManager colorManager, final LaunchkeyMiniMk3Configuration configuration, final IMidiOutput output, final IMidiInput input, final IMidiInput inputKeys, final ContinuousCommand pageAdjuster)
     {
-        super (host, configuration, colorManager, output, input, new LaunchkeyPadGrid (colorManager, output));
+        // TODO size
+        super (host, configuration, colorManager, output, input, new LaunchkeyPadGrid (colorManager, output), 100, 50);
 
         this.pageAdjuster = pageAdjuster;
-
-        this.setTriggerId (ButtonID.SHIFT, LAUNCHKEY_SHIFT);
 
         this.input.setSysexCallback (this::handleSysEx);
         this.output.sendSysex (DeviceInquiry.createQuery ());
@@ -94,7 +92,9 @@ public class LaunchkeyMiniMk3ControlSurface extends AbstractControlSurface<Launc
     @Override
     public boolean isShiftPressed ()
     {
-        return super.isShiftPressed () && !this.isPressed (0x0F, LAUNCHKEY_LEFT) && !this.isPressed (0x0F, LAUNCHKEY_RIGHT);
+        return false;
+        // TODO super.isShiftPressed () && !this.isPressed (0x0F, LAUNCHKEY_LEFT) && !this.isPressed
+        // (0x0F, LAUNCHKEY_RIGHT);
     }
 
 

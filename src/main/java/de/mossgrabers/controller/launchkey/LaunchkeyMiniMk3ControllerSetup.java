@@ -13,7 +13,6 @@ import de.mossgrabers.controller.launchkey.view.SessionView;
 import de.mossgrabers.controller.launchkey.view.UserPadView;
 import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.command.SceneCommand;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.command.continuous.KnobRowModeCommand;
 import de.mossgrabers.framework.command.core.NopCommand;
 import de.mossgrabers.framework.command.trigger.mode.ModeCursorCommand;
@@ -22,6 +21,7 @@ import de.mossgrabers.framework.command.trigger.transport.PlayCommand;
 import de.mossgrabers.framework.command.trigger.transport.RecordCommand;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -198,16 +198,16 @@ public class LaunchkeyMiniMk3ControllerSetup extends AbstractControllerSetup<Lau
     {
         final LaunchkeyMiniMk3ControlSurface surface = this.getSurface ();
 
-        this.addTriggerCommand (TriggerCommandID.SHIFT, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SHIFT, NopCommand.INSTANCE);
+        this.addButton (ButtonID.SHIFT, "Shift", NopCommand.INSTANCE, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SHIFT);
 
-        this.addTriggerCommand (TriggerCommandID.PLAY, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_PLAY, 15, new PlayCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.RECORD, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_RECORD, 15, new RecordCommand<> (this.model, surface));
+        this.addButton (ButtonID.PLAY, "Play", new PlayCommand<> (this.model, surface), 15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_PLAY);
+        this.addButton (ButtonID.RECORD, "Record", new RecordCommand<> (this.model, surface), 15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_RECORD);
 
-        this.addTriggerCommand (TriggerCommandID.MOVE_TRACK_LEFT, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_LEFT, 15, new ModeCursorCommand<> (Direction.LEFT, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.MOVE_TRACK_RIGHT, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_RIGHT, 15, new ModeCursorCommand<> (Direction.RIGHT, this.model, surface));
+        this.addButton (ButtonID.MOVE_TRACK_LEFT, "Previous", new ModeCursorCommand<> (Direction.LEFT, this.model, surface), 15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_LEFT);
+        this.addButton (ButtonID.MOVE_TRACK_RIGHT, "Next", new ModeCursorCommand<> (Direction.RIGHT, this.model, surface), 15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_RIGHT);
 
-        this.addTriggerCommand (TriggerCommandID.SCENE1, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1, new SceneCommand<> (0, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SCENE2, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2, new SceneCommand<> (1, this.model, surface));
+        this.addButton (ButtonID.SCENE1, "Scene 1", new SceneCommand<> (0, this.model, surface), LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1);
+        this.addButton (ButtonID.SCENE2, "Scene 2", new SceneCommand<> (1, this.model, surface), LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2);
     }
 
 
@@ -270,11 +270,14 @@ public class LaunchkeyMiniMk3ControllerSetup extends AbstractControllerSetup<Lau
         final LaunchkeyMiniMk3ControlSurface surface = this.getSurface ();
         final ITransport t = this.model.getTransport ();
 
-        final int colorLow = this.colorManager.getColor (ColorManager.BUTTON_STATE_ON);
-        final int colorHi = this.colorManager.getColor (ColorManager.BUTTON_STATE_HI);
+        final int colorLow = this.colorManager.getColorIndex (ColorManager.BUTTON_STATE_ON);
+        final int colorHi = this.colorManager.getColorIndex (ColorManager.BUTTON_STATE_HI);
 
-        surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_PLAY, t.isPlaying () ? colorHi : colorLow);
-        surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_RECORD, t.isLauncherOverdub () || t.isRecording () ? colorHi : colorLow);
+        // TODO
+        // surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_PLAY, t.isPlaying ()
+        // ? colorHi : colorLow);
+        // surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_RECORD,
+        // t.isLauncherOverdub () || t.isRecording () ? colorHi : colorLow);
 
         final ModeManager modeManager = this.getSurface ().getModeManager ();
         final Mode mode = modeManager.getActiveOrTempMode ();
@@ -288,15 +291,20 @@ public class LaunchkeyMiniMk3ControllerSetup extends AbstractControllerSetup<Lau
             hasPrevItem = cursorDevice.canSelectPreviousFX ();
             hasNextItem = cursorDevice.canSelectNextFX ();
         }
-        surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_LEFT, hasPrevItem ? colorHi : colorLow);
-        surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_RIGHT, hasNextItem ? colorHi : colorLow);
+
+        // TODO
+        // surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_LEFT, hasPrevItem ?
+        // colorHi : colorLow);
+        // surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_RIGHT, hasNextItem ?
+        // colorHi : colorLow);
 
         final ViewManager viewManager = surface.getViewManager ();
         final View activeView = viewManager.getActiveView ();
         if (activeView instanceof SceneView)
         {
-            for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
-                ((SceneView) activeView).updateSceneButton (i);
+            // TODO
+            // for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
+            // ((SceneView) activeView).updateSceneButton (i);
         }
     }
 

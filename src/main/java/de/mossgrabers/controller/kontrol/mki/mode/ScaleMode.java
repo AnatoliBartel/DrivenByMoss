@@ -5,7 +5,6 @@
 package de.mossgrabers.controller.kontrol.mki.mode;
 
 import de.mossgrabers.controller.kontrol.mki.Kontrol1Configuration;
-import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1Colors;
 import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1ControlSurface;
 import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1Display;
 import de.mossgrabers.framework.daw.IModel;
@@ -141,15 +140,23 @@ public class ScaleMode extends AbstractKontrol1Mode
         final boolean canScrollUp = this.scales.hasNextScaleOffset ();
         final boolean canScrollDown = this.scales.hasPrevScaleOffset ();
 
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_LEFT, canScrollLeft ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_RIGHT, canScrollRight ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_UP, canScrollUp ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_DOWN, canScrollDown ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BACK, Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_ENTER, Kontrol1Colors.BUTTON_STATE_ON);
-
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BROWSE, Kontrol1Colors.BUTTON_STATE_ON);
+        // TODO
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_LEFT, canScrollLeft ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_RIGHT, canScrollRight
+        // ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_UP, canScrollUp ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_DOWN, canScrollDown ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        //
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BACK,
+        // Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_ENTER,
+        // Kontrol1Colors.BUTTON_STATE_ON);
+        //
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BROWSE,
+        // Kontrol1Colors.BUTTON_STATE_ON);
 
     }
 

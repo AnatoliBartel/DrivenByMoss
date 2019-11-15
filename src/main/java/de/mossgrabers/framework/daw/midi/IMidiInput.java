@@ -5,8 +5,10 @@
 package de.mossgrabers.framework.daw.midi;
 
 import de.mossgrabers.framework.controller.hardware.BindType;
-import de.mossgrabers.framework.controller.hardware.IButton;
-import de.mossgrabers.framework.controller.hardware.IFader;
+import de.mossgrabers.framework.controller.hardware.IHwAbsoluteKnob;
+import de.mossgrabers.framework.controller.hardware.IHwButton;
+import de.mossgrabers.framework.controller.hardware.IHwFader;
+import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
 
 
 /**
@@ -71,7 +73,7 @@ public interface IMidiInput
      * @param channel The MIDI channel
      * @param value The MIDI command (CC, Note, ...)
      */
-    void bind (IButton button, BindType type, int channel, int value);
+    void bind (IHwButton button, BindType type, int channel, int value);
 
 
     /**
@@ -82,5 +84,27 @@ public interface IMidiInput
      * @param channel The MIDI channel
      * @param value The MIDI command (CC, Note, ...)
      */
-    void bind (IFader fader, BindType type, int channel, int value);
+    void bind (IHwFader fader, BindType type, int channel, int value);
+
+
+    /**
+     * Bind the given absolute knob to a MIDI command received on this midi input.
+     *
+     * @param absoluteKnob The absolute knob to bind
+     * @param type THe MIDI binding type
+     * @param channel The MIDI channel
+     * @param value The MIDI command (CC, Note, ...)
+     */
+    void bind (IHwAbsoluteKnob absoluteKnob, BindType type, int channel, int value);
+
+
+    /**
+     * Bind the given relative knob to a MIDI command received on this midi input.
+     *
+     * @param relativeKnob The relative knob to bind
+     * @param type THe MIDI binding type
+     * @param channel The MIDI channel
+     * @param value The MIDI command (CC, Note, ...)
+     */
+    void bind (IHwRelativeKnob relativeKnob, BindType type, int channel, int value);
 }

@@ -22,7 +22,6 @@ import de.mossgrabers.controller.kontrol.mki.mode.track.TrackMode;
 import de.mossgrabers.controller.kontrol.mki.mode.track.VolumeMode;
 import de.mossgrabers.controller.kontrol.mki.view.ControlView;
 import de.mossgrabers.framework.command.ContinuousCommandID;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.command.continuous.KnobRowModeCommand;
 import de.mossgrabers.framework.command.core.NopCommand;
 import de.mossgrabers.framework.command.trigger.BrowserCommand;
@@ -36,6 +35,7 @@ import de.mossgrabers.framework.command.trigger.transport.ToggleLoopCommand;
 import de.mossgrabers.framework.command.trigger.transport.WindCommand;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -187,48 +187,42 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
     {
         final Kontrol1ControlSurface surface = this.getSurface ();
 
-        this.addTriggerCommand (TriggerCommandID.SCALES, Kontrol1ControlSurface.BUTTON_SCALE, new ScaleButtonCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.METRONOME, Kontrol1ControlSurface.BUTTON_ARP, new MetronomeCommand<> (this.model, surface));
+        this.addButton (ButtonID.SCALES, "Scales", new ScaleButtonCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_SCALE);
+        this.addButton (ButtonID.METRONOME, "Metronome", new MetronomeCommand<> (this.model, surface), Kontrol1ControlSurface.BUTTON_ARP);
 
-        this.addTriggerCommand (TriggerCommandID.PLAY, Kontrol1ControlSurface.BUTTON_PLAY, new Kontrol1PlayCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.RECORD, Kontrol1ControlSurface.BUTTON_REC, new RecordCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.STOP, Kontrol1ControlSurface.BUTTON_STOP, new StopCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.REWIND, Kontrol1ControlSurface.BUTTON_RWD, new WindCommand<> (this.model, surface, false));
-        this.addTriggerCommand (TriggerCommandID.FORWARD, Kontrol1ControlSurface.BUTTON_FWD, new WindCommand<> (this.model, surface, true));
-        this.addTriggerCommand (TriggerCommandID.LOOP, Kontrol1ControlSurface.BUTTON_LOOP, new ToggleLoopCommand<> (this.model, surface));
+        this.addButton (ButtonID.PLAY, "Play", new Kontrol1PlayCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_PLAY);
+        this.addButton (ButtonID.RECORD, "Record", new RecordCommand<> (this.model, surface), Kontrol1ControlSurface.BUTTON_REC);
+        this.addButton (ButtonID.STOP, "Stop", new StopCommand<> (this.model, surface), Kontrol1ControlSurface.BUTTON_STOP);
+        this.addButton (ButtonID.REWIND, "<<", new WindCommand<> (this.model, surface, false), Kontrol1ControlSurface.BUTTON_RWD);
+        this.addButton (ButtonID.FORWARD, ">>", new WindCommand<> (this.model, surface, true), Kontrol1ControlSurface.BUTTON_FWD);
+        this.addButton (ButtonID.LOOP, "Loop", new ToggleLoopCommand<> (this.model, surface), Kontrol1ControlSurface.BUTTON_LOOP);
 
-        this.addTriggerCommand (TriggerCommandID.PAGE_LEFT, Kontrol1ControlSurface.BUTTON_PAGE_LEFT, new ModeMultiSelectCommand<> (this.model, surface, Modes.DEVICE_PARAMS, Modes.VOLUME, Modes.TRACK));
-        this.addTriggerCommand (TriggerCommandID.PAGE_RIGHT, Kontrol1ControlSurface.BUTTON_PAGE_RIGHT, new ModeMultiSelectCommand<> (this.model, surface, Modes.TRACK, Modes.VOLUME, Modes.DEVICE_PARAMS));
+        this.addButton (ButtonID.PAGE_LEFT, "Left", new ModeMultiSelectCommand<> (this.model, surface, Modes.DEVICE_PARAMS, Modes.VOLUME, Modes.TRACK), Kontrol1ControlSurface.BUTTON_PAGE_LEFT);
+        this.addButton (ButtonID.PAGE_RIGHT, "Right", new ModeMultiSelectCommand<> (this.model, surface, Modes.TRACK, Modes.VOLUME, Modes.DEVICE_PARAMS), Kontrol1ControlSurface.BUTTON_PAGE_RIGHT);
 
-        this.addTriggerCommand (TriggerCommandID.MASTERTRACK, Kontrol1ControlSurface.BUTTON_MAIN_ENCODER, new MainEncoderButtonCommand (this.model, surface));
+        this.addButton (ButtonID.MASTERTRACK, "Encoder", new MainEncoderButtonCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_MAIN_ENCODER);
 
-        this.addTriggerCommand (TriggerCommandID.ARROW_DOWN, Kontrol1ControlSurface.BUTTON_NAVIGATE_DOWN, new Kontrol1CursorCommand (Direction.DOWN, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_UP, Kontrol1ControlSurface.BUTTON_NAVIGATE_UP, new Kontrol1CursorCommand (Direction.UP, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_LEFT, Kontrol1ControlSurface.BUTTON_NAVIGATE_LEFT, new Kontrol1CursorCommand (Direction.LEFT, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_RIGHT, Kontrol1ControlSurface.BUTTON_NAVIGATE_RIGHT, new Kontrol1CursorCommand (Direction.RIGHT, this.model, surface));
+        this.addButton (ButtonID.ARROW_DOWN, "Down", new Kontrol1CursorCommand (Direction.DOWN, this.model, surface), Kontrol1ControlSurface.BUTTON_NAVIGATE_DOWN);
+        this.addButton (ButtonID.ARROW_UP, "Up", new Kontrol1CursorCommand (Direction.UP, this.model, surface), Kontrol1ControlSurface.BUTTON_NAVIGATE_UP);
+        this.addButton (ButtonID.ARROW_LEFT, "Left", new Kontrol1CursorCommand (Direction.LEFT, this.model, surface), Kontrol1ControlSurface.BUTTON_NAVIGATE_LEFT);
+        this.addButton (ButtonID.ARROW_RIGHT, "Right", new Kontrol1CursorCommand (Direction.RIGHT, this.model, surface), Kontrol1ControlSurface.BUTTON_NAVIGATE_RIGHT);
 
-        this.addTriggerCommand (TriggerCommandID.MUTE, Kontrol1ControlSurface.BUTTON_BACK, new BackButtonCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SOLO, Kontrol1ControlSurface.BUTTON_ENTER, new EnterButtonCommand (this.model, surface));
+        this.addButton (ButtonID.MUTE, "Back", new BackButtonCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_BACK);
+        this.addButton (ButtonID.SOLO, "Enter", new EnterButtonCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_ENTER);
 
-        this.addTriggerCommand (TriggerCommandID.BROWSE, Kontrol1ControlSurface.BUTTON_BROWSE, new BrowserCommand<> (Modes.BROWSER, this.model, surface));
+        this.addButton (ButtonID.BROWSE, "Browse", new BrowserCommand<> (Modes.BROWSER, this.model, surface), Kontrol1ControlSurface.BUTTON_BROWSE);
 
-        this.addTriggerCommand (TriggerCommandID.FADER_TOUCH_1, Kontrol1ControlSurface.TOUCH_ENCODER_1, new KnobRowTouchModeCommand<> (0, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.FADER_TOUCH_2, Kontrol1ControlSurface.TOUCH_ENCODER_2, new KnobRowTouchModeCommand<> (1, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.FADER_TOUCH_3, Kontrol1ControlSurface.TOUCH_ENCODER_3, new KnobRowTouchModeCommand<> (2, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.FADER_TOUCH_4, Kontrol1ControlSurface.TOUCH_ENCODER_4, new KnobRowTouchModeCommand<> (3, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.FADER_TOUCH_5, Kontrol1ControlSurface.TOUCH_ENCODER_5, new KnobRowTouchModeCommand<> (4, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.FADER_TOUCH_6, Kontrol1ControlSurface.TOUCH_ENCODER_6, new KnobRowTouchModeCommand<> (5, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.FADER_TOUCH_7, Kontrol1ControlSurface.TOUCH_ENCODER_7, new KnobRowTouchModeCommand<> (6, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.FADER_TOUCH_8, Kontrol1ControlSurface.TOUCH_ENCODER_8, new KnobRowTouchModeCommand<> (7, this.model, surface));
+        for (int i = 0; i < 8; i++)
+            this.addButton (ButtonID.get (ButtonID.FADER_TOUCH_1, i), "Knob Touch " + (i + 1), new KnobRowTouchModeCommand<> (i, this.model, surface), Kontrol1ControlSurface.TOUCH_ENCODER_1 + i);
 
-        // Block unused knobs and touches
-        this.addTriggerCommand (TriggerCommandID.ROW1_1, Kontrol1ControlSurface.TOUCH_ENCODER_MAIN, NopCommand.INSTANCE);
-        this.addTriggerCommand (TriggerCommandID.ROW1_2, Kontrol1ControlSurface.BUTTON_INSTANCE, NopCommand.INSTANCE);
-        this.addTriggerCommand (TriggerCommandID.ROW1_3, Kontrol1ControlSurface.BUTTON_PRESET_UP, NopCommand.INSTANCE);
-        this.addTriggerCommand (TriggerCommandID.ROW1_4, Kontrol1ControlSurface.BUTTON_PRESET_DOWN, NopCommand.INSTANCE);
-        this.addTriggerCommand (TriggerCommandID.ROW1_5, Kontrol1ControlSurface.BUTTON_OCTAVE_DOWN, NopCommand.INSTANCE);
-        this.addTriggerCommand (TriggerCommandID.ROW1_6, Kontrol1ControlSurface.BUTTON_OCTAVE_UP, NopCommand.INSTANCE);
-        this.addTriggerCommand (TriggerCommandID.SHIFT, Kontrol1ControlSurface.BUTTON_SHIFT, NopCommand.INSTANCE);
+        // Block unused buttons and touches
+        this.addButton (ButtonID.ROW1_1, "", NopCommand.INSTANCE, Kontrol1ControlSurface.TOUCH_ENCODER_MAIN);
+        this.addButton (ButtonID.ROW1_2, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_INSTANCE);
+        this.addButton (ButtonID.ROW1_3, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_PRESET_UP);
+        this.addButton (ButtonID.ROW1_4, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_PRESET_DOWN);
+        this.addButton (ButtonID.ROW1_5, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_OCTAVE_DOWN);
+        this.addButton (ButtonID.ROW1_6, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_OCTAVE_UP);
+        this.addButton (ButtonID.SHIFT, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_SHIFT);
     }
 
 

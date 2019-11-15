@@ -4,6 +4,7 @@
 
 package de.mossgrabers.framework.controller.display;
 
+import de.mossgrabers.framework.controller.hardware.IHwTextDisplay;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
 
@@ -16,22 +17,24 @@ import de.mossgrabers.framework.daw.midi.IMidiOutput;
 public abstract class AbstractTextDisplay implements ITextDisplay
 {
     /** Time to keep a notification displayed in ms. */
-    public static final int NOTIFICATION_TIME = 1000;
+    public static final int  NOTIFICATION_TIME = 1000;
 
-    protected IHost         host;
-    protected IMidiOutput   output;
+    protected IHost          host;
+    protected IMidiOutput    output;
 
-    protected int           noOfLines;
-    protected int           noOfCells;
-    protected int           noOfCharacters;
+    protected int            noOfLines;
+    protected int            noOfCells;
+    protected int            noOfCharacters;
 
-    protected final String  emptyLine;
-    protected String        notificationMessage;
-    protected boolean       isNotificationActive;
+    protected final String   emptyLine;
+    protected String         notificationMessage;
+    protected boolean        isNotificationActive;
 
-    protected String []     currentMessage;
-    protected String []     message;
-    protected String []     cells;
+    protected String []      currentMessage;
+    protected String []      message;
+    protected String []      cells;
+
+    protected IHwTextDisplay hwDisplay;
 
 
     /**
@@ -63,6 +66,22 @@ public abstract class AbstractTextDisplay implements ITextDisplay
 
         this.message = new String [this.noOfLines];
         this.cells = new String [this.noOfLines * this.noOfCells];
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public int getNoOfLines ()
+    {
+        return this.noOfLines;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void setHardwareDisplay (final IHwTextDisplay display)
+    {
+        this.hwDisplay = display;
     }
 
 

@@ -127,77 +127,77 @@ public class APCColors
      */
     public static void addColors (final ColorManager colorManager, final boolean isMkII)
     {
-        colorManager.registerColor (Scales.SCALE_COLOR_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
-        colorManager.registerColor (Scales.SCALE_COLOR_OCTAVE, isMkII ? APC_MKII_COLOR_OCEAN_HI : APC_COLOR_YELLOW);
-        colorManager.registerColor (Scales.SCALE_COLOR_NOTE, isMkII ? APC_MKII_COLOR_WHITE : APC_COLOR_BLACK);
-        colorManager.registerColor (Scales.SCALE_COLOR_OUT_OF_SCALE, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OCTAVE, isMkII ? APC_MKII_COLOR_OCEAN_HI : APC_COLOR_YELLOW);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_NOTE, isMkII ? APC_MKII_COLOR_WHITE : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OUT_OF_SCALE, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
 
-        colorManager.registerColor (AbstractSequencerView.COLOR_STEP_HILITE_NO_CONTENT, isMkII ? APC_MKII_COLOR_GREEN_HI : APC_COLOR_GREEN);
-        colorManager.registerColor (AbstractSequencerView.COLOR_STEP_HILITE_CONTENT, isMkII ? APC_MKII_COLOR_GREEN_LO : APC_COLOR_GREEN);
-        colorManager.registerColor (AbstractSequencerView.COLOR_NO_CONTENT, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
-        colorManager.registerColor (AbstractSequencerView.COLOR_CONTENT, isMkII ? APC_MKII_COLOR_BLUE_HI : APC_COLOR_RED);
-        colorManager.registerColor (AbstractSequencerView.COLOR_CONTENT_CONT, isMkII ? APC_MKII_COLOR_BLUE_LO : APC_COLOR_RED);
-        colorManager.registerColor (AbstractSequencerView.COLOR_PAGE, isMkII ? APC_MKII_COLOR_WHITE : APC_COLOR_GREEN);
-        colorManager.registerColor (AbstractSequencerView.COLOR_ACTIVE_PAGE, isMkII ? APC_MKII_COLOR_GREEN_HI : APC_COLOR_YELLOW);
-        colorManager.registerColor (AbstractSequencerView.COLOR_SELECTED_PAGE, isMkII ? APC_MKII_COLOR_BLUE_LO : APC_COLOR_RED);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_STEP_HILITE_NO_CONTENT, isMkII ? APC_MKII_COLOR_GREEN_HI : APC_COLOR_GREEN);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_STEP_HILITE_CONTENT, isMkII ? APC_MKII_COLOR_GREEN_LO : APC_COLOR_GREEN);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_NO_CONTENT, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_CONTENT, isMkII ? APC_MKII_COLOR_BLUE_HI : APC_COLOR_RED);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_CONTENT_CONT, isMkII ? APC_MKII_COLOR_BLUE_LO : APC_COLOR_RED);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_PAGE, isMkII ? APC_MKII_COLOR_WHITE : APC_COLOR_GREEN);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_ACTIVE_PAGE, isMkII ? APC_MKII_COLOR_GREEN_HI : APC_COLOR_YELLOW);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_SELECTED_PAGE, isMkII ? APC_MKII_COLOR_BLUE_LO : APC_COLOR_RED);
 
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_RECORD, isMkII ? APC_MKII_COLOR_RED_HI : APC_COLOR_RED);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_PLAY, isMkII ? APC_MKII_COLOR_GREEN_HI : APC_COLOR_GREEN);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_SELECTED, isMkII ? APC_MKII_COLOR_BLUE_HI : APC_COLOR_YELLOW_BLINK);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_MUTED, isMkII ? APC_MKII_COLOR_AMBER_LO : APC_COLOR_BLACK);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_HAS_CONTENT, isMkII ? APC_MKII_COLOR_YELLOW_HI : APC_COLOR_YELLOW);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_NO_CONTENT, isMkII ? APC_MKII_COLOR_YELLOW_LO : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_RECORD, isMkII ? APC_MKII_COLOR_RED_HI : APC_COLOR_RED);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_PLAY, isMkII ? APC_MKII_COLOR_GREEN_HI : APC_COLOR_GREEN);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_SELECTED, isMkII ? APC_MKII_COLOR_BLUE_HI : APC_COLOR_YELLOW_BLINK);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_MUTED, isMkII ? APC_MKII_COLOR_AMBER_LO : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_HAS_CONTENT, isMkII ? APC_MKII_COLOR_YELLOW_HI : APC_COLOR_YELLOW);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_NO_CONTENT, isMkII ? APC_MKII_COLOR_YELLOW_LO : APC_COLOR_BLACK);
 
-        colorManager.registerColor (AbstractPlayView.COLOR_PLAY, isMkII ? APC_MKII_COLOR_GREEN : APC_COLOR_GREEN);
-        colorManager.registerColor (AbstractPlayView.COLOR_RECORD, isMkII ? APC_MKII_COLOR_RED : APC_COLOR_RED);
-        colorManager.registerColor (AbstractPlayView.COLOR_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_PLAY, isMkII ? APC_MKII_COLOR_GREEN : APC_COLOR_GREEN);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_RECORD, isMkII ? APC_MKII_COLOR_RED : APC_COLOR_RED);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
 
-        colorManager.registerColor (PadGrid.GRID_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (PadGrid.GRID_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
 
-        colorManager.registerColor (DAWColors.COLOR_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (DAWColors.COLOR_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
 
         if (isMkII)
         {
-            colorManager.registerColor (DAWColors.DAW_COLOR_GRAY_HALF, APC_MKII_COLOR_GREY_MD);
-            colorManager.registerColor (DAWColors.DAW_COLOR_DARK_GRAY, APC_MKII_COLOR_GREY_LO);
-            colorManager.registerColor (DAWColors.DAW_COLOR_GRAY, APC_MKII_COLOR_GREY_MD);
-            colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_GRAY, APC_MKII_COLOR_GREY_LO);
-            colorManager.registerColor (DAWColors.DAW_COLOR_SILVER, APC_MKII_COLOR_SKY_OCEAN);
-            colorManager.registerColor (DAWColors.DAW_COLOR_DARK_BROWN, APC_MKII_COLOR_AMBER_LO);
-            colorManager.registerColor (DAWColors.DAW_COLOR_BROWN, APC_MKII_COLOR_AMBER_YELLOW);
-            colorManager.registerColor (DAWColors.DAW_COLOR_DARK_BLUE, APC_MKII_COLOR_OCEAN);
-            colorManager.registerColor (DAWColors.DAW_COLOR_PURPLE_BLUE, APC_MKII_COLOR_OCEAN_BLUE);
-            colorManager.registerColor (DAWColors.DAW_COLOR_PURPLE, APC_MKII_COLOR_PINK);
-            colorManager.registerColor (DAWColors.DAW_COLOR_PINK, APC_MKII_COLOR_PINK_HI);
-            colorManager.registerColor (DAWColors.DAW_COLOR_RED, APC_MKII_COLOR_RED);
-            colorManager.registerColor (DAWColors.DAW_COLOR_ORANGE, APC_MKII_COLOR_AMBER);
-            colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_ORANGE, APC_MKII_COLOR_RED_LO);
-            colorManager.registerColor (DAWColors.DAW_COLOR_MOSS_GREEN, APC_MKII_COLOR_LIME_LO);
-            colorManager.registerColor (DAWColors.DAW_COLOR_GREEN, APC_MKII_COLOR_SPRING);
-            colorManager.registerColor (DAWColors.DAW_COLOR_COLD_GREEN, APC_MKII_COLOR_TURQUOISE);
-            colorManager.registerColor (DAWColors.DAW_COLOR_BLUE, APC_MKII_COLOR_SKY_HI);
-            colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_PURPLE, APC_MKII_COLOR_BLUE_ORCHID);
-            colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_PINK, APC_MKII_COLOR_MAGENTA_PINK);
-            colorManager.registerColor (DAWColors.DAW_COLOR_SKIN, APC_MKII_COLOR_ROSE);
-            colorManager.registerColor (DAWColors.DAW_COLOR_REDDISH_BROWN, APC_MKII_COLOR_AMBER);
-            colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_BROWN, APC_MKII_COLOR_AMBER_HI);
-            colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_GREEN, APC_MKII_COLOR_LIME);
-            colorManager.registerColor (DAWColors.DAW_COLOR_BLUISH_GREEN, APC_MKII_COLOR_SPRING_HI);
-            colorManager.registerColor (DAWColors.DAW_COLOR_GREEN_BLUE, APC_MKII_COLOR_TURQUOISE_CYAN);
-            colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_BLUE, APC_MKII_COLOR_OCEAN_HI);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_GRAY_HALF, APC_MKII_COLOR_GREY_MD);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_DARK_GRAY, APC_MKII_COLOR_GREY_LO);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_GRAY, APC_MKII_COLOR_GREY_MD);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GRAY, APC_MKII_COLOR_GREY_LO);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_SILVER, APC_MKII_COLOR_SKY_OCEAN);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_DARK_BROWN, APC_MKII_COLOR_AMBER_LO);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_BROWN, APC_MKII_COLOR_AMBER_YELLOW);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_DARK_BLUE, APC_MKII_COLOR_OCEAN);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_PURPLE_BLUE, APC_MKII_COLOR_OCEAN_BLUE);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_PURPLE, APC_MKII_COLOR_PINK);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_PINK, APC_MKII_COLOR_PINK_HI);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_RED, APC_MKII_COLOR_RED);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_ORANGE, APC_MKII_COLOR_AMBER);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_ORANGE, APC_MKII_COLOR_RED_LO);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_MOSS_GREEN, APC_MKII_COLOR_LIME_LO);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_GREEN, APC_MKII_COLOR_SPRING);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_COLD_GREEN, APC_MKII_COLOR_TURQUOISE);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_BLUE, APC_MKII_COLOR_SKY_HI);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PURPLE, APC_MKII_COLOR_BLUE_ORCHID);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PINK, APC_MKII_COLOR_MAGENTA_PINK);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_SKIN, APC_MKII_COLOR_ROSE);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_REDDISH_BROWN, APC_MKII_COLOR_AMBER);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BROWN, APC_MKII_COLOR_AMBER_HI);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GREEN, APC_MKII_COLOR_LIME);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_BLUISH_GREEN, APC_MKII_COLOR_SPRING_HI);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_GREEN_BLUE, APC_MKII_COLOR_TURQUOISE_CYAN);
+            colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BLUE, APC_MKII_COLOR_OCEAN_HI);
         }
 
-        colorManager.registerColor (ColorManager.BUTTON_STATE_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_ON, 1);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_HI, 2);
-        colorManager.registerColor (BUTTON_STATE_BLINK, 3);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_ON, 1);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_HI, 2);
+        colorManager.registerColorIndex (BUTTON_STATE_BLINK, 3);
 
-        colorManager.registerColor (COLOR_VIEW_SELECTED, isMkII ? APC_MKII_COLOR_GREEN : APC_COLOR_GREEN);
-        colorManager.registerColor (COLOR_VIEW_UNSELECTED, isMkII ? APC_MKII_COLOR_AMBER : APC_COLOR_BLACK);
-        colorManager.registerColor (COLOR_VIEW_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
-        colorManager.registerColor (COLOR_KEY_WHITE, isMkII ? APC_MKII_COLOR_AMBER_LO : APC_COLOR_GREEN);
-        colorManager.registerColor (COLOR_KEY_BLACK, isMkII ? APC_MKII_COLOR_RED_HI : APC_COLOR_RED);
-        colorManager.registerColor (COLOR_KEY_SELECTED, isMkII ? APC_MKII_COLOR_GREEN_HI : APC_COLOR_GREEN);
+        colorManager.registerColorIndex (COLOR_VIEW_SELECTED, isMkII ? APC_MKII_COLOR_GREEN : APC_COLOR_GREEN);
+        colorManager.registerColorIndex (COLOR_VIEW_UNSELECTED, isMkII ? APC_MKII_COLOR_AMBER : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (COLOR_VIEW_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
+        colorManager.registerColorIndex (COLOR_KEY_WHITE, isMkII ? APC_MKII_COLOR_AMBER_LO : APC_COLOR_GREEN);
+        colorManager.registerColorIndex (COLOR_KEY_BLACK, isMkII ? APC_MKII_COLOR_RED_HI : APC_COLOR_RED);
+        colorManager.registerColorIndex (COLOR_KEY_SELECTED, isMkII ? APC_MKII_COLOR_GREEN_HI : APC_COLOR_GREEN);
     }
 }

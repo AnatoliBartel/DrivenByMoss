@@ -108,14 +108,25 @@ public class OptionsMode extends BaseMode
     @Override
     public void updateFirstRow ()
     {
-        this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1, SLMkIIIColors.SLMKIII_BROWN_DARK);
-        this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_2, SLMkIIIColors.SLMKIII_BROWN_DARK);
-        this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_3, SLMkIIIColors.SLMKIII_BROWN_DARK);
-        this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_4, SLMkIIIColors.SLMKIII_BROWN_DARK);
-        this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_5, SLMkIIIColors.SLMKIII_BROWN_DARK);
-        this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_6, this.model.getTransport ().isMetronomeOn () ? SLMkIIIColors.SLMKIII_BROWN : SLMkIIIColors.SLMKIII_BROWN_DARK);
-        this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_7, this.model.getApplication ().isEngineActive () ? SLMkIIIColors.SLMKIII_BROWN : SLMkIIIColors.SLMKIII_BROWN_DARK);
-        this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_8, SLMkIIIColors.SLMKIII_BROWN_DARK);
+        // TODO
+        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1,
+        // SLMkIIIColors.SLMKIII_BROWN_DARK);
+        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_2,
+        // SLMkIIIColors.SLMKIII_BROWN_DARK);
+        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_3,
+        // SLMkIIIColors.SLMKIII_BROWN_DARK);
+        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_4,
+        // SLMkIIIColors.SLMKIII_BROWN_DARK);
+        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_5,
+        // SLMkIIIColors.SLMKIII_BROWN_DARK);
+        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_6,
+        // this.model.getTransport ().isMetronomeOn () ? SLMkIIIColors.SLMKIII_BROWN :
+        // SLMkIIIColors.SLMKIII_BROWN_DARK);
+        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_7,
+        // this.model.getApplication ().isEngineActive () ? SLMkIIIColors.SLMKIII_BROWN :
+        // SLMkIIIColors.SLMKIII_BROWN_DARK);
+        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_8,
+        // SLMkIIIColors.SLMKIII_BROWN_DARK);
     }
 
 

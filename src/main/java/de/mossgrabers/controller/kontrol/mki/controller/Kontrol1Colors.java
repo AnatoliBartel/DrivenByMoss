@@ -82,34 +82,34 @@ public class Kontrol1Colors
      */
     public static void addColors (final ColorManager colorManager)
     {
-        colorManager.registerColor (ColorManager.BUTTON_STATE_OFF, BUTTON_STATE_OFF);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_ON, BUTTON_STATE_ON);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_HI, BUTTON_STATE_HI);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_OFF, BUTTON_STATE_OFF);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_ON, BUTTON_STATE_ON);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_HI, BUTTON_STATE_HI);
 
-        colorManager.registerColor (Scales.SCALE_COLOR_OFF, BUTTON_STATE_OFF);
-        colorManager.registerColor (Scales.SCALE_COLOR_OCTAVE, SCALE_COLOR_OCTAVE);
-        colorManager.registerColor (Scales.SCALE_COLOR_NOTE, SCALE_COLOR_NOTE);
-        colorManager.registerColor (Scales.SCALE_COLOR_OUT_OF_SCALE, SCALE_COLOR_OUT_OF_SCALE);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OFF, BUTTON_STATE_OFF);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OCTAVE, SCALE_COLOR_OCTAVE);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_NOTE, SCALE_COLOR_NOTE);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OUT_OF_SCALE, SCALE_COLOR_OUT_OF_SCALE);
 
-        colorManager.registerColor (AbstractPlayView.COLOR_OFF, BUTTON_STATE_OFF);
-        colorManager.registerColor (AbstractPlayView.COLOR_PLAY, COLOR_PLAY);
-        colorManager.registerColor (AbstractPlayView.COLOR_RECORD, COLOR_RECORD);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_OFF, BUTTON_STATE_OFF);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_PLAY, COLOR_PLAY);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_RECORD, COLOR_RECORD);
 
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_OFF, BUTTON_STATE_OFF);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_RECORD, COLOR_RECORD);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_PLAY, COLOR_PLAY);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_MUTED,
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_OFF, BUTTON_STATE_OFF);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_RECORD, COLOR_RECORD);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_PLAY, COLOR_PLAY);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_MUTED,
                 DAW_COLOR_START + 2 /* DAWColors.DAW_COLOR_GRAY */);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_HAS_CONTENT,
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_HAS_CONTENT,
                 DAW_COLOR_START + 17 /* DAWColors.DAW_COLOR_BLUE */);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_NO_CONTENT, BUTTON_STATE_OFF);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_NO_CONTENT, BUTTON_STATE_OFF);
 
-        colorManager.registerColor (PadGrid.GRID_OFF, BUTTON_STATE_OFF);
+        colorManager.registerColorIndex (PadGrid.GRID_OFF, BUTTON_STATE_OFF);
 
-        colorManager.registerColor (DAWColors.COLOR_OFF, BUTTON_STATE_OFF);
+        colorManager.registerColorIndex (DAWColors.COLOR_OFF, BUTTON_STATE_OFF);
 
         for (int i = 0; i < DAWColors.DAW_COLORS.length; i++)
-            colorManager.registerColor (DAWColors.DAW_COLORS[i], DAW_COLOR_START + i);
+            colorManager.registerColorIndex (DAWColors.DAW_COLORS[i], DAW_COLOR_START + i);
     }
 
 

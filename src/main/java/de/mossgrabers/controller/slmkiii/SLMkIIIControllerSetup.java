@@ -25,7 +25,6 @@ import de.mossgrabers.controller.slmkiii.view.DrumView;
 import de.mossgrabers.controller.slmkiii.view.SessionView;
 import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.command.SceneCommand;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.command.continuous.KnobRowModeCommand;
 import de.mossgrabers.framework.command.core.NopCommand;
 import de.mossgrabers.framework.command.trigger.ShiftCommand;
@@ -39,6 +38,7 @@ import de.mossgrabers.framework.command.trigger.transport.ToggleLoopCommand;
 import de.mossgrabers.framework.command.trigger.transport.WindCommand;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -190,22 +190,22 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
     {
         final SLMkIIIControlSurface surface = this.getSurface ();
 
-        this.addTriggerCommand (TriggerCommandID.REWIND, SLMkIIIControlSurface.MKIII_TRANSPORT_REWIND, new WindCommand<> (this.model, surface, false));
-        this.addTriggerCommand (TriggerCommandID.FORWARD, SLMkIIIControlSurface.MKIII_TRANSPORT_FORWARD, new WindCommand<> (this.model, surface, true));
-        this.addTriggerCommand (TriggerCommandID.LOOP, SLMkIIIControlSurface.MKIII_TRANSPORT_LOOP, new ToggleLoopCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.STOP, SLMkIIIControlSurface.MKIII_TRANSPORT_STOP, new StopCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.PLAY, SLMkIIIControlSurface.MKIII_TRANSPORT_PLAY, new PlayCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.RECORD, SLMkIIIControlSurface.MKIII_TRANSPORT_RECORD, new RecordCommand<> (this.model, surface));
+        this.addButton (ButtonID.REWIND, "<<", new WindCommand<> (this.model, surface, false), SLMkIIIControlSurface.MKIII_TRANSPORT_REWIND);
+        this.addButton (ButtonID.FORWARD, ">>", new WindCommand<> (this.model, surface, true), SLMkIIIControlSurface.MKIII_TRANSPORT_FORWARD);
+        this.addButton (ButtonID.LOOP, "Loop", new ToggleLoopCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_TRANSPORT_LOOP);
+        this.addButton (ButtonID.STOP, "Stop", new StopCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_TRANSPORT_STOP);
+        this.addButton (ButtonID.PLAY, "Play", new PlayCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_TRANSPORT_PLAY);
+        this.addButton (ButtonID.RECORD, "Record", new RecordCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_TRANSPORT_RECORD);
 
         for (int i = 0; i < 8; i++)
         {
-            this.addTriggerCommand (TriggerCommandID.get (TriggerCommandID.ROW1_1, i), SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i, new ButtonRowModeCommand<> (0, i, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.get (TriggerCommandID.ROW2_1, i), SLMkIIIControlSurface.MKIII_BUTTON_ROW1_1 + i, new ButtonAreaCommand (0, i, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.get (TriggerCommandID.ROW3_1, i), SLMkIIIControlSurface.MKIII_BUTTON_ROW2_1 + i, new ButtonAreaCommand (1, i, this.model, surface));
+            this.addButton (ButtonID.get (ButtonID.ROW1_1, i), "Select " + (i + 1), new ButtonRowModeCommand<> (0, i, this.model, surface), SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i);
+            this.addButton (ButtonID.get (ButtonID.ROW2_1, i), "Row 1 " + (i + 1), new ButtonAreaCommand (0, i, this.model, surface), SLMkIIIControlSurface.MKIII_BUTTON_ROW1_1 + i);
+            this.addButton (ButtonID.get (ButtonID.ROW3_1, i), "ROw 2 " + (i + 1), new ButtonAreaCommand (1, i, this.model, surface), SLMkIIIControlSurface.MKIII_BUTTON_ROW2_1 + i);
         }
 
         final ModeSelectCommand<SLMkIIIControlSurface, SLMkIIIConfiguration> deviceModeSelectCommand = new ModeSelectCommand<> (this.model, surface, Modes.DEVICE_PARAMS);
-        this.addTriggerCommand (TriggerCommandID.ARROW_UP, SLMkIIIControlSurface.MKIII_DISPLAY_UP, event -> {
+        this.addButton (ButtonID.ARROW_UP, "Up", event -> {
             if (event != ButtonEvent.DOWN)
                 return;
             final IBrowser browser = this.model.getBrowser ();
@@ -216,29 +216,29 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
                 ((ParametersMode) modeManager.getMode (Modes.DEVICE_PARAMS)).toggleShowDevices ();
             else
                 deviceModeSelectCommand.execute (event);
-        });
+        }, SLMkIIIControlSurface.MKIII_DISPLAY_UP);
 
-        this.addTriggerCommand (TriggerCommandID.ARROW_DOWN, SLMkIIIControlSurface.MKIII_DISPLAY_DOWN, new TrackModeCommand (this.model, surface));
+        this.addButton (ButtonID.ARROW_DOWN, "Down", new TrackModeCommand (this.model, surface), SLMkIIIControlSurface.MKIII_DISPLAY_DOWN);
 
-        this.addTriggerCommand (TriggerCommandID.SHIFT, SLMkIIIControlSurface.MKIII_SHIFT, new ShiftCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.USER, SLMkIIIControlSurface.MKIII_OPTIONS, new ModeSelectCommand<> (this.model, surface, Modes.FUNCTIONS, true));
+        this.addButton (ButtonID.SHIFT, "Shift", new ShiftCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_SHIFT);
+        this.addButton (ButtonID.USER, "User", new ModeSelectCommand<> (this.model, surface, Modes.FUNCTIONS, true), SLMkIIIControlSurface.MKIII_OPTIONS);
 
-        this.addTriggerCommand (TriggerCommandID.OCTAVE_UP, SLMkIIIControlSurface.MKIII_BUTTONS_UP, event -> {
+        this.addButton (ButtonID.OCTAVE_UP, "Octave Up", event -> {
             if (event == ButtonEvent.UP)
                 surface.toggleMuteSolo ();
-        });
-        this.addTriggerCommand (TriggerCommandID.OCTAVE_DOWN, SLMkIIIControlSurface.MKIII_BUTTONS_DOWN, event -> {
+        }, SLMkIIIControlSurface.MKIII_BUTTONS_UP);
+        this.addButton (ButtonID.OCTAVE_DOWN, "Octave Down", event -> {
             if (event == ButtonEvent.UP)
                 surface.toggleMuteSolo ();
-        });
+        }, SLMkIIIControlSurface.MKIII_BUTTONS_DOWN);
 
-        this.addTriggerCommand (TriggerCommandID.ARROW_LEFT, SLMkIIIControlSurface.MKIII_TRACK_LEFT, new SLMkIIICursorCommand (Direction.LEFT, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_RIGHT, SLMkIIIControlSurface.MKIII_TRACK_RIGHT, new SLMkIIICursorCommand (Direction.RIGHT, this.model, surface));
+        this.addButton (ButtonID.ARROW_LEFT, "Left", new SLMkIIICursorCommand (Direction.LEFT, this.model, surface), SLMkIIIControlSurface.MKIII_TRACK_LEFT);
+        this.addButton (ButtonID.ARROW_RIGHT, "Right", new SLMkIIICursorCommand (Direction.RIGHT, this.model, surface), SLMkIIIControlSurface.MKIII_TRACK_RIGHT);
 
-        this.addTriggerCommand (TriggerCommandID.SCENE1, SLMkIIIControlSurface.MKIII_SCENE_1, new SceneCommand<> (0, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SCENE2, SLMkIIIControlSurface.MKIII_SCENE_2, new SceneCommand<> (1, this.model, surface));
+        this.addButton (ButtonID.SCENE1, "Scene 1", new SceneCommand<> (0, this.model, surface), SLMkIIIControlSurface.MKIII_SCENE_1);
+        this.addButton (ButtonID.SCENE2, "Scene 2", new SceneCommand<> (1, this.model, surface), SLMkIIIControlSurface.MKIII_SCENE_2);
 
-        this.addTriggerCommand (TriggerCommandID.SCENE7, SLMkIIIControlSurface.MKIII_SCENE_UP, event -> {
+        this.addButton (ButtonID.SCENE7, "TODO", event -> {
             if (event != ButtonEvent.DOWN)
                 return;
             final ViewManager viewManager = this.getSurface ().getViewManager ();
@@ -254,8 +254,8 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
             }
             else if (viewManager.isActiveView (Views.COLOR))
                 ((ColorView) viewManager.getView (Views.COLOR)).setFlip (false);
-        });
-        this.addTriggerCommand (TriggerCommandID.SCENE8, SLMkIIIControlSurface.MKIII_SCENE_DOWN, event -> {
+        }, SLMkIIIControlSurface.MKIII_SCENE_UP);
+        this.addButton (ButtonID.SCENE8, "TODO", event -> {
             if (event != ButtonEvent.DOWN)
                 return;
             final ViewManager viewManager = this.getSurface ().getViewManager ();
@@ -271,18 +271,18 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
             }
             else if (viewManager.isActiveView (Views.COLOR))
                 ((ColorView) viewManager.getView (Views.COLOR)).setFlip (true);
-        });
+        }, SLMkIIIControlSurface.MKIII_SCENE_DOWN);
 
-        this.addTriggerCommand (TriggerCommandID.SELECT_SESSION_VIEW, SLMkIIIControlSurface.MKIII_GRID, event -> {
+        this.addButton (ButtonID.SESSION, "Session", event -> {
             if (event != ButtonEvent.DOWN)
                 return;
             final ViewManager viewManager = surface.getViewManager ();
             viewManager.setActiveView (viewManager.isActiveView (Views.SESSION) ? Views.DRUM : Views.SESSION);
             this.getSurface ().getDisplay ().notify (viewManager.isActiveView (Views.SESSION) ? "Session" : "Sequencer");
-        });
+        }, SLMkIIIControlSurface.MKIII_GRID);
 
-        this.addTriggerCommand (TriggerCommandID.DUPLICATE, SLMkIIIControlSurface.MKIII_DUPLICATE, NopCommand.INSTANCE);
-        this.addTriggerCommand (TriggerCommandID.DELETE, SLMkIIIControlSurface.MKIII_CLEAR, NopCommand.INSTANCE);
+        this.addButton (ButtonID.DUPLICATE, "Duplicate", NopCommand.INSTANCE, SLMkIIIControlSurface.MKIII_DUPLICATE);
+        this.addButton (ButtonID.DELETE, "Delete", NopCommand.INSTANCE, SLMkIIIControlSurface.MKIII_CLEAR);
 
     }
 
@@ -323,30 +323,52 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
         final boolean isShift = surface.isShiftPressed ();
 
         final ViewManager viewManager = surface.getViewManager ();
-        final View view = viewManager.getView (Views.SESSION);
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_REWIND, ((WindCommand<?, ?>) view.getTriggerCommand (TriggerCommandID.REWIND)).isRewinding () ? SLMkIIIColors.SLMKIII_YELLOW : SLMkIIIColors.SLMKIII_YELLOW_HALF);
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_FORWARD, ((WindCommand<?, ?>) view.getTriggerCommand (TriggerCommandID.FORWARD)).isForwarding () ? SLMkIIIColors.SLMKIII_YELLOW : SLMkIIIColors.SLMKIII_YELLOW_HALF);
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_LOOP, t.isLoop () ? SLMkIIIColors.SLMKIII_BLUE : SLMkIIIColors.SLMKIII_BLUE_HALF);
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_STOP, !t.isPlaying () ? SLMkIIIColors.SLMKIII_GREY : SLMkIIIColors.SLMKIII_DARK_GREY);
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_PLAY, t.isPlaying () ? SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_GREEN_HALF);
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_RECORD, isShift ? t.isLauncherOverdub () ? SLMkIIIColors.SLMKIII_AMBER : SLMkIIIColors.SLMKIII_AMBER_HALF : t.isRecording () ? SLMkIIIColors.SLMKIII_RED : SLMkIIIColors.SLMKIII_RED_HALF);
 
-        final ModeManager modeManager = surface.getModeManager ();
-
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_UP, getDeviceModeColor (modeManager));
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_DOWN, getTrackModeColor (modeManager));
-
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_BUTTONS_UP, surface.isMuteSolo () ? SLMkIIIColors.SLMKIII_ORANGE : SLMkIIIColors.SLMKIII_ORANGE_HALF);
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_BUTTONS_DOWN, !surface.isMuteSolo () ? SLMkIIIColors.SLMKIII_RED : SLMkIIIColors.SLMKIII_RED_HALF);
-
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_DUPLICATE, surface.isPressed (SLMkIIIControlSurface.MKIII_DUPLICATE) ? SLMkIIIColors.SLMKIII_AMBER : SLMkIIIColors.SLMKIII_AMBER_HALF);
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_CLEAR, surface.isPressed (SLMkIIIControlSurface.MKIII_CLEAR) ? SLMkIIIColors.SLMKIII_AMBER : SLMkIIIColors.SLMKIII_AMBER_HALF);
-
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_UP, this.getSceneUpColor ());
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_DOWN, this.getSceneDownColor ());
-
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_GRID, viewManager.isActiveView (Views.SESSION) ? SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_BLUE);
-        surface.updateTrigger (SLMkIIIControlSurface.MKIII_OPTIONS, modeManager.isActiveOrTempMode (Modes.FUNCTIONS) ? SLMkIIIColors.SLMKIII_BROWN_DARK : SLMkIIIColors.SLMKIII_DARK_GREY);
+        // TODO Button color udpate
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_REWIND, ((WindCommand<?, ?>)
+        // surface.getButton (ButtonID.REWIND)).isRewinding () ? SLMkIIIColors.SLMKIII_YELLOW :
+        // SLMkIIIColors.SLMKIII_YELLOW_HALF);
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_FORWARD, ((WindCommand<?,
+        // ?>) surface.getButton (ButtonID.FORWARD)).isForwarding () ? SLMkIIIColors.SLMKIII_YELLOW
+        // : SLMkIIIColors.SLMKIII_YELLOW_HALF);
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_LOOP, t.isLoop () ?
+        // SLMkIIIColors.SLMKIII_BLUE : SLMkIIIColors.SLMKIII_BLUE_HALF);
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_STOP, !t.isPlaying () ?
+        // SLMkIIIColors.SLMKIII_GREY : SLMkIIIColors.SLMKIII_DARK_GREY);
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_PLAY, t.isPlaying () ?
+        // SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_GREEN_HALF);
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_RECORD, isShift ?
+        // t.isLauncherOverdub () ? SLMkIIIColors.SLMKIII_AMBER : SLMkIIIColors.SLMKIII_AMBER_HALF :
+        // t.isRecording () ? SLMkIIIColors.SLMKIII_RED : SLMkIIIColors.SLMKIII_RED_HALF);
+        //
+        // final ModeManager modeManager = surface.getModeManager ();
+        //
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_UP, getDeviceModeColor
+        // (modeManager));
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_DOWN, getTrackModeColor
+        // (modeManager));
+        //
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_BUTTONS_UP, surface.isMuteSolo () ?
+        // SLMkIIIColors.SLMKIII_ORANGE : SLMkIIIColors.SLMKIII_ORANGE_HALF);
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_BUTTONS_DOWN, !surface.isMuteSolo () ?
+        // SLMkIIIColors.SLMKIII_RED : SLMkIIIColors.SLMKIII_RED_HALF);
+        //
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_DUPLICATE, surface.isPressed
+        // (SLMkIIIControlSurface.MKIII_DUPLICATE) ? SLMkIIIColors.SLMKIII_AMBER :
+        // SLMkIIIColors.SLMKIII_AMBER_HALF);
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_CLEAR, surface.isPressed
+        // (SLMkIIIControlSurface.MKIII_CLEAR) ? SLMkIIIColors.SLMKIII_AMBER :
+        // SLMkIIIColors.SLMKIII_AMBER_HALF);
+        //
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_UP, this.getSceneUpColor ());
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_DOWN, this.getSceneDownColor
+        // ());
+        //
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_GRID, viewManager.isActiveView
+        // (Views.SESSION) ? SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_BLUE);
+        // surface.updateTrigger (SLMkIIIControlSurface.MKIII_OPTIONS,
+        // modeManager.isActiveOrTempMode (Modes.FUNCTIONS) ? SLMkIIIColors.SLMKIII_BROWN_DARK :
+        // SLMkIIIColors.SLMKIII_DARK_GREY);
 
         final SLMkIIIDisplay display = surface.getDisplay ();
         final ITrackBank tb = this.model.getTrackBank ();
@@ -365,8 +387,8 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
             // (TriggerCommandID.ARROW_LEFT)).updateArrows ();
             if (activeView instanceof SceneView)
             {
-                for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
-                    ((SceneView) activeView).updateSceneButton (i);
+                // for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
+                // ((SceneView) activeView).updateSceneButton (i);
             }
         }
 
@@ -400,8 +422,9 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
                 color2 = exists ? track.isRecArm () ? SLMkIIIColors.SLMKIII_RED : SLMkIIIColors.SLMKIII_RED_HALF : SLMkIIIColors.SLMKIII_BLACK;
             }
 
-            surface.updateTrigger (SLMkIIIControlSurface.MKIII_BUTTON_ROW1_1 + i, color1);
-            surface.updateTrigger (SLMkIIIControlSurface.MKIII_BUTTON_ROW2_1 + i, color2);
+            // TODO
+            // surface.updateTrigger (SLMkIIIControlSurface.MKIII_BUTTON_ROW1_1 + i, color1);
+            // surface.updateTrigger (SLMkIIIControlSurface.MKIII_BUTTON_ROW2_1 + i, color2);
         }
     }
 

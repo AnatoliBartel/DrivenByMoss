@@ -62,7 +62,7 @@ public class SelectSessionViewCommand extends AbstractTriggerCommand<LaunchpadCo
         }
         else if (event == ButtonEvent.LONG)
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.SESSION));
+            this.surface.setTriggerConsumed (ButtonID.SESSION);
             sessionView.setBirdsEyeActive (true);
         }
 

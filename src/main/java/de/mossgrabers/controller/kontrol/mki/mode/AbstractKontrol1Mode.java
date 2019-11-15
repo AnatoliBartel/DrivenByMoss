@@ -5,7 +5,6 @@
 package de.mossgrabers.controller.kontrol.mki.mode;
 
 import de.mossgrabers.controller.kontrol.mki.Kontrol1Configuration;
-import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1Colors;
 import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1ControlSurface;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ITrackBank;
@@ -38,6 +37,8 @@ public abstract class AbstractKontrol1Mode extends AbstractMode<Kontrol1ControlS
     @Override
     public void updateFirstRow ()
     {
+        // TODO requires a new "int getButtonColor (ButtonID buttonID)" function
+
         final ITrackBank tb = this.model.getCurrentTrackBank ();
         final ITrack t = tb.getSelectedItem ();
         final int selIndex = t != null ? t.getIndex () : -1;
@@ -46,15 +47,23 @@ public abstract class AbstractKontrol1Mode extends AbstractMode<Kontrol1ControlS
         final boolean canScrollUp = tb.canScrollPageForwards ();
         final boolean canScrollDown = tb.canScrollPageBackwards ();
 
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_LEFT, canScrollLeft ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_RIGHT, canScrollRight ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_UP, canScrollUp ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_DOWN, canScrollDown ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BACK, t != null && t.isMute () ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_ENTER, t != null && t.isSolo () ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BROWSE, Kontrol1Colors.BUTTON_STATE_ON);
+        // TODO
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_LEFT, canScrollLeft ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_RIGHT, canScrollRight
+        // ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_UP, canScrollUp ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_DOWN, canScrollDown ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        //
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BACK, t != null && t.isMute ()
+        // ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_ENTER, t != null && t.isSolo ()
+        // ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        //
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BROWSE,
+        // Kontrol1Colors.BUTTON_STATE_ON);
     }
 
 

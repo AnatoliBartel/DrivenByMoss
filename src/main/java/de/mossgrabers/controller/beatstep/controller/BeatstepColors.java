@@ -40,11 +40,11 @@ public class BeatstepColors
      */
     public static void addColors (final ColorManager colorManager)
     {
-        colorManager.registerColor (Scales.SCALE_COLOR_OFF, BEATSTEP_BUTTON_STATE_OFF);
-        colorManager.registerColor (Scales.SCALE_COLOR_OCTAVE, BEATSTEP_BUTTON_STATE_RED);
-        colorManager.registerColor (Scales.SCALE_COLOR_NOTE, BEATSTEP_BUTTON_STATE_BLUE);
-        colorManager.registerColor (Scales.SCALE_COLOR_OUT_OF_SCALE, BEATSTEP_BUTTON_STATE_OFF);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OFF, BEATSTEP_BUTTON_STATE_OFF);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OCTAVE, BEATSTEP_BUTTON_STATE_RED);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_NOTE, BEATSTEP_BUTTON_STATE_BLUE);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OUT_OF_SCALE, BEATSTEP_BUTTON_STATE_OFF);
 
-        colorManager.registerColor (PadGrid.GRID_OFF, BEATSTEP_BUTTON_STATE_OFF);
+        colorManager.registerColorIndex (PadGrid.GRID_OFF, BEATSTEP_BUTTON_STATE_OFF);
     }
 }

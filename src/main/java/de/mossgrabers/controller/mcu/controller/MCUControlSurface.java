@@ -218,18 +218,12 @@ public class MCUControlSurface extends AbstractControlSurface<MCUConfiguration>
      */
     public MCUControlSurface (final List<MCUControlSurface> surfaces, final IHost host, final ColorManager colorManager, final MCUConfiguration configuration, final IMidiOutput output, final IMidiInput input, final int extenderOffset, final boolean isMainDevice)
     {
-        super (host, configuration, colorManager, output, input, null);
+        // TODO size
+        super (host, configuration, colorManager, output, input, null, 100, 100);
 
         this.surfaces = surfaces;
         this.extenderOffset = extenderOffset;
         this.isMainDevice = isMainDevice;
-
-        this.setTriggerId (ButtonID.SHIFT, MCU_SHIFT);
-        this.setTriggerId (ButtonID.SELECT, MCU_OPTION);
-        this.setTriggerId (ButtonID.LEFT, MCU_ARROW_LEFT);
-        this.setTriggerId (ButtonID.RIGHT, MCU_ARROW_RIGHT);
-        this.setTriggerId (ButtonID.UP, MCU_ARROW_UP);
-        this.setTriggerId (ButtonID.DOWN, MCU_ARROW_DOWN);
 
         Arrays.fill (this.knobValues, -1);
     }
@@ -426,20 +420,20 @@ public class MCUControlSurface extends AbstractControlSurface<MCUConfiguration>
 
     /** {@inheritDoc} */
     @Override
-    public boolean isPressed (final int button)
+    public boolean isPressed (final ButtonID buttonID)
     {
-        // Check on all MSU surfaces for state button presses
+        // Check on all MCU surfaces for state button presses
 
         for (final MCUControlSurface surface: this.surfaces)
-            if (surface.isTrigger (button) && surface.isSinglePressed (button))
+            if (surface.isSinglePressed (buttonID))
                 return true;
         return false;
     }
 
 
-    private boolean isSinglePressed (final int button)
+    private boolean isSinglePressed (final ButtonID buttonID)
     {
-        return super.isPressed (button);
+        return super.isPressed (buttonID);
     }
 
 

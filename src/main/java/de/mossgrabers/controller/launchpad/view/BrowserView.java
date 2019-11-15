@@ -8,7 +8,6 @@ import de.mossgrabers.controller.launchpad.LaunchpadConfiguration;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadColors;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
-import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.IBrowser;
@@ -76,9 +75,13 @@ public class BrowserView extends AbstractView<LaunchpadControlSurface, Launchpad
 
     private void delayedUpdateArrowButtons ()
     {
-        this.surface.setTrigger (this.surface.getTriggerId (ButtonID.SESSION), LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        this.surface.setTrigger (this.surface.getTriggerId (ButtonID.NOTE), LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        this.surface.setTrigger (this.surface.getTriggerId (ButtonID.DEVICE), LaunchpadColors.LAUNCHPAD_COLOR_TURQUOISE);
+        // TODO
+        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.SESSION),
+        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.NOTE),
+        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.DEVICE),
+        // LaunchpadColors.LAUNCHPAD_COLOR_TURQUOISE);
         if (this.surface.isPro ())
             this.surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER, this.model.getHost ().hasUserParameters () ? LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO : LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
     }
@@ -219,13 +222,14 @@ public class BrowserView extends AbstractView<LaunchpadControlSurface, Launchpad
         // Intentionally empty
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        this.surface.setTrigger (this.surface.getSceneTrigger (scene), LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-    }
+    // TODO
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // this.surface.setTrigger (this.surface.getSceneTrigger (scene),
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // }
 
 
     @Override

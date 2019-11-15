@@ -62,8 +62,10 @@ public class SequencerResolutionMode extends BaseMode
     {
         final DrumView drumView = (DrumView) this.surface.getViewManager ().getView (Views.DRUM);
         final int match = Resolution.getMatch (drumView.getClip ().getStepLength ());
-        for (int i = 0; i < 8; i++)
-            this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i, match == i ? SLMkIIIColors.SLMKIII_PINK : SLMkIIIColors.SLMKIII_DARK_GREY);
+        // TODO
+        // for (int i = 0; i < 8; i++)
+        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i, match == i
+        // ? SLMkIIIColors.SLMKIII_PINK : SLMkIIIColors.SLMKIII_DARK_GREY);
     }
 
 

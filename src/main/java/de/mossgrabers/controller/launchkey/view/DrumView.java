@@ -147,7 +147,7 @@ public class DrumView extends AbstractDrumView<LaunchkeyMiniMk3ControlSurface, L
         if (!drumPad.doesExist () || !drumPad.isActivated ())
             return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK;
 
-        return this.model.getColorManager ().getColor (DAWColors.getColorIndex (drumPad.getColor ()));
+        return this.model.getColorManager ().getColorIndex (DAWColors.getColorIndex (drumPad.getColor ()));
     }
 
 
@@ -158,16 +158,19 @@ public class DrumView extends AbstractDrumView<LaunchkeyMiniMk3ControlSurface, L
         return hilite ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREEN : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK;
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        if (scene == 0)
-            this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1, this.isPlayMode ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREEN : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLUE);
-        else
-            this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREY_LO);
-    }
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // TODO
+    // if (scene == 0)
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1,
+    // this.isPlayMode ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREEN :
+    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLUE);
+    // else
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
+    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREY_LO);
+    // }
 
 
     /** {@inheritDoc} */

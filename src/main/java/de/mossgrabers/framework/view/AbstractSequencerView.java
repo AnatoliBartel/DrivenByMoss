@@ -200,14 +200,6 @@ public abstract class AbstractSequencerView<S extends IControlSurface<C>, C exte
     }
 
 
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO REmove
-    }
-
-
     /**
      * Checks if the given number is in the current display.
      *

@@ -66,21 +66,13 @@ public class PlayView extends AbstractPlayView<PushControlSurface, PushConfigura
 
         if (this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             scene.remove ();
             return;
         }
 
         scene.select ();
         scene.launch ();
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO REmove
     }
 
 
@@ -102,7 +94,7 @@ public class PlayView extends AbstractPlayView<PushControlSurface, PushConfigura
     {
         if (this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             final int editMidiChannel = this.surface.getConfiguration ().getMidiEditChannel ();
             this.model.getNoteClip (8, 128).clearRow (editMidiChannel, this.keyManager.map (note));
             return;

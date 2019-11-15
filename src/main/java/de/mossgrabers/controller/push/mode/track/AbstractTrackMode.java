@@ -112,7 +112,7 @@ public abstract class AbstractTrackMode extends BaseMode
         if (!this.model.isEffectTrackBankActive ())
         {
             this.model.getTrackBank ().selectParent ();
-            this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_ROW1_1 + index);
+            this.surface.setTriggerConsumed (ButtonID.get (ButtonID.ROW1_1, index));
         }
     }
 

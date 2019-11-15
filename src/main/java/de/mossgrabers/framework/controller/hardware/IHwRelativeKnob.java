@@ -5,16 +5,11 @@
 package de.mossgrabers.framework.controller.hardware;
 
 /**
- * A control on a hardware controller.
+ * Interface for a proxy to a knob on a hardware controller.
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class ControlImpl implements IControl
+public interface IHwRelativeKnob extends IHwContinuousControl
 {
-    /** {@index} */
-    @Override
-    public void update ()
-    {
-        // Intentionally empty, overwrite for update functionality
-    }
+    // Intentionally empty
 }

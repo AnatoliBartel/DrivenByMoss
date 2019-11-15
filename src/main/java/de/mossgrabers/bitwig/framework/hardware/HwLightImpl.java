@@ -4,8 +4,8 @@
 
 package de.mossgrabers.bitwig.framework.hardware;
 
-import de.mossgrabers.framework.controller.hardware.ControlImpl;
-import de.mossgrabers.framework.controller.hardware.ILight;
+import de.mossgrabers.framework.controller.hardware.AbstractHwControl;
+import de.mossgrabers.framework.controller.hardware.IHwLight;
 
 import com.bitwig.extension.controller.api.MultiStateHardwareLight;
 
@@ -15,7 +15,7 @@ import com.bitwig.extension.controller.api.MultiStateHardwareLight;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class LightImpl extends ControlImpl implements ILight
+public class HwLightImpl extends AbstractHwControl implements IHwLight
 {
     final MultiStateHardwareLight hardwareLight;
 
@@ -25,8 +25,10 @@ public class LightImpl extends ControlImpl implements ILight
      *
      * @param hardwareLight The Bitwig hardware light
      */
-    public LightImpl (final MultiStateHardwareLight hardwareLight)
+    public HwLightImpl (final MultiStateHardwareLight hardwareLight)
     {
+        super (null, null);
+
         this.hardwareLight = hardwareLight;
     }
 
@@ -36,5 +38,13 @@ public class LightImpl extends ControlImpl implements ILight
     public void turnOff ()
     {
         this.hardwareLight.state ().setValue (-1);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void setBounds (double x, double y, double width, double height)
+    {
+        this.hardwareLight.setBounds (x, y, width, height);
     }
 }

@@ -24,15 +24,6 @@ public interface SceneView
 
 
     /**
-     * Update a scene button.
-     *
-     * @param scene The scene
-     */
-    @Deprecated
-    void updateSceneButton (int scene);
-
-
-    /**
      * Get scene button color.
      *
      * @param scene The scene

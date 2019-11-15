@@ -13,7 +13,6 @@ import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.IMasterTrack;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.utils.ButtonEvent;
-import de.mossgrabers.framework.view.AbstractSequencerView;
 import de.mossgrabers.framework.view.AbstractView;
 import de.mossgrabers.framework.view.SceneView;
 
@@ -85,17 +84,18 @@ public class ColorView extends AbstractView<SLMkIIIControlSurface, SLMkIIIConfig
         // Intentionally empty
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        final int colorOff = this.model.getColorManager ().getColor (AbstractSequencerView.COLOR_RESOLUTION_OFF);
-        if (scene == 0)
-            this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_1, colorOff);
-        else
-            this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_2, colorOff);
-    }
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // final int colorOff = this.model.getColorManager ().getColor
+    // (AbstractSequencerView.COLOR_RESOLUTION_OFF);
+    // TODO
+    // if (scene == 0)
+    // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_1, colorOff);
+    // else
+    // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_2, colorOff);
+    // }
 
 
     @Override

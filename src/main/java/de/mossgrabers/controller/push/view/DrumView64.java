@@ -49,9 +49,9 @@ public class DrumView64 extends AbstractDrumView64<PushControlSurface, PushConfi
     @Override
     protected void handleButtonCombinations (final int playedPad)
     {
-        if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_BROWSE))
+        if (this.surface.isPressed (ButtonID.BROWSE))
         {
-            this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_BROWSE);
+            this.surface.setTriggerConsumed (ButtonID.BROWSE);
 
             final ICursorDevice primary = this.model.getDrumDevice64 ();
             if (!primary.hasDrumPads ())
@@ -70,7 +70,7 @@ public class DrumView64 extends AbstractDrumView64<PushControlSurface, PushConfi
     @Override
     protected void handleDeleteButton (final int playedPad)
     {
-        this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+        this.surface.setTriggerConsumed (ButtonID.DELETE);
         final int editMidiChannel = this.surface.getConfiguration ().getMidiEditChannel ();
         this.model.getNoteClip (8, 128).clearRow (editMidiChannel, this.offsetY + playedPad);
     }
@@ -150,7 +150,7 @@ public class DrumView64 extends AbstractDrumView64<PushControlSurface, PushConfi
 
         if (this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             scene.remove ();
             return;
         }

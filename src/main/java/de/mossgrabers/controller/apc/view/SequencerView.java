@@ -6,7 +6,6 @@ package de.mossgrabers.controller.apc.view;
 
 import de.mossgrabers.controller.apc.APCConfiguration;
 import de.mossgrabers.controller.apc.controller.APCControlSurface;
-import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.view.AbstractNoteSequencerView;
@@ -33,14 +32,15 @@ public class SequencerView extends AbstractNoteSequencerView<APCControlSurface, 
         this.numSequencerRows = 4;
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        final String color = this.isActive () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
-        this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene, scene == 2 ? ColorManager.BUTTON_STATE_OFF : color);
-    }
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // final String color = this.isActive () ? ColorManager.BUTTON_STATE_ON :
+    // ColorManager.BUTTON_STATE_OFF;
+    // TODO this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene,
+    // scene == 2 ? ColorManager.BUTTON_STATE_OFF : color);
+    // }
 
 
     /** {@inheritDoc} */

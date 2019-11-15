@@ -112,16 +112,18 @@ public class PadModeSelectView extends AbstractView<LaunchkeyMiniMk3ControlSurfa
             this.isConsumed = true;
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        if (scene == 0)
-            this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
-        else
-            this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE);
-    }
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // TODO
+    // if (scene == 0)
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1,
+    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
+    // else
+    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
+    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE);
+    // }
 
 
     @Override

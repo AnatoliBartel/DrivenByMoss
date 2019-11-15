@@ -108,7 +108,7 @@ public class DeviceBrowserMode extends BaseMode
         {
             if (this.surface.isDeletePressed ())
             {
-                this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+                this.surface.setTriggerConsumed (ButtonID.DELETE);
                 fc = this.getFilterColumn (index);
                 if (fc != null && fc.doesExist ())
                     this.model.getBrowser ().resetFilterColumn (fc.getIndex ());

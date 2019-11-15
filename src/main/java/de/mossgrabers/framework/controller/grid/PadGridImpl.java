@@ -137,7 +137,7 @@ public class PadGridImpl implements PadGrid
     @Override
     public void light (final int note, final String colorID, final String blinkColorID, final boolean fast)
     {
-        this.light (note, this.colorManager.getColor (colorID), blinkColorID == null ? -1 : this.colorManager.getColor (blinkColorID), fast);
+        this.light (note, this.colorManager.getColorIndex (colorID), blinkColorID == null ? -1 : this.colorManager.getColorIndex (blinkColorID), fast);
     }
 
 
@@ -145,7 +145,7 @@ public class PadGridImpl implements PadGrid
     @Override
     public void lightEx (final int x, final int y, final String colorID, final String blinkColorID, final boolean fast)
     {
-        this.lightEx (x, y, this.colorManager.getColor (colorID), blinkColorID == null ? -1 : this.colorManager.getColor (blinkColorID), fast);
+        this.lightEx (x, y, this.colorManager.getColorIndex (colorID), blinkColorID == null ? -1 : this.colorManager.getColorIndex (blinkColorID), fast);
     }
 
 
@@ -167,7 +167,7 @@ public class PadGridImpl implements PadGrid
         else
         {
             this.buttonColors[index] = color;
-            this.blinkColors[index] = this.colorManager.getColor (GRID_OFF);
+            this.blinkColors[index] = this.colorManager.getColorIndex (GRID_OFF);
         }
         this.blinkFast[index] = fast;
     }
@@ -218,7 +218,7 @@ public class PadGridImpl implements PadGrid
                 this.currentBlinkFast[i] = this.blinkFast[i];
 
                 this.sendNoteState (note, this.currentButtonColors[i]);
-                if (this.blinkColors[i] != this.colorManager.getColor (GRID_OFF))
+                if (this.blinkColors[i] != this.colorManager.getColorIndex (GRID_OFF))
                     this.sendBlinkState (note, this.blinkColors[i], this.blinkFast[i]);
             }
         }
@@ -254,7 +254,7 @@ public class PadGridImpl implements PadGrid
     @Override
     public void turnOff ()
     {
-        final int color = this.colorManager.getColor (GRID_OFF);
+        final int color = this.colorManager.getColorIndex (GRID_OFF);
         for (int i = this.startNote; i <= this.endNote; i++)
             this.light (i, color, -1, false);
         this.flush ();

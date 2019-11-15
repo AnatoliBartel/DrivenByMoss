@@ -4,7 +4,6 @@
 
 package de.mossgrabers.controller.launchpad.view;
 
-import de.mossgrabers.controller.launchpad.controller.LaunchpadColors;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.framework.daw.DAWColors;
 import de.mossgrabers.framework.daw.IModel;
@@ -156,13 +155,14 @@ public abstract class AbstractFaderView extends SessionView
         this.surface.setLaunchpadToFaderMode ();
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        this.surface.setTrigger (this.surface.getSceneTrigger (scene), LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-    }
+    // TODO
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // this.surface.setTrigger (this.surface.getSceneTrigger (scene),
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // }
 
 
     /**
@@ -173,7 +173,7 @@ public abstract class AbstractFaderView extends SessionView
     public void setupFader (final int index)
     {
         final ITrack track = this.model.getCurrentTrackBank ().getItem (index);
-        final int color = this.model.getColorManager ().getColor (DAWColors.getColorIndex (track.getColor ()));
+        final int color = this.model.getColorManager ().getColorIndex (DAWColors.getColorIndex (track.getColor ()));
         this.surface.setupFader (index, color, false);
     }
 }

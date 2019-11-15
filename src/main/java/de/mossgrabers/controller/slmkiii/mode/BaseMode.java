@@ -71,8 +71,10 @@ public abstract class BaseMode extends AbstractMode<SLMkIIIControlSurface, SLMkI
     protected void disableFirstRow ()
     {
         final ColorManager colorManager = this.model.getColorManager ();
-        for (int i = 0; i < 8; i++)
-            this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i, colorManager.getColor (AbstractMode.BUTTON_COLOR_OFF));
+        // TODO
+        // for (int i = 0; i < 8; i++)
+        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i,
+        // colorManager.getColor (AbstractMode.BUTTON_COLOR_OFF));
     }
 
 

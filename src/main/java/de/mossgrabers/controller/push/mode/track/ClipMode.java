@@ -54,7 +54,7 @@ public class ClipMode extends AbstractTrackMode
 
         if (index == 7 && isTouched && this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             final IClip clip = this.model.getClip ();
             if (clip.doesExist ())
                 clip.resetAccent ();

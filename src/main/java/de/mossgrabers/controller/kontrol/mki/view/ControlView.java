@@ -5,14 +5,12 @@
 package de.mossgrabers.controller.kontrol.mki.view;
 
 import de.mossgrabers.controller.kontrol.mki.Kontrol1Configuration;
-import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1Colors;
 import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1ControlSurface;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.DAWColors;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IDrumPadBank;
 import de.mossgrabers.framework.daw.IModel;
-import de.mossgrabers.framework.daw.ITransport;
 import de.mossgrabers.framework.daw.data.IChannel;
 import de.mossgrabers.framework.mode.Mode;
 import de.mossgrabers.framework.scale.Scales;
@@ -43,21 +41,43 @@ public class ControlView extends AbstractPlayView<Kontrol1ControlSurface, Kontro
     @Override
     public void updateButtons ()
     {
-        final ITransport transport = this.model.getTransport ();
+        // TODO Move to button LED callbacks
 
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_SHIFT, this.surface.isShiftPressed () ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_SCALE, this.surface.getConfiguration ().isScaleIsActive () ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_ARP, this.surface.isShiftPressed () && transport.isMetronomeTicksOn () || !this.surface.isShiftPressed () && transport.isMetronomeOn () ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_LOOP, transport.isLoop () ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_RWD, this.surface.isPressed (Kontrol1ControlSurface.BUTTON_RWD) ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_FWD, this.surface.isPressed (Kontrol1ControlSurface.BUTTON_FWD) ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_PLAY, transport.isPlaying () ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_REC, transport.isRecording () ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_STOP, this.surface.isPressed (Kontrol1ControlSurface.BUTTON_STOP) ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_PAGE_LEFT, this.surface.isPressed (Kontrol1ControlSurface.BUTTON_PAGE_LEFT) ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_PAGE_RIGHT, this.surface.isPressed (Kontrol1ControlSurface.BUTTON_PAGE_RIGHT) ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // final ITransport transport = this.model.getTransport ();
+        //
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_SHIFT,
+        // this.surface.isShiftPressed () ? Kontrol1Colors.BUTTON_STATE_HI :
+        // Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_SCALE,
+        // this.surface.getConfiguration ().isScaleIsActive () ? Kontrol1Colors.BUTTON_STATE_HI :
+        // Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_ARP,
+        // this.surface.isShiftPressed () && transport.isMetronomeTicksOn () ||
+        // !this.surface.isShiftPressed () && transport.isMetronomeOn () ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        //
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_LOOP, transport.isLoop () ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_RWD, this.surface.isPressed
+        // (Kontrol1ControlSurface.BUTTON_RWD) ? Kontrol1Colors.BUTTON_STATE_HI :
+        // Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_FWD, this.surface.isPressed
+        // (Kontrol1ControlSurface.BUTTON_FWD) ? Kontrol1Colors.BUTTON_STATE_HI :
+        // Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_PLAY, transport.isPlaying () ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_REC, transport.isRecording () ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_STOP, this.surface.isPressed
+        // (Kontrol1ControlSurface.BUTTON_STOP) ? Kontrol1Colors.BUTTON_STATE_HI :
+        // Kontrol1Colors.BUTTON_STATE_ON);
+        //
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_PAGE_LEFT,
+        // this.surface.isPressed (Kontrol1ControlSurface.BUTTON_PAGE_LEFT) ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_PAGE_RIGHT,
+        // this.surface.isPressed (Kontrol1ControlSurface.BUTTON_PAGE_RIGHT) ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
 
         // Update all mode relevant buttons
         final Mode mode = this.surface.getModeManager ().getActiveOrTempMode ();

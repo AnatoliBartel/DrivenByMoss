@@ -155,4 +155,12 @@ public class DummyDisplay implements ITextDisplay
     {
         // Intentionally empty
     }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public int getNoOfLines ()
+    {
+        return 0;
+    }
 }

@@ -96,26 +96,26 @@ public class SessionView extends AbstractSessionView<PushControlSurface, PushCon
         // Duplicate a clip
         final ITrackBank tb = this.model.getCurrentTrackBank ();
         final ITrack track = tb.getItem (t);
-        if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_DUPLICATE))
+        if (this.surface.isPressed (ButtonID.DUPLICATE))
         {
-            this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_DUPLICATE);
+            this.surface.setTriggerConsumed (ButtonID.DUPLICATE);
             if (track.doesExist ())
                 track.getSlotBank ().getItem (s).duplicate ();
             return;
         }
 
         // Stop clip
-        if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_STOP_CLIP))
+        if (this.surface.isPressed (ButtonID.STOP_CLIP))
         {
-            this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_STOP_CLIP);
+            this.surface.setTriggerConsumed (ButtonID.STOP_CLIP);
             track.stop ();
             return;
         }
 
         // Browse for clips
-        if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_BROWSE))
+        if (this.surface.isPressed (ButtonID.BROWSE))
         {
-            this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_BROWSE);
+            this.surface.setTriggerConsumed (ButtonID.BROWSE);
             if (!track.doesExist ())
                 return;
             this.model.getBrowser ().replace (track.getSlotBank ().getItem (s));
@@ -126,14 +126,6 @@ public class SessionView extends AbstractSessionView<PushControlSurface, PushCon
         }
 
         super.onGridNote (note, velocity);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO REmove
     }
 
 

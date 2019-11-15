@@ -92,7 +92,8 @@ public class BeatstepControlSurface extends AbstractControlSurface<BeatstepConfi
      */
     public BeatstepControlSurface (final IHost host, final ColorManager colorManager, final BeatstepConfiguration configuration, final IMidiOutput output, final IMidiInput input, final boolean isPro)
     {
-        super (host, configuration, colorManager, output, input, new BeatstepPadGrid (colorManager, output));
+        // TODO size
+        super (host, configuration, colorManager, output, input, new BeatstepPadGrid (colorManager, output), 100, 50);
 
         this.isPro = isPro;
     }

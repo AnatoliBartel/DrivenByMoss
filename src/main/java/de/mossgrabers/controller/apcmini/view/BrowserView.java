@@ -210,12 +210,4 @@ public class BrowserView extends AbstractView<APCminiControlSurface, APCminiConf
     {
         return ColorManager.BUTTON_STATE_OFF;
     }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        // TODO Remove
-    }
 }

@@ -113,69 +113,69 @@ public class LaunchkeyMiniMk3Colors
      */
     public static void addColors (final ColorManager colorManager)
     {
-        colorManager.registerColor (Scales.SCALE_COLOR_OFF, LAUNCHKEY_COLOR_BLACK);
-        colorManager.registerColor (Scales.SCALE_COLOR_OCTAVE, LAUNCHKEY_COLOR_OCEAN_HI);
-        colorManager.registerColor (Scales.SCALE_COLOR_NOTE, LAUNCHKEY_COLOR_WHITE);
-        colorManager.registerColor (Scales.SCALE_COLOR_OUT_OF_SCALE, LAUNCHKEY_COLOR_BLACK);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OFF, LAUNCHKEY_COLOR_BLACK);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OCTAVE, LAUNCHKEY_COLOR_OCEAN_HI);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_NOTE, LAUNCHKEY_COLOR_WHITE);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OUT_OF_SCALE, LAUNCHKEY_COLOR_BLACK);
 
-        colorManager.registerColor (AbstractSequencerView.COLOR_STEP_HILITE_NO_CONTENT, LAUNCHKEY_COLOR_GREEN_LO);
-        colorManager.registerColor (AbstractSequencerView.COLOR_STEP_HILITE_CONTENT, LAUNCHKEY_COLOR_GREEN_HI);
-        colorManager.registerColor (AbstractSequencerView.COLOR_NO_CONTENT, LAUNCHKEY_COLOR_BLACK);
-        colorManager.registerColor (AbstractSequencerView.COLOR_CONTENT, LAUNCHKEY_COLOR_BLUE_HI);
-        colorManager.registerColor (AbstractSequencerView.COLOR_CONTENT_CONT, LAUNCHKEY_COLOR_BLUE_ORCHID);
-        colorManager.registerColor (AbstractSequencerView.COLOR_PAGE, LAUNCHKEY_COLOR_WHITE);
-        colorManager.registerColor (AbstractSequencerView.COLOR_ACTIVE_PAGE, LAUNCHKEY_COLOR_GREEN);
-        colorManager.registerColor (AbstractSequencerView.COLOR_SELECTED_PAGE, LAUNCHKEY_COLOR_BLUE_ORCHID);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_STEP_HILITE_NO_CONTENT, LAUNCHKEY_COLOR_GREEN_LO);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_STEP_HILITE_CONTENT, LAUNCHKEY_COLOR_GREEN_HI);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_NO_CONTENT, LAUNCHKEY_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_CONTENT, LAUNCHKEY_COLOR_BLUE_HI);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_CONTENT_CONT, LAUNCHKEY_COLOR_BLUE_ORCHID);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_PAGE, LAUNCHKEY_COLOR_WHITE);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_ACTIVE_PAGE, LAUNCHKEY_COLOR_GREEN);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_SELECTED_PAGE, LAUNCHKEY_COLOR_BLUE_ORCHID);
 
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_OFF, LAUNCHKEY_COLOR_BLACK);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_RECORD, LAUNCHKEY_COLOR_RED_HI);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_PLAY, LAUNCHKEY_COLOR_GREEN_HI);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_SELECTED, LAUNCHKEY_COLOR_BLUE_HI);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_MUTED, LAUNCHKEY_COLOR_AMBER_LO);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_HAS_CONTENT, LAUNCHKEY_COLOR_YELLOW_HI);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_NO_CONTENT, LAUNCHKEY_COLOR_YELLOW_LO);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_OFF, LAUNCHKEY_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_RECORD, LAUNCHKEY_COLOR_RED_HI);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_PLAY, LAUNCHKEY_COLOR_GREEN_HI);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_SELECTED, LAUNCHKEY_COLOR_BLUE_HI);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_MUTED, LAUNCHKEY_COLOR_AMBER_LO);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_HAS_CONTENT, LAUNCHKEY_COLOR_YELLOW_HI);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_NO_CONTENT, LAUNCHKEY_COLOR_YELLOW_LO);
 
-        colorManager.registerColor (AbstractPlayView.COLOR_PLAY, LAUNCHKEY_COLOR_GREEN_HI);
-        colorManager.registerColor (AbstractPlayView.COLOR_RECORD, LAUNCHKEY_COLOR_RED_HI);
-        colorManager.registerColor (AbstractPlayView.COLOR_OFF, LAUNCHKEY_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_PLAY, LAUNCHKEY_COLOR_GREEN_HI);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_RECORD, LAUNCHKEY_COLOR_RED_HI);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_OFF, LAUNCHKEY_COLOR_BLACK);
 
-        colorManager.registerColor (AbstractSessionView.COLOR_SCENE, LAUNCHKEY_COLOR_GREEN);
-        colorManager.registerColor (AbstractSessionView.COLOR_SELECTED_SCENE, LAUNCHKEY_COLOR_GREEN_HI);
-        colorManager.registerColor (AbstractSessionView.COLOR_SCENE_OFF, LAUNCHKEY_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractSessionView.COLOR_SCENE, LAUNCHKEY_COLOR_GREEN);
+        colorManager.registerColorIndex (AbstractSessionView.COLOR_SELECTED_SCENE, LAUNCHKEY_COLOR_GREEN_HI);
+        colorManager.registerColorIndex (AbstractSessionView.COLOR_SCENE_OFF, LAUNCHKEY_COLOR_BLACK);
 
-        colorManager.registerColor (PadGrid.GRID_OFF, LAUNCHKEY_COLOR_BLACK);
+        colorManager.registerColorIndex (PadGrid.GRID_OFF, LAUNCHKEY_COLOR_BLACK);
 
-        colorManager.registerColor (DAWColors.COLOR_OFF, LAUNCHKEY_COLOR_BLACK);
-        colorManager.registerColor (DAWColors.DAW_COLOR_GRAY_HALF, LAUNCHKEY_COLOR_GREY_MD);
-        colorManager.registerColor (DAWColors.DAW_COLOR_DARK_GRAY, LAUNCHKEY_COLOR_GREY_LO);
-        colorManager.registerColor (DAWColors.DAW_COLOR_GRAY, LAUNCHKEY_COLOR_GREY_MD);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_GRAY, LAUNCHKEY_COLOR_GREY_LO);
-        colorManager.registerColor (DAWColors.DAW_COLOR_SILVER, LAUNCHKEY_COLOR_SKY_OCEAN);
-        colorManager.registerColor (DAWColors.DAW_COLOR_DARK_BROWN, LAUNCHKEY_COLOR_AMBER_LO);
-        colorManager.registerColor (DAWColors.DAW_COLOR_BROWN, LAUNCHKEY_COLOR_AMBER_YELLOW);
-        colorManager.registerColor (DAWColors.DAW_COLOR_DARK_BLUE, LAUNCHKEY_COLOR_OCEAN);
-        colorManager.registerColor (DAWColors.DAW_COLOR_PURPLE_BLUE, LAUNCHKEY_COLOR_OCEAN_BLUE);
-        colorManager.registerColor (DAWColors.DAW_COLOR_PURPLE, LAUNCHKEY_COLOR_ORCHID_HI);
-        colorManager.registerColor (DAWColors.DAW_COLOR_PINK, LAUNCHKEY_COLOR_PINK_HI);
-        colorManager.registerColor (DAWColors.DAW_COLOR_RED, LAUNCHKEY_COLOR_RED);
-        colorManager.registerColor (DAWColors.DAW_COLOR_ORANGE, LAUNCHKEY_COLOR_ORANGE);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_ORANGE, LAUNCHKEY_COLOR_AMBER_HI);
-        colorManager.registerColor (DAWColors.DAW_COLOR_MOSS_GREEN, LAUNCHKEY_COLOR_LIME_LO);
-        colorManager.registerColor (DAWColors.DAW_COLOR_GREEN, LAUNCHKEY_COLOR_SPRING);
-        colorManager.registerColor (DAWColors.DAW_COLOR_COLD_GREEN, LAUNCHKEY_COLOR_TURQUOISE);
-        colorManager.registerColor (DAWColors.DAW_COLOR_BLUE, LAUNCHKEY_COLOR_SKY_HI);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_PURPLE, LAUNCHKEY_COLOR_BLUE_ORCHID);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_PINK, LAUNCHKEY_COLOR_MAGENTA_PINK);
-        colorManager.registerColor (DAWColors.DAW_COLOR_SKIN, LAUNCHKEY_COLOR_ROSE);
-        colorManager.registerColor (DAWColors.DAW_COLOR_REDDISH_BROWN, LAUNCHKEY_COLOR_AMBER);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_BROWN, LAUNCHKEY_COLOR_AMBER_YELLOW);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_GREEN, LAUNCHKEY_COLOR_LIME);
-        colorManager.registerColor (DAWColors.DAW_COLOR_BLUISH_GREEN, LAUNCHKEY_COLOR_SPRING_HI);
-        colorManager.registerColor (DAWColors.DAW_COLOR_GREEN_BLUE, LAUNCHKEY_COLOR_TURQUOISE_CYAN);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_BLUE, LAUNCHKEY_COLOR_OCEAN_HI);
+        colorManager.registerColorIndex (DAWColors.COLOR_OFF, LAUNCHKEY_COLOR_BLACK);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_GRAY_HALF, LAUNCHKEY_COLOR_GREY_MD);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_DARK_GRAY, LAUNCHKEY_COLOR_GREY_LO);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_GRAY, LAUNCHKEY_COLOR_GREY_MD);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GRAY, LAUNCHKEY_COLOR_GREY_LO);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_SILVER, LAUNCHKEY_COLOR_SKY_OCEAN);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_DARK_BROWN, LAUNCHKEY_COLOR_AMBER_LO);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_BROWN, LAUNCHKEY_COLOR_AMBER_YELLOW);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_DARK_BLUE, LAUNCHKEY_COLOR_OCEAN);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_PURPLE_BLUE, LAUNCHKEY_COLOR_OCEAN_BLUE);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_PURPLE, LAUNCHKEY_COLOR_ORCHID_HI);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_PINK, LAUNCHKEY_COLOR_PINK_HI);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_RED, LAUNCHKEY_COLOR_RED);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_ORANGE, LAUNCHKEY_COLOR_ORANGE);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_ORANGE, LAUNCHKEY_COLOR_AMBER_HI);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_MOSS_GREEN, LAUNCHKEY_COLOR_LIME_LO);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_GREEN, LAUNCHKEY_COLOR_SPRING);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_COLD_GREEN, LAUNCHKEY_COLOR_TURQUOISE);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_BLUE, LAUNCHKEY_COLOR_SKY_HI);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PURPLE, LAUNCHKEY_COLOR_BLUE_ORCHID);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PINK, LAUNCHKEY_COLOR_MAGENTA_PINK);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_SKIN, LAUNCHKEY_COLOR_ROSE);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_REDDISH_BROWN, LAUNCHKEY_COLOR_AMBER);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BROWN, LAUNCHKEY_COLOR_AMBER_YELLOW);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GREEN, LAUNCHKEY_COLOR_LIME);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_BLUISH_GREEN, LAUNCHKEY_COLOR_SPRING_HI);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_GREEN_BLUE, LAUNCHKEY_COLOR_TURQUOISE_CYAN);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BLUE, LAUNCHKEY_COLOR_OCEAN_HI);
 
-        colorManager.registerColor (ColorManager.BUTTON_STATE_OFF, 0);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_ON, 1);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_HI, 127);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_OFF, 0);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_ON, 1);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_HI, 127);
     }
 }

@@ -5,11 +5,9 @@
 package de.mossgrabers.framework.view;
 
 import de.mossgrabers.framework.command.ContinuousCommandID;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.command.core.AftertouchCommand;
 import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.command.core.PitchbendCommand;
-import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.configuration.Configuration;
 import de.mossgrabers.framework.controller.IControlSurface;
 import de.mossgrabers.framework.daw.DAWColors;
@@ -17,7 +15,6 @@ import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.mode.Mode;
 import de.mossgrabers.framework.scale.Scales;
-import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.utils.KeyManager;
 
 import java.util.EnumMap;
@@ -46,8 +43,6 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
     private AftertouchCommand                                 aftertouchCommand;
     private PitchbendCommand                                  pitchbendCommand;
 
-    private final Map<TriggerCommandID, TriggerCommand>       triggerCommands    = new EnumMap<> (TriggerCommandID.class);
-    private final Map<TriggerCommandID, TriggerCommand>       noteCommands       = new EnumMap<> (TriggerCommandID.class);
     private final Map<ContinuousCommandID, ContinuousCommand> continuousCommands = new EnumMap<> (ContinuousCommandID.class);
 
     protected boolean                                         canScrollLeft;
@@ -115,6 +110,9 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
     public void updateControlSurface ()
     {
         final Mode m = this.surface.getModeManager ().getActiveOrTempMode ();
+
+        // TODO put the hardware device update here
+
         if (m != null)
         {
             m.updateDisplay ();
@@ -182,32 +180,6 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
 
     /** {@inheritDoc} */
     @Override
-    public void registerTriggerCommand (final TriggerCommandID commandID, final TriggerCommand command)
-    {
-        this.triggerCommands.put (commandID, command);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void executeTriggerCommand (final TriggerCommandID commandID, final ButtonEvent event)
-    {
-        final TriggerCommand triggerCommand = this.triggerCommands.get (commandID);
-        if (triggerCommand != null)
-            triggerCommand.execute (event);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public TriggerCommand getTriggerCommand (final TriggerCommandID commandID)
-    {
-        return this.triggerCommands.get (commandID);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public void registerContinuousCommand (final ContinuousCommandID commandID, final ContinuousCommand command)
     {
         this.continuousCommands.put (commandID, command);
@@ -229,32 +201,6 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
         final ContinuousCommand continuousCommand = this.continuousCommands.get (commandID);
         if (continuousCommand != null)
             continuousCommand.execute (value);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void registerNoteCommand (final TriggerCommandID commandID, final TriggerCommand command)
-    {
-        this.noteCommands.put (commandID, command);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void executeNoteCommand (final TriggerCommandID commandID, final int value)
-    {
-        final TriggerCommand command = this.noteCommands.get (commandID);
-        if (command != null)
-            command.execute (value == 0 ? ButtonEvent.UP : ButtonEvent.DOWN);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public TriggerCommand getNoteCommand (final TriggerCommandID commandID)
-    {
-        return this.noteCommands.get (commandID);
     }
 
 

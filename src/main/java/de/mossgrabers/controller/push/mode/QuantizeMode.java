@@ -67,7 +67,7 @@ public class QuantizeMode extends BaseMode
     {
         if (isTouched && this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             if (index == 7)
                 this.surface.getConfiguration ().resetQuantizeAmount ();
         }

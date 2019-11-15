@@ -115,7 +115,7 @@ public class DeviceParamsMode extends BaseMode
         final IParameter param = cd.getParameterBank ().getItem (index);
         if (isTouched && this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
             param.resetValue ();
         }
         param.touchValue (isTouched);
@@ -142,16 +142,16 @@ public class DeviceParamsMode extends BaseMode
                 return;
             }
 
-            if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_DUPLICATE))
+            if (this.surface.isPressed (ButtonID.DUPLICATE))
             {
-                this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_DUPLICATE);
+                this.surface.setTriggerConsumed (ButtonID.DUPLICATE);
                 cd.duplicate ();
                 return;
             }
 
-            if (this.surface.isPressed (PushControlSurface.PUSH_BUTTON_DELETE))
+            if (this.surface.isPressed (ButtonID.DELETE))
             {
-                this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_DELETE);
+                this.surface.setTriggerConsumed (ButtonID.DELETE);
                 cd.getDeviceBank ().getItem (index).remove ();
                 return;
             }
@@ -177,7 +177,7 @@ public class DeviceParamsMode extends BaseMode
         }
 
         // LONG press - move upwards
-        this.surface.setTriggerConsumed (PushControlSurface.PUSH_BUTTON_ROW1_1 + index);
+        this.surface.setTriggerConsumed (ButtonID.get (ButtonID.ROW1_1, index));
         this.moveUp ();
     }
 

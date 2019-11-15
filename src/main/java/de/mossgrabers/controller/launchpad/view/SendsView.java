@@ -4,7 +4,6 @@
 
 package de.mossgrabers.controller.launchpad.view;
 
-import de.mossgrabers.controller.launchpad.controller.LaunchpadColors;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.DAWColors;
@@ -75,7 +74,7 @@ public class SendsView extends AbstractFaderView
         {
             final ITrack track = tb.getItem (i);
             final ISend send = track.getSendBank ().getItem (this.selectedSend);
-            final int color = cm.getColor (DAWColors.getColorIndex (track.getColor ()));
+            final int color = cm.getColorIndex (DAWColors.getColorIndex (track.getColor ()));
             if (this.trackColors[i] != color)
             {
                 this.trackColors[i] = color;
@@ -85,13 +84,14 @@ public class SendsView extends AbstractFaderView
         }
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void updateSceneButton (final int scene)
-    {
-        this.surface.setTrigger (this.surface.getSceneTrigger (scene), this.selectedSend == scene ? LaunchpadColors.LAUNCHPAD_COLOR_ORCHID : LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-    }
+    // TODO
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateSceneButton (final int scene)
+    // {
+    // this.surface.setTrigger (this.surface.getSceneTrigger (scene), this.selectedSend == scene ?
+    // LaunchpadColors.LAUNCHPAD_COLOR_ORCHID : LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+    // }
 
 
     /**

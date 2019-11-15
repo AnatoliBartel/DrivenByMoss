@@ -121,7 +121,7 @@ public class NoteRepeatMode extends BaseMode
 
         if (isTouched && this.surface.isDeletePressed ())
         {
-            this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+            this.surface.setTriggerConsumed (ButtonID.DELETE);
 
             switch (index)
             {
@@ -219,9 +219,9 @@ public class NoteRepeatMode extends BaseMode
     public int getFirstRowColor (final int index)
     {
         final ColorManager colorManager = this.model.getColorManager ();
-        final int offColor = colorManager.getColor (AbstractMode.BUTTON_COLOR_OFF);
-        final int onColor = colorManager.getColor (AbstractMode.BUTTON_COLOR_ON);
-        final int hiColor = colorManager.getColor (AbstractMode.BUTTON_COLOR_HI);
+        final int offColor = colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
+        final int onColor = colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON);
+        final int hiColor = colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_HI);
 
         switch (index)
         {
@@ -261,8 +261,8 @@ public class NoteRepeatMode extends BaseMode
     {
         final ColorManager colorManager = this.model.getColorManager ();
         if (index < 7)
-            return colorManager.getColor (AbstractMode.BUTTON_COLOR_OFF);
-        return this.model.getGroove ().getParameters ()[0].getValue () > 0 ? colorManager.getColor (AbstractMode.BUTTON_COLOR_HI) : colorManager.getColor (AbstractMode.BUTTON_COLOR_ON);
+            return colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
+        return this.model.getGroove ().getParameters ()[0].getValue () > 0 ? colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_HI) : colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON);
     }
 
 

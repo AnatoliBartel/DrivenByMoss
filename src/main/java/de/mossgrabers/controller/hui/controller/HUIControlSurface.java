@@ -9,7 +9,6 @@ import de.mossgrabers.framework.command.continuous.FaderAbsoluteCommand;
 import de.mossgrabers.framework.command.continuous.KnobRowModeCommand;
 import de.mossgrabers.framework.command.continuous.PlayPositionCommand;
 import de.mossgrabers.framework.controller.AbstractControlSurface;
-import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.IModel;
@@ -292,14 +291,8 @@ public class HUIControlSurface extends AbstractControlSurface<HUIConfiguration>
      */
     public HUIControlSurface (final IHost host, final ColorManager colorManager, final HUIConfiguration configuration, final IMidiOutput output, final IMidiInput input, final IModel model)
     {
-        super (host, configuration, colorManager, output, input, null);
-
-        this.setTriggerId (ButtonID.SHIFT, HUI_KEY_SHIFT_AD);
-        this.setTriggerId (ButtonID.SELECT, HUI_KEY_OPTION_A);
-        this.setTriggerId (ButtonID.LEFT, HUI_CURSOR_LEFT);
-        this.setTriggerId (ButtonID.RIGHT, HUI_CURSOR_RIGHT);
-        this.setTriggerId (ButtonID.UP, HUI_CURSOR_UP);
-        this.setTriggerId (ButtonID.DOWN, HUI_CURSOR_DOWN);
+        // TODO size
+        super (host, configuration, colorManager, output, input, null, 100, 100);
 
         Arrays.fill (this.knobValues, -1);
 
@@ -410,8 +403,9 @@ public class HUIControlSurface extends AbstractControlSurface<HUIConfiguration>
             case 0x2F:
                 final boolean isDown = data2 >= 0x40;
                 final int cc = this.zone * 8 + data2 % 8;
-                if (this.isTrigger (cc))
-                    this.handleCC (0, cc, isDown ? 127 : 0);
+                // TODO
+                // if (this.isTrigger (cc))
+                // this.handleCC (0, cc, isDown ? 127 : 0);
                 break;
 
             case 0x40:

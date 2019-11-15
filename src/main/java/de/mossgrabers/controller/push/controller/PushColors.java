@@ -4,6 +4,7 @@
 
 package de.mossgrabers.controller.push.controller;
 
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.DAWColors;
@@ -307,93 +308,98 @@ public class PushColors
      */
     public static void addColors (final ColorManager colorManager, final boolean isPush2)
     {
-        colorManager.registerColor (Scales.SCALE_COLOR_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
-        colorManager.registerColor (Scales.SCALE_COLOR_OCTAVE, isPush2 ? PUSH2_COLOR2_OCEAN_HI : PUSH1_COLOR2_OCEAN_HI);
-        colorManager.registerColor (Scales.SCALE_COLOR_NOTE, isPush2 ? PUSH2_COLOR2_WHITE : PUSH1_COLOR2_WHITE);
-        colorManager.registerColor (Scales.SCALE_COLOR_OUT_OF_SCALE, isPush2 ? PUSH2_COLOR_BLACK : PUSH1_COLOR_BLACK);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OCTAVE, isPush2 ? PUSH2_COLOR2_OCEAN_HI : PUSH1_COLOR2_OCEAN_HI);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_NOTE, isPush2 ? PUSH2_COLOR2_WHITE : PUSH1_COLOR2_WHITE);
+        colorManager.registerColorIndex (Scales.SCALE_COLOR_OUT_OF_SCALE, isPush2 ? PUSH2_COLOR_BLACK : PUSH1_COLOR_BLACK);
 
-        colorManager.registerColor (AbstractMode.BUTTON_COLOR_OFF, isPush2 ? PUSH2_COLOR_BLACK : PUSH1_COLOR_BLACK);
-        colorManager.registerColor (AbstractMode.BUTTON_COLOR_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : PUSH1_COLOR_GREEN_LO);
-        colorManager.registerColor (AbstractMode.BUTTON_COLOR_HI, isPush2 ? PUSH2_COLOR2_WHITE : PUSH1_COLOR_YELLOW_MD);
-        colorManager.registerColor (AbstractMode.BUTTON_COLOR2_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : PUSH1_COLOR2_GREEN_LO);
-        colorManager.registerColor (AbstractMode.BUTTON_COLOR2_HI, isPush2 ? PUSH2_COLOR2_WHITE : PUSH1_COLOR2_YELLOW_HI);
+        colorManager.registerColorIndex (AbstractMode.BUTTON_COLOR_OFF, isPush2 ? PUSH2_COLOR_BLACK : PUSH1_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractMode.BUTTON_COLOR_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : PUSH1_COLOR_GREEN_LO);
+        colorManager.registerColorIndex (AbstractMode.BUTTON_COLOR_HI, isPush2 ? PUSH2_COLOR2_WHITE : PUSH1_COLOR_YELLOW_MD);
+        colorManager.registerColorIndex (AbstractMode.BUTTON_COLOR2_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : PUSH1_COLOR2_GREEN_LO);
+        colorManager.registerColorIndex (AbstractMode.BUTTON_COLOR2_HI, isPush2 ? PUSH2_COLOR2_WHITE : PUSH1_COLOR2_YELLOW_HI);
 
-        colorManager.registerColor (AbstractSequencerView.COLOR_STEP_HILITE_NO_CONTENT, isPush2 ? PUSH2_COLOR2_GREEN_LO : PUSH1_COLOR2_GREEN_LO);
-        colorManager.registerColor (AbstractSequencerView.COLOR_STEP_HILITE_CONTENT, isPush2 ? PUSH2_COLOR2_GREEN_HI : PUSH1_COLOR2_GREEN_HI);
-        colorManager.registerColor (AbstractSequencerView.COLOR_NO_CONTENT, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
-        colorManager.registerColor (AbstractSequencerView.COLOR_CONTENT, isPush2 ? PUSH2_COLOR2_BLUE_HI : PUSH1_COLOR2_BLUE_HI);
-        colorManager.registerColor (AbstractSequencerView.COLOR_CONTENT_CONT, isPush2 ? PUSH2_COLOR2_BLUE_LO : PUSH1_COLOR2_BLUE_LO);
-        colorManager.registerColor (AbstractSequencerView.COLOR_PAGE, isPush2 ? PUSH2_COLOR2_WHITE : PUSH1_COLOR2_WHITE);
-        colorManager.registerColor (AbstractSequencerView.COLOR_ACTIVE_PAGE, isPush2 ? PUSH2_COLOR2_GREEN : PUSH1_COLOR2_GREEN);
-        colorManager.registerColor (AbstractSequencerView.COLOR_SELECTED_PAGE, isPush2 ? PUSH2_COLOR2_OCEAN_HI : PUSH1_COLOR2_OCEAN_HI);
-        colorManager.registerColor (AbstractSequencerView.COLOR_RESOLUTION, isPush2 ? PushColors.PUSH2_COLOR_SCENE_ORANGE : PushColors.PUSH1_COLOR_SCENE_ORANGE);
-        colorManager.registerColor (AbstractSequencerView.COLOR_RESOLUTION_SELECTED, isPush2 ? PushColors.PUSH2_COLOR_SCENE_ORANGE_HI : PushColors.PUSH1_COLOR_SCENE_ORANGE_HI);
-        colorManager.registerColor (AbstractSequencerView.COLOR_RESOLUTION_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
-        colorManager.registerColor (AbstractSequencerView.COLOR_TRANSPOSE, isPush2 ? PushColors.PUSH2_COLOR_SCENE_WHITE : PushColors.PUSH1_COLOR_SCENE_YELLOW);
-        colorManager.registerColor (AbstractSequencerView.COLOR_TRANSPOSE_SELECTED, isPush2 ? PushColors.PUSH2_COLOR_SCENE_YELLOW_HI : PushColors.PUSH1_COLOR_SCENE_YELLOW_HI);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_STEP_HILITE_NO_CONTENT, isPush2 ? PUSH2_COLOR2_GREEN_LO : PUSH1_COLOR2_GREEN_LO);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_STEP_HILITE_CONTENT, isPush2 ? PUSH2_COLOR2_GREEN_HI : PUSH1_COLOR2_GREEN_HI);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_NO_CONTENT, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_CONTENT, isPush2 ? PUSH2_COLOR2_BLUE_HI : PUSH1_COLOR2_BLUE_HI);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_CONTENT_CONT, isPush2 ? PUSH2_COLOR2_BLUE_LO : PUSH1_COLOR2_BLUE_LO);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_PAGE, isPush2 ? PUSH2_COLOR2_WHITE : PUSH1_COLOR2_WHITE);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_ACTIVE_PAGE, isPush2 ? PUSH2_COLOR2_GREEN : PUSH1_COLOR2_GREEN);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_SELECTED_PAGE, isPush2 ? PUSH2_COLOR2_OCEAN_HI : PUSH1_COLOR2_OCEAN_HI);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_RESOLUTION, isPush2 ? PushColors.PUSH2_COLOR_SCENE_ORANGE : PushColors.PUSH1_COLOR_SCENE_ORANGE);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_RESOLUTION_SELECTED, isPush2 ? PushColors.PUSH2_COLOR_SCENE_ORANGE_HI : PushColors.PUSH1_COLOR_SCENE_ORANGE_HI);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_RESOLUTION_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_TRANSPOSE, isPush2 ? PushColors.PUSH2_COLOR_SCENE_WHITE : PushColors.PUSH1_COLOR_SCENE_YELLOW);
+        colorManager.registerColorIndex (AbstractSequencerView.COLOR_TRANSPOSE_SELECTED, isPush2 ? PushColors.PUSH2_COLOR_SCENE_YELLOW_HI : PushColors.PUSH1_COLOR_SCENE_YELLOW_HI);
 
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_OFF, isPush2 ? PUSH2_COLOR_BLACK : PUSH1_COLOR_BLACK);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_RECORD, isPush2 ? PUSH2_COLOR2_RED_HI : PUSH1_COLOR2_RED_HI);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_PLAY, isPush2 ? PUSH2_COLOR2_GREEN_HI : PUSH1_COLOR2_GREEN_HI);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_SELECTED, isPush2 ? PUSH2_COLOR2_BLUE_HI : PUSH1_COLOR2_BLUE_HI);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_MUTED, isPush2 ? PUSH2_COLOR2_AMBER_LO : PUSH1_COLOR2_AMBER_LO);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_HAS_CONTENT, isPush2 ? PUSH2_COLOR2_YELLOW_HI : PUSH1_COLOR2_YELLOW_HI);
-        colorManager.registerColor (AbstractDrumView.COLOR_PAD_NO_CONTENT, isPush2 ? PUSH2_COLOR2_YELLOW_LO : PUSH1_COLOR2_YELLOW_LO);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_OFF, isPush2 ? PUSH2_COLOR_BLACK : PUSH1_COLOR_BLACK);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_RECORD, isPush2 ? PUSH2_COLOR2_RED_HI : PUSH1_COLOR2_RED_HI);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_PLAY, isPush2 ? PUSH2_COLOR2_GREEN_HI : PUSH1_COLOR2_GREEN_HI);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_SELECTED, isPush2 ? PUSH2_COLOR2_BLUE_HI : PUSH1_COLOR2_BLUE_HI);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_MUTED, isPush2 ? PUSH2_COLOR2_AMBER_LO : PUSH1_COLOR2_AMBER_LO);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_HAS_CONTENT, isPush2 ? PUSH2_COLOR2_YELLOW_HI : PUSH1_COLOR2_YELLOW_HI);
+        colorManager.registerColorIndex (AbstractDrumView.COLOR_PAD_NO_CONTENT, isPush2 ? PUSH2_COLOR2_YELLOW_LO : PUSH1_COLOR2_YELLOW_LO);
 
-        colorManager.registerColor (AbstractPlayView.COLOR_PLAY, isPush2 ? PUSH2_COLOR2_GREEN_HI : PUSH1_COLOR2_GREEN_HI);
-        colorManager.registerColor (AbstractPlayView.COLOR_RECORD, isPush2 ? PUSH2_COLOR2_RED_HI : PUSH1_COLOR2_RED_HI);
-        colorManager.registerColor (AbstractPlayView.COLOR_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_PLAY, isPush2 ? PUSH2_COLOR2_GREEN_HI : PUSH1_COLOR2_GREEN_HI);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_RECORD, isPush2 ? PUSH2_COLOR2_RED_HI : PUSH1_COLOR2_RED_HI);
+        colorManager.registerColorIndex (AbstractPlayView.COLOR_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
 
-        colorManager.registerColor (AbstractSessionView.COLOR_SCENE, isPush2 ? PushColors.PUSH2_COLOR_SCENE_GREEN : PushColors.PUSH1_COLOR_SCENE_GREEN);
-        colorManager.registerColor (AbstractSessionView.COLOR_SELECTED_SCENE, isPush2 ? PushColors.PUSH2_COLOR_SCENE_GREEN_HI : PushColors.PUSH1_COLOR_SCENE_GREEN_HI);
-        colorManager.registerColor (AbstractSessionView.COLOR_SCENE_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
+        colorManager.registerColorIndex (AbstractSessionView.COLOR_SCENE, isPush2 ? PushColors.PUSH2_COLOR_SCENE_GREEN : PushColors.PUSH1_COLOR_SCENE_GREEN);
+        colorManager.registerColorIndex (AbstractSessionView.COLOR_SELECTED_SCENE, isPush2 ? PushColors.PUSH2_COLOR_SCENE_GREEN_HI : PushColors.PUSH1_COLOR_SCENE_GREEN_HI);
+        colorManager.registerColorIndex (AbstractSessionView.COLOR_SCENE_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
 
-        colorManager.registerColor (PadGrid.GRID_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
+        colorManager.registerColorIndex (PadGrid.GRID_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
 
         // Push 2 DAW colors are set in the color palette from indices 70 to 96
-        colorManager.registerColor (DAWColors.COLOR_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
-        colorManager.registerColor (DAWColors.DAW_COLOR_GRAY_HALF, isPush2 ? 70 : PUSH1_COLOR2_GREY_MD);
-        colorManager.registerColor (DAWColors.DAW_COLOR_DARK_GRAY, isPush2 ? 71 : 1);
-        colorManager.registerColor (DAWColors.DAW_COLOR_GRAY, isPush2 ? 72 : PUSH1_COLOR2_GREY_MD);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_GRAY, isPush2 ? 73 : PUSH1_COLOR2_GREY_LT);
-        colorManager.registerColor (DAWColors.DAW_COLOR_SILVER, isPush2 ? 74 : 40);
-        colorManager.registerColor (DAWColors.DAW_COLOR_DARK_BROWN, isPush2 ? 75 : 11);
-        colorManager.registerColor (DAWColors.DAW_COLOR_BROWN, isPush2 ? 76 : 12);
-        colorManager.registerColor (DAWColors.DAW_COLOR_DARK_BLUE, isPush2 ? 77 : 42);
-        colorManager.registerColor (DAWColors.DAW_COLOR_PURPLE_BLUE, isPush2 ? 78 : 44);
-        colorManager.registerColor (DAWColors.DAW_COLOR_PURPLE, isPush2 ? 79 : 81);
-        colorManager.registerColor (DAWColors.DAW_COLOR_PINK, isPush2 ? 80 : 57);
-        colorManager.registerColor (DAWColors.DAW_COLOR_RED, isPush2 ? 81 : 6);
-        colorManager.registerColor (DAWColors.DAW_COLOR_ORANGE, isPush2 ? 82 : 60);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_ORANGE, isPush2 ? 83 : 62);
-        colorManager.registerColor (DAWColors.DAW_COLOR_MOSS_GREEN, isPush2 ? 84 : 19);
-        colorManager.registerColor (DAWColors.DAW_COLOR_GREEN, isPush2 ? 85 : 26);
-        colorManager.registerColor (DAWColors.DAW_COLOR_COLD_GREEN, isPush2 ? 86 : 30);
-        colorManager.registerColor (DAWColors.DAW_COLOR_BLUE, isPush2 ? 87 : 37);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_PURPLE, isPush2 ? 88 : 48);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_PINK, isPush2 ? 89 : 56);
-        colorManager.registerColor (DAWColors.DAW_COLOR_SKIN, isPush2 ? 90 : 4);
-        colorManager.registerColor (DAWColors.DAW_COLOR_REDDISH_BROWN, isPush2 ? 91 : 10);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_BROWN, isPush2 ? 92 : 61);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_GREEN, isPush2 ? 93 : 18);
-        colorManager.registerColor (DAWColors.DAW_COLOR_BLUISH_GREEN, isPush2 ? 94 : 25);
-        colorManager.registerColor (DAWColors.DAW_COLOR_GREEN_BLUE, isPush2 ? 95 : 32);
-        colorManager.registerColor (DAWColors.DAW_COLOR_LIGHT_BLUE, isPush2 ? 96 : 41);
+        colorManager.registerColorIndex (DAWColors.COLOR_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_GRAY_HALF, isPush2 ? 70 : PUSH1_COLOR2_GREY_MD);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_DARK_GRAY, isPush2 ? 71 : 1);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_GRAY, isPush2 ? 72 : PUSH1_COLOR2_GREY_MD);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GRAY, isPush2 ? 73 : PUSH1_COLOR2_GREY_LT);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_SILVER, isPush2 ? 74 : 40);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_DARK_BROWN, isPush2 ? 75 : 11);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_BROWN, isPush2 ? 76 : 12);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_DARK_BLUE, isPush2 ? 77 : 42);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_PURPLE_BLUE, isPush2 ? 78 : 44);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_PURPLE, isPush2 ? 79 : 81);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_PINK, isPush2 ? 80 : 57);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_RED, isPush2 ? 81 : 6);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_ORANGE, isPush2 ? 82 : 60);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_ORANGE, isPush2 ? 83 : 62);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_MOSS_GREEN, isPush2 ? 84 : 19);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_GREEN, isPush2 ? 85 : 26);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_COLD_GREEN, isPush2 ? 86 : 30);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_BLUE, isPush2 ? 87 : 37);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PURPLE, isPush2 ? 88 : 48);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PINK, isPush2 ? 89 : 56);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_SKIN, isPush2 ? 90 : 4);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_REDDISH_BROWN, isPush2 ? 91 : 10);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BROWN, isPush2 ? 92 : 61);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GREEN, isPush2 ? 93 : 18);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_BLUISH_GREEN, isPush2 ? 94 : 25);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_GREEN_BLUE, isPush2 ? 95 : 32);
+        colorManager.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BLUE, isPush2 ? 96 : 41);
 
-        colorManager.registerColor (ColorManager.BUTTON_STATE_OFF, 0);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_ON, isPush2 ? 8 : 1);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_HI, isPush2 ? 127 : 4);
-        colorManager.registerColor (PUSH_BUTTON_STATE_REC_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : 1);
-        colorManager.registerColor (PUSH_BUTTON_STATE_REC_HI, isPush2 ? PUSH2_COLOR2_RED_HI : 4);
-        colorManager.registerColor (PUSH_BUTTON_STATE_OVR_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : 1);
-        colorManager.registerColor (PUSH_BUTTON_STATE_OVR_HI, isPush2 ? PUSH2_COLOR2_AMBER : 2);
-        colorManager.registerColor (PUSH_BUTTON_STATE_PLAY_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : 1);
-        colorManager.registerColor (PUSH_BUTTON_STATE_PLAY_HI, isPush2 ? PUSH2_COLOR2_GREEN_HI : 4);
-        colorManager.registerColor (PUSH_BUTTON_STATE_MUTE_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : 1);
-        colorManager.registerColor (PUSH_BUTTON_STATE_MUTE_HI, isPush2 ? PUSH2_COLOR2_AMBER_LO : 4);
-        colorManager.registerColor (PUSH_BUTTON_STATE_SOLO_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : 1);
-        colorManager.registerColor (PUSH_BUTTON_STATE_SOLO_HI, isPush2 ? PUSH2_COLOR2_YELLOW : 4);
-        colorManager.registerColor (PUSH_BUTTON_STATE_STOP_ON, isPush2 ? PUSH2_COLOR2_RED_LO : 1);
-        colorManager.registerColor (PUSH_BUTTON_STATE_STOP_HI, isPush2 ? PUSH2_COLOR2_RED_HI : 4);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_OFF, 0);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_ON, isPush2 ? 8 : 1);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_HI, isPush2 ? 127 : 4);
+        colorManager.registerColorIndex (PUSH_BUTTON_STATE_REC_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : 1);
+        colorManager.registerColorIndex (PUSH_BUTTON_STATE_REC_HI, isPush2 ? PUSH2_COLOR2_RED_HI : 4);
+        colorManager.registerColorIndex (PUSH_BUTTON_STATE_OVR_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : 1);
+        colorManager.registerColorIndex (PUSH_BUTTON_STATE_OVR_HI, isPush2 ? PUSH2_COLOR2_AMBER : 2);
+        colorManager.registerColorIndex (PUSH_BUTTON_STATE_PLAY_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : 1);
+        colorManager.registerColorIndex (PUSH_BUTTON_STATE_PLAY_HI, isPush2 ? PUSH2_COLOR2_GREEN_HI : 4);
+        colorManager.registerColorIndex (PUSH_BUTTON_STATE_MUTE_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : 1);
+        colorManager.registerColorIndex (PUSH_BUTTON_STATE_MUTE_HI, isPush2 ? PUSH2_COLOR2_AMBER_LO : 4);
+        colorManager.registerColorIndex (PUSH_BUTTON_STATE_SOLO_ON, isPush2 ? PUSH2_COLOR2_GREY_LO : 1);
+        colorManager.registerColorIndex (PUSH_BUTTON_STATE_SOLO_HI, isPush2 ? PUSH2_COLOR2_YELLOW : 4);
+        colorManager.registerColorIndex (PUSH_BUTTON_STATE_STOP_ON, isPush2 ? PUSH2_COLOR2_RED_LO : 1);
+        colorManager.registerColorIndex (PUSH_BUTTON_STATE_STOP_HI, isPush2 ? PUSH2_COLOR2_RED_HI : 4);
+
+        // TODO Lookup colors
+
+        for (int i = 0; i < 128; i++)
+            colorManager.registerColor (i, ColorEx.BLACK);
     }
 }

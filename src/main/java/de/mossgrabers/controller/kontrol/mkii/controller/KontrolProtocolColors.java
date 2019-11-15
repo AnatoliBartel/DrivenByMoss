@@ -31,12 +31,12 @@ public class KontrolProtocolColors
      */
     public static void addColors (final ColorManager colorManager)
     {
-        colorManager.registerColor (AbstractMode.BUTTON_COLOR_OFF, 0);
-        colorManager.registerColor (AbstractMode.BUTTON_COLOR_ON, 0);
-        colorManager.registerColor (AbstractMode.BUTTON_COLOR_HI, 1);
+        colorManager.registerColorIndex (AbstractMode.BUTTON_COLOR_OFF, 0);
+        colorManager.registerColorIndex (AbstractMode.BUTTON_COLOR_ON, 0);
+        colorManager.registerColorIndex (AbstractMode.BUTTON_COLOR_HI, 1);
 
-        colorManager.registerColor (ColorManager.BUTTON_STATE_OFF, 0);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_ON, 0);
-        colorManager.registerColor (ColorManager.BUTTON_STATE_HI, 1);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_OFF, 0);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_ON, 0);
+        colorManager.registerColorIndex (ColorManager.BUTTON_STATE_HI, 1);
     }
 }

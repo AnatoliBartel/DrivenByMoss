@@ -5,14 +5,11 @@
 package de.mossgrabers.framework.controller.hardware;
 
 /**
- * A control on a controller surface.
+ * Interface for a proxy to a knob on a hardware controller.
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public interface IControl
+public interface IHwAbsoluteKnob extends IHwContinuousControl
 {
-    /**
-     * Update the state of the control (e.g. light, fader position).
-     */
-    void update ();
+    // Intentionally empty
 }

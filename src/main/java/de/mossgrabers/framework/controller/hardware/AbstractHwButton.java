@@ -6,7 +6,6 @@ package de.mossgrabers.framework.controller.hardware;
 
 import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.daw.IHost;
-import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.utils.ButtonEvent;
 
 
@@ -15,15 +14,12 @@ import de.mossgrabers.framework.utils.ButtonEvent;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public abstract class AbstractButton extends ControlImpl implements IButton
+public abstract class AbstractHwButton extends AbstractHwInputControl implements IHwButton
 {
     private static final int BUTTON_STATE_INTERVAL = 400;
 
-    protected final IHost    host;
-    private final String     label;
-
     protected TriggerCommand command;
-    protected ILight         light;
+    protected IHwLight         light;
 
     private ButtonEvent      state;
     private boolean          isConsumed;
@@ -35,27 +31,17 @@ public abstract class AbstractButton extends ControlImpl implements IButton
      * @param host The host
      * @param label The label of the button
      */
-    public AbstractButton (final IHost host, final String label)
+    public AbstractHwButton (final IHost host, final String label)
     {
-        this.host = host;
-        this.label = label;
+        super (host, label);
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public IButton bind (final TriggerCommand command)
+    public void bind (final TriggerCommand command)
     {
         this.command = command;
-        return this;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void bind (final IMidiInput input, final BindType type, final int value)
-    {
-        this.bind (input, type, 0, value);
     }
 
 
@@ -84,7 +70,7 @@ public abstract class AbstractButton extends ControlImpl implements IButton
 
     /** {@inheritDoc} */
     @Override
-    public void addLight (final ILight light)
+    public void addLight (final IHwLight light)
     {
         this.light = light;
     }
@@ -92,7 +78,7 @@ public abstract class AbstractButton extends ControlImpl implements IButton
 
     /** {@inheritDoc} */
     @Override
-    public ILight getLight ()
+    public IHwLight getLight ()
     {
         return this.light;
     }
@@ -108,9 +94,25 @@ public abstract class AbstractButton extends ControlImpl implements IButton
 
     /** {@inheritDoc} */
     @Override
+    public boolean isLongPressed ()
+    {
+        return this.state == ButtonEvent.LONG;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void setConsumed ()
     {
         this.isConsumed = true;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isConsumed ()
+    {
+        return this.isConsumed;
     }
 
 
@@ -122,17 +124,6 @@ public abstract class AbstractButton extends ControlImpl implements IButton
             this.handleButtonPressed ();
         else if (event == ButtonEvent.UP)
             this.handleButtonRelease ();
-    }
-
-
-    /**
-     * Get the label.
-     *
-     * @return The label
-     */
-    public String getLabel ()
-    {
-        return this.label;
     }
 
 

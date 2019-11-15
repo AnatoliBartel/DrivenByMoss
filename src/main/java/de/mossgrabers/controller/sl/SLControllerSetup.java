@@ -32,9 +32,9 @@ import de.mossgrabers.controller.sl.mode.device.DevicePresetsMode;
 import de.mossgrabers.controller.sl.view.ControlView;
 import de.mossgrabers.controller.sl.view.PlayView;
 import de.mossgrabers.framework.command.ContinuousCommandID;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -149,7 +149,7 @@ public class SLControllerSetup extends AbstractControllerSetup<SLControlSurface,
         super (factory, host, globalSettings, documentSettings);
         this.isMkII = isMkII;
         this.colorManager = new ColorManager ();
-        this.colorManager.registerColor (PadGrid.GRID_OFF, 0);
+        this.colorManager.registerColorIndex (PadGrid.GRID_OFF, 0);
         this.valueChanger = new DefaultValueChanger (128, 1, 0.5);
         this.configuration = new SLConfiguration (host, this.valueChanger, isMkII);
     }
@@ -255,24 +255,24 @@ public class SLControllerSetup extends AbstractControllerSetup<SLControlSurface,
         final SLControlSurface surface = this.getSurface ();
         for (int i = 0; i < 8; i++)
         {
-            this.addTriggerCommand (TriggerCommandID.get (TriggerCommandID.ROW1_1, i), SLControlSurface.MKII_BUTTON_ROW1_1 + i, new ButtonRowViewCommand<> (0, i, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.get (TriggerCommandID.ROW2_1, i), SLControlSurface.MKII_BUTTON_ROW2_1 + i, new ButtonRowViewCommand<> (1, i, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.get (TriggerCommandID.ROW3_1, i), SLControlSurface.MKII_BUTTON_ROW3_1 + i, new ButtonRowViewCommand<> (2, i, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.get (TriggerCommandID.ROW4_1, i), SLControlSurface.MKII_BUTTON_ROW4_1 + i, new ButtonRowViewCommand<> (3, i, this.model, surface));
-            this.addTriggerCommand (TriggerCommandID.get (TriggerCommandID.ROW_SELECT_1, i), SLControlSurface.MKII_BUTTON_ROWSEL1 + i, new ButtonRowSelectCommand<> (i, this.model, surface));
+            this.addButton (ButtonID.get (ButtonID.ROW1_1, i), "TODO", new ButtonRowViewCommand<> (0, i, this.model, surface), SLControlSurface.MKII_BUTTON_ROW1_1 + i);
+            this.addButton (ButtonID.get (ButtonID.ROW2_1, i), "TODO", new ButtonRowViewCommand<> (1, i, this.model, surface), SLControlSurface.MKII_BUTTON_ROW2_1 + i);
+            this.addButton (ButtonID.get (ButtonID.ROW3_1, i), "TODO", new ButtonRowViewCommand<> (2, i, this.model, surface), SLControlSurface.MKII_BUTTON_ROW3_1 + i);
+            this.addButton (ButtonID.get (ButtonID.ROW4_1, i), "TODO", new ButtonRowViewCommand<> (3, i, this.model, surface), SLControlSurface.MKII_BUTTON_ROW4_1 + i);
+            this.addButton (ButtonID.get (ButtonID.ROW_SELECT_1, i), "TODO", new ButtonRowSelectCommand<> (i, this.model, surface), SLControlSurface.MKII_BUTTON_ROWSEL1 + i);
         }
 
-        this.addTriggerCommand (TriggerCommandID.REWIND, SLControlSurface.MKII_BUTTON_REWIND, new ButtonRowViewCommand<> (4, 0, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.FORWARD, SLControlSurface.MKII_BUTTON_FORWARD, new ButtonRowViewCommand<> (4, 1, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.STOP, SLControlSurface.MKII_BUTTON_STOP, new ButtonRowViewCommand<> (4, 2, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.PLAY, SLControlSurface.MKII_BUTTON_PLAY, new ButtonRowViewCommand<> (4, 3, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.LOOP, SLControlSurface.MKII_BUTTON_LOOP, new ButtonRowViewCommand<> (4, 4, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.RECORD, SLControlSurface.MKII_BUTTON_RECORD, new ButtonRowViewCommand<> (4, 6, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_LEFT, SLControlSurface.MKII_BUTTON_P1_UP, new P1ButtonCommand (true, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_RIGHT, SLControlSurface.MKII_BUTTON_P1_DOWN, new P1ButtonCommand (false, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_UP, SLControlSurface.MKII_BUTTON_P2_UP, new P2ButtonCommand (true, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.ARROW_DOWN, SLControlSurface.MKII_BUTTON_P2_DOWN, new P2ButtonCommand (false, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SELECT_PLAY_VIEW, SLControlSurface.MKII_BUTTON_TRANSPORT, new TransportButtonCommand (this.model, surface));
+        this.addButton (ButtonID.REWIND, "<<", new ButtonRowViewCommand<> (4, 0, this.model, surface), SLControlSurface.MKII_BUTTON_REWIND);
+        this.addButton (ButtonID.FORWARD, ">>", new ButtonRowViewCommand<> (4, 1, this.model, surface), SLControlSurface.MKII_BUTTON_FORWARD);
+        this.addButton (ButtonID.STOP, "Stop", new ButtonRowViewCommand<> (4, 2, this.model, surface), SLControlSurface.MKII_BUTTON_STOP);
+        this.addButton (ButtonID.PLAY, "Play", new ButtonRowViewCommand<> (4, 3, this.model, surface), SLControlSurface.MKII_BUTTON_PLAY);
+        this.addButton (ButtonID.LOOP, "Loop", new ButtonRowViewCommand<> (4, 4, this.model, surface), SLControlSurface.MKII_BUTTON_LOOP);
+        this.addButton (ButtonID.RECORD, "Record", new ButtonRowViewCommand<> (4, 6, this.model, surface), SLControlSurface.MKII_BUTTON_RECORD);
+        this.addButton (ButtonID.ARROW_LEFT, "Left", new P1ButtonCommand (true, this.model, surface), SLControlSurface.MKII_BUTTON_P1_UP);
+        this.addButton (ButtonID.ARROW_RIGHT, "Right", new P1ButtonCommand (false, this.model, surface), SLControlSurface.MKII_BUTTON_P1_DOWN);
+        this.addButton (ButtonID.ARROW_UP, "Up", new P2ButtonCommand (true, this.model, surface), SLControlSurface.MKII_BUTTON_P2_UP);
+        this.addButton (ButtonID.ARROW_DOWN, "Down", new P2ButtonCommand (false, this.model, surface), SLControlSurface.MKII_BUTTON_P2_DOWN);
+        this.addButton (ButtonID.NOTE, "Play View", new TransportButtonCommand (this.model, surface), SLControlSurface.MKII_BUTTON_TRANSPORT);
     }
 
 

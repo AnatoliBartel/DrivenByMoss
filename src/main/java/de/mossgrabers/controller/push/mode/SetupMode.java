@@ -74,7 +74,7 @@ public class SetupMode extends BaseMode
         if (!isTouched || !this.surface.isDeletePressed ())
             return;
 
-        this.surface.setTriggerConsumed (this.surface.getTriggerId (ButtonID.DELETE));
+        this.surface.setTriggerConsumed (ButtonID.DELETE);
 
         final PushConfiguration config = this.surface.getConfiguration ();
         switch (index)

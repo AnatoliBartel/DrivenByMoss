@@ -6,7 +6,6 @@ package de.mossgrabers.controller.slmkiii.controller;
 
 import de.mossgrabers.controller.slmkiii.SLMkIIIConfiguration;
 import de.mossgrabers.framework.controller.AbstractControlSurface;
-import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.DeviceInquiry;
@@ -120,14 +119,10 @@ public class SLMkIIIControlSurface extends AbstractControlSurface<SLMkIIIConfigu
      */
     public SLMkIIIControlSurface (final IHost host, final ColorManager colorManager, final SLMkIIIConfiguration configuration, final IMidiOutput output, final IMidiInput input)
     {
-        super (host, configuration, colorManager, output, input, new SLMkIIIPadGrid (colorManager, output));
+        // TODO size
+        super (host, configuration, colorManager, output, input, new SLMkIIIPadGrid (colorManager, output), 100, 100);
 
         this.defaultMidiChannel = 15;
-
-        this.setTriggerId (ButtonID.SHIFT, MKIII_SHIFT);
-        this.setTriggerId (ButtonID.DELETE, MKIII_CLEAR);
-        this.setTriggerId (ButtonID.LEFT, MKIII_TRACK_LEFT);
-        this.setTriggerId (ButtonID.RIGHT, MKIII_TRACK_RIGHT);
 
         this.addTextDisplay (new SLMkIIIDisplay (host, output));
 

@@ -14,7 +14,6 @@ import de.mossgrabers.controller.kontrol.mkii.mode.ParamsMode;
 import de.mossgrabers.controller.kontrol.mkii.mode.SendMode;
 import de.mossgrabers.controller.kontrol.mkii.view.ControlView;
 import de.mossgrabers.framework.command.ContinuousCommandID;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.command.continuous.KnobRowModeCommand;
 import de.mossgrabers.framework.command.core.NopCommand;
 import de.mossgrabers.framework.command.trigger.application.RedoCommand;
@@ -35,6 +34,7 @@ import de.mossgrabers.framework.command.trigger.transport.WriteArrangerAutomatio
 import de.mossgrabers.framework.configuration.AbstractConfiguration;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IControlSurface;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -187,31 +187,31 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
     protected void registerTriggerCommands ()
     {
         final KontrolProtocolControlSurface surface = this.getSurface ();
-        this.addTriggerCommand (TriggerCommandID.PLAY, KontrolProtocolControlSurface.KONTROL_PLAY, new PlayCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.NEW, KontrolProtocolControlSurface.KONTROL_RESTART, new NewCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.RECORD, KontrolProtocolControlSurface.KONTROL_RECORD, new KontrolRecordCommand (true, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.REC_ARM, KontrolProtocolControlSurface.KONTROL_COUNT_IN, new KontrolRecordCommand (false, this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.STOP, KontrolProtocolControlSurface.KONTROL_STOP, new StopCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.DELETE, KontrolProtocolControlSurface.KONTROL_CLEAR, new ModeMultiSelectCommand<> (this.model, surface, Modes.VOLUME, Modes.SEND, Modes.DEVICE_PARAMS));
-        this.addTriggerCommand (TriggerCommandID.LOOP, KontrolProtocolControlSurface.KONTROL_LOOP, new ToggleLoopCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.METRONOME, KontrolProtocolControlSurface.KONTROL_METRO, new MetronomeCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.TAP_TEMPO, KontrolProtocolControlSurface.KONTROL_TEMPO, new TapTempoCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.UNDO, KontrolProtocolControlSurface.KONTROL_UNDO, new UndoCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.REDO, KontrolProtocolControlSurface.KONTROL_REDO, new RedoCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.QUANTIZE, KontrolProtocolControlSurface.KONTROL_QUANTIZE, new QuantizeCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.AUTOMATION, KontrolProtocolControlSurface.KONTROL_AUTOMATION, new WriteArrangerAutomationCommand<> (this.model, surface));
+        this.addButton (ButtonID.PLAY, "Play", new PlayCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_PLAY);
+        this.addButton (ButtonID.NEW, "New", new NewCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_RESTART);
+        this.addButton (ButtonID.RECORD, "Record", new KontrolRecordCommand (true, this.model, surface), KontrolProtocolControlSurface.KONTROL_RECORD);
+        this.addButton (ButtonID.REC_ARM, "Rec Arm", new KontrolRecordCommand (false, this.model, surface), KontrolProtocolControlSurface.KONTROL_COUNT_IN);
+        this.addButton (ButtonID.STOP, "Stop", new StopCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_STOP);
+        this.addButton (ButtonID.DELETE, "Modes", new ModeMultiSelectCommand<> (this.model, surface, Modes.VOLUME, Modes.SEND, Modes.DEVICE_PARAMS), KontrolProtocolControlSurface.KONTROL_CLEAR);
+        this.addButton (ButtonID.LOOP, "Loop", new ToggleLoopCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_LOOP);
+        this.addButton (ButtonID.METRONOME, "Metronome", new MetronomeCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_METRO);
+        this.addButton (ButtonID.TAP_TEMPO, "Tempo", new TapTempoCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_TEMPO);
+        this.addButton (ButtonID.UNDO, "Undo", new UndoCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_UNDO);
+        this.addButton (ButtonID.REDO, "Redo", new RedoCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_REDO);
+        this.addButton (ButtonID.QUANTIZE, "Quantize", new QuantizeCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_QUANTIZE);
+        this.addButton (ButtonID.AUTOMATION, "Automation", new WriteArrangerAutomationCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_AUTOMATION);
 
-        this.addTriggerCommand (TriggerCommandID.CLIP, KontrolProtocolControlSurface.KONTROL_PLAY_SELECTED_CLIP, new StartClipOrSceneCommand (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.STOP_CLIP, KontrolProtocolControlSurface.KONTROL_STOP_CLIP, new StopClipCommand<> (this.model, surface));
+        this.addButton (ButtonID.CLIP, "Start Clip", new StartClipOrSceneCommand (this.model, surface), KontrolProtocolControlSurface.KONTROL_PLAY_SELECTED_CLIP);
+        this.addButton (ButtonID.STOP_CLIP, "Stop Clip", new StopClipCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_STOP_CLIP);
         // Not implemented in NIHIA
-        this.addTriggerCommand (TriggerCommandID.SCENE1, KontrolProtocolControlSurface.KONTROL_PLAY_SCENE, new StartSceneCommand<> (this.model, surface));
+        this.addButton (ButtonID.SCENE1, "Play Scene", new StartSceneCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_PLAY_SCENE);
 
         // KONTROL_RECORD_SESSION - Not implemented in NIHIA
 
-        this.addTriggerCommand (TriggerCommandID.MUTE, KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_MUTE, new MuteCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.SOLO, KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_SOLO, new SoloCommand<> (this.model, surface));
-        this.addTriggerCommand (TriggerCommandID.F1, KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_AVAILABLE, NopCommand.INSTANCE);
-        this.addTriggerCommand (TriggerCommandID.F2, KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_MUTED_BY_SOLO, NopCommand.INSTANCE);
+        this.addButton (ButtonID.MUTE, "Mute", new MuteCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_MUTE);
+        this.addButton (ButtonID.SOLO, "Solo", new SoloCommand<> (this.model, surface), KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_SOLO);
+        this.addButton (ButtonID.F1, "", NopCommand.INSTANCE, KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_AVAILABLE);
+        this.addButton (ButtonID.F2, "", NopCommand.INSTANCE, KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_MUTED_BY_SOLO);
     }
 
 
@@ -376,18 +376,31 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
     {
         final ITransport t = this.model.getTransport ();
         final KontrolProtocolControlSurface surface = this.getSurface ();
-
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_PLAY, t.isPlaying () ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_RECORD, this.model.hasRecordingState () ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_COUNT_IN, t.isRecording () ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_STOP, !t.isPlaying () ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_CLEAR, ColorManager.BUTTON_STATE_HI);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_LOOP, t.isLoop () ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_METRO, t.isMetronomeOn () ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_UNDO, ColorManager.BUTTON_STATE_HI);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_REDO, ColorManager.BUTTON_STATE_HI);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_QUANTIZE, ColorManager.BUTTON_STATE_HI);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_AUTOMATION, t.isWritingArrangerAutomation () ? ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
+        // TODO
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_PLAY, t.isPlaying () ?
+        // ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_RECORD,
+        // this.model.hasRecordingState () ? ColorManager.BUTTON_STATE_HI :
+        // ColorManager.BUTTON_STATE_ON);
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_COUNT_IN, t.isRecording () ?
+        // ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_STOP, !t.isPlaying () ?
+        // ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_CLEAR,
+        // ColorManager.BUTTON_STATE_HI);
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_LOOP, t.isLoop () ?
+        // ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_METRO, t.isMetronomeOn () ?
+        // ColorManager.BUTTON_STATE_HI : ColorManager.BUTTON_STATE_ON);
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_UNDO,
+        // ColorManager.BUTTON_STATE_HI);
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_REDO,
+        // ColorManager.BUTTON_STATE_HI);
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_QUANTIZE,
+        // ColorManager.BUTTON_STATE_HI);
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_AUTOMATION,
+        // t.isWritingArrangerAutomation () ? ColorManager.BUTTON_STATE_HI :
+        // ColorManager.BUTTON_STATE_ON);
 
         surface.sendKontrolTrackSysEx (KontrolProtocolControlSurface.KONTROL_TRACK_INSTANCE, 0, 0, this.getKompleteInstance ());
 
@@ -402,11 +415,17 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
             surface.sendKontrolTrackSysEx (KontrolProtocolControlSurface.KONTROL_TRACK_MUTED_BY_SOLO, !track.isSolo () && hasSolo ? 1 : 0, i);
         }
 
-        final ITrack selectedTrack = bank.getSelectedItem ();
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_MUTE, selectedTrack != null && selectedTrack.isMute () ? 1 : 0);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_SOLO, selectedTrack != null && selectedTrack.isSolo () ? 1 : 0);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_AVAILABLE, selectedTrack != null ? TrackType.toTrackType (selectedTrack.getType ()) : 0);
-        surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_MUTED_BY_SOLO, selectedTrack != null && !selectedTrack.isSolo () && hasSolo ? 1 : 0);
+        // TODO
+        // final ITrack selectedTrack = bank.getSelectedItem ();
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_MUTE,
+        // selectedTrack != null && selectedTrack.isMute () ? 1 : 0);
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_SOLO,
+        // selectedTrack != null && selectedTrack.isSolo () ? 1 : 0);
+        // surface.updateTrigger (KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_AVAILABLE,
+        // selectedTrack != null ? TrackType.toTrackType (selectedTrack.getType ()) : 0);
+        // surface.updateTrigger
+        // (KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_MUTED_BY_SOLO, selectedTrack !=
+        // null && !selectedTrack.isSolo () && hasSolo ? 1 : 0);
 
     }
 

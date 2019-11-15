@@ -24,6 +24,7 @@ import de.mossgrabers.framework.command.trigger.view.ToggleShiftViewCommand;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -59,6 +60,30 @@ import java.util.Map;
  */
 public class APCminiControllerSetup extends AbstractControllerSetup<APCminiControlSurface, APCminiConfiguration>
 {
+    private static final String []          ROW_NAMES        =
+    {
+        "Track 1\nUp",
+        "Track 2\nDown",
+        "Track 3\nLeft",
+        "Track 4\nRight",
+        "Track 5\nVolume",
+        "Track 6\nPan",
+        "Track 7\nSend",
+        "Track 8\nDevice",
+    };
+
+    private static final String []          COL_NAMES        =
+    {
+        "Scene 1\n Clip Stop",
+        "Scene 2\nSolo",
+        "Scene 3\nRec Arm",
+        "Scene 4\nMute",
+        "Scene 5\nSelect",
+        "Scene 6\n-",
+        "Scene 7\n-",
+        "Scene 8\nStop All Clips",
+    };
+
     private static final Map<String, Modes> FADER_CTRL_MODES = new HashMap<> ();
     static
     {
@@ -87,6 +112,7 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
     public APCminiControllerSetup (final IHost host, final ISetupFactory factory, final ISettingsUI globalSettings, final ISettingsUI documentSettings)
     {
         super (factory, host, globalSettings, documentSettings);
+
         this.colorManager = new ColorManager ();
         APCminiColors.addColors (this.colorManager);
         this.valueChanger = new DefaultValueChanger (128, 1, 0.5);
@@ -193,23 +219,27 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
         final APCminiControlSurface surface = this.getSurface ();
         final ViewManager viewManager = surface.getViewManager ();
 
-        this.setupButton (ButtonID.SHIFT, "Shift", new ToggleShiftViewCommand<> (this.model, surface), APCminiControlSurface.APC_BUTTON_SHIFT);
+        this.addButton (ButtonID.SHIFT, "Shift", new ToggleShiftViewCommand<> (this.model, surface), APCminiControlSurface.APC_BUTTON_SHIFT);
 
         for (int i = 0; i < 8; i++)
         {
             final int index = i;
 
-            this.setupButton (ButtonID.get (ButtonID.SCENE1, i), "Scene " + i, new SceneCommand<> (i, this.model, surface), APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + i, () -> {
+            this.addButton (ButtonID.get (ButtonID.SCENE1, i), COL_NAMES[i], new SceneCommand<> (i, this.model, surface), APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + i, () -> {
                 final View view = viewManager.getActiveView ();
                 if (view instanceof SceneView)
-                    return this.colorManager.getColor (((SceneView) view).getSceneButtonColor (index));
+                    return this.colorManager.getColorIndex (((SceneView) view).getSceneButtonColor (index));
                 return APCminiColors.APC_COLOR_BLACK;
             });
 
-            this.setupButton (ButtonID.get (ButtonID.ROW_SELECT_1, i), "Track " + i, new TrackSelectCommand (i, this.model, surface), APCminiControlSurface.APC_BUTTON_TRACK_BUTTON1 + i, () -> {
+            this.addButton (ButtonID.get (ButtonID.ROW_SELECT_1, i), ROW_NAMES[i], new TrackSelectCommand (i, this.model, surface), APCminiControlSurface.APC_BUTTON_TRACK_BUTTON1 + i, () -> {
                 final View view = viewManager.getActiveView ();
                 if (view instanceof APCminiView)
-                    return ((APCminiView) view).getTrackButtonColor (index);
+                {
+                    int trackButtonColor = ((APCminiView) view).getTrackButtonColor (index);
+                    // Track buttons are only red!
+                    return trackButtonColor > 0 ? APCminiColors.APC_COLOR_RED : 0;
+                }
                 return APCminiColors.APC_COLOR_BLACK;
             });
         }
@@ -229,9 +259,35 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
     protected void registerContinuousCommands ()
     {
         final APCminiControlSurface surface = this.getSurface ();
-        this.setupFader ("Master", new MasterFaderAbsoluteCommand<> (this.model, surface), BindType.CC, APCminiControlSurface.APC_KNOB_MASTER_LEVEL);
+        this.addFader (ContinuousID.FADER_MASTER, "Master", new MasterFaderAbsoluteCommand<> (this.model, surface), BindType.CC, APCminiControlSurface.APC_KNOB_MASTER_LEVEL);
         for (int i = 0; i < 8; i++)
-            this.setupFader ("Fader " + (i + 1), new KnobRowModeCommand<> (i, this.model, surface), BindType.CC, APCminiControlSurface.APC_KNOB_TRACK_LEVEL1 + i);
+            this.addFader (ContinuousID.get (ContinuousID.FADER1, i), "Fader " + (i + 1), new KnobRowModeCommand<> (i, this.model, surface), BindType.CC, APCminiControlSurface.APC_KNOB_TRACK_LEVEL1 + i);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    protected void layoutControls ()
+    {
+        final double width = 10;
+        final double height = 6;
+        final double space = 2;
+        final double stepX = width + space;
+        final double stepY = height + space;
+
+        final APCminiControlSurface surface = this.getSurface ();
+
+        surface.getButton (ButtonID.SHIFT).setBounds (space + 8 * stepX, space + 8 * stepY, width, height);
+        surface.getContinuous (ContinuousID.FADER_MASTER).setBounds (space + 8 * stepX, space + 9 * stepY, width, width * 3);
+
+        for (int i = 0; i < 8; i++)
+        {
+            double x = i * stepX;
+            double y = i * stepY;
+            surface.getButton (ButtonID.get (ButtonID.SCENE1, i)).setBounds (space + 8.0 * stepX, space + y, width, height);
+            surface.getButton (ButtonID.get (ButtonID.ROW_SELECT_1, i)).setBounds (space + x, space + 8.0 * stepY, width, height);
+            surface.getContinuous (ContinuousID.get (ContinuousID.FADER1, i)).setBounds (space + x, space + 9.0 * stepY, width, width * 3);
+        }
     }
 
 

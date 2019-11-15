@@ -17,11 +17,11 @@ import de.mossgrabers.controller.beatstep.view.SessionView;
 import de.mossgrabers.controller.beatstep.view.ShiftView;
 import de.mossgrabers.controller.beatstep.view.TrackView;
 import de.mossgrabers.framework.command.ContinuousCommandID;
-import de.mossgrabers.framework.command.TriggerCommandID;
 import de.mossgrabers.framework.command.aftertouch.AftertouchAbstractViewCommand;
 import de.mossgrabers.framework.command.continuous.PlayPositionCommand;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.Relative3ValueChanger;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -179,7 +179,7 @@ public class BeatstepControllerSetup extends AbstractControllerSetup<BeatstepCon
 
         final BeatstepControlSurface surface = this.getSurface ();
         for (int i = 0; i < 16; i++)
-            this.addTriggerCommand (TriggerCommandID.get (TriggerCommandID.ROW1_1, i), BeatstepControlSurface.BEATSTEP_PRO_STEP1 + i, new StepCommand (i, this.model, surface));
+            this.addButton (ButtonID.get (ButtonID.ROW1_1, i), "Button " + (i + 1), new StepCommand (i, this.model, surface), BeatstepControlSurface.BEATSTEP_PRO_STEP1 + i);
     }
 
 
