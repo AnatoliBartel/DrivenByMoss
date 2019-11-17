@@ -4,7 +4,7 @@
 
 package de.mossgrabers.framework.controller;
 
-import de.mossgrabers.framework.command.ContinuousCommandID;
+import de.mossgrabers.controller.push.command.pitchbend.PitchbendCommand;
 import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.configuration.AbstractConfiguration;
@@ -136,18 +136,6 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
     {
         for (final S surface: this.surfaces)
             surface.flush ();
-
-        this.updateButtons ();
-    }
-
-
-    /**
-     * Update all button LEDs, except the ones controlled by the views. Refreshed on flush.
-     */
-    @Deprecated
-    protected void updateButtons ()
-    {
-        // Overwrite to update button LEDs
     }
 
 
@@ -475,7 +463,8 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
         final IHwButton button = surface.createButton (buttonID, label);
         button.bind (command);
         button.bind (surface.getInput (), this.getTriggerBindType (), midiValue);
-        final IntSupplier supp = supplier == null ? () -> button.isPressed () ? 1 : 0 : supplier;
+        final IntSupplier intSupplier = () -> button.isPressed () ? 1 : 0;
+        final IntSupplier supp = supplier == null ? intSupplier : supplier;
         button.addLight (surface.createLight ( () -> {
             final int state = supp.getAsInt ();
             // Color is the state if there are no colors provided!
@@ -499,17 +488,52 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
 
     /**
      * Create a hardware fader proxy on controller device 1, bind a continuous command to it and
+     * bind it to a MIDI pitchbend.
+     * 
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param command The command to bind
+     * @return The created fader
+     */
+    protected IHwFader addFader (final ContinuousID continuousID, final String label, final PitchbendCommand command)
+    {
+        return this.addFader (this.getSurface (), continuousID, label, command, 0);
+    }
+
+
+    /**
+     * Create a hardware fader proxy on controller device 1, bind a continuous command to it and
+     * bind it to a MIDI pitchbend.
+     *
+     * @param surface
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param command The command to bind
+     * @param midiChannel The MIDI channel
+     * @return The created fader
+     */
+    protected IHwFader addFader (final S surface, final ContinuousID continuousID, final String label, final PitchbendCommand command, final int midiChannel)
+    {
+        final IHwFader fader = surface.createFader (continuousID, label);
+        fader.bind (command);
+        fader.bind (surface.getInput (), BindType.PITCHBEND, midiChannel, 0);
+        return fader;
+    }
+
+
+    /**
+     * Create a hardware fader proxy on controller device 1, bind a continuous command to it and
      * bind it to a MIDI CC on MIDI channel 1.
      * 
      * @param continuousID The ID of the control (for later access)
      * @param label The label of the fader
-     * @param midiValue The MIDI CC or note
      * @param command The command to bind
      * @param bindType The MIDI bind type
+     * @param midiValue The MIDI CC or note
      */
     protected void addFader (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiValue)
     {
-        this.addFader (this.getSurface (), continuousID, label, command, bindType, midiValue);
+        this.addFader (continuousID, label, command, bindType, 0, midiValue);
     }
 
 
@@ -517,18 +541,70 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * Create a hardware fader proxy on a controller, bind a continuous command to it and bind it to
      * a MIDI CC on MIDI channel 1.
      *
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param command The command to bind
+     * @param bindType The MIDI bind type
+     * @param midiChannel The MIDI channel
+     * @param midiValue The MIDI CC or note
+     */
+    protected void addFader (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiValue)
+    {
+        this.addFader (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiValue);
+    }
+
+
+    /**
+     * Create a hardware fader proxy on a controller, bind a continuous command to it and bind it to
+     * a MIDI CC.
+     *
      * @param surface The control surface
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param command The command to bind
+     * @param bindType The MIDI bind type
+     * @param midiChannel The MIDI channel
+     * @param midiValue The MIDI CC or note
+     */
+    protected void addFader (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiValue)
+    {
+        final IHwFader fader = surface.createFader (continuousID, label);
+        fader.bind (command);
+        fader.bind (surface.getInput (), bindType, midiChannel, midiValue);
+    }
+
+
+    /**
+     * Create a hardware knob proxy on a controller, which sends relative values, bind a continuous
+     * command to it and bind it to a MIDI CC on MIDI channel 1.
+     *
      * @param continuousID The ID of the control (for later access)
      * @param label The label of the fader
      * @param midiValue The MIDI CC or note
      * @param command The command to bind
-     * @param bindType The MIDI bind type
+     * @return The created knob
      */
-    protected void addFader (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiValue)
+    protected IHwRelativeKnob addRelativeKnob (final ContinuousID continuousID, final String label, final ContinuousCommand command, final int midiValue)
     {
-        final IHwFader fader = surface.createFader (continuousID, label);
-        fader.bind (command);
-        fader.bind (surface.getInput (), bindType, midiValue);
+        return addRelativeKnob (continuousID, label, command, BindType.CC, 0, midiValue);
+    }
+
+
+    /**
+     * Create a hardware knob proxy on a controller, which sends relative values, bind a continuous
+     * command to it and bind it to a MIDI CC on MIDI channel 1.
+     *
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param command The command to bind
+     * @param bindType The MIDI bind type
+     * @param midiChannel The MIDI channel
+     * @param midiValue The MIDI CC or note
+     * @return The created knob
+     */
+    protected IHwRelativeKnob addRelativeKnob (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiValue)
+    {
+        return this.addRelativeKnob (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiValue);
     }
 
 
@@ -539,48 +615,18 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param surface The control surface
      * @param continuousID The ID of the control (for later access)
      * @param label The label of the fader
-     * @param midiValue The MIDI CC or note
      * @param command The command to bind
      * @param bindType The MIDI bind type
+     * @param midiChannel The MIDI channel
+     * @param midiValue The MIDI CC or note
+     * @return The created knob
      */
-    protected void addRelativeKnob (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiValue)
+    protected IHwRelativeKnob addRelativeKnob (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiValue)
     {
         final IHwRelativeKnob knob = surface.createRelativeKnob (continuousID, label);
         knob.bind (command);
-        knob.bind (surface.getInput (), bindType, midiValue);
-    }
-
-
-    /**
-     * Register a (global) continuous command for all views and assign it to a MIDI CC.
-     *
-     * @param commandID The ID of the command to register
-     * @param midiCC The midi CC
-     * @param midiChannel The midi channel to assign to
-     * @param command The command to register
-     */
-    @Deprecated
-    protected void addContinuousCommand (final ContinuousCommandID commandID, final int midiCC, final int midiChannel, final ContinuousCommand command)
-    {
-        final S surface = this.surfaces.get (0);
-        surface.getViewManager ().registerContinuousCommand (commandID, command);
-        surface.assignContinuousCommand (midiChannel, midiCC, commandID);
-    }
-
-
-    /**
-     * Register a (global) continuous command for all views and assign it to a MIDI CC.
-     *
-     * @param commandID The ID of the command to register
-     * @param midiCC The midi CC
-     * @param command The command to register
-     */
-    @Deprecated
-    protected void addContinuousCommand (final ContinuousCommandID commandID, final int midiCC, final ContinuousCommand command)
-    {
-        final S surface = this.surfaces.get (0);
-        surface.getViewManager ().registerContinuousCommand (commandID, command);
-        surface.assignContinuousCommand (midiCC, commandID);
+        knob.bind (surface.getInput (), bindType, midiChannel, midiValue);
+        return knob;
     }
 
 

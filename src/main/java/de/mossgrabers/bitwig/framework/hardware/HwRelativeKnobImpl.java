@@ -6,10 +6,12 @@ package de.mossgrabers.bitwig.framework.hardware;
 
 import de.mossgrabers.bitwig.framework.daw.HostImpl;
 import de.mossgrabers.framework.command.core.ContinuousCommand;
+import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.controller.hardware.AbstractHwContinuousControl;
 import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
+import de.mossgrabers.framework.utils.ButtonEvent;
 
 import com.bitwig.extension.controller.api.ControllerHost;
 import com.bitwig.extension.controller.api.RelativeHardwareKnob;
@@ -57,6 +59,20 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
     public void bind (final IMidiInput input, final BindType type, final int channel, final int value)
     {
         input.bind (this, type, channel, value);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void bindTouch (final TriggerCommand command, final IMidiInput input, final BindType type, final int control)
+    {
+        this.touchCommand = command;
+
+        // TODO Add a description text
+        this.hardwareKnob.beginTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.DOWN), () -> "TODO"));
+        this.hardwareKnob.endTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.UP), () -> "TODO"));
+
+        input.bindTouch (this, type, 0, control);
     }
 
 

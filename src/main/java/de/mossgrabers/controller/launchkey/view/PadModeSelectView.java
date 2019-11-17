@@ -7,7 +7,7 @@ package de.mossgrabers.controller.launchkey.view;
 import de.mossgrabers.controller.launchkey.LaunchkeyMiniMk3Configuration;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3Colors;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ControlSurface;
-import de.mossgrabers.framework.controller.color.ColorManager;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
@@ -112,25 +112,14 @@ public class PadModeSelectView extends AbstractView<LaunchkeyMiniMk3ControlSurfa
             this.isConsumed = true;
     }
 
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // TODO
-    // if (scene == 0)
-    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1,
-    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
-    // else
-    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
-    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE);
-    // }
 
-
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public int getButtonColor (final ButtonID buttonID)
     {
-        // TODO Auto-generated method stub
-        return ColorManager.BUTTON_STATE_OFF;
+        if (buttonID == ButtonID.SCENE1)
+            return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK;
+        return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE;
     }
 
 

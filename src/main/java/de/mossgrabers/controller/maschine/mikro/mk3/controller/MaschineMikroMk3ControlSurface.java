@@ -88,37 +88,37 @@ public class MaschineMikroMk3ControlSurface extends AbstractControlSurface<Masch
         super (host, configuration, colorManager, output, input, new PadGridImpl (colorManager, output), 100, 100);
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    protected void handleCC (final int channel, final int cc, final int value)
-    {
-        if (cc == MaschineMikroMk3ControlSurface.MIKRO_3_ENCODER)
-        {
-            // Change absolute into relative value
-
-            this.getOutput ().sendCC (MaschineMikroMk3ControlSurface.MIKRO_3_ENCODER, 63);
-
-            final int relativeValue = value - 63;
-            super.handleCC (channel, cc, relativeValue);
-
-            return;
-        }
-
-        if (cc == MaschineMikroMk3ControlSurface.MIKRO_3_TOUCHSTRIP)
-        {
-            super.handleCC (channel, cc, value);
-            return;
-        }
-
-        // All buttons are toggle buttons (first press sends 127, second 0)
-        // Therefore, turn any received message into a proper button press and release
-        super.handleCC (channel, cc, 127);
-        super.handleCC (channel, cc, 0);
-
-        // TODO Is this necessary?!
-        // this.clearTriggerCache (channel, cc);
-    }
+    // TODO
+    // /** {@inheritDoc} */
+    // @Override
+    // protected void handleCC (final int channel, final int cc, final int value)
+    // {
+    // if (cc == MaschineMikroMk3ControlSurface.MIKRO_3_ENCODER)
+    // {
+    // // Change absolute into relative value
+    //
+    // this.getOutput ().sendCC (MaschineMikroMk3ControlSurface.MIKRO_3_ENCODER, 63);
+    //
+    // final int relativeValue = value - 63;
+    // super.handleCC (channel, cc, relativeValue);
+    //
+    // return;
+    // }
+    //
+    // if (cc == MaschineMikroMk3ControlSurface.MIKRO_3_TOUCHSTRIP)
+    // {
+    // super.handleCC (channel, cc, value);
+    // return;
+    // }
+    //
+    // // All buttons are toggle buttons (first press sends 127, second 0)
+    // // Therefore, turn any received message into a proper button press and release
+    // super.handleCC (channel, cc, 127);
+    // super.handleCC (channel, cc, 0);
+    //
+    // // TODO Is this necessary?!
+    // // this.clearTriggerCache (channel, cc);
+    // }
 
 
     /** {@inheritDoc} */

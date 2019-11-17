@@ -4,7 +4,6 @@
 
 package de.mossgrabers.framework.controller;
 
-import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.configuration.Configuration;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.display.IDisplay;
@@ -143,46 +142,6 @@ public interface IControlSurface<C extends Configuration>
 
 
     /**
-     * Assigns a continuous command to a midi CC on the default midi channel. When the midi CC is
-     * received the command is executed.
-     *
-     * @param cc The midi CC
-     * @param commandID The command ID
-     */
-    void assignContinuousCommand (int cc, ContinuousCommandID commandID);
-
-
-    /**
-     * Assigns a continuous command to a midi CC. When the midi CC is received the command is
-     * executed.
-     *
-     * @param channel The midi channel to assign to (0-15)
-     * @param cc The midi CC
-     * @param commandID The command ID
-     */
-    void assignContinuousCommand (int channel, int cc, ContinuousCommandID commandID);
-
-
-    /**
-     * Get the ID of an assigned continuous command on the default midi channel.
-     *
-     * @param cc The midi CC
-     * @return The command ID or null if none is assigned to the given midi CC
-     */
-    ContinuousCommandID getContinuousCommand (int cc);
-
-
-    /**
-     * Get the ID of an assigned continuous command.
-     *
-     * @param channel The midi channel to which it was assign to (0-15)
-     * @param cc The midi CC
-     * @return The command ID or null if none is assigned to the given midi CC
-     */
-    ContinuousCommandID getContinuousCommand (int channel, int cc);
-
-
-    /**
      * Check if a given note belongs to the grid.
      *
      * @param note The note to check
@@ -257,16 +216,6 @@ public interface IControlSurface<C extends Configuration>
      * @return The state of the mute trigger
      */
     boolean isMutePressed ();
-
-
-    /**
-     * Get the midi cc of one of the scene triggers.
-     *
-     *
-     * @param index The index of the scene trigger
-     * @return The midi cc
-     */
-    int getSceneTrigger (final int index);
 
 
     /**

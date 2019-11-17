@@ -1112,18 +1112,9 @@ public class PushControlSurface extends AbstractControlSurface<PushConfiguration
      */
     public PushControlSurface (final IHost host, final ColorManager colorManager, final PushConfiguration configuration, final IMidiOutput output, final IMidiInput input)
     {
-        // TODO size
-        super (host, configuration, colorManager, output, input, new PadGridImpl (colorManager, output), 200, 200);
+        super (host, configuration, colorManager, output, input, new PadGridImpl (colorManager, output), 200, 156);
 
         this.input.setSysexCallback (this::handleSysEx);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public int getSceneTrigger (final int index)
-    {
-        return PUSH_BUTTON_SCENE1 + index;
     }
 
 

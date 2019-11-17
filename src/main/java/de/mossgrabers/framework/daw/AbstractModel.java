@@ -321,7 +321,7 @@ public abstract class AbstractModel implements IModel
     public boolean canConvertClip ()
     {
         final ITrack selectedTrack = this.getSelectedTrack ();
-        if (selectedTrack == null)
+        if (selectedTrack == null || !selectedTrack.canHoldAudioData ())
             return false;
         final List<ISlot> slots = selectedTrack.getSlotBank ().getSelectedItems ();
         if (slots.isEmpty ())

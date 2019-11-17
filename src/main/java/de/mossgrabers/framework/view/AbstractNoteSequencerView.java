@@ -204,7 +204,7 @@ public abstract class AbstractNoteSequencerView<S extends IControlSurface<C>, C 
             default:
                 if (hilite)
                     return COLOR_STEP_HILITE_NO_CONTENT;
-                return this.getColor (note, this.useTrackColor ? track : null);
+                return this.getPadColor (note, this.useTrackColor ? track : null);
         }
     }
 

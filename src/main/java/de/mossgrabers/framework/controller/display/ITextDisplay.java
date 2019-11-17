@@ -151,9 +151,17 @@ public interface ITextDisplay extends IDisplay
 
 
     /**
-     * Assign a proxy to the hardware display, which gets filled by this text displpay.
+     * Assign a proxy to the hardware display, which gets filled by this text display.
      *
      * @param display The hardware display
      */
     void setHardwareDisplay (IHwTextDisplay display);
+
+
+    /**
+     * Get the hardware display.
+     *
+     * @return The hardware display
+     */
+    IHwTextDisplay getHardwareDisplay ();
 }

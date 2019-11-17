@@ -7,6 +7,7 @@ package de.mossgrabers.controller.apcmini.view;
 import de.mossgrabers.controller.apcmini.APCminiConfiguration;
 import de.mossgrabers.controller.apcmini.controller.APCminiColors;
 import de.mossgrabers.controller.apcmini.controller.APCminiControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISlotBank;
@@ -87,9 +88,10 @@ public class SessionView extends AbstractSessionView<APCminiControlSurface, APCm
 
     /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public String getButtonColorID (final ButtonID buttonID)
     {
-        return this.surface.getNoteVelocity (scene) > 0 ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
+        final int index = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
+        return this.surface.getNoteVelocity (index) > 0 ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
     }
 
 

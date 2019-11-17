@@ -6,13 +6,14 @@ package de.mossgrabers.controller.slmkiii.view;
 
 import de.mossgrabers.controller.slmkiii.SLMkIIIConfiguration;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
-import de.mossgrabers.framework.controller.color.ColorManager;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.DAWColors;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.IMasterTrack;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.utils.ButtonEvent;
+import de.mossgrabers.framework.view.AbstractSequencerView;
 import de.mossgrabers.framework.view.AbstractView;
 import de.mossgrabers.framework.view.SceneView;
 
@@ -84,25 +85,12 @@ public class ColorView extends AbstractView<SLMkIIIControlSurface, SLMkIIIConfig
         // Intentionally empty
     }
 
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // final int colorOff = this.model.getColorManager ().getColor
-    // (AbstractSequencerView.COLOR_RESOLUTION_OFF);
-    // TODO
-    // if (scene == 0)
-    // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_1, colorOff);
-    // else
-    // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_2, colorOff);
-    // }
 
-
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public String getButtonColorID (final ButtonID buttonID)
     {
-        // TODO Auto-generated method stub
-        return ColorManager.BUTTON_STATE_OFF;
+        return AbstractSequencerView.COLOR_RESOLUTION_OFF;
     }
 
 

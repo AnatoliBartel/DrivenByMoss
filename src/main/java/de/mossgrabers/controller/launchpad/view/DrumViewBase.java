@@ -5,7 +5,6 @@
 package de.mossgrabers.controller.launchpad.view;
 
 import de.mossgrabers.controller.launchpad.LaunchpadConfiguration;
-import de.mossgrabers.controller.launchpad.controller.LaunchpadColors;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ITrackBank;
@@ -101,7 +100,9 @@ public abstract class DrumViewBase extends AbstractDrumView<LaunchpadControlSurf
      */
     protected void updateLowerSceneButtons ()
     {
-        for (int i = 4; i < 8; i++)
-            this.surface.setTrigger (this.surface.getSceneTrigger (i), LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+        // TODO
+        // for (int i = 4; i < 8; i++)
+        // this.surface.setTrigger (this.surface.getSceneTrigger (i),
+        // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
     }
 }

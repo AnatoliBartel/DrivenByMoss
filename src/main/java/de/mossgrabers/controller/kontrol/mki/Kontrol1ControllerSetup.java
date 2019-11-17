@@ -21,7 +21,6 @@ import de.mossgrabers.controller.kontrol.mki.mode.device.ParamsMode;
 import de.mossgrabers.controller.kontrol.mki.mode.track.TrackMode;
 import de.mossgrabers.controller.kontrol.mki.mode.track.VolumeMode;
 import de.mossgrabers.controller.kontrol.mki.view.ControlView;
-import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.command.continuous.KnobRowModeCommand;
 import de.mossgrabers.framework.command.core.NopCommand;
 import de.mossgrabers.framework.command.trigger.BrowserCommand;
@@ -36,6 +35,7 @@ import de.mossgrabers.framework.command.trigger.transport.WindCommand;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -104,8 +104,9 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
         final ITrackBank trackBank = this.model.getTrackBank ();
         trackBank.addSelectionObserver ( (index, isSelected) -> {
             final View activeView = this.getSurface ().getViewManager ().getActiveView ();
-            if (activeView instanceof ControlView)
-                ((ControlView) activeView).updateButtons ();
+            // TODO
+            // if (activeView instanceof ControlView)
+            // ((ControlView) activeView).updateButtons ();
         });
 
         final ICursorDevice primary = this.model.getInstrumentDevice ();
@@ -233,9 +234,9 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
         final Kontrol1ControlSurface surface = this.getSurface ();
 
         for (int i = 0; i < 8; i++)
-            this.addContinuousCommand (ContinuousCommandID.get (ContinuousCommandID.KNOB1, i), Kontrol1ControlSurface.ENCODER_1 + i, new KnobRowModeCommand<> (i, this.model, surface));
+            this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), new KnobRowModeCommand<> (i, this.model, surface), Kontrol1ControlSurface.ENCODER_1 + i);
 
-        this.addContinuousCommand (ContinuousCommandID.MASTER_KNOB, Kontrol1ControlSurface.MAIN_ENCODER, new MainEncoderCommand (this.model, surface));
+        this.addRelativeKnob (ContinuousID.MASTER_KNOB, "Master", new MainEncoderCommand (this.model, surface), Kontrol1ControlSurface.MAIN_ENCODER);
     }
 
 

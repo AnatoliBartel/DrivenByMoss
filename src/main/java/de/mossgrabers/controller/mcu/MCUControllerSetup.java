@@ -4,10 +4,9 @@
 
 package de.mossgrabers.controller.mcu;
 
-import de.mossgrabers.controller.mcu.command.continuous.PlayPositionTempoCommand;
-import de.mossgrabers.controller.mcu.command.pitchbend.PitchbendVolumeCommand;
 import de.mossgrabers.controller.mcu.command.trigger.AssignableCommand;
 import de.mossgrabers.controller.mcu.command.trigger.DevicesCommand;
+import de.mossgrabers.controller.mcu.command.trigger.FaderTouchCommand;
 import de.mossgrabers.controller.mcu.command.trigger.GrooveCommand;
 import de.mossgrabers.controller.mcu.command.trigger.KeyCommand;
 import de.mossgrabers.controller.mcu.command.trigger.KeyCommand.Key;
@@ -32,8 +31,6 @@ import de.mossgrabers.controller.mcu.mode.track.PanMode;
 import de.mossgrabers.controller.mcu.mode.track.SendMode;
 import de.mossgrabers.controller.mcu.mode.track.TrackMode;
 import de.mossgrabers.controller.mcu.mode.track.VolumeMode;
-import de.mossgrabers.framework.command.ContinuousCommandID;
-import de.mossgrabers.framework.command.continuous.KnobRowModeCommand;
 import de.mossgrabers.framework.command.core.NopCommand;
 import de.mossgrabers.framework.command.trigger.AutomationCommand;
 import de.mossgrabers.framework.command.trigger.BrowserCommand;
@@ -45,6 +42,7 @@ import de.mossgrabers.framework.command.trigger.application.PaneCommand;
 import de.mossgrabers.framework.command.trigger.application.SaveCommand;
 import de.mossgrabers.framework.command.trigger.application.UndoCommand;
 import de.mossgrabers.framework.command.trigger.device.DeviceOnOffCommand;
+import de.mossgrabers.framework.command.trigger.mode.ButtonRowModeCommand;
 import de.mossgrabers.framework.command.trigger.mode.ModeCursorCommand.Direction;
 import de.mossgrabers.framework.command.trigger.mode.ModeSelectCommand;
 import de.mossgrabers.framework.command.trigger.track.MoveTrackBankCommand;
@@ -420,32 +418,18 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
             for (int i = 0; i < 8; i++)
             {
                 // TODO
-                // TriggerCommandID commandID = TriggerCommandID.get (TriggerCommandID.ROW_SELECT_1,
-                // i);
-                // viewManager.registerTriggerCommand (commandID, new SelectCommand (i, this.model,
-                // surface));
-                // surface.assignTriggerCommand (MCUControlSurface.MCU_SELECT1 + i, commandID);
-                //
-                // commandID = TriggerCommandID.get (TriggerCommandID.FADER_TOUCH_1, i);
-                // viewManager.registerTriggerCommand (commandID, new FaderTouchCommand (i,
-                // this.model, surface));
-                // surface.assignTriggerCommand (MCUControlSurface.MCU_FADER_TOUCH1 + i, commandID);
-                //
-                // this.setupButton (ButtonID.get (TriggerCommandID.ROW1_1, i),
-                // MCUControlSurface.MCU_VSELECT1 + i, new ButtonRowModeCommand<> (0, i, this.model,
-                // surface), index);
-                // this.setupButton (ButtonID.get (TriggerCommandID.ROW2_1, i),
-                // MCUControlSurface.MCU_ARM1 + i, new ButtonRowModeCommand<> (1, i, this.model,
-                // surface), index);
-                // this.setupButton (ButtonID.get (TriggerCommandID.ROW3_1, i),
-                // MCUControlSurface.MCU_SOLO1 + i, new ButtonRowModeCommand<> (2, i, this.model,
-                // surface), index);
-                // this.setupButton (ButtonID.get (TriggerCommandID.ROW4_1, i),
-                // MCUControlSurface.MCU_MUTE1 + i, new ButtonRowModeCommand<> (3, i, this.model,
-                // surface), index);
+                this.addButton (ButtonID.get (ButtonID.ROW_SELECT_1, i), "Select " + i, new SelectCommand (i, this.model, surface), MCUControlSurface.MCU_SELECT1 + i);
+
+                this.addButton (ButtonID.get (ButtonID.FADER_TOUCH_1, i), "Fader Touch " + i, new FaderTouchCommand (i, this.model, surface), MCUControlSurface.MCU_FADER_TOUCH1 + i);
+
+                this.addButton (ButtonID.get (ButtonID.ROW1_1, i), "VSelect " + i, new ButtonRowModeCommand<> (0, i, this.model, surface), index, MCUControlSurface.MCU_VSELECT1 + i);
+                this.addButton (ButtonID.get (ButtonID.ROW2_1, i), "Rec Arm " + i, new ButtonRowModeCommand<> (1, i, this.model, surface), index, MCUControlSurface.MCU_ARM1 + i);
+                this.addButton (ButtonID.get (ButtonID.ROW3_1, i), "Solo " + i, new ButtonRowModeCommand<> (2, i, this.model, surface), index, MCUControlSurface.MCU_SOLO1 + i);
+                this.addButton (ButtonID.get (ButtonID.ROW4_1, i), "Mute " + i, new ButtonRowModeCommand<> (3, i, this.model, surface), index, MCUControlSurface.MCU_MUTE1 + i);
             }
 
-            viewManager.registerPitchbendCommand (new PitchbendVolumeCommand (this.model, surface));
+            // TODO viewManager.registerPitchbendCommand (new PitchbendVolumeCommand (this.model,
+            // surface));
         }
     }
 
@@ -454,22 +438,27 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
     @Override
     protected void registerContinuousCommands ()
     {
-        MCUControlSurface surface = this.getSurface ();
-        ViewManager viewManager = surface.getViewManager ();
-        viewManager.registerContinuousCommand (ContinuousCommandID.PLAY_POSITION, new PlayPositionTempoCommand (this.model, surface));
-        surface.assignContinuousCommand (1, MCUControlSurface.MCU_CC_JOG, ContinuousCommandID.PLAY_POSITION);
-
-        for (int index = 0; index < this.numMCUDevices; index++)
-        {
-            surface = this.getSurface (index);
-            viewManager = surface.getViewManager ();
-            for (int i = 0; i < 8; i++)
-            {
-                final ContinuousCommandID commandID = ContinuousCommandID.get (ContinuousCommandID.KNOB1, i);
-                viewManager.registerContinuousCommand (commandID, new KnobRowModeCommand<> (i, this.model, surface));
-                surface.assignContinuousCommand (1, MCUControlSurface.MCU_CC_VPOT1 + i, commandID);
-            }
-        }
+        // TODO
+        // MCUControlSurface surface = this.getSurface ();
+        // ViewManager viewManager = surface.getViewManager ();
+        // viewManager.registerContinuousCommand (ContinuousCommandID.PLAY_POSITION, new
+        // PlayPositionTempoCommand (this.model, surface));
+        // surface.assignContinuousCommand (1, MCUControlSurface.MCU_CC_JOG,
+        // ContinuousCommandID.PLAY_POSITION);
+        //
+        // for (int index = 0; index < this.numMCUDevices; index++)
+        // {
+        // surface = this.getSurface (index);
+        // viewManager = surface.getViewManager ();
+        // for (int i = 0; i < 8; i++)
+        // {
+        // final ContinuousCommandID commandID = ContinuousCommandID.get (ContinuousCommandID.KNOB1,
+        // i);
+        // viewManager.registerContinuousCommand (commandID, new KnobRowModeCommand<> (i,
+        // this.model, surface));
+        // surface.assignContinuousCommand (1, MCUControlSurface.MCU_CC_VPOT1 + i, commandID);
+        // }
+        // }
     }
 
 
@@ -487,123 +476,123 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
         }
     }
 
+    // /** {@inheritDoc} */
+    // @Override
+    // protected void updateButtons ()
+    // {
+    // final MCUControlSurface surface = this.getSurface ();
+    // final Modes mode = surface.getModeManager ().getActiveOrTempModeId ();
+    // if (mode == null)
+    // return;
+    //
+    // final boolean isShift = surface.isShiftPressed ();
+    //
+    // this.updateVUandFaders (isShift);
+    // this.updateSegmentDisplay ();
+    //
+    // // Set button states
+    // final ITransport t = this.model.getTransport ();
+    // final boolean isFlipRecord = this.configuration.isFlipRecord ();
+    // final boolean isRecordShifted = isShift && !isFlipRecord || !isShift && isFlipRecord;
+    //
+    // final boolean isTrackOn = Modes.TRACK.equals (mode) || Modes.VOLUME.equals (mode);
+    // final boolean isPanOn = Modes.PAN.equals (mode);
+    // final boolean isSendOn = mode.ordinal () >= Modes.SEND1.ordinal () && mode.ordinal () <=
+    // Modes.SEND8.ordinal ();
+    // final boolean isDeviceOn = Modes.DEVICE_PARAMS.equals (mode);
 
-    /** {@inheritDoc} */
-    @Override
-    protected void updateButtons ()
-    {
-        final MCUControlSurface surface = this.getSurface ();
-        final Modes mode = surface.getModeManager ().getActiveOrTempModeId ();
-        if (mode == null)
-            return;
-
-        final boolean isShift = surface.isShiftPressed ();
-
-        this.updateVUandFaders (isShift);
-        this.updateSegmentDisplay ();
-
-        // Set button states
-        final ITransport t = this.model.getTransport ();
-        final boolean isFlipRecord = this.configuration.isFlipRecord ();
-        final boolean isRecordShifted = isShift && !isFlipRecord || !isShift && isFlipRecord;
-
-        final boolean isTrackOn = Modes.TRACK.equals (mode) || Modes.VOLUME.equals (mode);
-        final boolean isPanOn = Modes.PAN.equals (mode);
-        final boolean isSendOn = mode.ordinal () >= Modes.SEND1.ordinal () && mode.ordinal () <= Modes.SEND8.ordinal ();
-        final boolean isDeviceOn = Modes.DEVICE_PARAMS.equals (mode);
-
-        // final boolean isLEDOn = surface.isPressed (MCUControlSurface.MCU_OPTION) ?
-        // this.model.isCursorTrackPinned () : isTrackOn;
-        // surface.updateTrigger (MCUControlSurface.MCU_MODE_IO, isLEDOn ? MCU_BUTTON_STATE_ON :
-        // MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_MODE_PAN, isPanOn ? MCU_BUTTON_STATE_ON :
-        // MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_MODE_SENDS, isSendOn ? MCU_BUTTON_STATE_ON :
-        // MCU_BUTTON_STATE_OFF);
-        //
-        // final ICursorDevice cursorDevice = this.model.getCursorDevice ();
-        // final boolean isOn = surface.isPressed (MCUControlSurface.MCU_OPTION) ?
-        // cursorDevice.isPinned () : isDeviceOn;
-        //
-        // surface.updateTrigger (MCUControlSurface.MCU_MODE_PLUGIN, isOn ? MCU_BUTTON_STATE_ON :
-        // MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_USER, Modes.BROWSER.equals (mode) ?
-        // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        //
-        // final String automationWriteMode = t.getAutomationWriteMode ();
-        // final boolean writingArrangerAutomation = t.isWritingArrangerAutomation ();
-        //
-        // surface.updateTrigger (MCUControlSurface.MCU_F6, t.isPunchInEnabled () ?
-        // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_F7, t.isPunchOutEnabled () ?
-        // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        //
-        // surface.updateTrigger (MCUControlSurface.MCU_READ, !writingArrangerAutomation ?
-        // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        // final int writeState = writingArrangerAutomation &&
-        // TransportConstants.AUTOMATION_MODES_VALUES[2].equals (automationWriteMode) ?
-        // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF;
-        // surface.updateTrigger (MCUControlSurface.MCU_WRITE, writeState);
-        // surface.updateTrigger (MCUControlSurface.MCU_GROUP, writeState);
-        // surface.updateTrigger (MCUControlSurface.MCU_TRIM, t.isWritingClipLauncherAutomation () ?
-        // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_TOUCH, writingArrangerAutomation &&
-        // TransportConstants.AUTOMATION_MODES_VALUES[1].equals (automationWriteMode) ?
-        // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_LATCH, writingArrangerAutomation &&
-        // TransportConstants.AUTOMATION_MODES_VALUES[0].equals (automationWriteMode) ?
-        // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        //
-        // surface.updateTrigger (MCUControlSurface.MCU_REWIND, ((WindCommand<?, ?>)
-        // surface.getButton (ButtonID.REWIND)).isRewinding () ? MCU_BUTTON_STATE_ON :
-        // MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_FORWARD, ((WindCommand<?, ?>)
-        // surface.getButton (ButtonID.FORWARD)).isForwarding () ? MCU_BUTTON_STATE_ON :
-        // MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_REPEAT, t.isLoop () ? MCU_BUTTON_STATE_ON :
-        // MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_STOP, !t.isPlaying () ? MCU_BUTTON_STATE_ON
-        // : MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_PLAY, t.isPlaying () ? MCU_BUTTON_STATE_ON :
-        // MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_RECORD, isRecordShifted ?
-        // t.isLauncherOverdub () ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF : t.isRecording () ?
-        // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        //
-        // surface.updateTrigger (MCUControlSurface.MCU_NAME_VALUE, surface.getConfiguration
-        // ().isDisplayTrackNames () ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_ZOOM, surface.getConfiguration
-        // ().isZoomState () ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_SCRUB, surface.getModeManager
-        // ().isActiveOrTempMode (Modes.DEVICE_PARAMS) ? MCU_BUTTON_STATE_ON :
-        // MCU_BUTTON_STATE_OFF);
-        //
-        // surface.updateTrigger (MCUControlSurface.MCU_MIDI_TRACKS, MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_INPUTS, MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_AUDIO_TRACKS, surface.isShiftPressed () &&
-        // cursorDevice.isWindowOpen () ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_AUDIO_INSTR, MCU_BUTTON_STATE_OFF);
-        //
-        // surface.updateTrigger (MCUControlSurface.MCU_CLICK, (isShift ? t.isMetronomeTicksOn () :
-        // t.isMetronomeOn ()) ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_SOLO, this.model.getGroove ().getParameters
-        // ()[0].getValue () > 0 ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_REPLACE, (isShift ? t.isLauncherOverdub () :
-        // t.isArrangerOverdub ()) ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_FLIP, this.model.isEffectTrackBankActive ()
-        // ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        //
-        // final boolean displayTicks = this.configuration.isDisplayTicks ();
-        // surface.updateTrigger (MCUControlSurface.MCU_SMPTE_BEATS, displayTicks ?
-        // MCU_BUTTON_STATE_OFF : MCU_BUTTON_STATE_ON);
-        // surface.updateTrigger (MCUControlSurface.MCU_SMPTE_LED, displayTicks ?
-        // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-        // surface.updateTrigger (MCUControlSurface.MCU_BEATS_LED, displayTicks ?
-        // MCU_BUTTON_STATE_OFF : MCU_BUTTON_STATE_ON);
-        //
-        // surface.updateTrigger (MCUControlSurface.MCU_MARKER, this.model.getArranger
-        // ().areCueMarkersVisible () ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
-    }
+    // final boolean isLEDOn = surface.isPressed (MCUControlSurface.MCU_OPTION) ?
+    // this.model.isCursorTrackPinned () : isTrackOn;
+    // surface.updateTrigger (MCUControlSurface.MCU_MODE_IO, isLEDOn ? MCU_BUTTON_STATE_ON :
+    // MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_MODE_PAN, isPanOn ? MCU_BUTTON_STATE_ON :
+    // MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_MODE_SENDS, isSendOn ? MCU_BUTTON_STATE_ON :
+    // MCU_BUTTON_STATE_OFF);
+    //
+    // final ICursorDevice cursorDevice = this.model.getCursorDevice ();
+    // final boolean isOn = surface.isPressed (MCUControlSurface.MCU_OPTION) ?
+    // cursorDevice.isPinned () : isDeviceOn;
+    //
+    // surface.updateTrigger (MCUControlSurface.MCU_MODE_PLUGIN, isOn ? MCU_BUTTON_STATE_ON :
+    // MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_USER, Modes.BROWSER.equals (mode) ?
+    // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    //
+    // final String automationWriteMode = t.getAutomationWriteMode ();
+    // final boolean writingArrangerAutomation = t.isWritingArrangerAutomation ();
+    //
+    // surface.updateTrigger (MCUControlSurface.MCU_F6, t.isPunchInEnabled () ?
+    // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_F7, t.isPunchOutEnabled () ?
+    // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    //
+    // surface.updateTrigger (MCUControlSurface.MCU_READ, !writingArrangerAutomation ?
+    // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    // final int writeState = writingArrangerAutomation &&
+    // TransportConstants.AUTOMATION_MODES_VALUES[2].equals (automationWriteMode) ?
+    // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF;
+    // surface.updateTrigger (MCUControlSurface.MCU_WRITE, writeState);
+    // surface.updateTrigger (MCUControlSurface.MCU_GROUP, writeState);
+    // surface.updateTrigger (MCUControlSurface.MCU_TRIM, t.isWritingClipLauncherAutomation () ?
+    // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_TOUCH, writingArrangerAutomation &&
+    // TransportConstants.AUTOMATION_MODES_VALUES[1].equals (automationWriteMode) ?
+    // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_LATCH, writingArrangerAutomation &&
+    // TransportConstants.AUTOMATION_MODES_VALUES[0].equals (automationWriteMode) ?
+    // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    //
+    // surface.updateTrigger (MCUControlSurface.MCU_REWIND, ((WindCommand<?, ?>)
+    // surface.getButton (ButtonID.REWIND)).isRewinding () ? MCU_BUTTON_STATE_ON :
+    // MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_FORWARD, ((WindCommand<?, ?>)
+    // surface.getButton (ButtonID.FORWARD)).isForwarding () ? MCU_BUTTON_STATE_ON :
+    // MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_REPEAT, t.isLoop () ? MCU_BUTTON_STATE_ON :
+    // MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_STOP, !t.isPlaying () ? MCU_BUTTON_STATE_ON
+    // : MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_PLAY, t.isPlaying () ? MCU_BUTTON_STATE_ON :
+    // MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_RECORD, isRecordShifted ?
+    // t.isLauncherOverdub () ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF : t.isRecording () ?
+    // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    //
+    // surface.updateTrigger (MCUControlSurface.MCU_NAME_VALUE, surface.getConfiguration
+    // ().isDisplayTrackNames () ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_ZOOM, surface.getConfiguration
+    // ().isZoomState () ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_SCRUB, surface.getModeManager
+    // ().isActiveOrTempMode (Modes.DEVICE_PARAMS) ? MCU_BUTTON_STATE_ON :
+    // MCU_BUTTON_STATE_OFF);
+    //
+    // surface.updateTrigger (MCUControlSurface.MCU_MIDI_TRACKS, MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_INPUTS, MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_AUDIO_TRACKS, surface.isShiftPressed () &&
+    // cursorDevice.isWindowOpen () ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_AUDIO_INSTR, MCU_BUTTON_STATE_OFF);
+    //
+    // surface.updateTrigger (MCUControlSurface.MCU_CLICK, (isShift ? t.isMetronomeTicksOn () :
+    // t.isMetronomeOn ()) ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_SOLO, this.model.getGroove ().getParameters
+    // ()[0].getValue () > 0 ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_REPLACE, (isShift ? t.isLauncherOverdub () :
+    // t.isArrangerOverdub ()) ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_FLIP, this.model.isEffectTrackBankActive ()
+    // ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    //
+    // final boolean displayTicks = this.configuration.isDisplayTicks ();
+    // surface.updateTrigger (MCUControlSurface.MCU_SMPTE_BEATS, displayTicks ?
+    // MCU_BUTTON_STATE_OFF : MCU_BUTTON_STATE_ON);
+    // surface.updateTrigger (MCUControlSurface.MCU_SMPTE_LED, displayTicks ?
+    // MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    // surface.updateTrigger (MCUControlSurface.MCU_BEATS_LED, displayTicks ?
+    // MCU_BUTTON_STATE_OFF : MCU_BUTTON_STATE_ON);
+    //
+    // surface.updateTrigger (MCUControlSurface.MCU_MARKER, this.model.getArranger
+    // ().areCueMarkersVisible () ? MCU_BUTTON_STATE_ON : MCU_BUTTON_STATE_OFF);
+    // }
 
 
     private void updateSegmentDisplay ()

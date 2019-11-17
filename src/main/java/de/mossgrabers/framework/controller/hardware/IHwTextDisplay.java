@@ -9,7 +9,7 @@ package de.mossgrabers.framework.controller.hardware;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public interface IHwTextDisplay
+public interface IHwTextDisplay extends IHwControl
 {
     /**
      * Set a line of the display.

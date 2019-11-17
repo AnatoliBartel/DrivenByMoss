@@ -4,21 +4,19 @@
 
 package de.mossgrabers.framework.view;
 
-import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.command.core.AftertouchCommand;
-import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.command.core.PitchbendCommand;
 import de.mossgrabers.framework.configuration.Configuration;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IControlSurface;
+import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.DAWColors;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.ITrack;
+import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.mode.Mode;
 import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.utils.KeyManager;
-
-import java.util.EnumMap;
-import java.util.Map;
 
 
 /**
@@ -31,24 +29,23 @@ import java.util.Map;
  */
 public abstract class AbstractView<S extends IControlSurface<C>, C extends Configuration> implements View
 {
-    protected static final int []                             EMPTY_TABLE        = Scales.getEmptyMatrix ();
+    protected static final int [] EMPTY_TABLE = Scales.getEmptyMatrix ();
 
-    private final String                                      name;
+    private final String          name;
 
-    protected final S                                         surface;
-    protected final IModel                                    model;
-    protected final Scales                                    scales;
-    protected final KeyManager                                keyManager;
+    protected final S             surface;
+    protected final IModel        model;
+    protected final ColorManager  colorManager;
+    protected final Scales        scales;
+    protected final KeyManager    keyManager;
 
-    private AftertouchCommand                                 aftertouchCommand;
-    private PitchbendCommand                                  pitchbendCommand;
+    private AftertouchCommand     aftertouchCommand;
+    private PitchbendCommand      pitchbendCommand;
 
-    private final Map<ContinuousCommandID, ContinuousCommand> continuousCommands = new EnumMap<> (ContinuousCommandID.class);
-
-    protected boolean                                         canScrollLeft;
-    protected boolean                                         canScrollRight;
-    protected boolean                                         canScrollUp;
-    protected boolean                                         canScrollDown;
+    protected boolean             canScrollLeft;
+    protected boolean             canScrollRight;
+    protected boolean             canScrollUp;
+    protected boolean             canScrollDown;
 
 
     /**
@@ -63,6 +60,7 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
         this.name = name;
         this.surface = surface;
         this.model = model;
+        this.colorManager = this.model.getColorManager ();
         this.scales = model.getScales ();
         this.keyManager = new KeyManager (model, surface.getPadGrid ());
 
@@ -110,21 +108,35 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
     public void updateControlSurface ()
     {
         final Mode m = this.surface.getModeManager ().getActiveOrTempMode ();
-
-        // TODO put the hardware device update here
-
         if (m != null)
-        {
             m.updateDisplay ();
-            m.updateFirstRow ();
-            m.updateSecondRow ();
-        }
-        this.updateButtons ();
-        this.updateArrows ();
     }
 
 
     /** {@inheritDoc} */
+    @Override
+    public int getButtonColor (final ButtonID buttonID)
+    {
+        return this.colorManager.getColorIndex (this.getButtonColorID (buttonID));
+    }
+
+
+    /**
+     * Get the color ID for a button, which is controlled by the view.
+     * 
+     * @param buttonID The ID of the button
+     * @return A color ID
+     */
+    protected String getButtonColorID (final ButtonID buttonID)
+    {
+        return AbstractMode.BUTTON_COLOR_OFF;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Deprecated
     @Override
     public void registerAftertouchCommand (final AftertouchCommand command)
     {
@@ -132,7 +144,12 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     * 
+     * @deprecated
+     */
+    @Deprecated
     @Override
     public void executeAftertouchCommand (final int note, final int value)
     {
@@ -145,7 +162,12 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     * 
+     * @deprecated
+     */
+    @Deprecated
     @Override
     public void registerPitchbendCommand (final PitchbendCommand command)
     {
@@ -153,7 +175,12 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     * 
+     * @deprecated
+     */
+    @Deprecated
     @Override
     public void executePitchbendCommand (final int channel, final int data1, final int data2)
     {
@@ -162,7 +189,12 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     * 
+     * @deprecated
+     */
+    @Deprecated
     @Override
     public PitchbendCommand getPitchbendCommand ()
     {
@@ -178,32 +210,6 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
     }
 
 
-    /** {@inheritDoc} */
-    @Override
-    public void registerContinuousCommand (final ContinuousCommandID commandID, final ContinuousCommand command)
-    {
-        this.continuousCommands.put (commandID, command);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public ContinuousCommand getContinuousCommand (final ContinuousCommandID commandID)
-    {
-        return this.continuousCommands.get (commandID);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void executeContinuousCommand (final ContinuousCommandID commandID, final int value)
-    {
-        final ContinuousCommand continuousCommand = this.continuousCommands.get (commandID);
-        if (continuousCommand != null)
-            continuousCommand.execute (value);
-    }
-
-
     /**
      * Get the ID of the color to use for a pad with respect to the current scale settings.
      *
@@ -212,7 +218,7 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
      *            the default color
      * @return The color ID
      */
-    protected String getColor (final int pad, final ITrack track)
+    protected String getPadColor (final int pad, final ITrack track)
     {
         return replaceOctaveColorWithTrackColor (track, this.keyManager.getColor (pad));
     }
@@ -237,26 +243,6 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
             return c == null ? Scales.SCALE_COLOR_OCTAVE : c;
         }
         return colorID;
-    }
-
-
-    /**
-     * Implement to update button LEDs.
-     */
-    @Deprecated
-    protected void updateButtons ()
-    {
-        // Intentionally empty
-    }
-
-
-    /**
-     * Implement to update arrow button LEDs.
-     */
-    @Deprecated
-    protected void updateArrows ()
-    {
-        // Intentionally empty
     }
 
 

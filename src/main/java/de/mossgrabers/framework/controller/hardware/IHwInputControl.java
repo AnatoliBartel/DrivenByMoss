@@ -19,9 +19,9 @@ public interface IHwInputControl extends IHwControl
      *
      * @param input The MIDI input
      * @param type How to bind
-     * @param value The MIDI CC or note to bind
+     * @param control The MIDI CC or note to bind
      */
-    void bind (IMidiInput input, BindType type, int value);
+    void bind (IMidiInput input, BindType type, int control);
 
 
     /**
@@ -30,7 +30,7 @@ public interface IHwInputControl extends IHwControl
      * @param input The MIDI input
      * @param channel The MIDI channel
      * @param type How to bind
-     * @param value The MIDI CC or note to bind
+     * @param control The MIDI CC or note to bind
      */
-    void bind (IMidiInput input, BindType type, int channel, int value);
+    void bind (IMidiInput input, BindType type, int channel, int control);
 }

@@ -6,6 +6,8 @@ package de.mossgrabers.bitwig.framework.hardware;
 
 import de.mossgrabers.bitwig.framework.daw.HostImpl;
 import de.mossgrabers.framework.command.core.ContinuousCommand;
+import de.mossgrabers.framework.command.core.PitchbendCommand;
+import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.controller.hardware.AbstractHwContinuousControl;
 import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.controller.hardware.IHwFader;
@@ -54,6 +56,15 @@ public class HwFaderImpl extends AbstractHwContinuousControl implements IHwFader
 
     /** {@inheritDoc} */
     @Override
+    public void bind (final PitchbendCommand command)
+    {
+        super.bind (command);
+        this.hardwareFader.addBinding (this.controllerHost.createAbsoluteHardwareControlAdjustmentTarget (this::handleValue));
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void bind (final IMidiInput input, final BindType type, final int channel, final int value)
     {
         input.bind (this, type, channel, value);
@@ -62,10 +73,25 @@ public class HwFaderImpl extends AbstractHwContinuousControl implements IHwFader
 
     /** {@inheritDoc} */
     @Override
+    public void bindTouch (final TriggerCommand command, final IMidiInput input, final BindType type, final int control)
+    {
+        input.bindTouch (this, type, 0, control);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void handleValue (final double value)
     {
-        // TODO Support pitchbend
-        this.command.execute ((int) Math.round (value * 127.0));
+        if (this.command != null)
+            this.command.execute ((int) Math.round (value * 127.0));
+        else if (this.pitchbendCommand != null)
+        {
+            final double v = value * 16383.0;
+            final int data1 = (int) Math.round (v % 128.0);
+            final int data2 = (int) Math.min (127, Math.round (v / 128.0));
+            this.pitchbendCommand.onPitchbend (0, data1, data2);
+        }
     }
 
 

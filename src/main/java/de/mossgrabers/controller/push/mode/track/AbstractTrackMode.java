@@ -215,74 +215,80 @@ public abstract class AbstractTrackMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public int getFirstRowColor (final int index)
-    {
-        final ITrack track = this.model.getCurrentTrackBank ().getItem (index);
-        if (!track.doesExist () || !track.isActivated ())
-            return this.isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
-
-        final ITrack selTrack = this.model.getSelectedTrack ();
-        final int selIndex = selTrack == null ? -1 : selTrack.getIndex ();
-        final boolean isSel = track.getIndex () == selIndex;
-
-        if (track.isRecArm ())
-            return isSel ? this.isPush2 ? PushColors.PUSH2_COLOR_RED_HI : PushColors.PUSH1_COLOR_RED_HI : this.isPush2 ? PushColors.PUSH2_COLOR_RED_LO : PushColors.PUSH1_COLOR_RED_LO;
-
-        return isSel ? this.isPush2 ? PushColors.PUSH2_COLOR_ORANGE_HI : PushColors.PUSH1_COLOR_ORANGE_HI : this.isPush2 ? PushColors.PUSH2_COLOR_YELLOW_LO : PushColors.PUSH1_COLOR_YELLOW_LO;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public int getSecondRowColor (final int index)
+    public int getButtonColor (final ButtonID buttonID)
     {
         final PushConfiguration config = this.surface.getConfiguration ();
         final ITrackBank tb = this.model.getCurrentTrackBank ();
-        final ITrack track = tb.getItem (index);
-        if (this.isPush2)
+
+        int index = this.isButtonRow (0, buttonID);
+        if (index >= 0)
         {
-            if (this.surface.isPressed (ButtonID.STOP_CLIP))
-                return track.doesExist () && track.isPlaying () ? PushColors.PUSH2_COLOR_RED_HI : PushColors.PUSH2_COLOR_BLACK;
+            final ITrack track = tb.getItem (index);
+            if (!track.doesExist () || !track.isActivated ())
+                return this.isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
 
-            if (config.isMuteLongPressed () || config.isSoloLongPressed () || config.isMuteSoloLocked ())
-            {
-                final boolean muteState = config.isMuteState ();
-                return this.getTrackStateColor (muteState, track);
-            }
+            final ITrack selTrack = this.model.getSelectedTrack ();
+            final int selIndex = selTrack == null ? -1 : selTrack.getIndex ();
+            final boolean isSel = track.getIndex () == selIndex;
 
-            final ModeManager modeManager = this.surface.getModeManager ();
-            final boolean sendsAreToggled = config.isSendsAreToggled ();
-            switch (index)
-            {
-                case 0:
-                    return modeManager.isActiveOrTempMode (Modes.VOLUME) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
-                case 1:
-                    return modeManager.isActiveOrTempMode (Modes.PAN) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
-                case 2:
-                    return modeManager.isActiveOrTempMode (Modes.CROSSFADER) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
-                case 4:
-                    return modeManager.isActiveOrTempMode (sendsAreToggled ? Modes.SEND5 : Modes.SEND1) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
-                case 5:
-                    return modeManager.isActiveOrTempMode (sendsAreToggled ? Modes.SEND6 : Modes.SEND2) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
-                case 6:
-                    return modeManager.isActiveOrTempMode (sendsAreToggled ? Modes.SEND7 : Modes.SEND3) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
-                case 7:
-                    if (this.surface.isShiftPressed ())
-                        return modeManager.isActiveOrTempMode (sendsAreToggled ? Modes.SEND8 : Modes.SEND4) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
-                    return tb.hasParent () ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
-                default:
-                case 3:
-                    return PushColors.PUSH2_COLOR_BLACK;
-            }
+            if (track.isRecArm ())
+                return isSel ? this.isPush2 ? PushColors.PUSH2_COLOR_RED_HI : PushColors.PUSH1_COLOR_RED_HI : this.isPush2 ? PushColors.PUSH2_COLOR_RED_LO : PushColors.PUSH1_COLOR_RED_LO;
+
+            return isSel ? this.isPush2 ? PushColors.PUSH2_COLOR_ORANGE_HI : PushColors.PUSH1_COLOR_ORANGE_HI : this.isPush2 ? PushColors.PUSH2_COLOR_YELLOW_LO : PushColors.PUSH1_COLOR_YELLOW_LO;
         }
 
-        final boolean muteState = config.isMuteState ();
-        if (!track.doesExist ())
-            return PushColors.PUSH1_COLOR_BLACK;
+        index = this.isButtonRow (1, buttonID);
+        if (index >= 0)
+        {
+            final ITrack track = tb.getItem (index);
 
-        if (muteState)
-            return track.isMute () ? PushColors.PUSH1_COLOR_BLACK : PushColors.PUSH1_COLOR2_YELLOW_HI;
-        return track.isSolo () ? PushColors.PUSH1_COLOR2_BLUE_HI : PushColors.PUSH1_COLOR2_GREY_LO;
+            if (this.isPush2)
+            {
+                if (this.surface.isPressed (ButtonID.STOP_CLIP))
+                    return track.doesExist () && track.isPlaying () ? PushColors.PUSH2_COLOR_RED_HI : PushColors.PUSH2_COLOR_BLACK;
+
+                if (config.isMuteLongPressed () || config.isSoloLongPressed () || config.isMuteSoloLocked ())
+                {
+                    final boolean muteState = config.isMuteState ();
+                    return this.getTrackStateColor (muteState, track);
+                }
+
+                final ModeManager modeManager = this.surface.getModeManager ();
+                final boolean sendsAreToggled = config.isSendsAreToggled ();
+                switch (index)
+                {
+                    case 0:
+                        return modeManager.isActiveOrTempMode (Modes.VOLUME) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
+                    case 1:
+                        return modeManager.isActiveOrTempMode (Modes.PAN) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
+                    case 2:
+                        return modeManager.isActiveOrTempMode (Modes.CROSSFADER) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
+                    case 4:
+                        return modeManager.isActiveOrTempMode (sendsAreToggled ? Modes.SEND5 : Modes.SEND1) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
+                    case 5:
+                        return modeManager.isActiveOrTempMode (sendsAreToggled ? Modes.SEND6 : Modes.SEND2) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
+                    case 6:
+                        return modeManager.isActiveOrTempMode (sendsAreToggled ? Modes.SEND7 : Modes.SEND3) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
+                    case 7:
+                        if (this.surface.isShiftPressed ())
+                            return modeManager.isActiveOrTempMode (sendsAreToggled ? Modes.SEND8 : Modes.SEND4) ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
+                        return tb.hasParent () ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
+                    default:
+                    case 3:
+                        return PushColors.PUSH2_COLOR_BLACK;
+                }
+            }
+
+            final boolean muteState = config.isMuteState ();
+            if (!track.doesExist ())
+                return PushColors.PUSH1_COLOR_BLACK;
+
+            if (muteState)
+                return track.isMute () ? PushColors.PUSH1_COLOR_BLACK : PushColors.PUSH1_COLOR2_YELLOW_HI;
+            return track.isSolo () ? PushColors.PUSH1_COLOR2_BLUE_HI : PushColors.PUSH1_COLOR2_GREY_LO;
+        }
+
+        return super.getButtonColor (buttonID);
     }
 
 

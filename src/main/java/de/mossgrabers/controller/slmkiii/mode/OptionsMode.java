@@ -7,6 +7,7 @@ package de.mossgrabers.controller.slmkiii.mode;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IValueChanger;
 import de.mossgrabers.framework.daw.IClip;
 import de.mossgrabers.framework.daw.IModel;
@@ -106,7 +107,7 @@ public class OptionsMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public void updateFirstRow ()
+    public int getButtonColor (final ButtonID buttonID)
     {
         // TODO
         // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1,
@@ -127,6 +128,8 @@ public class OptionsMode extends BaseMode
         // SLMkIIIColors.SLMKIII_BROWN_DARK);
         // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_8,
         // SLMkIIIColors.SLMKIII_BROWN_DARK);
+
+        return 0;
     }
 
 

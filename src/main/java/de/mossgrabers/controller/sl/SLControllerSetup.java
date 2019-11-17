@@ -6,9 +6,6 @@ package de.mossgrabers.controller.sl;
 
 import de.mossgrabers.controller.sl.command.continuous.DeviceKnobRowCommand;
 import de.mossgrabers.controller.sl.command.continuous.FaderCommand;
-import de.mossgrabers.controller.sl.command.continuous.TapTempoInitMkICommand;
-import de.mossgrabers.controller.sl.command.continuous.TapTempoMkICommand;
-import de.mossgrabers.controller.sl.command.continuous.TouchpadCommand;
 import de.mossgrabers.controller.sl.command.continuous.TrackKnobRowCommand;
 import de.mossgrabers.controller.sl.command.trigger.ButtonRowSelectCommand;
 import de.mossgrabers.controller.sl.command.trigger.ButtonRowViewCommand;
@@ -31,10 +28,10 @@ import de.mossgrabers.controller.sl.mode.device.DeviceParamsMode;
 import de.mossgrabers.controller.sl.mode.device.DevicePresetsMode;
 import de.mossgrabers.controller.sl.view.ControlView;
 import de.mossgrabers.controller.sl.view.PlayView;
-import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -283,14 +280,20 @@ public class SLControllerSetup extends AbstractControllerSetup<SLControlSurface,
         final SLControlSurface surface = this.getSurface ();
         for (int i = 0; i < 8; i++)
         {
-            this.addContinuousCommand (ContinuousCommandID.get (ContinuousCommandID.FADER1, i), SLControlSurface.MKII_SLIDER1 + i, new FaderCommand (i, this.model, surface));
-            this.addContinuousCommand (ContinuousCommandID.get (ContinuousCommandID.DEVICE_KNOB1, i), SLControlSurface.MKII_KNOB_ROW1_1 + i, new DeviceKnobRowCommand (i, this.model, surface));
-            this.addContinuousCommand (ContinuousCommandID.get (ContinuousCommandID.KNOB1, i), SLControlSurface.MKII_KNOB_ROW2_1 + i, new TrackKnobRowCommand (i, this.model, surface));
+            this.addRelativeKnob (ContinuousID.get (ContinuousID.FADER1, i), "Fader " + (i + 1), new FaderCommand (i, this.model, surface), SLControlSurface.MKII_SLIDER1 + i);
+            this.addRelativeKnob (ContinuousID.get (ContinuousID.DEVICE_KNOB1, i), "Device Knob " + (i + 1), new DeviceKnobRowCommand (i, this.model, surface), SLControlSurface.MKII_KNOB_ROW1_1 + i);
+            this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), new TrackKnobRowCommand (i, this.model, surface), SLControlSurface.MKII_KNOB_ROW2_1 + i);
         }
-        this.addContinuousCommand (ContinuousCommandID.TOUCHPAD_X, SLControlSurface.MKII_TOUCHPAD_X, new TouchpadCommand (true, this.model, surface));
-        this.addContinuousCommand (ContinuousCommandID.TOUCHPAD_Y, SLControlSurface.MKII_TOUCHPAD_Y, new TouchpadCommand (false, this.model, surface));
-        this.addContinuousCommand (ContinuousCommandID.HELLO, SLControlSurface.MKI_BUTTON_TAP_TEMPO, new TapTempoInitMkICommand (this.model, surface));
-        this.addContinuousCommand (ContinuousCommandID.TEMPO, SLControlSurface.MKI_BUTTON_TAP_TEMPO_VALUE, new TapTempoMkICommand (this.model, surface));
+        // TODO
+        // this.addContinuousCommand (ContinuousID.TOUCHPAD_X, SLControlSurface.MKII_TOUCHPAD_X, new
+        // TouchpadCommand (true, this.model, surface));
+        // this.addContinuousCommand (ContinuousID.TOUCHPAD_Y, SLControlSurface.MKII_TOUCHPAD_Y, new
+        // TouchpadCommand (false, this.model, surface));
+        // this.addContinuousCommand (ContinuousID.HELLO, SLControlSurface.MKI_BUTTON_TAP_TEMPO, new
+        // TapTempoInitMkICommand (this.model, surface));
+        // this.addContinuousCommand (ContinuousID.TEMPO,
+        // SLControlSurface.MKI_BUTTON_TAP_TEMPO_VALUE, new TapTempoMkICommand (this.model,
+        // surface));
     }
 
 

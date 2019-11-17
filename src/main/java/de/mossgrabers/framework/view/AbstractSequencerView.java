@@ -5,6 +5,7 @@
 package de.mossgrabers.framework.view;
 
 import de.mossgrabers.framework.configuration.Configuration;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IControlSurface;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.INoteClip;
@@ -192,11 +193,11 @@ public abstract class AbstractSequencerView<S extends IControlSurface<C>, C exte
 
     /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public String getButtonColorID (final ButtonID buttonID)
     {
         if (!this.isActive ())
             return AbstractSequencerView.COLOR_RESOLUTION_OFF;
-        return scene == this.selectedResolutionIndex ? AbstractSequencerView.COLOR_RESOLUTION_SELECTED : AbstractSequencerView.COLOR_RESOLUTION;
+        return buttonID == ButtonID.get (ButtonID.SCENE1, 7 - this.selectedResolutionIndex) ? AbstractSequencerView.COLOR_RESOLUTION_SELECTED : AbstractSequencerView.COLOR_RESOLUTION;
     }
 
 

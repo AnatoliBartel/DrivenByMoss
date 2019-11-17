@@ -228,7 +228,7 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
             this.addButton (ButtonID.get (ButtonID.SCENE1, i), COL_NAMES[i], new SceneCommand<> (i, this.model, surface), APCminiControlSurface.APC_BUTTON_SCENE_BUTTON1 + i, () -> {
                 final View view = viewManager.getActiveView ();
                 if (view instanceof SceneView)
-                    return this.colorManager.getColorIndex (((SceneView) view).getSceneButtonColor (index));
+                    return view.getButtonColor (ButtonID.get (ButtonID.SCENE1, index));
                 return APCminiColors.APC_COLOR_BLACK;
             });
 

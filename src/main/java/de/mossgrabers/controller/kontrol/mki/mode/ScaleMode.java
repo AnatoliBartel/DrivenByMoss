@@ -7,6 +7,7 @@ package de.mossgrabers.controller.kontrol.mki.mode;
 import de.mossgrabers.controller.kontrol.mki.Kontrol1Configuration;
 import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1ControlSurface;
 import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1Display;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.scale.Scales;
 
@@ -133,7 +134,7 @@ public class ScaleMode extends AbstractKontrol1Mode
 
     /** {@inheritDoc} */
     @Override
-    public void updateFirstRow ()
+    public int getButtonColor (final ButtonID buttonID)
     {
         final boolean canScrollLeft = this.scales.hasPrevScale ();
         final boolean canScrollRight = this.scales.hasNextScale ();
@@ -157,6 +158,8 @@ public class ScaleMode extends AbstractKontrol1Mode
         //
         // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BROWSE,
         // Kontrol1Colors.BUTTON_STATE_ON);
+
+        return 0;
 
     }
 

@@ -5,6 +5,9 @@
 package de.mossgrabers.framework.controller.hardware;
 
 import de.mossgrabers.framework.command.core.ContinuousCommand;
+import de.mossgrabers.framework.command.core.PitchbendCommand;
+import de.mossgrabers.framework.command.core.TriggerCommand;
+import de.mossgrabers.framework.daw.midi.IMidiInput;
 
 
 /**
@@ -23,7 +26,34 @@ public interface IHwContinuousControl extends IHwInputControl
 
 
     /**
-     * Get the trigger command,
+     * Assign a pitchbend command to the control.
+     *
+     * @param command The command to assign
+     */
+    void bind (PitchbendCommand command);
+
+
+    /**
+     * Bind a command which is executed when the control (knob, fader) is touched.
+     *
+     * @param command The command to bind to touch
+     * @param input The MIDI input
+     * @param type How to bind
+     * @param control The MIDI CC or note to bind
+     */
+    void bindTouch (TriggerCommand command, IMidiInput input, BindType type, int control);
+
+
+    /**
+     * Get the touch trigger command, if any.
+     *
+     * @return The command or null if not bound
+     */
+    TriggerCommand getTouchCommand ();
+
+
+    /**
+     * Get the continuous command.
      *
      * @return The command or null if not bound
      */

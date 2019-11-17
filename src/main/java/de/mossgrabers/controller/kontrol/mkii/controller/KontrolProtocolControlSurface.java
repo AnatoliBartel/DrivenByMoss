@@ -305,26 +305,25 @@ public class KontrolProtocolControlSurface extends AbstractControlSurface<Kontro
         this.output.sendSysex ("F0 00 21 09 00 00 44 43 01 00 " + StringUtils.toHexStr (data) + "F7");
     }
 
+    // /** {@inheritDoc} */
+    // @Override
+    // protected void handleCC (final int channel, final int cc, final int value)
+    // {
+    // TODO How to implement that with the new API, is that necessary to have to button up?
 
-    /** {@inheritDoc} */
-    @Override
-    protected void handleCC (final int channel, final int cc, final int value)
-    {
-        // TODO How to implement that with the new API, is that necessary to have to button up?
-
-        // // All NIHIA MIDI communication is on MIDI channel 16
-        // if (channel != 15)
-        // return;
-        //
-        // // Emulate a proper button press, NIHIA only sends value 1
-        // if (this.isTrigger (cc))
-        // {
-        // super.handleCC (channel, cc, 127);
-        // super.handleCC (channel, cc, 0);
-        // }
-        // else
-        super.handleCC (channel, cc, value);
-    }
+    // // All NIHIA MIDI communication is on MIDI channel 16
+    // if (channel != 15)
+    // return;
+    //
+    // // Emulate a proper button press, NIHIA only sends value 1
+    // if (this.isTrigger (cc))
+    // {
+    // super.handleCC (channel, cc, 127);
+    // super.handleCC (channel, cc, 0);
+    // }
+    // else
+    // super.handleCC (channel, cc, value);
+    // }
 
 
     /**

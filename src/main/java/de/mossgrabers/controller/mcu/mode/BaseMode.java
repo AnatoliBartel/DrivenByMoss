@@ -5,7 +5,9 @@
 package de.mossgrabers.controller.mcu.mode;
 
 import de.mossgrabers.controller.mcu.MCUConfiguration;
+import de.mossgrabers.controller.mcu.MCUControllerSetup;
 import de.mossgrabers.controller.mcu.controller.MCUControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IModel;
@@ -83,25 +85,27 @@ public abstract class BaseMode extends AbstractMode<MCUControlSurface, MCUConfig
 
     /** {@inheritDoc} */
     @Override
-    public void updateFirstRow ()
+    public int getButtonColor (final ButtonID buttonID)
     {
         final ITrackBank tb = this.model.getCurrentTrackBank ();
         final int extenderOffset = this.surface.getExtenderOffset ();
         for (int i = 0; i < 8; i++)
         {
             final ITrack track = tb.getItem (extenderOffset + i);
-            // TODO
-            // this.surface.updateTrigger (MCUControlSurface.MCU_ARM1 + i, track.isRecArm () ?
-            // MCUControllerSetup.MCU_BUTTON_STATE_ON : MCUControllerSetup.MCU_BUTTON_STATE_OFF);
-            // this.surface.updateTrigger (MCUControlSurface.MCU_SOLO1 + i, track.isSolo () ?
-            // MCUControllerSetup.MCU_BUTTON_STATE_ON : MCUControllerSetup.MCU_BUTTON_STATE_OFF);
-            // this.surface.updateTrigger (MCUControlSurface.MCU_MUTE1 + i, track.isMute () ?
-            // MCUControllerSetup.MCU_BUTTON_STATE_ON : MCUControllerSetup.MCU_BUTTON_STATE_OFF);
-            // this.surface.updateTrigger (MCUControlSurface.MCU_SELECT1 + i, track.isSelected () ?
-            // MCUControllerSetup.MCU_BUTTON_STATE_ON : MCUControllerSetup.MCU_BUTTON_STATE_OFF);
+
+            if (buttonID == ButtonID.get (ButtonID.ROW_SELECT_1, i))
+                return track.isSelected () ? MCUControllerSetup.MCU_BUTTON_STATE_ON : MCUControllerSetup.MCU_BUTTON_STATE_OFF;
+            if (buttonID == ButtonID.get (ButtonID.ROW2_1, i))
+                return track.isRecArm () ? MCUControllerSetup.MCU_BUTTON_STATE_ON : MCUControllerSetup.MCU_BUTTON_STATE_OFF;
+            if (buttonID == ButtonID.get (ButtonID.ROW3_1, i))
+                return track.isSolo () ? MCUControllerSetup.MCU_BUTTON_STATE_ON : MCUControllerSetup.MCU_BUTTON_STATE_OFF;
+            if (buttonID == ButtonID.get (ButtonID.ROW4_1, i))
+                return track.isMute () ? MCUControllerSetup.MCU_BUTTON_STATE_ON : MCUControllerSetup.MCU_BUTTON_STATE_OFF;
         }
 
-        this.updateKnobLEDs ();
+        return MCUControllerSetup.MCU_BUTTON_STATE_OFF;
+
+        // TODO this.updateKnobLEDs ();
     }
 
 

@@ -9,11 +9,14 @@ import de.mossgrabers.controller.launchpad.controller.LaunchpadColors;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
 import de.mossgrabers.framework.controller.ButtonID;
-import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.daw.DAWColors;
 import de.mossgrabers.framework.daw.IModel;
+import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.daw.ITrackBank;
+import de.mossgrabers.framework.daw.data.IScene;
 import de.mossgrabers.framework.daw.data.ITrack;
+import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.mode.Modes;
 import de.mossgrabers.framework.utils.ButtonEvent;
@@ -182,29 +185,23 @@ public class SessionView extends AbstractSessionView<LaunchpadControlSurface, La
         this.isBirdsEyeViewActive = isBirdsEyeActive;
     }
 
-    // TODO
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // final ITrackBank tb = this.model.getCurrentTrackBank ();
-    // final ISceneBank sceneBank = tb.getSceneBank ();
-    // final IScene s = sceneBank.getItem (scene);
-    //
-    // if (s.doesExist ())
-    // this.surface.setTrigger (this.surface.getSceneTrigger (scene), DAWColors.getColorIndex
-    // (s.getColor ()));
-    // else
-    // this.surface.setTrigger (this.surface.getSceneTrigger (scene),
-    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-    // }
 
-
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public String getButtonColorID (final ButtonID buttonID)
     {
-        // TODO Auto-generated method stub
-        return ColorManager.BUTTON_STATE_OFF;
+        final int index = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
+        if (index >= 0 || index < 8)
+        {
+            final ITrackBank tb = this.model.getCurrentTrackBank ();
+            final ISceneBank sceneBank = tb.getSceneBank ();
+            final IScene s = sceneBank.getItem (index);
+
+            if (s.doesExist ())
+                return DAWColors.getColorIndex (s.getColor ());
+        }
+
+        return AbstractMode.BUTTON_COLOR_OFF;
     }
 
 

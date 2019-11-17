@@ -181,20 +181,42 @@ public class MasterMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public int getFirstRowColor (final int index)
+    public int getButtonColor (final ButtonID buttonID)
     {
-        final ColorManager colorManager = this.model.getColorManager ();
+        int index = this.isButtonRow (0, buttonID);
+        if (index >= 0)
+        {
+            final ColorManager colorManager = this.model.getColorManager ();
 
-        final boolean isPush2 = this.surface.getConfiguration ().isPush2 ();
-        if (index == 0)
-            return this.getTrackButtonColor ();
-        if (index < 4 || index == 5)
-            return colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
-        if (index > 5)
-            return colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON);
+            final boolean isPush2 = this.surface.getConfiguration ().isPush2 ();
+            if (index == 0)
+                return this.getTrackButtonColor ();
+            if (index < 4 || index == 5)
+                return colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
+            if (index > 5)
+                return colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON);
 
-        final int red = isPush2 ? PushColors.PUSH2_COLOR_RED_HI : PushColors.PUSH1_COLOR_RED_HI;
-        return this.model.getApplication ().isEngineActive () ? colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON) : red;
+            final int red = isPush2 ? PushColors.PUSH2_COLOR_RED_HI : PushColors.PUSH1_COLOR_RED_HI;
+            return this.model.getApplication ().isEngineActive () ? colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON) : red;
+        }
+
+        index = this.isButtonRow (1, buttonID);
+        if (index >= 0)
+        {
+            final int off = this.isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
+
+            if (this.isPush2 || index > 0)
+                return off;
+
+            final boolean muteState = this.surface.getConfiguration ().isMuteState ();
+            final IMasterTrack master = this.model.getMasterTrack ();
+            if (muteState)
+                return master.isMute () ? off : PushColors.PUSH1_COLOR2_YELLOW_HI;
+            return master.isSolo () ? PushColors.PUSH1_COLOR2_BLUE_HI : PushColors.PUSH1_COLOR2_GREY_LO;
+        }
+
+        return super.getButtonColor (buttonID);
+
     }
 
 
@@ -215,23 +237,6 @@ public class MasterMode extends BaseMode
             master.toggleMute ();
         else
             master.toggleSolo ();
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public int getSecondRowColor (final int index)
-    {
-        final int off = this.isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
-
-        if (this.isPush2 || index > 0)
-            return off;
-
-        final boolean muteState = this.surface.getConfiguration ().isMuteState ();
-        final IMasterTrack master = this.model.getMasterTrack ();
-        if (muteState)
-            return master.isMute () ? off : PushColors.PUSH1_COLOR2_YELLOW_HI;
-        return master.isSolo () ? PushColors.PUSH1_COLOR2_BLUE_HI : PushColors.PUSH1_COLOR2_GREY_LO;
     }
 
 

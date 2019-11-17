@@ -193,7 +193,7 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
     @Override
     public void mainEncoderChanged (final boolean valueIncreased)
     {
-        this.handleCC (0, MAIN_ENCODER, valueIncreased ? 1 : 127);
+        // TODO this.handleCC (0, MAIN_ENCODER, valueIncreased ? 1 : 127);
     }
 
 
@@ -201,7 +201,7 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
     @Override
     public void encoderChanged (final int encIndex, final boolean valueIncreased)
     {
-        this.handleCC (0, ENCODER_1 + encIndex, valueIncreased ? 1 : 127);
+        // TODO this.handleCC (0, ENCODER_1 + encIndex, valueIncreased ? 1 : 127);
     }
 
 

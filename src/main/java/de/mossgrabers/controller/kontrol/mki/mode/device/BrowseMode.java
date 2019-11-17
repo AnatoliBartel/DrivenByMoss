@@ -253,7 +253,7 @@ public class BrowseMode extends AbstractKontrol1Mode
 
     /** {@inheritDoc} */
     @Override
-    public void updateFirstRow ()
+    public int getButtonColor (final ButtonID buttonID)
     {
         final IBrowser browser = this.model.getBrowser ();
         final boolean canScrollLeft = browser.hasPreviousContentType ();
@@ -276,6 +276,8 @@ public class BrowseMode extends AbstractKontrol1Mode
         //
         // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BROWSE,
         // Kontrol1Colors.BUTTON_STATE_HI);
+
+        return 0;
     }
 
 

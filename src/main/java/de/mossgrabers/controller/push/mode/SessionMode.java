@@ -8,7 +8,7 @@ import de.mossgrabers.controller.push.controller.Push1Display;
 import de.mossgrabers.controller.push.controller.PushColors;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.controller.push.mode.track.AbstractTrackMode;
-import de.mossgrabers.framework.controller.color.ColorManager;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.daw.IModel;
@@ -115,19 +115,23 @@ public class SessionMode extends AbstractTrackMode
 
     /** {@inheritDoc} */
     @Override
-    public int getSecondRowColor (final int index)
+    public int getButtonColor (final ButtonID buttonID)
     {
-        final ColorManager colorManager = this.model.getColorManager ();
-        // TODO
-        // this.surface.updateTrigger (102, colorManager.getColor (this.rowDisplayMode ==
-        // RowDisplayMode.UPPER ? AbstractMode.BUTTON_COLOR_HI : AbstractMode.BUTTON_COLOR_ON));
-        // this.surface.updateTrigger (103, colorManager.getColor (this.rowDisplayMode ==
-        // RowDisplayMode.LOWER ? AbstractMode.BUTTON_COLOR_HI : AbstractMode.BUTTON_COLOR_ON));
-        if (index < 5)
-            return colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
+        int index = this.isButtonRow (1, buttonID);
+        if (index >= 0)
+        {
+            if (index == 0)
+                return this.colorManager.getColorIndex (this.rowDisplayMode == RowDisplayMode.UPPER ? AbstractMode.BUTTON_COLOR_HI : AbstractMode.BUTTON_COLOR_ON);
+            if (index == 1)
+                return this.colorManager.getColorIndex (this.rowDisplayMode == RowDisplayMode.LOWER ? AbstractMode.BUTTON_COLOR_HI : AbstractMode.BUTTON_COLOR_ON);
+            if (index < 5)
+                return this.colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
 
-        final ITrackBank tb = this.model.getCurrentTrackBank ();
-        return tb.hasParent () ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
+            final ITrackBank tb = this.model.getCurrentTrackBank ();
+            return tb.hasParent () ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
+        }
+
+        return super.getButtonColor (buttonID);
     }
 
 

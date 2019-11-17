@@ -42,7 +42,6 @@ import de.mossgrabers.controller.launchpad.view.SessionView;
 import de.mossgrabers.controller.launchpad.view.ShiftView;
 import de.mossgrabers.controller.launchpad.view.UserView;
 import de.mossgrabers.controller.launchpad.view.VolumeView;
-import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.command.aftertouch.AftertouchAbstractViewCommand;
 import de.mossgrabers.framework.command.trigger.application.DeleteCommand;
 import de.mossgrabers.framework.command.trigger.application.UndoCommand;
@@ -52,16 +51,16 @@ import de.mossgrabers.framework.command.trigger.view.ViewMultiSelectCommand;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.IParameterBank;
 import de.mossgrabers.framework.daw.ISendBank;
 import de.mossgrabers.framework.daw.ITrackBank;
-import de.mossgrabers.framework.daw.ITransport;
 import de.mossgrabers.framework.daw.ModelSetup;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.daw.midi.IMidiAccess;
@@ -73,7 +72,6 @@ import de.mossgrabers.framework.mode.track.MuteMode;
 import de.mossgrabers.framework.mode.track.PanMode;
 import de.mossgrabers.framework.mode.track.SoloMode;
 import de.mossgrabers.framework.mode.track.VolumeMode;
-import de.mossgrabers.framework.utils.StringUtils;
 import de.mossgrabers.framework.view.AbstractView;
 import de.mossgrabers.framework.view.View;
 import de.mossgrabers.framework.view.ViewManager;
@@ -316,7 +314,7 @@ public class LaunchpadControllerSetup extends AbstractControllerSetup<LaunchpadC
     {
         final LaunchpadControlSurface surface = this.getSurface ();
         for (int i = 0; i < 8; i++)
-            this.addContinuousCommand (ContinuousCommandID.get (ContinuousCommandID.KNOB1, i), LaunchpadControlSurface.LAUNCHPAD_FADER_1 + i, new FaderCommand (i, this.model, surface));
+            this.addFader (ContinuousID.get (ContinuousID.KNOB1, i), "Fader " + (i + 1), new FaderCommand (i, this.model, surface), BindType.CC, LaunchpadControlSurface.LAUNCHPAD_FADER_1 + i);
         final ViewManager viewManager = surface.getViewManager ();
 
         final Views [] views =
@@ -341,67 +339,97 @@ public class LaunchpadControllerSetup extends AbstractControllerSetup<LaunchpadC
         this.getSurface ().getViewManager ().setActiveView (Views.PLAY);
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    protected void updateButtons ()
-    {
-        final LaunchpadControlSurface surface = this.getSurface ();
-        final ViewManager viewManager = surface.getViewManager ();
-        final View activeView = viewManager.getActiveView ();
-        if (activeView != null)
-        {
-            // TODO ((LaunchpadCursorCommand) activeView.getTriggerCommand
-            // (TriggerCommandID.ARROW_DOWN)).updateArrows ();
-            // for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
-            // ((SceneView) activeView).updateSceneButton (i);
-        }
-
-        final boolean isShift = surface.isShiftPressed ();
-        // TODO needs to be configured per controller model
-        // surface.setTrigger (surface.getTriggerId (ButtonID.SHIFT), isShift ?
-        // LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-
-        // Update the front or logo LED with the color of the current track
-        final ITrack selTrack = this.model.getSelectedTrack ();
-        final int index = selTrack == null ? -1 : selTrack.getIndex ();
-        final ITrack track = index == -1 ? null : this.model.getCurrentTrackBank ().getItem (index);
-        final int color = track != null && track.doesExist () ? this.colorManager.getColorIndex (DAWColors.getColorIndex (track.getColor ())) : 0;
-        if (this.definition.isPro ())
-        {
-            if (color != this.frontColor)
-            {
-                surface.sendLaunchpadSysEx ("0A 63 " + StringUtils.toHexStr (color));
-                this.frontColor = color;
-            }
-        }
-        else
-            surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_LOGO, color);
-
-        if (!this.definition.isPro ())
-            return;
-
-        final ModeManager modeManager = surface.getModeManager ();
-        final ITransport transport = this.model.getTransport ();
-
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_CLICK, isShift ? LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING : transport.isMetronomeOn () ? LaunchpadColors.LAUNCHPAD_COLOR_GREEN_HI : LaunchpadColors.LAUNCHPAD_COLOR_GREEN_LO);
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_UNDO, isShift ? LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING : LaunchpadColors.LAUNCHPAD_COLOR_GREEN_LO);
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DELETE, isShift ? LaunchpadColors.LAUNCHPAD_COLOR_BLACK : LaunchpadColors.LAUNCHPAD_COLOR_GREEN_LO);
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_QUANTIZE, isShift ? LaunchpadColors.LAUNCHPAD_COLOR_BLACK : LaunchpadColors.LAUNCHPAD_COLOR_GREEN_LO);
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DUPLICATE, isShift ? LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING : LaunchpadColors.LAUNCHPAD_COLOR_GREEN_LO);
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DOUBLE, isShift ? LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING : LaunchpadColors.LAUNCHPAD_COLOR_GREEN_LO);
-        final boolean flipRecord = surface.getConfiguration ().isFlipRecord ();
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_RECORD, isShift && !flipRecord || !isShift && flipRecord ? transport.isLauncherOverdub () ? LaunchpadColors.LAUNCHPAD_COLOR_ROSE : LaunchpadColors.LAUNCHPAD_COLOR_RED_AMBER : transport.isRecording () ? LaunchpadColors.LAUNCHPAD_COLOR_RED_HI : LaunchpadColors.LAUNCHPAD_COLOR_RED_LO);
-
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_REC_ARM, modeManager.isActiveOrTempMode (Modes.REC_ARM) ? LaunchpadColors.LAUNCHPAD_COLOR_RED : index == 0 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_TRACK, modeManager.isActiveOrTempMode (Modes.TRACK_SELECT) ? LaunchpadColors.LAUNCHPAD_COLOR_GREEN : index == 1 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_MUTE, modeManager.isActiveOrTempMode (Modes.MUTE) ? LaunchpadColors.LAUNCHPAD_COLOR_YELLOW : index == 2 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_SOLO, modeManager.isActiveOrTempMode (Modes.SOLO) ? LaunchpadColors.LAUNCHPAD_COLOR_BLUE : index == 3 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_VOLUME, viewManager.isActiveView (Views.TRACK_VOLUME) ? LaunchpadColors.LAUNCHPAD_COLOR_CYAN : index == 4 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_PAN, viewManager.isActiveView (Views.TRACK_PAN) ? LaunchpadColors.LAUNCHPAD_COLOR_SKY : index == 5 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_SENDS, viewManager.isActiveView (Views.TRACK_SENDS) ? LaunchpadColors.LAUNCHPAD_COLOR_ORCHID : index == 6 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_STOP_CLIP, modeManager.isActiveOrTempMode (Modes.STOP_CLIP) ? LaunchpadColors.LAUNCHPAD_COLOR_ROSE : index == 7 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-    }
+    // TODO
+    // /** {@inheritDoc} */
+    // @Override
+    // protected void updateButtons ()
+    // {
+    // final LaunchpadControlSurface surface = this.getSurface ();
+    // final ViewManager viewManager = surface.getViewManager ();
+    // final View activeView = viewManager.getActiveView ();
+    // if (activeView != null)
+    // {
+    // // TODO ((LaunchpadCursorCommand) activeView.getTriggerCommand
+    // // (TriggerCommandID.ARROW_DOWN)).updateArrows ();
+    // // for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
+    // // ((SceneView) activeView).updateSceneButton (i);
+    // }
+    //
+    // final boolean isShift = surface.isShiftPressed ();
+    // // TODO needs to be configured per controller model
+    // // surface.setTrigger (surface.getTriggerId (ButtonID.SHIFT), isShift ?
+    // // LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+    //
+    // // Update the front or logo LED with the color of the current track
+    // final ITrack selTrack = this.model.getSelectedTrack ();
+    // final int index = selTrack == null ? -1 : selTrack.getIndex ();
+    // final ITrack track = index == -1 ? null : this.model.getCurrentTrackBank ().getItem (index);
+    // final int color = track != null && track.doesExist () ? this.colorManager.getColorIndex
+    // (DAWColors.getColorIndex (track.getColor ())) : 0;
+    // if (this.definition.isPro ())
+    // {
+    // if (color != this.frontColor)
+    // {
+    // surface.sendLaunchpadSysEx ("0A 63 " + StringUtils.toHexStr (color));
+    // this.frontColor = color;
+    // }
+    // }
+    // else
+    // surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_LOGO, color);
+    //
+    // if (!this.definition.isPro ())
+    // return;
+    //
+    // final ModeManager modeManager = surface.getModeManager ();
+    // final ITransport transport = this.model.getTransport ();
+    //
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_CLICK, isShift ?
+    // LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING : transport.isMetronomeOn () ?
+    // LaunchpadColors.LAUNCHPAD_COLOR_GREEN_HI : LaunchpadColors.LAUNCHPAD_COLOR_GREEN_LO);
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_UNDO, isShift ?
+    // LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING : LaunchpadColors.LAUNCHPAD_COLOR_GREEN_LO);
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DELETE, isShift ?
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK : LaunchpadColors.LAUNCHPAD_COLOR_GREEN_LO);
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_QUANTIZE, isShift ?
+    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK : LaunchpadColors.LAUNCHPAD_COLOR_GREEN_LO);
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DUPLICATE, isShift ?
+    // LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING : LaunchpadColors.LAUNCHPAD_COLOR_GREEN_LO);
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DOUBLE, isShift ?
+    // LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING : LaunchpadColors.LAUNCHPAD_COLOR_GREEN_LO);
+    // final boolean flipRecord = surface.getConfiguration ().isFlipRecord ();
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_RECORD, isShift &&
+    // !flipRecord || !isShift && flipRecord ? transport.isLauncherOverdub () ?
+    // LaunchpadColors.LAUNCHPAD_COLOR_ROSE : LaunchpadColors.LAUNCHPAD_COLOR_RED_AMBER :
+    // transport.isRecording () ? LaunchpadColors.LAUNCHPAD_COLOR_RED_HI :
+    // LaunchpadColors.LAUNCHPAD_COLOR_RED_LO);
+    //
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_REC_ARM,
+    // modeManager.isActiveOrTempMode (Modes.REC_ARM) ? LaunchpadColors.LAUNCHPAD_COLOR_RED : index
+    // == 0 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_TRACK,
+    // modeManager.isActiveOrTempMode (Modes.TRACK_SELECT) ? LaunchpadColors.LAUNCHPAD_COLOR_GREEN :
+    // index == 1 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE :
+    // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_MUTE,
+    // modeManager.isActiveOrTempMode (Modes.MUTE) ? LaunchpadColors.LAUNCHPAD_COLOR_YELLOW : index
+    // == 2 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_SOLO,
+    // modeManager.isActiveOrTempMode (Modes.SOLO) ? LaunchpadColors.LAUNCHPAD_COLOR_BLUE : index ==
+    // 3 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_VOLUME,
+    // viewManager.isActiveView (Views.TRACK_VOLUME) ? LaunchpadColors.LAUNCHPAD_COLOR_CYAN : index
+    // == 4 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_PAN,
+    // viewManager.isActiveView (Views.TRACK_PAN) ? LaunchpadColors.LAUNCHPAD_COLOR_SKY : index == 5
+    // ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_SENDS,
+    // viewManager.isActiveView (Views.TRACK_SENDS) ? LaunchpadColors.LAUNCHPAD_COLOR_ORCHID : index
+    // == 6 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+    // surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_STOP_CLIP,
+    // modeManager.isActiveOrTempMode (Modes.STOP_CLIP) ? LaunchpadColors.LAUNCHPAD_COLOR_ROSE :
+    // index == 7 ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE :
+    // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+    // }
 
 
     /** {@inheritDoc} */

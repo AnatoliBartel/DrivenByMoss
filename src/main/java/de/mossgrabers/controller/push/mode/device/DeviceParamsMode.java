@@ -235,24 +235,66 @@ public class DeviceParamsMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public int getFirstRowColor (final int index)
+    public int getButtonColor (final ButtonID buttonID)
     {
         final ICursorDevice cd = this.model.getCursorDevice ();
-        if (!cd.doesExist ())
-            return super.getFirstRowColor (index);
 
-        final int selectedColor = this.isPush2 ? PushColors.PUSH2_COLOR_ORANGE_HI : PushColors.PUSH1_COLOR_ORANGE_HI;
-        final int existsColor = this.isPush2 ? PushColors.PUSH2_COLOR_YELLOW_LO : PushColors.PUSH1_COLOR_YELLOW_LO;
-        final int offColor = this.isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
-
-        if (this.showDevices)
+        int index = this.isButtonRow (0, buttonID);
+        if (index >= 0)
         {
-            final IDeviceBank bank = cd.getDeviceBank ();
-            return bank.getItem (index).doesExist () ? index == cd.getIndex () ? selectedColor : existsColor : offColor;
+            if (!cd.doesExist ())
+                return getButtonColor (buttonID);
+
+            final int selectedColor = this.isPush2 ? PushColors.PUSH2_COLOR_ORANGE_HI : PushColors.PUSH1_COLOR_ORANGE_HI;
+            final int existsColor = this.isPush2 ? PushColors.PUSH2_COLOR_YELLOW_LO : PushColors.PUSH1_COLOR_YELLOW_LO;
+            final int offColor = this.isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
+
+            if (this.showDevices)
+            {
+                final IDeviceBank bank = cd.getDeviceBank ();
+                return bank.getItem (index).doesExist () ? index == cd.getIndex () ? selectedColor : existsColor : offColor;
+            }
+            final IParameterPageBank bank = cd.getParameterPageBank ();
+            final int selectedItemIndex = bank.getSelectedItemIndex ();
+            return !bank.getItem (index).isEmpty () ? index == selectedItemIndex ? selectedColor : existsColor : offColor;
         }
-        final IParameterPageBank bank = cd.getParameterPageBank ();
-        final int selectedItemIndex = bank.getSelectedItemIndex ();
-        return !bank.getItem (index).isEmpty () ? index == selectedItemIndex ? selectedColor : existsColor : offColor;
+
+        index = this.isButtonRow (1, buttonID);
+        if (index >= 0)
+        {
+            final int white = this.isPush2 ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH1_COLOR2_WHITE;
+            if (!cd.doesExist ())
+                return index == 7 ? white : super.getButtonColor (buttonID);
+
+            final int green = this.isPush2 ? PushColors.PUSH2_COLOR2_GREEN : PushColors.PUSH1_COLOR2_GREEN;
+            final int grey = this.isPush2 ? PushColors.PUSH2_COLOR2_GREY_LO : PushColors.PUSH1_COLOR2_GREY_LO;
+            final int orange = this.isPush2 ? PushColors.PUSH2_COLOR2_ORANGE : PushColors.PUSH1_COLOR2_ORANGE;
+            final int off = this.isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
+            final int turquoise = this.isPush2 ? PushColors.PUSH2_COLOR2_TURQUOISE_HI : PushColors.PUSH1_COLOR2_TURQUOISE_HI;
+
+            switch (index)
+            {
+                case 0:
+                    return cd.isEnabled () ? green : grey;
+                case 1:
+                    return cd.isParameterPageSectionVisible () ? orange : white;
+                case 2:
+                    return cd.isExpanded () ? orange : white;
+                case 3:
+                    return this.surface.getModeManager ().isActiveOrTempMode (Modes.DEVICE_CHAINS) ? orange : white;
+                case 4:
+                    return this.showDevices ? white : orange;
+                case 5:
+                    return this.model.getHost ().hasPinning () ? cd.isPinned () ? turquoise : grey : off;
+                case 6:
+                    return cd.isWindowOpen () ? turquoise : grey;
+                default:
+                case 7:
+                    return white;
+            }
+        }
+
+        return getButtonColor (buttonID);
     }
 
 
@@ -307,45 +349,6 @@ public class DeviceParamsMode extends BaseMode
             default:
                 // Not used
                 break;
-        }
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public int getSecondRowColor (final int index)
-    {
-        final int white = this.isPush2 ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH1_COLOR2_WHITE;
-
-        final ICursorDevice cd = this.model.getCursorDevice ();
-        if (!cd.doesExist ())
-            return index == 7 ? white : super.getFirstRowColor (index);
-
-        final int green = this.isPush2 ? PushColors.PUSH2_COLOR2_GREEN : PushColors.PUSH1_COLOR2_GREEN;
-        final int grey = this.isPush2 ? PushColors.PUSH2_COLOR2_GREY_LO : PushColors.PUSH1_COLOR2_GREY_LO;
-        final int orange = this.isPush2 ? PushColors.PUSH2_COLOR2_ORANGE : PushColors.PUSH1_COLOR2_ORANGE;
-        final int off = this.isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
-        final int turquoise = this.isPush2 ? PushColors.PUSH2_COLOR2_TURQUOISE_HI : PushColors.PUSH1_COLOR2_TURQUOISE_HI;
-
-        switch (index)
-        {
-            case 0:
-                return cd.isEnabled () ? green : grey;
-            case 1:
-                return cd.isParameterPageSectionVisible () ? orange : white;
-            case 2:
-                return cd.isExpanded () ? orange : white;
-            case 3:
-                return this.surface.getModeManager ().isActiveOrTempMode (Modes.DEVICE_CHAINS) ? orange : white;
-            case 4:
-                return this.showDevices ? white : orange;
-            case 5:
-                return this.model.getHost ().hasPinning () ? cd.isPinned () ? turquoise : grey : off;
-            case 6:
-                return cd.isWindowOpen () ? turquoise : grey;
-            default:
-            case 7:
-                return white;
         }
     }
 

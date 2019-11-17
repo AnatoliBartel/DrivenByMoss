@@ -7,7 +7,7 @@ package de.mossgrabers.controller.apc.view;
 import de.mossgrabers.controller.apc.APCConfiguration;
 import de.mossgrabers.controller.apc.controller.APCColors;
 import de.mossgrabers.controller.apc.controller.APCControlSurface;
-import de.mossgrabers.framework.controller.color.ColorManager;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.view.AbstractSessionView;
@@ -72,22 +72,12 @@ public class SessionView extends AbstractSessionView<APCControlSurface, APCConfi
         // ColorManager.BUTTON_STATE_OFF);
     }
 
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // final int green = this.surface.isMkII () ? APCColors.APC_MKII_COLOR_GREEN :
-    // APCColors.APC_COLOR_GREEN;
-    // TODO this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene,
-    // green);
-    // }
 
-
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public int getButtonColor (final ButtonID buttonID)
     {
-        // TODO Auto-generated method stub
-        return ColorManager.BUTTON_STATE_OFF;
+        return this.surface.isMkII () ? APCColors.APC_MKII_COLOR_GREEN : APCColors.APC_COLOR_GREEN;
     }
 
 

@@ -7,10 +7,12 @@ package de.mossgrabers.controller.push.view;
 import de.mossgrabers.controller.push.PushConfiguration;
 import de.mossgrabers.controller.push.controller.PushColors;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.IClip;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.INoteClip;
 import de.mossgrabers.framework.daw.constants.Resolution;
+import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.view.AbstractSequencerView;
 
@@ -116,19 +118,22 @@ public class ClipView extends AbstractSequencerView<PushControlSurface, PushConf
     {
         if (event != ButtonEvent.DOWN)
             return;
-        final int res = 7 - index;
-        if (res > 3)
+        if (index >= 3)
             return;
 
-        this.padResolution = res;
+        this.padResolution = index;
         this.surface.getDisplay ().notify ("1/" + this.padResolutions[this.padResolution]);
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public String getButtonColorID (final ButtonID buttonID)
     {
+        final int scene = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
+        if (scene < 0 || scene >= 8)
+            return AbstractMode.BUTTON_COLOR_OFF;
+
         if (scene < 3)
             return scene == this.padResolution ? AbstractSequencerView.COLOR_RESOLUTION_SELECTED : AbstractSequencerView.COLOR_RESOLUTION;
         return AbstractSequencerView.COLOR_RESOLUTION_OFF;

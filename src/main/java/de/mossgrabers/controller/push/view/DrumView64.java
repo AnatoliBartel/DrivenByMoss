@@ -13,6 +13,7 @@ import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.daw.data.IDrumPad;
 import de.mossgrabers.framework.daw.data.IScene;
+import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.mode.BrowserActivator;
 import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.mode.Modes;
@@ -129,10 +130,14 @@ public class DrumView64 extends AbstractDrumView64<PushControlSurface, PushConfi
 
     /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public String getButtonColorID (final ButtonID buttonID)
     {
+        final int scene = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
+        if (scene < 0 || scene >= 8)
+            return AbstractMode.BUTTON_COLOR_OFF;
+
         final ISceneBank sceneBank = this.model.getSceneBank ();
-        final IScene s = sceneBank.getItem (7 - scene);
+        final IScene s = sceneBank.getItem (scene);
         if (s.doesExist ())
             return s.isSelected () ? AbstractSessionView.COLOR_SELECTED_SCENE : AbstractSessionView.COLOR_SCENE;
         return AbstractSessionView.COLOR_SCENE_OFF;

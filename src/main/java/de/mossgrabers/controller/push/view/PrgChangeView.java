@@ -7,7 +7,7 @@ package de.mossgrabers.controller.push.view;
 import de.mossgrabers.controller.push.PushConfiguration;
 import de.mossgrabers.controller.push.controller.PushColors;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
-import de.mossgrabers.framework.controller.color.ColorManager;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.utils.ButtonEvent;
@@ -98,19 +98,20 @@ public class PrgChangeView extends AbstractView<PushControlSurface, PushConfigur
 
     /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public int getButtonColor (final ButtonID buttonID)
     {
+        final boolean isPush2 = this.surface.getConfiguration ().isPush2 ();
+        final int black = isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
+
+        final int scene = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
+        if (scene < 0 || scene >= 8)
+            return black;
+
         // TODO Create constants, create a generic AbstractPrgChangeView
 
-        // final boolean isPush2 = this.surface.getConfiguration ().isPush2 ();
-        // final int green = isPush2 ? PushColors.PUSH2_COLOR_SCENE_GREEN :
-        // PushColors.PUSH1_COLOR_SCENE_GREEN;
-        // final int yellow = isPush2 ? PushColors.PUSH2_COLOR_SCENE_YELLOW :
-        // PushColors.PUSH1_COLOR_SCENE_YELLOW;
-        // final int black = isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
-        // this.bankNumber == 7 - scene ? this.isToggled ? yellow : green : black;
-
-        return ColorManager.BUTTON_STATE_ON;
+        final int green = isPush2 ? PushColors.PUSH2_COLOR_SCENE_GREEN : PushColors.PUSH1_COLOR_SCENE_GREEN;
+        final int yellow = isPush2 ? PushColors.PUSH2_COLOR_SCENE_YELLOW : PushColors.PUSH1_COLOR_SCENE_YELLOW;
+        return this.bankNumber == scene ? this.isToggled ? yellow : green : black;
     }
 
 

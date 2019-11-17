@@ -136,7 +136,7 @@ public abstract class AbstractRaindropsView<S extends IControlSurface<C>, C exte
 
             for (int y = 0; y < this.numDisplayRows; y++)
             {
-                String colorID = y == 0 ? this.getColor (x, selectedTrack) : AbstractSequencerView.COLOR_NO_CONTENT;
+                String colorID = y == 0 ? this.getPadColor (x, selectedTrack) : AbstractSequencerView.COLOR_NO_CONTENT;
                 if (isOn)
                 {
                     if (y == distance)

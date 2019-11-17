@@ -6,6 +6,7 @@ package de.mossgrabers.bitwig.framework.hardware;
 
 import de.mossgrabers.bitwig.framework.daw.HostImpl;
 import de.mossgrabers.framework.command.core.ContinuousCommand;
+import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.controller.hardware.AbstractHwContinuousControl;
 import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.controller.hardware.IHwAbsoluteKnob;
@@ -57,6 +58,14 @@ public class HwAbsoluteKnobImpl extends AbstractHwContinuousControl implements I
     public void bind (final IMidiInput input, final BindType type, final int channel, final int value)
     {
         input.bind (this, type, channel, value);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void bindTouch (final TriggerCommand command, final IMidiInput input, final BindType type, final int control)
+    {
+        // No touch on absolute knob
     }
 
 

@@ -308,12 +308,12 @@ public class MCUControlSurface extends AbstractControlSurface<MCUConfiguration>
             case 0x80:
             case 0x90:
                 // Reroute all notes to CC buttons
-                this.handleCC (0, data1, data2);
+                // TODO this.handleCC (0, data1, data2);
                 break;
 
             case 0xB0:
                 // Handle knobs and jog wheel
-                this.handleCC (1, data1, data2);
+                // TODO this.handleCC (1, data1, data2);
                 break;
 
             default:

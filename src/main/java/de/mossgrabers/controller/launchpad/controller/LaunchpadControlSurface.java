@@ -269,14 +269,6 @@ public class LaunchpadControlSurface extends AbstractControlSurface<LaunchpadCon
     }
 
 
-    /** {@inheritDoc} */
-    @Override
-    public int getSceneTrigger (final int index)
-    {
-        return LAUNCHPAD_BUTTON_SCENE1 - 10 * index;
-    }
-
-
     /**
      * Is this device a Pro model with additional buttons?
      *

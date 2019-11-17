@@ -81,14 +81,32 @@ public class UserParamsMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public int getFirstRowColor (final int index)
+    public int getButtonColor (final ButtonID buttonID)
     {
-        final int selectedColor = this.isPush2 ? PushColors.PUSH2_COLOR_ORANGE_HI : PushColors.PUSH1_COLOR_ORANGE_HI;
-        final int existsColor = this.isPush2 ? PushColors.PUSH2_COLOR_YELLOW_LO : PushColors.PUSH1_COLOR_YELLOW_LO;
+        int index = this.isButtonRow (0, buttonID);
+        if (index >= 0)
+        {
+            final int selectedColor = this.isPush2 ? PushColors.PUSH2_COLOR_ORANGE_HI : PushColors.PUSH1_COLOR_ORANGE_HI;
+            final int existsColor = this.isPush2 ? PushColors.PUSH2_COLOR_YELLOW_LO : PushColors.PUSH1_COLOR_YELLOW_LO;
 
-        final IParameterBank bank = this.model.getUserParameterBank ();
-        final int selectedPage = bank.getScrollPosition () / bank.getPageSize ();
-        return index == selectedPage ? selectedColor : existsColor;
+            final IParameterBank bank = this.model.getUserParameterBank ();
+            final int selectedPage = bank.getScrollPosition () / bank.getPageSize ();
+            return index == selectedPage ? selectedColor : existsColor;
+        }
+
+        index = this.isButtonRow (1, buttonID);
+        if (index >= 0)
+        {
+            final IParameterBank bank = this.model.getUserParameterBank ();
+            final IParameter param = bank.getItem (index);
+            if (!param.doesExist ())
+                return super.getButtonColor (buttonID);
+
+            final int max = this.model.getValueChanger ().getUpperBound () - 1;
+            return this.colorManager.getColorIndex (param.getValue () > max / 2 ? AbstractMode.BUTTON_COLOR_HI : AbstractMode.BUTTON_COLOR_ON);
+        }
+
+        return super.getButtonColor (buttonID);
     }
 
 
@@ -106,20 +124,6 @@ public class UserParamsMode extends BaseMode
         // Toggle between the min and max value
         final int max = this.model.getValueChanger ().getUpperBound () - 1;
         param.setValueImmediatly (param.getValue () < max / 2 ? max : 0);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    protected String getSecondRowColorID (final int index)
-    {
-        final IParameterBank bank = this.model.getUserParameterBank ();
-        final IParameter param = bank.getItem (index);
-        if (!param.doesExist ())
-            return AbstractMode.BUTTON_COLOR_OFF;
-
-        final int max = this.model.getValueChanger ().getUpperBound () - 1;
-        return param.getValue () > max / 2 ? AbstractMode.BUTTON_COLOR_HI : AbstractMode.BUTTON_COLOR_ON;
     }
 
 

@@ -9,6 +9,7 @@ import de.mossgrabers.controller.apcmini.controller.APCminiColors;
 import de.mossgrabers.controller.apcmini.controller.APCminiControlSurface;
 import de.mossgrabers.framework.command.trigger.clip.NewCommand;
 import de.mossgrabers.framework.command.trigger.transport.PlayCommand;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.IClip;
@@ -403,25 +404,24 @@ public class ShiftView extends AbstractView<APCminiControlSurface, APCminiConfig
 
     /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public String getButtonColorID (final ButtonID buttonID)
     {
-
-        // Draw the track states on the scene buttons
         final int trackState = this.surface.getTrackState ();
 
-        switch (scene)
+        // Draw the track states on the scene buttons
+        switch (buttonID)
         {
-            case 0:
+            case SCENE1:
                 return trackState == APCminiControlSurface.TRACK_STATE_CLIP_STOP ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
-            case 1:
+            case SCENE2:
                 return trackState == APCminiControlSurface.TRACK_STATE_SOLO ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
-            case 2:
+            case SCENE3:
                 return trackState == APCminiControlSurface.TRACK_STATE_REC_ARM ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
-            case 3:
+            case SCENE4:
                 return trackState == APCminiControlSurface.TRACK_STATE_MUTE ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
-            case 4:
+            case SCENE5:
                 return trackState == APCminiControlSurface.TRACK_STATE_SELECT ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
-            case 5:
+            case SCENE6:
                 return this.model.isEffectTrackBankActive () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
             default:
                 return ColorManager.BUTTON_STATE_OFF;

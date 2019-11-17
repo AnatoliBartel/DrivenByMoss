@@ -79,8 +79,12 @@ public class DeviceChainsMode extends DeviceParamsMode
 
     /** {@inheritDoc} */
     @Override
-    public int getFirstRowColor (final int index)
+    public int getButtonColor (final ButtonID buttonID)
     {
+        int index = this.isButtonRow (0, buttonID);
+        if (index >= 0)
+            return super.getButtonColor (buttonID);
+
         final int existsColor = this.isPush2 ? PushColors.PUSH2_COLOR_YELLOW_LO : PushColors.PUSH1_COLOR_YELLOW_LO;
         final int offColor = this.isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
         final String [] slotChains = this.model.getCursorDevice ().getSlotChains ();

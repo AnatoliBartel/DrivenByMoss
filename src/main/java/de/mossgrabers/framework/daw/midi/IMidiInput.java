@@ -69,7 +69,7 @@ public interface IMidiInput
      * Bind the given button to a MIDI command received on this midi input.
      *
      * @param button The button to bind
-     * @param type THe MIDI binding type
+     * @param type The MIDI binding type
      * @param channel The MIDI channel
      * @param value The MIDI command (CC, Note, ...)
      */
@@ -80,7 +80,7 @@ public interface IMidiInput
      * Bind the given fader to a MIDI command received on this midi input.
      *
      * @param fader The fader to bind
-     * @param type THe MIDI binding type
+     * @param type The MIDI binding type
      * @param channel The MIDI channel
      * @param value The MIDI command (CC, Note, ...)
      */
@@ -91,7 +91,7 @@ public interface IMidiInput
      * Bind the given absolute knob to a MIDI command received on this midi input.
      *
      * @param absoluteKnob The absolute knob to bind
-     * @param type THe MIDI binding type
+     * @param type The MIDI binding type
      * @param channel The MIDI channel
      * @param value The MIDI command (CC, Note, ...)
      */
@@ -102,9 +102,31 @@ public interface IMidiInput
      * Bind the given relative knob to a MIDI command received on this midi input.
      *
      * @param relativeKnob The relative knob to bind
-     * @param type THe MIDI binding type
+     * @param type The MIDI binding type
      * @param channel The MIDI channel
      * @param value The MIDI command (CC, Note, ...)
      */
     void bind (IHwRelativeKnob relativeKnob, BindType type, int channel, int value);
+
+
+    /**
+     * Bind the given relative knob to a MIDI command received on this midi input as a touch action.
+     *
+     * @param relativeKnob The relative knob to bind
+     * @param type The MIDI binding type
+     * @param channel The MIDI channel
+     * @param control The MIDI command (CC, Note, ...)
+     */
+    void bindTouch (IHwRelativeKnob relativeKnob, BindType type, int channel, int control);
+
+
+    /**
+     * Bind the given fader to a MIDI command received on this midi input as a touch action.
+     *
+     * @param fader The fader to bind
+     * @param type The MIDI binding type
+     * @param channel The MIDI channel
+     * @param control The MIDI command (CC, Note, ...)
+     */
+    void bindTouch (IHwFader fader, BindType type, int channel, int control);
 }

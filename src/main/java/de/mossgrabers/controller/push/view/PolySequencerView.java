@@ -297,7 +297,7 @@ public class PolySequencerView extends AbstractSequencerView<PushControlSurface,
         {
             if (this.keyManager.isKeyPressed (note))
                 return isRecording ? AbstractPlayView.COLOR_RECORD : AbstractPlayView.COLOR_PLAY;
-            return this.getColor (note, this.useTrackColor ? track : null);
+            return this.getPadColor (note, this.useTrackColor ? track : null);
         }
         return AbstractPlayView.COLOR_OFF;
     }

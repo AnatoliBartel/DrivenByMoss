@@ -9,6 +9,7 @@ import de.mossgrabers.controller.sl.command.trigger.ButtonRowSelectCommand;
 import de.mossgrabers.controller.sl.command.trigger.P2ButtonCommand;
 import de.mossgrabers.controller.sl.controller.SLControlSurface;
 import de.mossgrabers.controller.sl.mode.device.DeviceParamsMode;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISlotBank;
@@ -353,7 +354,7 @@ public class ControlView extends ControlOnlyView<SLControlSurface, SLConfigurati
 
     /** {@inheritDoc} */
     @Override
-    public void updateButtons ()
+    public int getButtonColor (final ButtonID buttonID)
     {
         final ITrackBank tb = this.model.getCurrentTrackBank ();
         final ICursorDevice cd = this.model.getCursorDevice ();
@@ -497,6 +498,8 @@ public class ControlView extends ControlOnlyView<SLControlSurface, SLConfigurati
         // SLControlSurface.MKII_BUTTON_STATE_ON : SLControlSurface.MKII_BUTTON_STATE_OFF);
         // this.surface.updateTrigger (SLControlSurface.MKII_BUTTON_ROWSEL7,
         // SLControlSurface.MKII_BUTTON_STATE_OFF);
+
+        return 0;
     }
 
 

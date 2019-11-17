@@ -216,53 +216,57 @@ public class NoteRepeatMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public int getFirstRowColor (final int index)
+    public int getButtonColor (final ButtonID buttonID)
     {
-        final ColorManager colorManager = this.model.getColorManager ();
-        final int offColor = colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
-        final int onColor = colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON);
-        final int hiColor = colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_HI);
-
-        switch (index)
+        int index = this.isButtonRow (0, buttonID);
+        if (index >= 0)
         {
-            default:
-            case 0:
-            case 1:
-                return onColor;
-            case 2:
-                return this.host.canEdit (EditCapability.NOTE_REPEAT_LENGTH) ? onColor : offColor;
-            case 3:
-                return this.host.canEdit (EditCapability.NOTE_REPEAT_LENGTH) ? onColor : offColor;
+            final ColorManager colorManager = this.model.getColorManager ();
+            final int offColor = colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
+            final int onColor = colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON);
+            final int hiColor = colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_HI);
 
-            case 4:
-                return offColor;
+            switch (index)
+            {
+                default:
+                case 0:
+                case 1:
+                    return onColor;
+                case 2:
+                    return this.host.canEdit (EditCapability.NOTE_REPEAT_LENGTH) ? onColor : offColor;
+                case 3:
+                    return this.host.canEdit (EditCapability.NOTE_REPEAT_LENGTH) ? onColor : offColor;
 
-            case 5:
-                if (this.host.canEdit (EditCapability.NOTE_REPEAT_USE_PRESSURE_TO_VELOCITY))
-                    return this.noteRepeat.usePressure () ? hiColor : onColor;
-                return offColor;
+                case 4:
+                    return offColor;
 
-            case 6:
-                if (this.host.canEdit (EditCapability.NOTE_REPEAT_IS_FREE_RUNNING))
-                    return !this.noteRepeat.isFreeRunning () ? hiColor : onColor;
-                return offColor;
+                case 5:
+                    if (this.host.canEdit (EditCapability.NOTE_REPEAT_USE_PRESSURE_TO_VELOCITY))
+                        return this.noteRepeat.usePressure () ? hiColor : onColor;
+                    return offColor;
 
-            case 7:
-                if (this.host.canEdit (EditCapability.NOTE_REPEAT_SWING))
-                    return this.noteRepeat.isShuffle () ? hiColor : onColor;
-                return offColor;
+                case 6:
+                    if (this.host.canEdit (EditCapability.NOTE_REPEAT_IS_FREE_RUNNING))
+                        return !this.noteRepeat.isFreeRunning () ? hiColor : onColor;
+                    return offColor;
+
+                case 7:
+                    if (this.host.canEdit (EditCapability.NOTE_REPEAT_SWING))
+                        return this.noteRepeat.isShuffle () ? hiColor : onColor;
+                    return offColor;
+            }
         }
-    }
 
+        index = this.isButtonRow (1, buttonID);
+        if (index >= 0)
+        {
+            final ColorManager colorManager = this.model.getColorManager ();
+            if (index < 7)
+                return colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
+            return this.model.getGroove ().getParameters ()[0].getValue () > 0 ? colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_HI) : colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON);
+        }
 
-    /** {@inheritDoc} */
-    @Override
-    public int getSecondRowColor (final int index)
-    {
-        final ColorManager colorManager = this.model.getColorManager ();
-        if (index < 7)
-            return colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
-        return this.model.getGroove ().getParameters ()[0].getValue () > 0 ? colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_HI) : colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON);
+        return super.getButtonColor (buttonID);
     }
 
 

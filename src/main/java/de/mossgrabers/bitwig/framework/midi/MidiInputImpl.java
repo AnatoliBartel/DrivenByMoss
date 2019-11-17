@@ -20,9 +20,11 @@ import de.mossgrabers.framework.daw.midi.MidiShortCallback;
 import de.mossgrabers.framework.daw.midi.MidiSysExCallback;
 
 import com.bitwig.extension.controller.api.AbsoluteHardwareControl;
+import com.bitwig.extension.controller.api.ContinuousHardwareControl;
 import com.bitwig.extension.controller.api.ControllerHost;
 import com.bitwig.extension.controller.api.HardwareActionMatcher;
 import com.bitwig.extension.controller.api.HardwareButton;
+import com.bitwig.extension.controller.api.HardwareSlider;
 import com.bitwig.extension.controller.api.MidiIn;
 import com.bitwig.extension.controller.api.RelativeHardwareKnob;
 
@@ -132,11 +134,16 @@ public class MidiInputImpl implements IMidiInput
         RelativeHardwareKnob hardwareKnob = ((HwRelativeKnobImpl) knob).getHardwareKnob ();
 
         // TODO Support different relative mappings, understand what these names really mean...
-        if (type == BindType.CC)
-            hardwareKnob.setAdjustValueMatcher (this.port.createRelative2sComplementCCValueMatcher (channel, value));
-        else
-            throw new BindException (type);
-
+        switch (type)
+        {
+            case CC:
+                hardwareKnob.setAdjustValueMatcher (this.port.createRelative2sComplementCCValueMatcher (channel, value));
+                break;
+            case PITCHBEND:
+                break;
+            default:
+                throw new BindException (type);
+        }
     }
 
 
@@ -158,10 +165,56 @@ public class MidiInputImpl implements IMidiInput
 
     private void bind (final BindType type, final int channel, final int value, final AbsoluteHardwareControl hardwareControl)
     {
-        // TODO Support pitchbend
-        if (type == BindType.CC)
-            hardwareControl.setAdjustValueMatcher (this.port.createAbsoluteCCValueMatcher (channel, value));
-        else
-            throw new BindException (type);
+        switch (type)
+        {
+            case CC:
+                hardwareControl.setAdjustValueMatcher (this.port.createAbsoluteCCValueMatcher (channel, value));
+                break;
+            case PITCHBEND:
+                hardwareControl.setAdjustValueMatcher (this.port.createAbsolutePitchBendValueMatcher (channel));
+                break;
+            default:
+                throw new BindException (type);
+        }
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void bindTouch (final IHwRelativeKnob relativeKnob, final BindType type, final int channel, final int control)
+    {
+        final RelativeHardwareKnob hardwareControl = ((HwRelativeKnobImpl) relativeKnob).getHardwareKnob ();
+        bindTouch (hardwareControl, type, channel, control);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void bindTouch (final IHwFader fader, final BindType type, final int channel, final int control)
+    {
+        final HardwareSlider hardwareControl = ((HwFaderImpl) fader).getHardwareFader ();
+        bindTouch (hardwareControl, type, channel, control);
+    }
+
+
+    private void bindTouch (final ContinuousHardwareControl<?> hardwareControl, final BindType type, final int channel, final int control)
+    {
+        final HardwareActionMatcher pressedMatcher;
+        final HardwareActionMatcher releasedMatcher;
+        switch (type)
+        {
+            case CC:
+                pressedMatcher = this.port.createCCActionMatcher (channel, control, 127);
+                releasedMatcher = this.port.createCCActionMatcher (channel, control, 0);
+                break;
+            case NOTE:
+                pressedMatcher = this.port.createNoteOnActionMatcher (channel, control);
+                releasedMatcher = this.port.createNoteOffActionMatcher (channel, control);
+                break;
+            default:
+                throw new BindException (type);
+        }
+        hardwareControl.beginTouchAction ().setActionMatcher (pressedMatcher);
+        hardwareControl.endTouchAction ().setActionMatcher (releasedMatcher);
     }
 }

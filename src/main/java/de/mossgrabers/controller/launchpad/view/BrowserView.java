@@ -8,6 +8,7 @@ import de.mossgrabers.controller.launchpad.LaunchpadConfiguration;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadColors;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.IBrowser;
@@ -222,20 +223,11 @@ public class BrowserView extends AbstractView<LaunchpadControlSurface, Launchpad
         // Intentionally empty
     }
 
-    // TODO
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // this.surface.setTrigger (this.surface.getSceneTrigger (scene),
-    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-    // }
 
-
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public String getButtonColorID (final ButtonID buttonID)
     {
-        // TODO Auto-generated method stub
         return ColorManager.BUTTON_STATE_OFF;
     }
 }

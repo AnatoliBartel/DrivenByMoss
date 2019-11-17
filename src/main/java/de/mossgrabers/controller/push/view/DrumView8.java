@@ -118,10 +118,10 @@ public class DrumView8 extends DrumViewBase
     @Override
     protected void onLowerScene (final int index)
     {
-        // 7, 6, 5, 4
-        if (index < 6)
+        // 0, 8
+        if (index > 1)
             return;
-        this.soundOffset = index == 7 ? 0 : 8;
+        this.soundOffset = index == 0 ? 0 : 8;
         this.surface.getDisplay ().notify ("Offset: " + this.soundOffset);
     }
 }

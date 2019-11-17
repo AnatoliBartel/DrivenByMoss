@@ -6,6 +6,7 @@ package de.mossgrabers.controller.hui.mode.track;
 
 import de.mossgrabers.controller.hui.HUIConfiguration;
 import de.mossgrabers.controller.hui.controller.HUIControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ITrackBank;
@@ -38,9 +39,12 @@ public abstract class AbstractTrackMode extends AbstractMode<HUIControlSurface, 
 
     /** {@inheritDoc} */
     @Override
-    public void updateFirstRow ()
+    public int getButtonColor (final ButtonID buttonID)
     {
+        // TODO ???
         this.updateKnobLEDs ();
+
+        return 0;
     }
 
 

@@ -40,19 +40,11 @@ public class DrumView64 extends AbstractDrumView64<LaunchpadControlSurface, Laun
         this.model.getNoteClip (8, 128).clearRow (editMidiChannel, this.offsetY + playedPad);
     }
 
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // this.surface.setTrigger (this.surface.getSceneTrigger (scene),
-    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-    // }
 
-
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public String getButtonColorID (final ButtonID buttonID)
     {
-        // TODO Auto-generated method stub
         return ColorManager.BUTTON_STATE_OFF;
     }
 }

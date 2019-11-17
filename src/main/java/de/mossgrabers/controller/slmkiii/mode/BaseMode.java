@@ -8,6 +8,7 @@ import de.mossgrabers.controller.slmkiii.SLMkIIIConfiguration;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.mode.AbstractMode;
@@ -59,9 +60,11 @@ public abstract class BaseMode extends AbstractMode<SLMkIIIControlSurface, SLMkI
 
     /** {@inheritDoc} */
     @Override
-    public void updateFirstRow ()
+    public int getButtonColor (final ButtonID buttonID)
     {
-        this.disableFirstRow ();
+        // TODO
+        // this.disableFirstRow ();
+        return 0;
     }
 
 

@@ -19,7 +19,7 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
     private static final int BUTTON_STATE_INTERVAL = 400;
 
     protected TriggerCommand command;
-    protected IHwLight         light;
+    protected IHwLight       light;
 
     private ButtonEvent      state;
     private boolean          isConsumed;

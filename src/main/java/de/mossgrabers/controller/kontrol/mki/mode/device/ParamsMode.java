@@ -83,7 +83,7 @@ public class ParamsMode extends AbstractKontrol1Mode
 
     /** {@inheritDoc} */
     @Override
-    public void updateFirstRow ()
+    public int getButtonColor (final ButtonID buttonID)
     {
         final ICursorDevice cursorDevice = this.model.getCursorDevice ();
         final IParameterBank parameterBank = cursorDevice.getParameterBank ();
@@ -110,6 +110,8 @@ public class ParamsMode extends AbstractKontrol1Mode
         //
         // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BROWSE,
         // Kontrol1Colors.BUTTON_STATE_ON);
+
+        return 0;
     }
 
 

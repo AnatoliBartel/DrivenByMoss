@@ -4,7 +4,6 @@
 
 package de.mossgrabers.framework.controller;
 
-import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.configuration.Configuration;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -34,7 +33,6 @@ import de.mossgrabers.framework.view.ViewManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.IntConsumer;
@@ -51,40 +49,39 @@ import java.util.function.IntSupplier;
  */
 public abstract class AbstractControlSurface<C extends Configuration> implements IControlSurface<C>
 {
-    protected static final int                                      BUTTON_STATE_INTERVAL = 400;
-    protected static final int                                      NUM_NOTES             = 128;
-    protected static final int                                      NUM_INFOS             = 256;
+    protected static final int                      BUTTON_STATE_INTERVAL = 400;
+    protected static final int                      NUM_NOTES             = 128;
+    protected static final int                      NUM_INFOS             = 256;
 
-    protected final IHost                                           host;
-    protected final C                                               configuration;
-    protected final ColorManager                                    colorManager;
-    protected final IMidiOutput                                     output;
-    protected final IMidiInput                                      input;
-    protected final IHwSurfaceFactory                               surfaceFactory;
+    protected final IHost                           host;
+    protected final C                               configuration;
+    protected final ColorManager                    colorManager;
+    protected final IMidiOutput                     output;
+    protected final IMidiInput                      input;
+    protected final IHwSurfaceFactory               surfaceFactory;
 
-    protected final ViewManager                                     viewManager           = new ViewManager ();
-    protected final ModeManager                                     modeManager           = new ModeManager ();
+    protected final ViewManager                     viewManager           = new ViewManager ();
+    protected final ModeManager                     modeManager           = new ModeManager ();
 
-    protected int                                                   defaultMidiChannel    = 0;
+    protected int                                   defaultMidiChannel    = 0;
 
-    private Map<ButtonID, IHwButton>                                buttons               = new EnumMap<> (ButtonID.class);
-    private Map<ContinuousID, IHwContinuousControl>                 continuous            = new EnumMap<> (ContinuousID.class);
-    private final ContinuousInfo [] []                              continuousInfos       = new ContinuousInfo [16] [NUM_INFOS];
-    private final int []                                            noteVelocities;
+    private Map<ButtonID, IHwButton>                buttons               = new EnumMap<> (ButtonID.class);
+    private Map<ContinuousID, IHwContinuousControl> continuous            = new EnumMap<> (ContinuousID.class);
+    private final ContinuousInfo [] []              continuousInfos       = new ContinuousInfo [16] [NUM_INFOS];
+    private final int []                            noteVelocities;
 
-    protected List<ITextDisplay>                                    textDisplays          = new ArrayList<> (1);
-    protected List<IGraphicDisplay>                                 graphicsDisplays      = new ArrayList<> (1);
+    protected List<ITextDisplay>                    textDisplays          = new ArrayList<> (1);
+    protected List<IGraphicDisplay>                 graphicsDisplays      = new ArrayList<> (1);
 
-    protected final PadGrid                                         pads;
-    protected final Map<Integer, Map<Integer, ContinuousCommandID>> continuousCommands    = new HashMap<> ();
+    protected final PadGrid                         pads;
 
-    private final boolean []                                        gridNoteConsumed;
-    private final ButtonEvent []                                    gridNoteStates;
-    private final int []                                            gridNoteVelocities;
-    private int []                                                  keyTranslationTable;
+    private final boolean []                        gridNoteConsumed;
+    private final ButtonEvent []                    gridNoteStates;
+    private final int []                            gridNoteVelocities;
+    private int []                                  keyTranslationTable;
 
-    private final LatestTaskExecutor                                flushExecutor         = new LatestTaskExecutor ();
-    private final DummyDisplay                                      dummyDisplay;
+    private final LatestTaskExecutor                flushExecutor         = new LatestTaskExecutor ();
+    private final DummyDisplay                      dummyDisplay;
 
 
     /**
@@ -238,40 +235,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     public IMidiInput getInput ()
     {
         return this.input;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void assignContinuousCommand (final int cc, final ContinuousCommandID commandID)
-    {
-        this.assignContinuousCommand (this.defaultMidiChannel, cc, commandID);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void assignContinuousCommand (final int channel, final int cc, final ContinuousCommandID commandID)
-    {
-        this.continuousInfos[channel][cc] = new ContinuousInfo ();
-        this.continuousCommands.computeIfAbsent (Integer.valueOf (cc), k -> new HashMap<> ()).put (Integer.valueOf (channel), commandID);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public ContinuousCommandID getContinuousCommand (final int cc)
-    {
-        return this.getContinuousCommand (this.defaultMidiChannel, cc);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public ContinuousCommandID getContinuousCommand (final int channel, final int cc)
-    {
-        final Map<Integer, ContinuousCommandID> channelMap = this.continuousCommands.get (Integer.valueOf (cc));
-        return channelMap == null ? null : channelMap.get (Integer.valueOf (channel));
     }
 
 
@@ -446,14 +409,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public int getSceneTrigger (final int index)
-    {
-        return -1;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public void setTrigger (final int cc, final int state)
     {
         this.setTrigger (this.defaultMidiChannel, cc, state);
@@ -496,7 +451,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public void clearTriggerCache ()
     {
-        // TODO Correct? Remove completely?
         this.turnOffTriggers ();
     }
 
@@ -659,7 +613,8 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
             // CC
             case 0xB0:
-                this.handleCC (channel, data1, data2);
+                // TODO Check if already fully handled by framework
+                // this.handleCC (channel, data1, data2);
                 break;
 
             // Program Change
@@ -873,19 +828,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
 
     /**
-     * Handle non-grid midi CC like buttons and knobs.
-     *
-     * @param channel The midi channel
-     * @param cc The CC
-     * @param value The value
-     */
-    protected void handleCC (final int channel, final int cc, final int value)
-    {
-        this.handleCCEvent (channel, cc, value);
-    }
-
-
-    /**
      * Handle note events.
      *
      * @param note The midi note
@@ -894,30 +836,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     protected void handleNoteEvent (final int note, final int velocity)
     {
         this.noteVelocities[note] = velocity;
-    }
-
-
-    /**
-     * Override in subclass with buttons array usage.
-     *
-     * @param channel The midi channel
-     * @param cc The midi CC
-     * @param value The value
-     */
-    protected void handleCCEvent (final int channel, final int cc, final int value)
-    {
-        final View view = this.viewManager.getActiveView ();
-        if (view == null)
-            return;
-
-        final ContinuousCommandID commandID = this.getContinuousCommand (channel, cc);
-        if (commandID != null)
-        {
-            view.executeContinuousCommand (commandID, value);
-            return;
-        }
-
-        this.println ("Unsupported Midi CC: " + cc);
     }
 
 

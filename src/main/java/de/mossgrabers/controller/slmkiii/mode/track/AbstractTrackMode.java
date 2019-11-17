@@ -169,7 +169,7 @@ public abstract class AbstractTrackMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public void updateFirstRow ()
+    public int getButtonColor (final ButtonID buttonID)
     {
         final ITrackBank tb = this.model.getCurrentTrackBank ();
         final ITrack selectedTrack = tb.getSelectedItem ();
@@ -204,7 +204,7 @@ public abstract class AbstractTrackMode extends BaseMode
             // SLMkIIIColors.SLMKIII_RED_HALF);
             // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_8,
             // SLMkIIIColors.SLMKIII_RED_HALF);
-            return;
+            return 0;
         }
 
         // if (this.surface.isLongPressed (ButtonID.ARROW_DOWN))
@@ -234,6 +234,8 @@ public abstract class AbstractTrackMode extends BaseMode
         // }
         // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i, color);
         // }
+
+        return 0;
     }
 
 

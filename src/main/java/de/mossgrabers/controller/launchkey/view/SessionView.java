@@ -7,6 +7,7 @@ package de.mossgrabers.controller.launchkey.view;
 import de.mossgrabers.controller.launchkey.LaunchkeyMiniMk3Configuration;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3Colors;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.IModel;
@@ -62,69 +63,45 @@ public class SessionView extends AbstractSessionView<LaunchkeyMiniMk3ControlSurf
         this.setColors (isRecording, isRecordingQueued, isPlaying, isPlayingQueued, hasContent, noContent, recArmed);
     }
 
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // final ColorManager colorManager = this.model.getColorManager ();
-    // final int colorScene = colorManager.getColor (AbstractSessionView.COLOR_SCENE);
-    // final int colorSceneSelected = colorManager.getColor
-    // (AbstractSessionView.COLOR_SELECTED_SCENE);
-    // final int colorSceneOff = colorManager.getColor (AbstractSessionView.COLOR_SCENE_OFF);
-    //
-    // final ISceneBank sceneBank = this.model.getSceneBank ();
-    // IScene s = sceneBank.getItem (0);
-    //
-    // TODO
-    // if (scene == 0)
-    // {
-    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1, s.doesExist
-    // () ? s.isSelected () ? colorSceneSelected : colorScene : colorSceneOff);
-    // return;
-    // }
-    //
-    // if (this.padMode == null)
-    // {
-    // s = sceneBank.getItem (1);
-    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2, s.doesExist
-    // () ? s.isSelected () ? colorSceneSelected : colorScene : colorSceneOff);
-    // return;
-    // }
-    //
-    // switch (this.padMode)
-    // {
-    // case REC_ARM:
-    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
-    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED_HI);
-    // break;
-    // case TRACK_SELECT:
-    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
-    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE);
-    // break;
-    // case MUTE:
-    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
-    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_AMBER_HI);
-    // break;
-    // case SOLO:
-    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
-    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_YELLOW_HI);
-    // break;
-    // case STOP_CLIP:
-    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
-    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_ROSE);
-    // break;
-    // default:
-    // // Unused
-    // break;
-    // }
-    // }
 
-
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public int getButtonColor (final ButtonID buttonID)
     {
-        // TODO Auto-generated method stub
-        return ColorManager.BUTTON_STATE_OFF;
+        final ColorManager colorManager = this.model.getColorManager ();
+        final int colorScene = colorManager.getColorIndex (AbstractSessionView.COLOR_SCENE);
+        final int colorSceneSelected = colorManager.getColorIndex (AbstractSessionView.COLOR_SELECTED_SCENE);
+        final int colorSceneOff = colorManager.getColorIndex (AbstractSessionView.COLOR_SCENE_OFF);
+
+        final ISceneBank sceneBank = this.model.getSceneBank ();
+        IScene s = sceneBank.getItem (0);
+
+        if (buttonID == ButtonID.SCENE1)
+            return s.doesExist () ? s.isSelected () ? colorSceneSelected : colorScene : colorSceneOff;
+
+        // SCENE 2
+
+        if (this.padMode == null)
+        {
+            s = sceneBank.getItem (1);
+            return s.doesExist () ? s.isSelected () ? colorSceneSelected : colorScene : colorSceneOff;
+        }
+
+        switch (this.padMode)
+        {
+            case REC_ARM:
+                return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED_HI;
+            case TRACK_SELECT:
+                return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE;
+            case MUTE:
+                return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_AMBER_HI;
+            case SOLO:
+                return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_YELLOW_HI;
+            case STOP_CLIP:
+                return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_ROSE;
+            default:
+                return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK;
+        }
     }
 
 

@@ -4,10 +4,9 @@
 
 package de.mossgrabers.framework.view;
 
-import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.command.core.AftertouchCommand;
-import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.command.core.PitchbendCommand;
+import de.mossgrabers.framework.controller.ButtonID;
 
 
 /**
@@ -39,30 +38,12 @@ public interface View
 
 
     /**
-     * Registers a continuous command for this view.
-     *
-     * @param commandID The ID of the command
-     * @param command The command
+     * Get the color for a button, which is controlled by the view.
+     * 
+     * @param buttonID The ID of the button
+     * @return A color index
      */
-    void registerContinuousCommand (ContinuousCommandID commandID, ContinuousCommand command);
-
-
-    /**
-     * Get a registered continuous command.
-     *
-     * @param commandID The ID of the command.
-     * @return The command or null
-     */
-    ContinuousCommand getContinuousCommand (ContinuousCommandID commandID);
-
-
-    /**
-     * Execute a continuous command which has been registered before.
-     *
-     * @param commandID The ID of the command
-     * @param value The updated value
-     */
-    void executeContinuousCommand (ContinuousCommandID commandID, int value);
+    int getButtonColor (ButtonID buttonID);
 
 
     /**
@@ -70,6 +51,7 @@ public interface View
      *
      * @param command The command
      */
+    @Deprecated
     void registerAftertouchCommand (AftertouchCommand command);
 
 
@@ -79,6 +61,7 @@ public interface View
      * @param note The note on which aftertouch is applied. Set to -1 for channel aftertouch
      * @param value The updated value
      */
+    @Deprecated
     void executeAftertouchCommand (int note, int value);
 
 
@@ -87,6 +70,7 @@ public interface View
      *
      * @param command The command
      */
+    @Deprecated
     void registerPitchbendCommand (PitchbendCommand command);
 
 
@@ -97,6 +81,7 @@ public interface View
      * @param data1 The first pitchbend byte
      * @param data2 The second pitchbend byte
      */
+    @Deprecated
     void executePitchbendCommand (int channel, int data1, int data2);
 
 
@@ -105,6 +90,7 @@ public interface View
      *
      * @return The command or null if not registered
      */
+    @Deprecated
     PitchbendCommand getPitchbendCommand ();
 
 

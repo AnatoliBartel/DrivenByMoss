@@ -117,7 +117,7 @@ public abstract class AbstractPlayView<S extends IControlSurface<C>, C extends C
         {
             if (this.keyManager.isKeyPressed (note))
                 return isRecording ? AbstractPlayView.COLOR_RECORD : AbstractPlayView.COLOR_PLAY;
-            return this.getColor (note, this.useTrackColor ? track : null);
+            return this.getPadColor (note, this.useTrackColor ? track : null);
         }
         return AbstractPlayView.COLOR_OFF;
     }

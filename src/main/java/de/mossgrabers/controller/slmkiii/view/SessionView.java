@@ -88,28 +88,24 @@ public class SessionView extends AbstractSessionView<SLMkIIIControlSurface, SLMk
         super.onGridNote (note, velocity);
     }
 
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // final ColorManager colorManager = this.model.getColorManager ();
-    // final int colorScene = colorManager.getColor (AbstractSessionView.COLOR_SCENE);
-    // final int colorSceneSelected = colorManager.getColor
-    // (AbstractSessionView.COLOR_SELECTED_SCENE);
-    // final int colorSceneOff = colorManager.getColor (AbstractSessionView.COLOR_SCENE_OFF);
-    //
-    // final ISceneBank sceneBank = this.model.getSceneBank ();
-    // final IScene s = sceneBank.getItem (scene);
-    // final int color = s.doesExist () ? s.isSelected () ? colorSceneSelected : colorScene :
-    // colorSceneOff;
-    // TODO this.surface.updateTrigger (ButtonID.SCENE_1 + scene, color);
-    // }
 
-
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public int getButtonColor (final ButtonID buttonID)
     {
-        // TODO Auto-generated method stub
-        return ColorManager.BUTTON_STATE_OFF;
+        final ColorManager colorManager = this.model.getColorManager ();
+        final int colorScene = colorManager.getColorIndex (AbstractSessionView.COLOR_SCENE);
+        final int colorSceneSelected = colorManager.getColorIndex (AbstractSessionView.COLOR_SELECTED_SCENE);
+        final int colorSceneOff = colorManager.getColorIndex (AbstractSessionView.COLOR_SCENE_OFF);
+
+        final ISceneBank sceneBank = this.model.getSceneBank ();
+
+        // TODO
+        // final IScene s = sceneBank.getItem (scene);
+        // final int color = s.doesExist () ? s.isSelected () ? colorSceneSelected : colorScene :
+        // colorSceneOff;
+        // this.surface.updateTrigger (ButtonID.SCENE_1 + scene, color);
+
+        return 0;
     }
 }

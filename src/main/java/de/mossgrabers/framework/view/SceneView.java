@@ -21,13 +21,4 @@ public interface SceneView
      * @param event The button event
      */
     void onScene (int scene, ButtonEvent event);
-
-
-    /**
-     * Get scene button color.
-     *
-     * @param scene The scene
-     * @return A color ID
-     */
-    String getSceneButtonColor (int scene);
 }

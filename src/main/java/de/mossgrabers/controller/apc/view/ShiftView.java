@@ -173,35 +173,22 @@ public class ShiftView extends AbstractView<APCControlSurface, APCConfiguration>
             viewManager.setPreferredView (selectedTrack.getPosition (), VIEW_IDS[scene]);
     }
 
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // TODO Update button LEDs
 
-    // final Views previousViewId = this.surface.getViewManager ().getPreviousViewId ();
-    // this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1,
-    // Views.SESSION.equals (previousViewId) ? APCColors.COLOR_VIEW_SELECTED :
-    // APCColors.COLOR_VIEW_UNSELECTED);
-    // this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_2,
-    // Views.PLAY.equals (previousViewId) ? APCColors.COLOR_VIEW_SELECTED :
-    // APCColors.COLOR_VIEW_UNSELECTED);
-    // this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_3,
-    // Views.DRUM.equals (previousViewId) ? APCColors.COLOR_VIEW_SELECTED :
-    // APCColors.COLOR_VIEW_UNSELECTED);
-    // this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_4,
-    // Views.SEQUENCER.equals (previousViewId) ? APCColors.COLOR_VIEW_SELECTED :
-    // APCColors.COLOR_VIEW_UNSELECTED);
-    // this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_5,
-    // Views.RAINDROPS.equals (previousViewId) ? APCColors.COLOR_VIEW_SELECTED :
-    // APCColors.COLOR_VIEW_UNSELECTED);
-    // }
-
-
+    /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public String getButtonColorID (final ButtonID buttonID)
     {
-        // TODO Auto-generated method stub
+        final Views previousViewId = this.surface.getViewManager ().getPreviousViewId ();
+        if (buttonID == ButtonID.SCENE1)
+            return Views.SESSION.equals (previousViewId) ? APCColors.COLOR_VIEW_SELECTED : APCColors.COLOR_VIEW_UNSELECTED;
+        if (buttonID == ButtonID.SCENE2)
+            return Views.PLAY.equals (previousViewId) ? APCColors.COLOR_VIEW_SELECTED : APCColors.COLOR_VIEW_UNSELECTED;
+        if (buttonID == ButtonID.SCENE3)
+            return Views.DRUM.equals (previousViewId) ? APCColors.COLOR_VIEW_SELECTED : APCColors.COLOR_VIEW_UNSELECTED;
+        if (buttonID == ButtonID.SCENE4)
+            return Views.SEQUENCER.equals (previousViewId) ? APCColors.COLOR_VIEW_SELECTED : APCColors.COLOR_VIEW_UNSELECTED;
+        if (buttonID == ButtonID.SCENE5)
+            return Views.RAINDROPS.equals (previousViewId) ? APCColors.COLOR_VIEW_SELECTED : APCColors.COLOR_VIEW_UNSELECTED;
         return ColorManager.BUTTON_STATE_OFF;
     }
 }

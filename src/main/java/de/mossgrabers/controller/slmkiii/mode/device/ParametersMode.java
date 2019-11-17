@@ -175,7 +175,7 @@ public class ParametersMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public void updateFirstRow ()
+    public int getButtonColor (final ButtonID buttonID)
     {
         final ICursorDevice cd = this.model.getCursorDevice ();
 
@@ -206,13 +206,13 @@ public class ParametersMode extends BaseMode
             // this.surface.updateTrigger (ButtonID.ROW1_8, SLMkIIIColors.SLMKIII_RED_HALF);
             // }
 
-            return;
+            return 0;
         }
 
         if (!cd.doesExist ())
         {
             this.disableFirstRow ();
-            return;
+            return 0;
         }
 
         if (this.showDevices)
@@ -244,6 +244,8 @@ public class ParametersMode extends BaseMode
                 // selectedItemIndex ? selectedColor : existsColor : offColor);
             }
         }
+
+        return 0;
     }
 
 

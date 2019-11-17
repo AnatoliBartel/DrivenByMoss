@@ -16,12 +16,12 @@ import de.mossgrabers.controller.beatstep.view.SequencerView;
 import de.mossgrabers.controller.beatstep.view.SessionView;
 import de.mossgrabers.controller.beatstep.view.ShiftView;
 import de.mossgrabers.controller.beatstep.view.TrackView;
-import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.command.aftertouch.AftertouchAbstractViewCommand;
 import de.mossgrabers.framework.command.continuous.PlayPositionCommand;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.Relative3ValueChanger;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -191,10 +191,11 @@ public class BeatstepControllerSetup extends AbstractControllerSetup<BeatstepCon
         final ViewManager viewManager = surface.getViewManager ();
         for (int i = 0; i < 8; i++)
         {
-            this.addContinuousCommand (ContinuousCommandID.get (ContinuousCommandID.KNOB1, i), BeatstepControlSurface.BEATSTEP_KNOB_1 + i, new KnobRowViewCommand (i, this.model, surface));
-            this.addContinuousCommand (ContinuousCommandID.get (ContinuousCommandID.DEVICE_KNOB1, i), BeatstepControlSurface.BEATSTEP_KNOB_9 + i, new KnobRowViewCommand (i + 8, this.model, surface));
+            this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), new KnobRowViewCommand (i, this.model, surface), BeatstepControlSurface.BEATSTEP_KNOB_1 + i);
+            this.addRelativeKnob (ContinuousID.get (ContinuousID.DEVICE_KNOB1, i), "Knob " + (i + 9), new KnobRowViewCommand (i + 8, this.model, surface), BeatstepControlSurface.BEATSTEP_KNOB_9 + i);
         }
-        this.addContinuousCommand (ContinuousCommandID.MASTER_KNOB, BeatstepControlSurface.BEATSTEP_KNOB_MAIN, new PlayPositionCommand<> (this.model, surface));
+        this.addRelativeKnob (ContinuousID.MASTER_KNOB, "Master", new PlayPositionCommand<> (this.model, surface), BeatstepControlSurface.BEATSTEP_KNOB_MAIN);
+
         final PlayView playView = (PlayView) viewManager.getView (Views.PLAY);
         playView.registerAftertouchCommand (new AftertouchAbstractViewCommand<> (playView, this.model, surface));
     }

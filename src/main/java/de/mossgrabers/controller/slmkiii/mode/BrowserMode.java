@@ -7,6 +7,7 @@ package de.mossgrabers.controller.slmkiii.mode;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.IBrowser;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.IBrowserColumn;
@@ -128,7 +129,7 @@ public class BrowserMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public void updateFirstRow ()
+    public int getButtonColor (final ButtonID buttonID)
     {
         // TODO
         // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1,
@@ -147,6 +148,8 @@ public class BrowserMode extends BaseMode
         // SLMkIIIColors.SLMKIII_GREEN_GRASS);
         // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_8,
         // SLMkIIIColors.SLMKIII_GREEN_GRASS);
+
+        return 0;
     }
 
 

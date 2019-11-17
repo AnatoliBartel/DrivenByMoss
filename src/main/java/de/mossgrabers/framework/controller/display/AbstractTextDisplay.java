@@ -87,6 +87,14 @@ public abstract class AbstractTextDisplay implements ITextDisplay
 
     /** {@inheritDoc} */
     @Override
+    public IHwTextDisplay getHardwareDisplay ()
+    {
+        return this.hwDisplay;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public ITextDisplay setRow (final int row, final String str)
     {
         this.message[row] = str;

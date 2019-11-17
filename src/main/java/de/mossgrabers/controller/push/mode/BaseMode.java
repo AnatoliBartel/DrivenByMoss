@@ -136,34 +136,6 @@ public abstract class BaseMode extends AbstractMode<PushControlSurface, PushConf
 
 
     /**
-     * Turn off all buttons of the first row.
-     */
-    @Deprecated
-    protected void disableFirstRow ()
-    {
-        // TODO
-        // final ColorManager colorManager = this.model.getColorManager ();
-        // for (int i = 0; i < 8; i++)
-        // this.surface.updateTrigger (20 + i, colorManager.getColor
-        // (AbstractMode.BUTTON_COLOR_OFF));
-    }
-
-
-    /**
-     * Turn off all buttons of the second row.
-     */
-    @Deprecated
-    protected void disableSecondRow ()
-    {
-        // TODO
-        // final ColorManager colorManager = this.model.getColorManager ();
-        // for (int i = 0; i < 8; i++)
-        // this.surface.updateTrigger (102 + i, colorManager.getColor
-        // (AbstractMode.BUTTON_COLOR_OFF));
-    }
-
-
-    /**
      * Check if the automation needs to be stopped because a knob is no longer touched.
      *
      * @param isTouched The touch state

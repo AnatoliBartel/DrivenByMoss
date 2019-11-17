@@ -11,7 +11,6 @@ import de.mossgrabers.controller.launchkey.view.DrumView;
 import de.mossgrabers.controller.launchkey.view.PadModeSelectView;
 import de.mossgrabers.controller.launchkey.view.SessionView;
 import de.mossgrabers.controller.launchkey.view.UserPadView;
-import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.command.SceneCommand;
 import de.mossgrabers.framework.command.continuous.KnobRowModeCommand;
 import de.mossgrabers.framework.command.core.NopCommand;
@@ -22,6 +21,7 @@ import de.mossgrabers.framework.command.trigger.transport.RecordCommand;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -30,13 +30,11 @@ import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.IParameterBank;
 import de.mossgrabers.framework.daw.ISendBank;
 import de.mossgrabers.framework.daw.ITrackBank;
-import de.mossgrabers.framework.daw.ITransport;
 import de.mossgrabers.framework.daw.ModelSetup;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.daw.midi.IMidiAccess;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
-import de.mossgrabers.framework.mode.Mode;
 import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.mode.Modes;
 import de.mossgrabers.framework.mode.device.ParameterMode;
@@ -45,8 +43,6 @@ import de.mossgrabers.framework.mode.track.PanMode;
 import de.mossgrabers.framework.mode.track.SendMode;
 import de.mossgrabers.framework.mode.track.VolumeMode;
 import de.mossgrabers.framework.scale.Scales;
-import de.mossgrabers.framework.view.SceneView;
-import de.mossgrabers.framework.view.View;
 import de.mossgrabers.framework.view.ViewManager;
 import de.mossgrabers.framework.view.Views;
 
@@ -219,34 +215,35 @@ public class LaunchkeyMiniMk3ControllerSetup extends AbstractControllerSetup<Lau
         for (int i = 0; i < 8; i++)
         {
             final KnobRowModeCommand<LaunchkeyMiniMk3ControlSurface, LaunchkeyMiniMk3Configuration> command = new KnobRowModeCommand<> (i, this.model, surface);
-            this.addContinuousCommand (ContinuousCommandID.get (ContinuousCommandID.KNOB1, i), LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_KNOB_1 + i, 15, command);
-            this.addContinuousCommand (ContinuousCommandID.get (ContinuousCommandID.KNOB1, i), LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_KNOB_1 + i, command);
+            // TODO this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "", command, 15,
+            // LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_KNOB_1 + i);
+            this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "", command, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_KNOB_1 + i);
         }
 
-        this.addContinuousCommand (ContinuousCommandID.MODE_SELECTION, 0x09, 0x0F, value -> {
-            final Modes mode = MODES_SELECT.get (Integer.valueOf (value));
-            if (mode == null)
-            {
-                this.host.println ("Unknown knob mode " + value);
-                return;
-            }
-            final ModeManager modeManager = this.getSurface ().getModeManager ();
-            modeManager.setActiveMode (mode);
-            surface.getDisplay ().notify (modeManager.getActiveOrTempMode ().getName ());
-        });
-
-        this.addContinuousCommand (ContinuousCommandID.VIEW_SELECTION, 0x03, 0x0F, value -> {
-            final Views view = VIEWS_SELECT.get (Integer.valueOf (value));
-            if (view == null)
-            {
-                this.host.println ("Unknown pad mode " + value);
-                return;
-            }
-            final ViewManager viewManager = this.getSurface ().getViewManager ();
-            viewManager.setActiveView (view);
-            surface.getDisplay ().notify (viewManager.getActiveView ().getName ());
-            surface.getPadGrid ().setView (view);
-        });
+        // this.addContinuousCommand (ContinuousCommandID.MODE_SELECTION, 0x09, 0x0F, value -> {
+        // final Modes mode = MODES_SELECT.get (Integer.valueOf (value));
+        // if (mode == null)
+        // {
+        // this.host.println ("Unknown knob mode " + value);
+        // return;
+        // }
+        // final ModeManager modeManager = this.getSurface ().getModeManager ();
+        // modeManager.setActiveMode (mode);
+        // surface.getDisplay ().notify (modeManager.getActiveOrTempMode ().getName ());
+        // });
+        //
+        // this.addContinuousCommand (ContinuousCommandID.VIEW_SELECTION, 0x03, 0x0F, value -> {
+        // final Views view = VIEWS_SELECT.get (Integer.valueOf (value));
+        // if (view == null)
+        // {
+        // this.host.println ("Unknown pad mode " + value);
+        // return;
+        // }
+        // final ViewManager viewManager = this.getSurface ().getViewManager ();
+        // viewManager.setActiveView (view);
+        // surface.getDisplay ().notify (viewManager.getActiveView ().getName ());
+        // surface.getPadGrid ().setView (view);
+        // });
     }
 
 
@@ -262,51 +259,51 @@ public class LaunchkeyMiniMk3ControllerSetup extends AbstractControllerSetup<Lau
         surface.setPadMode (LaunchkeyMiniMk3ControlSurface.PAD_MODE_SESSION);
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    protected void updateButtons ()
-    {
-        final LaunchkeyMiniMk3ControlSurface surface = this.getSurface ();
-        final ITransport t = this.model.getTransport ();
-
-        final int colorLow = this.colorManager.getColorIndex (ColorManager.BUTTON_STATE_ON);
-        final int colorHi = this.colorManager.getColorIndex (ColorManager.BUTTON_STATE_HI);
-
-        // TODO
-        // surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_PLAY, t.isPlaying ()
-        // ? colorHi : colorLow);
-        // surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_RECORD,
-        // t.isLauncherOverdub () || t.isRecording () ? colorHi : colorLow);
-
-        final ModeManager modeManager = this.getSurface ().getModeManager ();
-        final Mode mode = modeManager.getActiveOrTempMode ();
-        if (mode == null)
-            return;
-        boolean hasPrevItem = mode.hasPreviousItem ();
-        boolean hasNextItem = mode.hasNextItem ();
-        if (modeManager.isActiveMode (Modes.DEVICE_PARAMS))
-        {
-            final ICursorDevice cursorDevice = this.model.getCursorDevice ();
-            hasPrevItem = cursorDevice.canSelectPreviousFX ();
-            hasNextItem = cursorDevice.canSelectNextFX ();
-        }
-
-        // TODO
-        // surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_LEFT, hasPrevItem ?
-        // colorHi : colorLow);
-        // surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_RIGHT, hasNextItem ?
-        // colorHi : colorLow);
-
-        final ViewManager viewManager = surface.getViewManager ();
-        final View activeView = viewManager.getActiveView ();
-        if (activeView instanceof SceneView)
-        {
-            // TODO
-            // for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
-            // ((SceneView) activeView).updateSceneButton (i);
-        }
-    }
+    // TODO
+    // /** {@inheritDoc} */
+    // @Override
+    // protected void updateButtons ()
+    // {
+    // final LaunchkeyMiniMk3ControlSurface surface = this.getSurface ();
+    // final ITransport t = this.model.getTransport ();
+    //
+    // final int colorLow = this.colorManager.getColorIndex (ColorManager.BUTTON_STATE_ON);
+    // final int colorHi = this.colorManager.getColorIndex (ColorManager.BUTTON_STATE_HI);
+    //
+    // // TODO
+    // // surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_PLAY, t.isPlaying ()
+    // // ? colorHi : colorLow);
+    // // surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_RECORD,
+    // // t.isLauncherOverdub () || t.isRecording () ? colorHi : colorLow);
+    //
+    // final ModeManager modeManager = this.getSurface ().getModeManager ();
+    // final Mode mode = modeManager.getActiveOrTempMode ();
+    // if (mode == null)
+    // return;
+    // boolean hasPrevItem = mode.hasPreviousItem ();
+    // boolean hasNextItem = mode.hasNextItem ();
+    // if (modeManager.isActiveMode (Modes.DEVICE_PARAMS))
+    // {
+    // final ICursorDevice cursorDevice = this.model.getCursorDevice ();
+    // hasPrevItem = cursorDevice.canSelectPreviousFX ();
+    // hasNextItem = cursorDevice.canSelectNextFX ();
+    // }
+    //
+    // // TODO
+    // // surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_LEFT, hasPrevItem ?
+    // // colorHi : colorLow);
+    // // surface.updateTrigger (15, LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_RIGHT, hasNextItem ?
+    // // colorHi : colorLow);
+    //
+    // final ViewManager viewManager = surface.getViewManager ();
+    // final View activeView = viewManager.getActiveView ();
+    // if (activeView instanceof SceneView)
+    // {
+    // // TODO
+    // // for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
+    // // ((SceneView) activeView).updateSceneButton (i);
+    // }
+    // }
 
 
     /** {@inheritDoc} */

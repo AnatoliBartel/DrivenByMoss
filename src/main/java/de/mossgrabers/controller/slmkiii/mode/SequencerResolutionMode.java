@@ -8,6 +8,7 @@ import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.controller.slmkiii.view.DrumView;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.constants.Resolution;
 import de.mossgrabers.framework.utils.ButtonEvent;
@@ -58,7 +59,7 @@ public class SequencerResolutionMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public void updateFirstRow ()
+    public int getButtonColor (final ButtonID buttonID)
     {
         final DrumView drumView = (DrumView) this.surface.getViewManager ().getView (Views.DRUM);
         final int match = Resolution.getMatch (drumView.getClip ().getStepLength ());
@@ -66,6 +67,8 @@ public class SequencerResolutionMode extends BaseMode
         // for (int i = 0; i < 8; i++)
         // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i, match == i
         // ? SLMkIIIColors.SLMKIII_PINK : SLMkIIIColors.SLMKIII_DARK_GREY);
+
+        return 0;
     }
 
 

@@ -391,90 +391,89 @@ public class HUIControllerSetup extends AbstractControllerSetup<HUIControlSurfac
         this.host.scheduleTask (this::sendPing, 1000);
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    protected void updateButtons ()
-    {
-        final HUIControlSurface surface = this.getSurface ();
-        final Modes mode = surface.getModeManager ().getActiveOrTempModeId ();
-        if (mode == null)
-            return;
-
-        this.updateVUandFaders ();
-        this.updateSegmentDisplay ();
-
-        // TODO Set button states
-        // final ITransport t = this.model.getTransport ();
-        // surface.updateTrigger (HUIControlSurface.HUI_ASSIGN1_PAN, Modes.PAN.equals (mode) ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_ASSIGN1_SEND_A, Modes.SEND1.equals (mode) ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_ASSIGN1_SEND_B, Modes.SEND2.equals (mode) ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_ASSIGN1_SEND_C, Modes.SEND3.equals (mode) ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_ASSIGN1_SEND_D, Modes.SEND4.equals (mode) ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_ASSIGN1_SEND_E, Modes.SEND5.equals (mode) ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        //
-        // final String automationWriteMode = t.getAutomationWriteMode ();
-        // final boolean writingArrangerAutomation = t.isWritingArrangerAutomation ();
-        //
-        // surface.updateTrigger (HUIControlSurface.HUI_AUTO_MODE_OFF, !writingArrangerAutomation ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_AUTO_MODE_READ, !writingArrangerAutomation ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_AUTO_MODE_WRITE, writingArrangerAutomation
-        // && TransportConstants.AUTOMATION_MODES_VALUES[2].equals (automationWriteMode) ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_AUTO_MODE_TRIM,
-        // t.isWritingClipLauncherAutomation () ? HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_AUTO_MODE_TOUCH, writingArrangerAutomation
-        // && TransportConstants.AUTOMATION_MODES_VALUES[1].equals (automationWriteMode) ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_AUTO_MODE_LATCH, writingArrangerAutomation
-        // && TransportConstants.AUTOMATION_MODES_VALUES[0].equals (automationWriteMode) ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        //
-        // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_REWIND, ((WindCommand<?, ?>)
-        // surface.getButton (ButtonID.REWIND)).isRewinding () ? HUI_BUTTON_STATE_ON :
-        // HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_FAST_FWD, ((WindCommand<?, ?>)
-        // surface.getButton (ButtonID.FORWARD)).isForwarding () ? HUI_BUTTON_STATE_ON :
-        // HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_LOOP, t.isLoop () ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_STOP, !t.isPlaying () ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_PLAY, t.isPlaying () ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_RECORD, t.isRecording () ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        //
-        // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_PRE, t.isMetronomeOn () ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_POST, HUI_BUTTON_STATE_OFF);
-        //
-        // surface.updateTrigger (HUIControlSurface.HUI_CURSOR_MODE, surface.getConfiguration
-        // ().isZoomState () ? HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        //
-        // final ITrackBank tb = this.model.getCurrentTrackBank ();
-        // for (int i = 0; i < 8; i++)
-        // {
-        // final ITrack track = tb.getItem (i);
-        // final int offset = i * 8;
-        // surface.updateTrigger (HUIControlSurface.HUI_SELECT1 + offset, track.isSelected () ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_ARM1 + offset, track.isRecArm () ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_SOLO1 + offset, track.isSolo () ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // surface.updateTrigger (HUIControlSurface.HUI_MUTE1 + offset, track.isMute () ?
-        // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
-        // }
-    }
+    // /** {@inheritDoc} */
+    // @Override
+    // protected void updateButtons ()
+    // {
+    // final HUIControlSurface surface = this.getSurface ();
+    // final Modes mode = surface.getModeManager ().getActiveOrTempModeId ();
+    // if (mode == null)
+    // return;
+    //
+    // this.updateVUandFaders ();
+    // this.updateSegmentDisplay ();
+    //
+    // TODO Set button states
+    // final ITransport t = this.model.getTransport ();
+    // surface.updateTrigger (HUIControlSurface.HUI_ASSIGN1_PAN, Modes.PAN.equals (mode) ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_ASSIGN1_SEND_A, Modes.SEND1.equals (mode) ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_ASSIGN1_SEND_B, Modes.SEND2.equals (mode) ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_ASSIGN1_SEND_C, Modes.SEND3.equals (mode) ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_ASSIGN1_SEND_D, Modes.SEND4.equals (mode) ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_ASSIGN1_SEND_E, Modes.SEND5.equals (mode) ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    //
+    // final String automationWriteMode = t.getAutomationWriteMode ();
+    // final boolean writingArrangerAutomation = t.isWritingArrangerAutomation ();
+    //
+    // surface.updateTrigger (HUIControlSurface.HUI_AUTO_MODE_OFF, !writingArrangerAutomation ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_AUTO_MODE_READ, !writingArrangerAutomation ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_AUTO_MODE_WRITE, writingArrangerAutomation
+    // && TransportConstants.AUTOMATION_MODES_VALUES[2].equals (automationWriteMode) ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_AUTO_MODE_TRIM,
+    // t.isWritingClipLauncherAutomation () ? HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_AUTO_MODE_TOUCH, writingArrangerAutomation
+    // && TransportConstants.AUTOMATION_MODES_VALUES[1].equals (automationWriteMode) ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_AUTO_MODE_LATCH, writingArrangerAutomation
+    // && TransportConstants.AUTOMATION_MODES_VALUES[0].equals (automationWriteMode) ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    //
+    // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_REWIND, ((WindCommand<?, ?>)
+    // surface.getButton (ButtonID.REWIND)).isRewinding () ? HUI_BUTTON_STATE_ON :
+    // HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_FAST_FWD, ((WindCommand<?, ?>)
+    // surface.getButton (ButtonID.FORWARD)).isForwarding () ? HUI_BUTTON_STATE_ON :
+    // HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_LOOP, t.isLoop () ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_STOP, !t.isPlaying () ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_PLAY, t.isPlaying () ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_RECORD, t.isRecording () ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    //
+    // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_PRE, t.isMetronomeOn () ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_TRANSPORT_POST, HUI_BUTTON_STATE_OFF);
+    //
+    // surface.updateTrigger (HUIControlSurface.HUI_CURSOR_MODE, surface.getConfiguration
+    // ().isZoomState () ? HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    //
+    // final ITrackBank tb = this.model.getCurrentTrackBank ();
+    // for (int i = 0; i < 8; i++)
+    // {
+    // final ITrack track = tb.getItem (i);
+    // final int offset = i * 8;
+    // surface.updateTrigger (HUIControlSurface.HUI_SELECT1 + offset, track.isSelected () ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_ARM1 + offset, track.isRecArm () ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_SOLO1 + offset, track.isSolo () ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // surface.updateTrigger (HUIControlSurface.HUI_MUTE1 + offset, track.isMute () ?
+    // HUI_BUTTON_STATE_ON : HUI_BUTTON_STATE_OFF);
+    // }
+    // }
 
 
     private void updateSegmentDisplay ()

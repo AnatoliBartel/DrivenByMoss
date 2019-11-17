@@ -201,11 +201,17 @@ public class ClipMode extends AbstractTrackMode
 
     /** {@inheritDoc} */
     @Override
-    public int getSecondRowColor (final int index)
+    public int getButtonColor (final ButtonID buttonID)
     {
-        if (index == 7)
-            return this.displayMidiNotes ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH2_COLOR2_WHITE;
-        return PushColors.PUSH2_COLOR_BLACK;
+        final int index = this.isButtonRow (1, buttonID);
+        if (index >= 0)
+        {
+            if (index == 7)
+                return this.displayMidiNotes ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH2_COLOR2_WHITE;
+            return PushColors.PUSH2_COLOR_BLACK;
+        }
+
+        return super.getButtonColor (buttonID);
     }
 
 

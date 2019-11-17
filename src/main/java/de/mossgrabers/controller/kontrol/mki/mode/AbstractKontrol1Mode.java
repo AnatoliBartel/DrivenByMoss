@@ -32,39 +32,39 @@ public abstract class AbstractKontrol1Mode extends AbstractMode<Kontrol1ControlS
         this.isTemporary = false;
     }
 
+    // /** {@inheritDoc} */
+    // @Override
+    // public void updateFirstRow ()
+    // {
+    // TODO requires a new "int getButtonColor (ButtonID buttonID)" function
 
-    /** {@inheritDoc} */
-    @Override
-    public void updateFirstRow ()
-    {
-        // TODO requires a new "int getButtonColor (ButtonID buttonID)" function
+    // final ITrackBank tb = this.model.getCurrentTrackBank ();
+    // final ITrack t = tb.getSelectedItem ();
+    // final int selIndex = t != null ? t.getIndex () : -1;
+    // final boolean canScrollLeft = selIndex > 0 || tb.canScrollPageBackwards ();
+    // final boolean canScrollRight = selIndex >= 0 && selIndex < 7 && tb.getItem (selIndex +
+    // 1).doesExist () || tb.canScrollPageForwards ();
+    // final boolean canScrollUp = tb.canScrollPageForwards ();
+    // final boolean canScrollDown = tb.canScrollPageBackwards ();
 
-        final ITrackBank tb = this.model.getCurrentTrackBank ();
-        final ITrack t = tb.getSelectedItem ();
-        final int selIndex = t != null ? t.getIndex () : -1;
-        final boolean canScrollLeft = selIndex > 0 || tb.canScrollPageBackwards ();
-        final boolean canScrollRight = selIndex >= 0 && selIndex < 7 && tb.getItem (selIndex + 1).doesExist () || tb.canScrollPageForwards ();
-        final boolean canScrollUp = tb.canScrollPageForwards ();
-        final boolean canScrollDown = tb.canScrollPageBackwards ();
-
-        // TODO
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_LEFT, canScrollLeft ?
-        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_RIGHT, canScrollRight
-        // ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_UP, canScrollUp ?
-        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_DOWN, canScrollDown ?
-        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        //
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BACK, t != null && t.isMute ()
-        // ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_ENTER, t != null && t.isSolo ()
-        // ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        //
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BROWSE,
-        // Kontrol1Colors.BUTTON_STATE_ON);
-    }
+    // TODO
+    // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_LEFT, canScrollLeft ?
+    // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+    // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_RIGHT, canScrollRight
+    // ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+    // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_UP, canScrollUp ?
+    // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+    // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_DOWN, canScrollDown ?
+    // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+    //
+    // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BACK, t != null && t.isMute ()
+    // ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+    // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_ENTER, t != null && t.isSolo ()
+    // ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+    //
+    // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BROWSE,
+    // Kontrol1Colors.BUTTON_STATE_ON);
+    // }
 
 
     /** {@inheritDoc} */

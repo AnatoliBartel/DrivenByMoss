@@ -20,7 +20,6 @@ import de.mossgrabers.controller.apc.view.RaindropsView;
 import de.mossgrabers.controller.apc.view.SequencerView;
 import de.mossgrabers.controller.apc.view.SessionView;
 import de.mossgrabers.controller.apc.view.ShiftView;
-import de.mossgrabers.framework.command.ContinuousCommandID;
 import de.mossgrabers.framework.command.SceneCommand;
 import de.mossgrabers.framework.command.continuous.CrossfaderCommand;
 import de.mossgrabers.framework.command.continuous.FaderAbsoluteCommand;
@@ -41,9 +40,11 @@ import de.mossgrabers.framework.command.trigger.view.ToggleShiftViewCommand;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
+import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.IParameterBank;
@@ -314,29 +315,20 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
     protected void registerContinuousCommands ()
     {
         final APCControlSurface surface = this.getSurface ();
-        final ViewManager viewManager = surface.getViewManager ();
 
-        this.addContinuousCommand (ContinuousCommandID.MASTER_KNOB, APCControlSurface.APC_KNOB_MASTER_LEVEL, new MasterFaderAbsoluteCommand<> (this.model, surface));
-        this.addContinuousCommand (ContinuousCommandID.PLAY_POSITION, APCControlSurface.APC_KNOB_CUE_LEVEL, new PlayPositionCommand<> (this.model, surface));
-        this.addContinuousCommand (ContinuousCommandID.CROSSFADER, APCControlSurface.APC_KNOB_CROSSFADER, new CrossfaderCommand<> (this.model, surface));
+        this.addFader (ContinuousID.MASTER_KNOB, "Master", new MasterFaderAbsoluteCommand<> (this.model, surface), BindType.CC, APCControlSurface.APC_KNOB_MASTER_LEVEL);
+        this.addRelativeKnob (ContinuousID.PLAY_POSITION, "Play Position", new PlayPositionCommand<> (this.model, surface), APCControlSurface.APC_KNOB_CUE_LEVEL);
+        this.addFader (ContinuousID.CROSSFADER, "Crossfader", new CrossfaderCommand<> (this.model, surface), BindType.CC, APCControlSurface.APC_KNOB_CROSSFADER);
 
         for (int i = 0; i < 8; i++)
         {
-            final ContinuousCommandID faderCommand = ContinuousCommandID.get (ContinuousCommandID.FADER1, i);
-            viewManager.registerContinuousCommand (faderCommand, new FaderAbsoluteCommand<> (i, this.model, surface));
-            surface.assignContinuousCommand (i, APCControlSurface.APC_KNOB_TRACK_LEVEL, faderCommand);
-
-            final ContinuousCommandID knobCommand = ContinuousCommandID.get (ContinuousCommandID.KNOB1, i);
-            viewManager.registerContinuousCommand (knobCommand, new KnobRowModeCommand<> (i, this.model, surface));
-            surface.assignContinuousCommand (APCControlSurface.APC_KNOB_TRACK_KNOB_1 + i, knobCommand);
-
-            final ContinuousCommandID deviceKnobCommand = ContinuousCommandID.get (ContinuousCommandID.DEVICE_KNOB1, i);
-            viewManager.registerContinuousCommand (deviceKnobCommand, new DeviceParamsKnobRowCommand<> (i, this.model, surface));
-            surface.assignContinuousCommand (APCControlSurface.APC_KNOB_DEVICE_KNOB_1 + i, deviceKnobCommand);
+            this.addFader (ContinuousID.get (ContinuousID.FADER1, i), "Fader" + (i + 1), new FaderAbsoluteCommand<> (i, this.model, surface), BindType.CC, i, APCControlSurface.APC_KNOB_TRACK_LEVEL);
+            this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), new KnobRowModeCommand<> (i, this.model, surface), APCControlSurface.APC_KNOB_TRACK_KNOB_1 + i);
+            this.addRelativeKnob (ContinuousID.get (ContinuousID.DEVICE_KNOB1, i), "Device Knob " + (i + 1), new DeviceParamsKnobRowCommand<> (i, this.model, surface), APCControlSurface.APC_KNOB_DEVICE_KNOB_1 + i);
         }
 
         if (this.isMkII)
-            this.addContinuousCommand (ContinuousCommandID.TEMPO, APCControlSurface.APC_KNOB_TEMPO, new TempoCommand<> (this.model, surface));
+            this.addRelativeKnob (ContinuousID.TEMPO, "Tempo", new TempoCommand<> (this.model, surface), APCControlSurface.APC_KNOB_TEMPO);
     }
 
 
@@ -349,131 +341,130 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
         surface.getViewManager ().setActiveView (Views.PLAY);
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    protected void updateButtons ()
-    {
-        final APCControlSurface surface = this.getSurface ();
-        final ViewManager viewManager = surface.getViewManager ();
-        final View activeView = viewManager.getActiveView ();
-        if (activeView != null)
-        {
-            // TODO((CursorCommand<?, ?>) activeView.getTriggerCommand
-            // (TriggerCommandID.ARROW_DOWN)).updateArrows ();
-            // for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
-            // ((SceneView) activeView).updateSceneButton (i);
-        }
-
-        // TODO Update button LEDs
-        // final boolean isShift = surface.isShiftPressed ();
-        // final boolean isSendA = surface.isPressed (APCControlSurface.APC_BUTTON_SEND_A);
-        //
-        // final ITransport t = this.model.getTransport ();
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_PLAY, t.isPlaying () ?
-        // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_RECORD, t.isRecording () ?
-        // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        //
-        // // Activator, Solo, Record Arm
-        // final ITrackBank tb = this.model.getCurrentTrackBank ();
-        // final ITrack selTrack = tb.getSelectedItem ();
-        // final int selIndex = selTrack == null ? -1 : selTrack.getIndex ();
-        // final int clipLength = surface.getConfiguration ().getNewClipLength ();
-        // final ModeManager modeManager = surface.getModeManager ();
-        // for (int i = 0; i < 8; i++)
-        // {
-        // final ITrack track = tb.getItem (i);
-        // final boolean trackExists = track.doesExist ();
-        //
-        // boolean isOn;
-        // if (isShift)
-        // isOn = i == clipLength;
-        // else
-        // isOn = isSendA ? modeManager.isActiveOrTempMode (Modes.get (Modes.SEND1, i)) : i ==
-        // selIndex;
-        // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_TRACK_SELECTION, isOn ?
-        // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_SOLO, trackExists &&
-        // getSoloButtonState (isShift, track) ? ColorManager.BUTTON_STATE_ON :
-        // ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_ACTIVATOR, trackExists &&
-        // getMuteButtonState (isShift, track) ? ColorManager.BUTTON_STATE_ON :
-        // ColorManager.BUTTON_STATE_OFF);
-        //
-        // if (this.isMkII)
-        // {
-        // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_A_B, getCrossfadeButtonColor
-        // (track, trackExists));
-        // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_RECORD_ARM, trackExists &&
-        // track.isRecArm () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        // }
-        // else
-        // {
-        // if (isShift)
-        // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_RECORD_ARM,
-        // getCrossfadeButtonColor (track, trackExists));
-        // else
-        // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_RECORD_ARM, trackExists &&
-        // track.isRecArm () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        // }
-        // }
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_MASTER, this.model.getMasterTrack
-        // ().isSelected () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        //
-        // final ICursorDevice device = this.model.getCursorDevice ();
-        //
-        // if (this.isMkII)
-        // {
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_SESSION, t.isLauncherOverdub () ?
-        // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_SEND_C, t.isMetronomeOn () ?
-        // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        //
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_DETAIL_VIEW, device.isEnabled () ?
-        // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_REC_QUANT,
-        // ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_MIDI_OVERDUB,
-        // ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_METRONOME,
-        // ColorManager.BUTTON_STATE_OFF);
-        //
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_CLIP_TRACK,
-        // ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_DEVICE_ON_OFF,
-        // ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_DEVICE_LEFT,
-        // ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_DEVICE_RIGHT,
-        // ColorManager.BUTTON_STATE_OFF);
-        //
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_BANK, this.model.getBrowser
-        // ().isActive () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        // }
-        // else
-        // {
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_DETAIL_VIEW,
-        // ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_REC_QUANT,
-        // ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_MIDI_OVERDUB, t.isLauncherOverdub ()
-        // ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_METRONOME, t.isMetronomeOn () ?
-        // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        //
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_CLIP_TRACK,
-        // ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_DEVICE_ON_OFF, device.isEnabled () ?
-        // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_DEVICE_LEFT,
-        // ColorManager.BUTTON_STATE_OFF);
-        // surface.updateTrigger (APCControlSurface.APC_BUTTON_DEVICE_RIGHT,
-        // ColorManager.BUTTON_STATE_OFF);
-        // }
-
-        this.updateDeviceKnobs ();
-    }
+    // /** {@inheritDoc} */
+    // @Override
+    // protected void updateButtons ()
+    // {
+    // final APCControlSurface surface = this.getSurface ();
+    // final ViewManager viewManager = surface.getViewManager ();
+    // final View activeView = viewManager.getActiveView ();
+    // if (activeView != null)
+    // {
+    // TODO((CursorCommand<?, ?>) activeView.getTriggerCommand
+    // (TriggerCommandID.ARROW_DOWN)).updateArrows ();
+    // for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
+    // ((SceneView) activeView).updateSceneButton (i);
+    // }
+    //
+    // TODO Update button LEDs
+    // final boolean isShift = surface.isShiftPressed ();
+    // final boolean isSendA = surface.isPressed (APCControlSurface.APC_BUTTON_SEND_A);
+    //
+    // final ITransport t = this.model.getTransport ();
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_PLAY, t.isPlaying () ?
+    // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_RECORD, t.isRecording () ?
+    // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    //
+    // // Activator, Solo, Record Arm
+    // final ITrackBank tb = this.model.getCurrentTrackBank ();
+    // final ITrack selTrack = tb.getSelectedItem ();
+    // final int selIndex = selTrack == null ? -1 : selTrack.getIndex ();
+    // final int clipLength = surface.getConfiguration ().getNewClipLength ();
+    // final ModeManager modeManager = surface.getModeManager ();
+    // for (int i = 0; i < 8; i++)
+    // {
+    // final ITrack track = tb.getItem (i);
+    // final boolean trackExists = track.doesExist ();
+    //
+    // boolean isOn;
+    // if (isShift)
+    // isOn = i == clipLength;
+    // else
+    // isOn = isSendA ? modeManager.isActiveOrTempMode (Modes.get (Modes.SEND1, i)) : i ==
+    // selIndex;
+    // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_TRACK_SELECTION, isOn ?
+    // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_SOLO, trackExists &&
+    // getSoloButtonState (isShift, track) ? ColorManager.BUTTON_STATE_ON :
+    // ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_ACTIVATOR, trackExists &&
+    // getMuteButtonState (isShift, track) ? ColorManager.BUTTON_STATE_ON :
+    // ColorManager.BUTTON_STATE_OFF);
+    //
+    // if (this.isMkII)
+    // {
+    // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_A_B, getCrossfadeButtonColor
+    // (track, trackExists));
+    // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_RECORD_ARM, trackExists &&
+    // track.isRecArm () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    // }
+    // else
+    // {
+    // if (isShift)
+    // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_RECORD_ARM,
+    // getCrossfadeButtonColor (track, trackExists));
+    // else
+    // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_RECORD_ARM, trackExists &&
+    // track.isRecArm () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    // }
+    // }
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_MASTER, this.model.getMasterTrack
+    // ().isSelected () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    //
+    // final ICursorDevice device = this.model.getCursorDevice ();
+    //
+    // if (this.isMkII)
+    // {
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_SESSION, t.isLauncherOverdub () ?
+    // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_SEND_C, t.isMetronomeOn () ?
+    // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    //
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_DETAIL_VIEW, device.isEnabled () ?
+    // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_REC_QUANT,
+    // ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_MIDI_OVERDUB,
+    // ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_METRONOME,
+    // ColorManager.BUTTON_STATE_OFF);
+    //
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_CLIP_TRACK,
+    // ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_DEVICE_ON_OFF,
+    // ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_DEVICE_LEFT,
+    // ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_DEVICE_RIGHT,
+    // ColorManager.BUTTON_STATE_OFF);
+    //
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_BANK, this.model.getBrowser
+    // ().isActive () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    // }
+    // else
+    // {
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_DETAIL_VIEW,
+    // ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_REC_QUANT,
+    // ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_MIDI_OVERDUB, t.isLauncherOverdub ()
+    // ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_METRONOME, t.isMetronomeOn () ?
+    // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    //
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_CLIP_TRACK,
+    // ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_DEVICE_ON_OFF, device.isEnabled () ?
+    // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_DEVICE_LEFT,
+    // ColorManager.BUTTON_STATE_OFF);
+    // surface.updateTrigger (APCControlSurface.APC_BUTTON_DEVICE_RIGHT,
+    // ColorManager.BUTTON_STATE_OFF);
+    // }
+    //
+    // this.updateDeviceKnobs ();
+    // }
 
 
     private static String getCrossfadeButtonColor (final ITrack track, final boolean trackExists)
@@ -543,9 +534,13 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
         final IParameterBank parameterBank = this.model.getCursorDevice ().getParameterBank ();
         for (int i = 0; i < 8; i++)
         {
-            final ContinuousCommandID deviceKnobCommand = ContinuousCommandID.get (ContinuousCommandID.DEVICE_KNOB1, i);
-            if (!((DeviceParamsKnobRowCommand<?, ?>) view.getContinuousCommand (deviceKnobCommand)).isKnobMoving ())
-                surface.setLED (APCControlSurface.APC_KNOB_DEVICE_KNOB_1 + i, parameterBank.getItem (i).getValue ());
+            // TODO
+            // final ContinuousCommandID deviceKnobCommand = ContinuousCommandID.get
+            // (ContinuousCommandID.DEVICE_KNOB1, i);
+            // if (!((DeviceParamsKnobRowCommand<?, ?>) view.getContinuousCommand
+            // (deviceKnobCommand)).isKnobMoving ())
+            // surface.setLED (APCControlSurface.APC_KNOB_DEVICE_KNOB_1 + i, parameterBank.getItem
+            // (i).getValue ());
         }
     }
 

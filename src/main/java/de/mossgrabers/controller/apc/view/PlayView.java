@@ -6,10 +6,9 @@ package de.mossgrabers.controller.apc.view;
 
 import de.mossgrabers.controller.apc.APCConfiguration;
 import de.mossgrabers.controller.apc.controller.APCControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IModel;
-import de.mossgrabers.framework.daw.ITrackBank;
-import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.view.AbstractPlayView;
 import de.mossgrabers.framework.view.SceneView;
@@ -48,33 +47,16 @@ public class PlayView extends AbstractPlayView<APCControlSurface, APCConfigurati
             this.surface.sendMidiEvent (0x90, mapped, velocity);
     }
 
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // TODO this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene,
-    // scene == 2 ? ColorManager.BUTTON_STATE_OFF : ColorManager.BUTTON_STATE_ON);
-    // }
-
-
-    @Override
-    public String getSceneButtonColor (final int scene)
-    {
-        // TODO Auto-generated method stub
-        return ColorManager.BUTTON_STATE_OFF;
-    }
-
 
     /** {@inheritDoc} */
     @Override
-    public void updateArrows ()
+    public String getButtonColorID (final ButtonID buttonID)
     {
-        final ITrackBank tb = this.model.getCurrentTrackBank ();
-        final ITrack sel = tb.getSelectedItem ();
-        this.canScrollLeft = sel != null && sel.getIndex () > 0 || tb.canScrollPageBackwards ();
-        this.canScrollRight = sel != null && sel.getIndex () < 7 || tb.canScrollPageForwards ();
+        final int index = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
+        if (index >= 0 && index < 8)
+            return index == 2 ? ColorManager.BUTTON_STATE_OFF : ColorManager.BUTTON_STATE_ON;
 
-        super.updateArrows ();
+        return ColorManager.BUTTON_STATE_OFF;
     }
 
 

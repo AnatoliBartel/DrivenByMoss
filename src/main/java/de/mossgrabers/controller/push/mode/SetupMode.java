@@ -103,12 +103,17 @@ public class SetupMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    protected String getSecondRowColorID (final int index)
+    public String getButtonColorID (final ButtonID buttonID)
     {
-        if (index == 0)
-            return AbstractMode.BUTTON_COLOR_HI;
-        if (index == 1)
-            return AbstractMode.BUTTON_COLOR_ON;
+        int index = this.isButtonRow (1, buttonID);
+        if (index >= 0)
+        {
+            if (index == 0)
+                return AbstractMode.BUTTON_COLOR_HI;
+            if (index == 1)
+                return AbstractMode.BUTTON_COLOR_ON;
+        }
+
         return AbstractMode.BUTTON_COLOR_OFF;
     }
 

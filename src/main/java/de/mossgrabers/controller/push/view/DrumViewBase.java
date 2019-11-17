@@ -6,8 +6,10 @@ package de.mossgrabers.controller.push.view;
 
 import de.mossgrabers.controller.push.PushConfiguration;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.ITrack;
+import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.view.AbstractDrumView;
 import de.mossgrabers.framework.view.AbstractSequencerView;
@@ -73,8 +75,12 @@ public abstract class DrumViewBase extends AbstractDrumView<PushControlSurface, 
 
     /** {@inheritDoc} */
     @Override
-    public String getSceneButtonColor (final int scene)
+    public String getButtonColorID (final ButtonID buttonID)
     {
+        final int scene = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
+        if (scene < 0 || scene >= 8)
+            return AbstractMode.BUTTON_COLOR_OFF;
+
         if (this.surface.isShiftPressed ())
         {
             if (scene >= 4)
@@ -82,7 +88,7 @@ public abstract class DrumViewBase extends AbstractDrumView<PushControlSurface, 
             return this.updateLowerSceneButtons (scene);
         }
 
-        return super.getSceneButtonColor (scene);
+        return super.getButtonColorID (buttonID);
     }
 
 

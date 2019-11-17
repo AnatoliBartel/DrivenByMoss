@@ -9,6 +9,7 @@ import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.framework.command.core.AbstractPitchbendCommand;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.ITrack;
+import de.mossgrabers.framework.view.Views;
 
 
 /**
@@ -37,6 +38,14 @@ public class PitchbendCommand extends AbstractPitchbendCommand<PushControlSurfac
     @Override
     public void onPitchbend (final int channel, final int data1, final int data2)
     {
+        if (this.surface.getViewManager ().isActiveView (Views.SESSION))
+        {
+            final int value = this.surface.isShiftPressed () ? 63 : data2;
+            this.model.getTransport ().setCrossfade (this.model.getValueChanger ().toDAWValue (value));
+            this.surface.setRibbonValue (value);
+            return;
+        }
+
         // Don't get in the way of configuration
         if (this.surface.isShiftPressed ())
             return;
@@ -96,6 +105,12 @@ public class PitchbendCommand extends AbstractPitchbendCommand<PushControlSurfac
     @Override
     public void updateValue ()
     {
+        if (this.surface.getViewManager ().isActiveView (Views.SESSION))
+        {
+            this.surface.setRibbonValue (this.model.getValueChanger ().toMidiValue (this.model.getTransport ().getCrossfade ()));
+            return;
+        }
+
         final PushConfiguration config = this.surface.getConfiguration ();
         switch (config.getRibbonMode ())
         {
