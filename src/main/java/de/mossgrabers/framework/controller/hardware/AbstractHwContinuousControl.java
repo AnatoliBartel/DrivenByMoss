@@ -64,4 +64,12 @@ public abstract class AbstractHwContinuousControl extends AbstractHwInputControl
     {
         return this.touchCommand;
     }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public PitchbendCommand getPitchbendCommand ()
+    {
+        return this.pitchbendCommand;
+    }
 }

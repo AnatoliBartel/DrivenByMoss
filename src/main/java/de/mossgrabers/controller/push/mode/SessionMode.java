@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.push.mode;
 
 import de.mossgrabers.controller.push.controller.Push1Display;
-import de.mossgrabers.controller.push.controller.PushColors;
+import de.mossgrabers.controller.push.controller.PushColorManager;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.controller.push.mode.track.AbstractTrackMode;
 import de.mossgrabers.framework.controller.ButtonID;
@@ -128,7 +128,7 @@ public class SessionMode extends AbstractTrackMode
                 return this.colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_OFF);
 
             final ITrackBank tb = this.model.getCurrentTrackBank ();
-            return tb.hasParent () ? PushColors.PUSH2_COLOR2_WHITE : PushColors.PUSH2_COLOR_BLACK;
+            return tb.hasParent () ? PushColorManager.PUSH2_COLOR2_WHITE : PushColorManager.PUSH2_COLOR_BLACK;
         }
 
         return super.getButtonColor (buttonID);

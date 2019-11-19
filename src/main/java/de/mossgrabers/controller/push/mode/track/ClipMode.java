@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.push.mode.track;
 
-import de.mossgrabers.controller.push.controller.PushColors;
+import de.mossgrabers.controller.push.controller.PushColorManager;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.controller.push.view.ColorView;
 import de.mossgrabers.controller.push.view.ColorView.SelectMode;
@@ -207,8 +207,8 @@ public class ClipMode extends AbstractTrackMode
         if (index >= 0)
         {
             if (index == 7)
-                return this.displayMidiNotes ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH2_COLOR2_WHITE;
-            return PushColors.PUSH2_COLOR_BLACK;
+                return this.displayMidiNotes ? PushColorManager.PUSH2_COLOR_BLACK : PushColorManager.PUSH2_COLOR2_WHITE;
+            return PushColorManager.PUSH2_COLOR_BLACK;
         }
 
         return super.getButtonColor (buttonID);

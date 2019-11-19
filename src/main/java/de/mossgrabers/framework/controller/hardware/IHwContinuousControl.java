@@ -61,6 +61,14 @@ public interface IHwContinuousControl extends IHwInputControl
 
 
     /**
+     * Get the pitchbend command.
+     *
+     * @return The command or null if not bound
+     */
+    PitchbendCommand getPitchbendCommand ();
+
+
+    /**
      * Handle a value update. Only for internal updates.
      *
      * @param value The new value

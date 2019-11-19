@@ -471,7 +471,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
             if (colorIds == null || colorIds.length == 0)
                 return state;
             return this.colorManager.getColorIndex (state < 0 ? ColorManager.BUTTON_STATE_OFF : colorIds[state]);
-        }, color -> surface.setTrigger (midiChannel, midiValue, color), this.colorManager::getColor));
+        }, color -> surface.setTrigger (midiChannel, midiValue, color), state -> this.colorManager.getColor (state, buttonID)));
     }
 
 

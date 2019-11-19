@@ -4,6 +4,8 @@
 
 package de.mossgrabers.framework.controller.color;
 
+import de.mossgrabers.framework.controller.ButtonID;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,14 +18,14 @@ import java.util.Map;
 public class ColorManager
 {
     /** ID for color when button is turned off. */
-    public static final String          BUTTON_STATE_OFF = "BUTTON_STATE_OFF";
+    public static final String            BUTTON_STATE_OFF = "BUTTON_STATE_OFF";
     /** ID for color when button is turned on. */
-    public static final String          BUTTON_STATE_ON  = "BUTTON_STATE_ON";
+    public static final String            BUTTON_STATE_ON  = "BUTTON_STATE_ON";
     /** ID for color when button is highlighted. */
-    public static final String          BUTTON_STATE_HI  = "BUTTON_STATE_HI";
+    public static final String            BUTTON_STATE_HI  = "BUTTON_STATE_HI";
 
-    private final Map<String, Integer>  colorIndexByKey  = new HashMap<> ();
-    private final Map<Integer, ColorEx> colorByIndex     = new HashMap<> ();
+    protected final Map<String, Integer>  colorIndexByKey  = new HashMap<> ();
+    protected final Map<Integer, ColorEx> colorByIndex     = new HashMap<> ();
 
 
     /**
@@ -71,9 +73,10 @@ public class ColorManager
      * Get the color index which is registered with the given key.
      *
      * @param colorIndex The color index
+     * @param buttonID The ID of the button in case button LEDs have a different color range
      * @return The color index
      */
-    public ColorEx getColor (final int colorIndex)
+    public ColorEx getColor (final int colorIndex, final ButtonID buttonID)
     {
         if (colorIndex < 0)
             return ColorEx.BLACK;

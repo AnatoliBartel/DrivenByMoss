@@ -5,6 +5,7 @@
 package de.mossgrabers.framework.controller.display;
 
 import de.mossgrabers.framework.controller.color.ColorEx;
+import de.mossgrabers.framework.controller.hardware.IHwGraphicsDisplay;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.INoteClip;
 import de.mossgrabers.framework.daw.data.IScene;
@@ -90,6 +91,8 @@ public abstract class AbstractGraphicDisplay implements IGraphicDisplay
     protected final IGraphicsConfiguration configuration;
     protected final IGraphicsDimensions    dimensions;
     protected final IBitmap                image;
+
+    private IHwGraphicsDisplay             hardwareDisplay;
 
 
     /**
@@ -357,6 +360,30 @@ public abstract class AbstractGraphicDisplay implements IGraphicDisplay
     public void addSlotListElement (final List<Pair<ITrack, ISlot>> slots)
     {
         this.columns.add (new ClipListComponent (slots));
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void setHardwareDisplay (IHwGraphicsDisplay display)
+    {
+        this.hardwareDisplay = display;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public IHwGraphicsDisplay getHardwareDisplay ()
+    {
+        return this.hardwareDisplay;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public IBitmap getImage ()
+    {
+        return this.image;
     }
 
 

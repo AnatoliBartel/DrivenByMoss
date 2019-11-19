@@ -39,7 +39,7 @@ public class ColorEx
     /**
      * Constructor.
      *
-     * @param color The red, gree and blue components
+     * @param color The red, gree and blue components (0..1)
      */
     public ColorEx (final double [] color)
     {
@@ -50,9 +50,9 @@ public class ColorEx
     /**
      * Constructor.
      *
-     * @param red The red component
-     * @param green The green component
-     * @param blue The blue component
+     * @param red The red component (0..1)
+     * @param green The green component (0..1)
+     * @param blue The blue component (0..1)
      */
     public ColorEx (final double red, final double green, final double blue)
     {

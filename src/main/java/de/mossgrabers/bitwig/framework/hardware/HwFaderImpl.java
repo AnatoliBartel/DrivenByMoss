@@ -12,6 +12,7 @@ import de.mossgrabers.framework.controller.hardware.AbstractHwContinuousControl;
 import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.controller.hardware.IHwFader;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
+import de.mossgrabers.framework.utils.ButtonEvent;
 
 import com.bitwig.extension.controller.api.ControllerHost;
 import com.bitwig.extension.controller.api.HardwareSlider;
@@ -75,6 +76,12 @@ public class HwFaderImpl extends AbstractHwContinuousControl implements IHwFader
     @Override
     public void bindTouch (final TriggerCommand command, final IMidiInput input, final BindType type, final int control)
     {
+        this.touchCommand = command;
+
+        // TODO Add a description text
+        this.hardwareFader.beginTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.DOWN), () -> "TODO"));
+        this.hardwareFader.endTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.UP), () -> "TODO"));
+
         input.bindTouch (this, type, 0, control);
     }
 
@@ -88,8 +95,9 @@ public class HwFaderImpl extends AbstractHwContinuousControl implements IHwFader
         else if (this.pitchbendCommand != null)
         {
             final double v = value * 16383.0;
-            final int data1 = (int) Math.round (v % 128.0);
+            final int data1 = (int) Math.min (127, Math.round (v % 128.0));
             final int data2 = (int) Math.min (127, Math.round (v / 128.0));
+            this.host.println (data1 + ":" + data2);
             this.pitchbendCommand.onPitchbend (0, data1, data2);
         }
     }

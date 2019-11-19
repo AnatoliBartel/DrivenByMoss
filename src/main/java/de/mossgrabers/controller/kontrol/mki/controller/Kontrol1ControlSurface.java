@@ -254,9 +254,10 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
 
             // Pitch Bend
             case 0xE0:
-                view = this.viewManager.getActiveView ();
-                if (view != null)
-                    view.executePitchbendCommand (channel, data1, data2);
+                // TODO
+                // view = this.viewManager.getActiveView ();
+                // if (view != null)
+                // view.executePitchbendCommand (channel, data1, data2);
                 break;
 
             default:

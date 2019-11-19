@@ -5,7 +5,6 @@
 package de.mossgrabers.framework.view;
 
 import de.mossgrabers.framework.command.core.AftertouchCommand;
-import de.mossgrabers.framework.command.core.PitchbendCommand;
 import de.mossgrabers.framework.controller.ButtonID;
 
 
@@ -51,7 +50,6 @@ public interface View
      *
      * @param command The command
      */
-    @Deprecated
     void registerAftertouchCommand (AftertouchCommand command);
 
 
@@ -61,37 +59,7 @@ public interface View
      * @param note The note on which aftertouch is applied. Set to -1 for channel aftertouch
      * @param value The updated value
      */
-    @Deprecated
     void executeAftertouchCommand (int note, int value);
-
-
-    /**
-     * Registers the pitchbend command.
-     *
-     * @param command The command
-     */
-    @Deprecated
-    void registerPitchbendCommand (PitchbendCommand command);
-
-
-    /**
-     * Execute the pitchbend command which has been registered before.
-     *
-     * @param channel The midi channel
-     * @param data1 The first pitchbend byte
-     * @param data2 The second pitchbend byte
-     */
-    @Deprecated
-    void executePitchbendCommand (int channel, int data1, int data2);
-
-
-    /**
-     * Get the registered pitchbend command.
-     *
-     * @return The command or null if not registered
-     */
-    @Deprecated
-    PitchbendCommand getPitchbendCommand ();
 
 
     /**

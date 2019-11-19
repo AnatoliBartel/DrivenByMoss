@@ -5,7 +5,6 @@
 package de.mossgrabers.framework.view;
 
 import de.mossgrabers.framework.command.core.AftertouchCommand;
-import de.mossgrabers.framework.command.core.PitchbendCommand;
 import de.mossgrabers.framework.configuration.Configuration;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IControlSurface;
@@ -40,7 +39,6 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
     protected final KeyManager    keyManager;
 
     private AftertouchCommand     aftertouchCommand;
-    private PitchbendCommand      pitchbendCommand;
 
     protected boolean             canScrollLeft;
     protected boolean             canScrollRight;
@@ -133,10 +131,7 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    @Deprecated
+    /** {@inheritDoc} */
     @Override
     public void registerAftertouchCommand (final AftertouchCommand command)
     {
@@ -144,12 +139,7 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
     }
 
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated
-     */
-    @Deprecated
+    /** {@inheritDoc} */
     @Override
     public void executeAftertouchCommand (final int note, final int value)
     {
@@ -159,46 +149,6 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
             this.aftertouchCommand.onChannelAftertouch (value);
         else
             this.aftertouchCommand.onPolyAftertouch (note, value);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated
-     */
-    @Deprecated
-    @Override
-    public void registerPitchbendCommand (final PitchbendCommand command)
-    {
-        this.pitchbendCommand = command;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated
-     */
-    @Deprecated
-    @Override
-    public void executePitchbendCommand (final int channel, final int data1, final int data2)
-    {
-        if (this.pitchbendCommand != null)
-            this.pitchbendCommand.onPitchbend (channel, data1, data2);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated
-     */
-    @Deprecated
-    @Override
-    public PitchbendCommand getPitchbendCommand ()
-    {
-        return this.pitchbendCommand;
     }
 
 

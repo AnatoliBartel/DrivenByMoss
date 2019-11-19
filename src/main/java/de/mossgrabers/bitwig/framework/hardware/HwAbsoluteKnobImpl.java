@@ -73,7 +73,6 @@ public class HwAbsoluteKnobImpl extends AbstractHwContinuousControl implements I
     @Override
     public void handleValue (final double value)
     {
-        // TODO Support pitchbend
         this.command.execute ((int) Math.round (value * 127.0));
     }
 

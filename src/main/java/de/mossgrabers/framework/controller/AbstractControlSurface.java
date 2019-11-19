@@ -23,6 +23,7 @@ import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
 import de.mossgrabers.framework.daw.midi.INoteInput;
+import de.mossgrabers.framework.graphics.IBitmap;
 import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.utils.ContinuousInfo;
@@ -210,6 +211,8 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public void addGraphicsDisplay (final IGraphicDisplay display)
     {
+        final IBitmap bitmap = display.getImage ();
+        display.setHardwareDisplay (this.surfaceFactory.createGraphicsDisplay (OutputID.DISPLAY1, bitmap));
         this.graphicsDisplays.add (display);
     }
 
@@ -613,8 +616,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
             // CC
             case 0xB0:
-                // TODO Check if already fully handled by framework
-                // this.handleCC (channel, data1, data2);
+                this.host.error ("CC should be handled in framework...");
                 break;
 
             // Program Change
@@ -629,11 +631,11 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
             // Pitch Bend
             case 0xE0:
-                this.handlePitchBend (channel, data1, data2);
+                this.host.error ("Pitchbend should be handled in framework...");
                 break;
 
             default:
-                this.host.println ("Unhandled midi status: " + status);
+                this.host.error ("Unhandled midi status: " + status);
                 break;
         }
     }
@@ -651,21 +653,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
             this.handleGridNote (note, velocity);
         else
             this.handleNoteEvent (note, velocity);
-    }
-
-
-    /**
-     * Handle pitch bend.
-     *
-     * @param channel The MIDI channel
-     * @param data1 First data byte
-     * @param data2 Second data byte
-     */
-    protected void handlePitchBend (final int channel, final int data1, final int data2)
-    {
-        final View view = this.viewManager.getActiveView ();
-        if (view != null)
-            view.executePitchbendCommand (channel, data1, data2);
     }
 
 

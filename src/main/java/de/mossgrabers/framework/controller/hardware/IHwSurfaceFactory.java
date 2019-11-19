@@ -8,6 +8,7 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.OutputID;
 import de.mossgrabers.framework.controller.color.ColorEx;
+import de.mossgrabers.framework.graphics.IBitmap;
 
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
@@ -74,13 +75,23 @@ public interface IHwSurfaceFactory
 
 
     /**
-     * Create a proxy to a hardware Text display.
+     * Create a proxy to a hardware text display.
      * 
      * @param outputID The ID of the display
      * @param numLines The number of lines of the display
      * @return The created display
      */
     IHwTextDisplay createTextDisplay (OutputID outputID, int numLines);
+
+
+    /**
+     * Create a proxy to a hardware graphics display.
+     * 
+     * @param outputID The ID of the display
+     * @param bitmap TODO
+     * @return The created display
+     */
+    IHwGraphicsDisplay createGraphicsDisplay (OutputID outputID, IBitmap bitmap);
 
 
     /**

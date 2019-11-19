@@ -36,15 +36,11 @@ public class ShiftCommand extends AbstractTriggerCommand<PushControlSurface, Pus
     @Override
     public void execute (final ButtonEvent event)
     {
-        final boolean isUp = event == ButtonEvent.UP;
-        // TODO this.surface.updateTrigger (PushControlSurface.PUSH_BUTTON_SHIFT, isUp ?
-        // ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_HI);
-
         final ModeManager modeManager = this.surface.getModeManager ();
         final Modes cm = modeManager.getActiveOrTempModeId ();
         if (event == ButtonEvent.DOWN && Modes.SCALES.equals (cm))
             modeManager.setActiveMode (Modes.SCALE_LAYOUT);
-        else if (isUp && Modes.SCALE_LAYOUT.equals (cm))
+        else if (event == ButtonEvent.UP && Modes.SCALE_LAYOUT.equals (cm))
             modeManager.restoreMode ();
 
         this.model.getValueChanger ().setSpeed (this.surface.isShiftPressed ());

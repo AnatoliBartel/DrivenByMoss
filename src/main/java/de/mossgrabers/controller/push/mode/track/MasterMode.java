@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.push.mode.track;
 
-import de.mossgrabers.controller.push.controller.PushColors;
+import de.mossgrabers.controller.push.controller.PushColorManager;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.controller.push.mode.BaseMode;
 import de.mossgrabers.framework.controller.ButtonID;
@@ -196,14 +196,14 @@ public class MasterMode extends BaseMode
             if (index > 5)
                 return colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON);
 
-            final int red = isPush2 ? PushColors.PUSH2_COLOR_RED_HI : PushColors.PUSH1_COLOR_RED_HI;
+            final int red = isPush2 ? PushColorManager.PUSH2_COLOR_RED_HI : PushColorManager.PUSH1_COLOR_RED_HI;
             return this.model.getApplication ().isEngineActive () ? colorManager.getColorIndex (AbstractMode.BUTTON_COLOR_ON) : red;
         }
 
         index = this.isButtonRow (1, buttonID);
         if (index >= 0)
         {
-            final int off = this.isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
+            final int off = this.isPush2 ? PushColorManager.PUSH2_COLOR_BLACK : PushColorManager.PUSH1_COLOR_BLACK;
 
             if (this.isPush2 || index > 0)
                 return off;
@@ -211,8 +211,8 @@ public class MasterMode extends BaseMode
             final boolean muteState = this.surface.getConfiguration ().isMuteState ();
             final IMasterTrack master = this.model.getMasterTrack ();
             if (muteState)
-                return master.isMute () ? off : PushColors.PUSH1_COLOR2_YELLOW_HI;
-            return master.isSolo () ? PushColors.PUSH1_COLOR2_BLUE_HI : PushColors.PUSH1_COLOR2_GREY_LO;
+                return master.isMute () ? off : PushColorManager.PUSH1_COLOR2_YELLOW_HI;
+            return master.isSolo () ? PushColorManager.PUSH1_COLOR2_BLUE_HI : PushColorManager.PUSH1_COLOR2_GREY_LO;
         }
 
         return super.getButtonColor (buttonID);
@@ -244,10 +244,10 @@ public class MasterMode extends BaseMode
     {
         final IMasterTrack track = this.model.getMasterTrack ();
         if (!track.isActivated ())
-            return this.isPush2 ? PushColors.PUSH2_COLOR_BLACK : PushColors.PUSH1_COLOR_BLACK;
+            return this.isPush2 ? PushColorManager.PUSH2_COLOR_BLACK : PushColorManager.PUSH1_COLOR_BLACK;
         if (track.isRecArm ())
-            return this.isPush2 ? PushColors.PUSH2_COLOR_RED_HI : PushColors.PUSH1_COLOR_RED_HI;
-        return this.isPush2 ? PushColors.PUSH2_COLOR_ORANGE_HI : PushColors.PUSH1_COLOR_ORANGE_HI;
+            return this.isPush2 ? PushColorManager.PUSH2_COLOR_RED_HI : PushColorManager.PUSH1_COLOR_RED_HI;
+        return this.isPush2 ? PushColorManager.PUSH2_COLOR_ORANGE_HI : PushColorManager.PUSH1_COLOR_ORANGE_HI;
     }
 
 
