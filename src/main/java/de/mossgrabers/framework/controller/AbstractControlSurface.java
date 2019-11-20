@@ -12,6 +12,7 @@ import de.mossgrabers.framework.controller.display.IDisplay;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.controller.hardware.IHwAbsoluteKnob;
 import de.mossgrabers.framework.controller.hardware.IHwButton;
 import de.mossgrabers.framework.controller.hardware.IHwContinuousControl;
@@ -113,6 +114,8 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
         if (this.input != null)
             this.input.setMidiCallback (this::handleMidi);
 
+        // TODO alles ab hier nach PadGrid
+
         // Notes
         this.noteVelocities = new int [NUM_NOTES];
 
@@ -124,8 +127,17 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
         this.gridNoteVelocities = new int [NUM_NOTES];
         for (int i = 0; i < size; i++)
         {
+            final int index = i;
             this.gridNoteStates[i] = ButtonEvent.UP;
             this.gridNoteVelocities[i] = 0;
+
+            final ButtonID buttonID = ButtonID.get (ButtonID.PAD1, i);
+            final IHwButton pad = this.createButton (buttonID, "P " + (i + 1));
+            // TODO Simulator GUI does not support blinking
+            pad.addLight (this.surfaceFactory.createLight ( () -> this.pads.getEncodedNoteState (index), state -> this.pads.sendEncodedNoteState (index, state), state -> this.colorManager.getColor (state & 0x7F, buttonID)));
+            final int note = this.pads.getStartNote () + i;
+            pad.bind (input, BindType.NOTE, this.pads.translateToGrid (note));
+            pad.bindDynamic (value -> this.handleGridNote (note, value));
         }
     }
 
@@ -601,12 +613,12 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
         {
             // Note off
             case 0x80:
-                this.handleNote (data1, 0);
+                // TODO Remove this.handleNote (data1, 0);
                 break;
 
             // Note on
             case 0x90:
-                this.handleNote (data1, data2);
+                // TODO Remove this.handleNote (data1, data2);
                 break;
 
             // Polyphonic Aftertouch

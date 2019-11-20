@@ -4,6 +4,7 @@
 
 package de.mossgrabers.framework.controller.hardware;
 
+import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.utils.ButtonEvent;
 
@@ -21,6 +22,14 @@ public interface IHwButton extends IHwInputControl
      * @param command The command to assign
      */
     void bind (TriggerCommand command);
+
+
+    /**
+     * Assign a dynamic command to a button, which is triggered by the button.
+     *
+     * @param command The command to assign
+     */
+    void bindDynamic (ContinuousCommand command);
 
 
     /**

@@ -4,6 +4,7 @@
 
 package de.mossgrabers.framework.controller.hardware;
 
+import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.utils.ButtonEvent;
@@ -16,13 +17,14 @@ import de.mossgrabers.framework.utils.ButtonEvent;
  */
 public abstract class AbstractHwButton extends AbstractHwInputControl implements IHwButton
 {
-    private static final int BUTTON_STATE_INTERVAL = 400;
+    private static final int    BUTTON_STATE_INTERVAL = 400;
 
-    protected TriggerCommand command;
-    protected IHwLight       light;
+    protected TriggerCommand    command;
+    protected ContinuousCommand dynamicCommand;
+    protected IHwLight          light;
 
-    private ButtonEvent      state;
-    private boolean          isConsumed;
+    private ButtonEvent         state;
+    private boolean             isConsumed;
 
 
     /**
@@ -42,6 +44,14 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
     public void bind (final TriggerCommand command)
     {
         this.command = command;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void bindDynamic (final ContinuousCommand command)
+    {
+        this.dynamicCommand = command;
     }
 
 
@@ -65,6 +75,35 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
         this.state = ButtonEvent.UP;
         if (!this.isConsumed)
             this.command.execute (ButtonEvent.UP);
+    }
+
+
+    /**
+     * Handle a button press with pressure information.
+     * 
+     * @param value The dynamic pressure value
+     */
+    protected void handleDynamicButtonPressed (final double value)
+    {
+        this.state = ButtonEvent.DOWN;
+        this.isConsumed = false;
+        this.host.scheduleTask (this::checkButtonState, BUTTON_STATE_INTERVAL);
+        this.dynamicCommand.execute ((int) (value * 127.0));
+    }
+
+
+    /**
+     * Handle a button release with release information.
+     * 
+     * @param value The dynamic release value
+     */
+    protected void handleDynamicButtonRelease (final double value)
+    {
+        this.state = ButtonEvent.UP;
+        if (this.isConsumed)
+            return;
+        // value == 1.0 which does creates problems...
+        this.dynamicCommand.execute (0);
     }
 
 
@@ -144,6 +183,10 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
         if (!this.isPressed ())
             return;
         this.state = ButtonEvent.LONG;
-        this.command.execute (ButtonEvent.LONG);
+        // TODO
+        if (this.command != null)
+            // this.dynamicCommand.
+            // else
+            this.command.execute (ButtonEvent.LONG);
     }
 }

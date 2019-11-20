@@ -439,7 +439,136 @@ public enum ButtonID
     /** Up button. */
     UP,
     /** Down button. */
-    DOWN;
+    DOWN,
+
+    /** Pad 1. */
+    PAD1,
+    /** Pad 2. */
+    PAD2,
+    /** Pad 3. */
+    PAD3,
+    /** Pad 4. */
+    PAD4,
+    /** Pad 5. */
+    PAD5,
+    /** Pad 6. */
+    PAD6,
+    /** Pad 7. */
+    PAD7,
+    /** Pad 8. */
+    PAD8,
+    /** Pad 9. */
+    PAD9,
+    /** Pad 10. */
+    PAD10,
+    /** Pad 11. */
+    PAD11,
+    /** Pad 12. */
+    PAD12,
+    /** Pad 13. */
+    PAD13,
+    /** Pad 14. */
+    PAD14,
+    /** Pad 15. */
+    PAD15,
+    /** Pad 16. */
+    PAD16,
+    /** Pad 17. */
+    PAD17,
+    /** Pad 18. */
+    PAD18,
+    /** Pad 19. */
+    PAD19,
+    /** Pad 20. */
+    PAD20,
+    /** Pad 21. */
+    PAD21,
+    /** Pad 22. */
+    PAD22,
+    /** Pad 23. */
+    PAD23,
+    /** Pad 24. */
+    PAD24,
+    /** Pad 25. */
+    PAD25,
+    /** Pad 26. */
+    PAD26,
+    /** Pad 27. */
+    PAD27,
+    /** Pad 28. */
+    PAD28,
+    /** Pad 29. */
+    PAD29,
+    /** Pad 30. */
+    PAD30,
+    /** Pad 31. */
+    PAD31,
+    /** Pad 32. */
+    PAD32,
+    /** Pad 33. */
+    PAD33,
+    /** Pad 34. */
+    PAD34,
+    /** Pad 35. */
+    PAD35,
+    /** Pad 36. */
+    PAD36,
+    /** Pad 37. */
+    PAD37,
+    /** Pad 38. */
+    PAD38,
+    /** Pad 39. */
+    PAD39,
+    /** Pad 40. */
+    PAD40,
+    /** Pad 41. */
+    PAD41,
+    /** Pad 42. */
+    PAD42,
+    /** Pad 43. */
+    PAD43,
+    /** Pad 44. */
+    PAD44,
+    /** Pad 45. */
+    PAD45,
+    /** Pad 46. */
+    PAD46,
+    /** Pad 47. */
+    PAD47,
+    /** Pad 48. */
+    PAD48,
+    /** Pad 49. */
+    PAD49,
+    /** Pad 50. */
+    PAD50,
+    /** Pad 51. */
+    PAD51,
+    /** Pad 52. */
+    PAD52,
+    /** Pad 53. */
+    PAD53,
+    /** Pad 54. */
+    PAD54,
+    /** Pad 55. */
+    PAD55,
+    /** Pad 56. */
+    PAD56,
+    /** Pad 57. */
+    PAD57,
+    /** Pad 58. */
+    PAD58,
+    /** Pad 59. */
+    PAD59,
+    /** Pad 60. */
+    PAD60,
+    /** Pad 61. */
+    PAD61,
+    /** Pad 62. */
+    PAD62,
+    /** Pad 63. */
+    PAD63,
+    /** Pad 64. */
+    PAD64;
 
 
     /**

@@ -174,4 +174,10 @@ public interface PadGrid
      * @return True if the note belongs to the grid
      */
     boolean isGridNote (int note);
+
+
+    int getEncodedNoteState (int index);
+
+
+    void sendEncodedNoteState (int index, int encodedColorState);
 }

@@ -29,6 +29,8 @@ public class PadGridImpl implements PadGrid
     protected final boolean []   currentBlinkFast;
     protected final boolean []   blinkFast;
 
+    protected int []             encodedColors;
+
     protected final int          rows;
     protected final int          cols;
     protected final int          startNote;
@@ -73,6 +75,7 @@ public class PadGridImpl implements PadGrid
         this.currentBlinkColors = new int [NUM_NOTES];
         this.blinkColors = new int [NUM_NOTES];
         this.currentBlinkFast = new boolean [NUM_NOTES];
+        this.encodedColors = new int [NUM_NOTES];
         this.blinkFast = new boolean [NUM_NOTES];
 
         Arrays.fill (this.currentButtonColors, -1);
@@ -202,13 +205,10 @@ public class PadGridImpl implements PadGrid
     {
         for (int i = this.startNote; i <= this.endNote; i++)
         {
-            final int note = this.translateToController (i);
-
             boolean baseChanged = false;
             if (this.currentButtonColors[i] != this.buttonColors[i])
             {
                 this.currentButtonColors[i] = this.buttonColors[i];
-                this.sendNoteState (note, this.buttonColors[i]);
                 baseChanged = true;
             }
             // No "else" here: Blinking color needs a base color
@@ -217,11 +217,45 @@ public class PadGridImpl implements PadGrid
                 this.currentBlinkColors[i] = this.blinkColors[i];
                 this.currentBlinkFast[i] = this.blinkFast[i];
 
-                this.sendNoteState (note, this.currentButtonColors[i]);
-                if (this.blinkColors[i] != this.colorManager.getColorIndex (GRID_OFF))
-                    this.sendBlinkState (note, this.blinkColors[i], this.blinkFast[i]);
+                if (this.blinkColors[i] == this.colorManager.getColorIndex (GRID_OFF))
+                    this.encodeNoteState (i - this.startNote, this.currentButtonColors[i], 128, false);
+                else
+                    this.encodeNoteState (i - this.startNote, this.currentButtonColors[i], this.blinkColors[i], this.blinkFast[i]);
             }
         }
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public int getEncodedNoteState (final int index)
+    {
+        return this.encodedColors[index];
+    }
+
+
+    protected void encodeNoteState (int index, int color, int blinkColor, boolean fast)
+    {
+        int codeBlinkColor = blinkColor << 8;
+        int codeFast = fast ? 1 << 16 : 0;
+        this.encodedColors[index] = codeFast + codeBlinkColor + color;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void sendEncodedNoteState (int index, int encodedColorState)
+    {
+        final int color = encodedColorState & 0xFF;
+        final int blinkColor = (encodedColorState >> 8) & 0xFF;
+        final boolean blinkFast = ((encodedColorState >> 16) & 1) > 0;
+
+        final int note = this.startNote + index;
+        final int translated = this.translateToController (note);
+
+        this.sendNoteState (translated, color);
+        if (blinkColor < 128)
+            this.sendBlinkState (translated, blinkColor, blinkFast);
     }
 
 

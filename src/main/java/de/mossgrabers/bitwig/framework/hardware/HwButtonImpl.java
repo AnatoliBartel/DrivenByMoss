@@ -5,6 +5,7 @@
 package de.mossgrabers.bitwig.framework.hardware;
 
 import de.mossgrabers.bitwig.framework.daw.HostImpl;
+import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.controller.hardware.AbstractHwButton;
 import de.mossgrabers.framework.controller.hardware.BindType;
@@ -60,6 +61,20 @@ public class HwButtonImpl extends AbstractHwButton
     public void bind (final IMidiInput input, final BindType type, final int channel, final int value)
     {
         input.bind (this, type, channel, value);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void bindDynamic (final ContinuousCommand command)
+    {
+        super.bindDynamic (command);
+
+        final ControllerHost controllerHost = ((HostImpl) this.host).getControllerHost ();
+
+        // TODO Add a description text
+        this.hardwareButton.pressedAction ().addBinding (controllerHost.createAction (this::handleDynamicButtonPressed, () -> "TODO"));
+        this.hardwareButton.releasedAction ().addBinding (controllerHost.createAction (this::handleDynamicButtonRelease, () -> "TODO"));
     }
 
 

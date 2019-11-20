@@ -20,6 +20,7 @@ import de.mossgrabers.framework.daw.midi.MidiShortCallback;
 import de.mossgrabers.framework.daw.midi.MidiSysExCallback;
 
 import com.bitwig.extension.controller.api.AbsoluteHardwareControl;
+import com.bitwig.extension.controller.api.AbsoluteHardwareValueMatcher;
 import com.bitwig.extension.controller.api.ContinuousHardwareControl;
 import com.bitwig.extension.controller.api.ControllerHost;
 import com.bitwig.extension.controller.api.HardwareActionMatcher;
@@ -107,6 +108,35 @@ public class MidiInputImpl implements IMidiInput
     public void bind (final IHwButton button, final BindType type, final int channel, final int value)
     {
         final HardwareButton hardwareButton = ((HwButtonImpl) button).getHardwareButton ();
+
+        if (button.getCommand () == null)
+        {
+            // Dynamic mapping
+            final AbsoluteHardwareValueMatcher pressedMatcher;
+            final HardwareActionMatcher releasedMatcher;
+            switch (type)
+            {
+                case CC:
+                    pressedMatcher = this.port.createAbsoluteCCValueMatcher (channel, value);
+                    releasedMatcher = this.port.createCCActionMatcher (channel, value, 0);
+                    break;
+
+                case NOTE:
+                    pressedMatcher = this.port.createNoteOnValueMatcher (channel, value);
+                    releasedMatcher = this.port.createNoteOffActionMatcher (channel, value);
+                    break;
+
+                default:
+                    throw new BindException (type);
+            }
+
+            hardwareButton.pressedAction ().setPressureActionMatcher (pressedMatcher);
+            hardwareButton.releasedAction ().setActionMatcher (releasedMatcher);
+            return;
+        }
+
+        // Static mapping
+
         final HardwareActionMatcher pressedMatcher;
         final HardwareActionMatcher releasedMatcher;
         switch (type)
@@ -115,13 +145,16 @@ public class MidiInputImpl implements IMidiInput
                 pressedMatcher = this.port.createCCActionMatcher (channel, value, 127);
                 releasedMatcher = this.port.createCCActionMatcher (channel, value, 0);
                 break;
+
             case NOTE:
                 pressedMatcher = this.port.createNoteOnActionMatcher (channel, value);
                 releasedMatcher = this.port.createNoteOffActionMatcher (channel, value);
                 break;
+
             default:
                 throw new BindException (type);
         }
+
         hardwareButton.pressedAction ().setActionMatcher (pressedMatcher);
         hardwareButton.releasedAction ().setActionMatcher (releasedMatcher);
     }
