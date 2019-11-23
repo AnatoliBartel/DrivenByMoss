@@ -110,7 +110,7 @@ public class GlobalHandler extends AbstractHandler
             // Global: Shift Button
             case GLOBAL_SHIFT_BUTTON:
                 this.surface.setShiftPressed (isButtonPressed);
-                this.knobSpeedCommand.execute (isButtonPressed ? ButtonEvent.DOWN : ButtonEvent.UP);
+                this.knobSpeedCommand.execute (isButtonPressed ? ButtonEvent.DOWN : ButtonEvent.UP, isButtonPressed ? 127 : 0);
                 break;
 
             default:

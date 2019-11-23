@@ -5,7 +5,6 @@
 package de.mossgrabers.bitwig.framework.hardware;
 
 import de.mossgrabers.bitwig.framework.daw.HostImpl;
-import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.controller.hardware.AbstractHwButton;
 import de.mossgrabers.framework.controller.hardware.BindType;
@@ -46,7 +45,7 @@ public class HwButtonImpl extends AbstractHwButton
     @Override
     public void bind (final TriggerCommand command)
     {
-        super.bind (command);
+        this.command = command;
 
         final ControllerHost controllerHost = ((HostImpl) this.host).getControllerHost ();
 
@@ -66,9 +65,9 @@ public class HwButtonImpl extends AbstractHwButton
 
     /** {@inheritDoc} */
     @Override
-    public void bindDynamic (final ContinuousCommand command)
+    public void bindDynamic (final TriggerCommand command)
     {
-        super.bindDynamic (command);
+        this.command = command;
 
         final ControllerHost controllerHost = ((HostImpl) this.host).getControllerHost ();
 

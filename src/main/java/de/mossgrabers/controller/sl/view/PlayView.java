@@ -232,13 +232,13 @@ public class PlayView extends AbstractSequencerView<SLControlSurface, SLConfigur
 
         if (Modes.VOLUME.equals (activeModeId))
         {
-            new P2ButtonCommand (isUp, this.model, this.surface).execute (event);
+            new P2ButtonCommand (isUp, this.model, this.surface).execute (ButtonEvent.DOWN, 127);
             return;
         }
 
         if (Modes.TRACK.equals (activeModeId) || Modes.MASTER.equals (activeModeId))
         {
-            new ButtonRowSelectCommand<> (3, this.model, this.surface).execute (event);
+            new ButtonRowSelectCommand<> (3, this.model, this.surface).execute (ButtonEvent.DOWN, 127);
             return;
         }
 

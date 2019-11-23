@@ -105,7 +105,7 @@ public class MidiInputImpl implements IMidiInput
 
     /** {@inheritDoc} */
     @Override
-    public void bind (final IHwButton button, final BindType type, final int channel, final int value)
+    public void bind (final IHwButton button, final BindType type, final int channel, final int control)
     {
         final HardwareButton hardwareButton = ((HwButtonImpl) button).getHardwareButton ();
 
@@ -117,13 +117,13 @@ public class MidiInputImpl implements IMidiInput
             switch (type)
             {
                 case CC:
-                    pressedMatcher = this.port.createAbsoluteCCValueMatcher (channel, value);
-                    releasedMatcher = this.port.createCCActionMatcher (channel, value, 0);
+                    pressedMatcher = this.port.createAbsoluteCCValueMatcher (channel, control);
+                    releasedMatcher = this.port.createCCActionMatcher (channel, control, 0);
                     break;
 
                 case NOTE:
-                    pressedMatcher = this.port.createNoteOnValueMatcher (channel, value);
-                    releasedMatcher = this.port.createNoteOffActionMatcher (channel, value);
+                    pressedMatcher = this.port.createNoteOnVelocityValueMatcher (channel, control);
+                    releasedMatcher = this.port.createNoteOffActionMatcher (channel, control);
                     break;
 
                 default:
@@ -142,13 +142,13 @@ public class MidiInputImpl implements IMidiInput
         switch (type)
         {
             case CC:
-                pressedMatcher = this.port.createCCActionMatcher (channel, value, 127);
-                releasedMatcher = this.port.createCCActionMatcher (channel, value, 0);
+                pressedMatcher = this.port.createCCActionMatcher (channel, control, 127);
+                releasedMatcher = this.port.createCCActionMatcher (channel, control, 0);
                 break;
 
             case NOTE:
-                pressedMatcher = this.port.createNoteOnActionMatcher (channel, value);
-                releasedMatcher = this.port.createNoteOffActionMatcher (channel, value);
+                pressedMatcher = this.port.createNoteOnActionMatcher (channel, control);
+                releasedMatcher = this.port.createNoteOffActionMatcher (channel, control);
                 break;
 
             default:
@@ -162,7 +162,7 @@ public class MidiInputImpl implements IMidiInput
 
     /** {@inheritDoc} */
     @Override
-    public void bind (final IHwRelativeKnob knob, final BindType type, final int channel, final int value)
+    public void bind (final IHwRelativeKnob knob, final BindType type, final int channel, final int control)
     {
         RelativeHardwareKnob hardwareKnob = ((HwRelativeKnobImpl) knob).getHardwareKnob ();
 
@@ -170,7 +170,7 @@ public class MidiInputImpl implements IMidiInput
         switch (type)
         {
             case CC:
-                hardwareKnob.setAdjustValueMatcher (this.port.createRelative2sComplementCCValueMatcher (channel, value));
+                hardwareKnob.setAdjustValueMatcher (this.port.createRelative2sComplementCCValueMatcher (channel, control));
                 break;
             case PITCHBEND:
                 break;
@@ -182,17 +182,17 @@ public class MidiInputImpl implements IMidiInput
 
     /** {@inheritDoc} */
     @Override
-    public void bind (final IHwFader fader, final BindType type, final int channel, final int value)
+    public void bind (final IHwFader fader, final BindType type, final int channel, final int control)
     {
-        this.bind (type, channel, value, ((HwFaderImpl) fader).getHardwareFader ());
+        this.bind (type, channel, control, ((HwFaderImpl) fader).getHardwareFader ());
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public void bind (final IHwAbsoluteKnob knob, final BindType type, final int channel, final int value)
+    public void bind (final IHwAbsoluteKnob knob, final BindType type, final int channel, final int control)
     {
-        this.bind (type, channel, value, ((HwAbsoluteKnobImpl) knob).getHardwareKnob ());
+        this.bind (type, channel, control, ((HwAbsoluteKnobImpl) knob).getHardwareKnob ());
     }
 
 

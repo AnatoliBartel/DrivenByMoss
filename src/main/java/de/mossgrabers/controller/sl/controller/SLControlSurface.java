@@ -132,15 +132,7 @@ public class SLControlSurface extends AbstractControlSurface<SLConfiguration>
     public SLControlSurface (final IHost host, final ColorManager colorManager, final SLConfiguration configuration, final IMidiOutput output, final IMidiInput input, final boolean isMkII)
     {
         // TODO size
-        super (host, configuration, colorManager, output, input, new PadGridImpl (colorManager, output, 1, 8, 36)
-        {
-            /** {@inheritDoc} */
-            @Override
-            public void flush ()
-            {
-                // The drum pads do not have LEDs
-            }
-        }, 100, 100);
+        super (host, configuration, colorManager, output, input, new PadGridImpl (colorManager, output, 1, 8, 36), 100, 100);
 
         this.isMkII = isMkII;
 

@@ -34,7 +34,7 @@ public class DevicesCommand extends ModeSelectCommand<MCUControlSurface, MCUConf
 
     /** {@inheritDoc} */
     @Override
-    public void execute (final ButtonEvent event)
+    public void execute (final ButtonEvent event, final int velocity)
     {
         if (this.surface.isPressed (ButtonID.SELECT))
         {
@@ -43,6 +43,6 @@ public class DevicesCommand extends ModeSelectCommand<MCUControlSurface, MCUConf
             return;
         }
 
-        super.execute (event);
+        super.execute (event, velocity);
     }
 }

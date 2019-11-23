@@ -37,7 +37,7 @@ public class AutomationCommand extends AbstractTriggerCommand<PushControlSurface
 
     /** {@inheritDoc} */
     @Override
-    public void execute (final ButtonEvent event)
+    public void execute (final ButtonEvent event, final int velocity)
     {
         if (this.surface.isDeletePressed ())
         {

@@ -21,6 +21,8 @@ import de.mossgrabers.framework.controller.hardware.IHwTextDisplay;
 import de.mossgrabers.framework.graphics.IBitmap;
 
 import com.bitwig.extension.api.Color;
+import com.bitwig.extension.controller.api.HardwareButton;
+import com.bitwig.extension.controller.api.HardwareLightVisualState;
 import com.bitwig.extension.controller.api.HardwareSurface;
 import com.bitwig.extension.controller.api.MultiStateHardwareLight;
 
@@ -39,7 +41,7 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
     private final HostImpl        host;
     private final HardwareSurface hardwareSurface;
 
-    private int                   lightCounter = 0;
+    private int                   controlCounter = 0;
 
 
     /**
@@ -61,22 +63,53 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
     @Override
     public IHwButton createButton (final ButtonID buttonID, final String label)
     {
-        return new HwButtonImpl (this.host, this.hardwareSurface.createHardwareButton (buttonID.name ()), label);
+        final String id = this.createID (buttonID.name ());
+        final HardwareButton hwButton = this.hardwareSurface.createHardwareButton (id);
+        return new HwButtonImpl (this.host, hwButton, label);
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public IHwLight createLight (final IntSupplier supplier, final IntConsumer sendValueConsumer, IntFunction<ColorEx> stateToColorFunction)
+    public IHwLight createLight (final IntSupplier supplier, final IntConsumer sendValueConsumer, final IntFunction<ColorEx> stateToColorFunction, final IHwButton button)
     {
-        this.lightCounter++;
-        final MultiStateHardwareLight hardwareLight = this.hardwareSurface.createMultiStateHardwareLight ("LIGHT" + this.lightCounter, state -> {
-            final ColorEx colorEx = stateToColorFunction.apply (state);
-            return Color.fromRGB (colorEx.getRed (), colorEx.getGreen (), colorEx.getBlue ());
+        final String id = this.createID ("LIGHT");
+
+        final MultiStateHardwareLight hardwareLight = this.hardwareSurface.createMultiStateHardwareLight (id, encodedColorState -> {
+
+            final int colorIndex = encodedColorState & 0xFF;
+            final int blinkColorIndex = (encodedColorState >> 8) & 0xFF;
+            final boolean blinkFast = ((encodedColorState >> 16) & 1) > 0;
+
+            final ColorEx colorEx = stateToColorFunction.apply (colorIndex);
+            final Color color = Color.fromRGB (colorEx.getRed (), colorEx.getGreen (), colorEx.getBlue ());
+
+            // TODO needs a Bitwig fix - setLabelColor can only be called during init
+            // if (button != null)
+            // {
+            // final ColorEx contrastColorEx = ColorEx.calcContrastColor (colorEx);
+            // final Color contrastColor = Color.fromRGB (contrastColorEx.getRed (),
+            // contrastColorEx.getGreen (), contrastColorEx.getBlue ());
+            // ((HwButtonImpl) button).getHardwareButton ().setLabelColor (contrastColor);
+            // }
+
+            if (blinkColorIndex <= 0 || blinkColorIndex >= 128)
+                return HardwareLightVisualState.createForColor (color);
+
+            final ColorEx blinkColorEx = stateToColorFunction.apply (blinkColorIndex);
+            final Color blinkColor = Color.fromRGB (blinkColorEx.getRed (), blinkColorEx.getGreen (), blinkColorEx.getBlue ());
+            final double blinkTimeInSec = blinkFast ? 0.5 : 1;
+            return HardwareLightVisualState.createBlinking (blinkColor, color, blinkTimeInSec, blinkTimeInSec);
+
         });
         hardwareLight.state ().setValueSupplier (supplier);
         hardwareLight.state ().onUpdateHardware (sendValueConsumer);
-        return new HwLightImpl (hardwareLight);
+        final HwLightImpl lightImpl = new HwLightImpl (hardwareLight);
+
+        if (button != null)
+            button.addLight (lightImpl);
+
+        return lightImpl;
     }
 
 
@@ -84,7 +117,8 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
     @Override
     public IHwFader createFader (final ContinuousID faderID, final String label)
     {
-        return new HwFaderImpl (this.host, this.hardwareSurface.createHardwareSlider (faderID.name ()), label);
+        final String id = this.createID (faderID.name ());
+        return new HwFaderImpl (this.host, this.hardwareSurface.createHardwareSlider (id), label);
     }
 
 
@@ -92,7 +126,8 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
     @Override
     public IHwAbsoluteKnob createAbsoluteKnob (final ContinuousID knobID, final String label)
     {
-        return new HwAbsoluteKnobImpl (this.host, this.hardwareSurface.createAbsoluteHardwareKnob (knobID.name ()), label);
+        final String id = this.createID (knobID.name ());
+        return new HwAbsoluteKnobImpl (this.host, this.hardwareSurface.createAbsoluteHardwareKnob (id), label);
     }
 
 
@@ -100,7 +135,8 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
     @Override
     public IHwRelativeKnob createRelativeKnob (final ContinuousID knobID, final String label)
     {
-        return new HwRelativeKnobImpl (this.host, this.hardwareSurface.createRelativeHardwareKnob (knobID.name ()), label);
+        final String id = this.createID (knobID.name ());
+        return new HwRelativeKnobImpl (this.host, this.hardwareSurface.createRelativeHardwareKnob (id), label);
     }
 
 
@@ -108,7 +144,8 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
     @Override
     public IHwTextDisplay createTextDisplay (final OutputID outputID, final int numLines)
     {
-        return new HwTextDisplayImpl (this.hardwareSurface.createHardwareTextDisplay (outputID.name (), numLines));
+        final String id = this.createID (outputID.name ());
+        return new HwTextDisplayImpl (this.hardwareSurface.createHardwareTextDisplay (id, numLines));
     }
 
 
@@ -116,7 +153,8 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
     @Override
     public IHwGraphicsDisplay createGraphicsDisplay (final OutputID outputID, final IBitmap bitmap)
     {
-        return new HwGraphicsDisplayImpl (this.hardwareSurface.createHardwarePixelDisplay (outputID.name (), ((BitmapImpl) bitmap).getBitmap ()));
+        final String id = this.createID (outputID.name ());
+        return new HwGraphicsDisplayImpl (this.hardwareSurface.createHardwarePixelDisplay (id, ((BitmapImpl) bitmap).getBitmap ()));
     }
 
 
@@ -125,5 +163,12 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
     public void flush ()
     {
         this.hardwareSurface.updateHardware ();
+    }
+
+
+    private String createID (final String name)
+    {
+        this.controlCounter++;
+        return this.controlCounter + "_" + name;
     }
 }

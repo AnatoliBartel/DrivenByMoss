@@ -71,9 +71,9 @@ public interface IMidiInput
      * @param button The button to bind
      * @param type The MIDI binding type
      * @param channel The MIDI channel
-     * @param value The MIDI command (CC, Note, ...)
+     * @param control The MIDI command (CC, Note, ...)
      */
-    void bind (IHwButton button, BindType type, int channel, int value);
+    void bind (IHwButton button, BindType type, int channel, int control);
 
 
     /**
@@ -82,9 +82,9 @@ public interface IMidiInput
      * @param fader The fader to bind
      * @param type The MIDI binding type
      * @param channel The MIDI channel
-     * @param value The MIDI command (CC, Note, ...)
+     * @param control The MIDI command (CC, Note, ...)
      */
-    void bind (IHwFader fader, BindType type, int channel, int value);
+    void bind (IHwFader fader, BindType type, int channel, int control);
 
 
     /**
@@ -93,9 +93,9 @@ public interface IMidiInput
      * @param absoluteKnob The absolute knob to bind
      * @param type The MIDI binding type
      * @param channel The MIDI channel
-     * @param value The MIDI command (CC, Note, ...)
+     * @param control The MIDI command (CC, Note, ...)
      */
-    void bind (IHwAbsoluteKnob absoluteKnob, BindType type, int channel, int value);
+    void bind (IHwAbsoluteKnob absoluteKnob, BindType type, int channel, int control);
 
 
     /**
@@ -104,9 +104,9 @@ public interface IMidiInput
      * @param relativeKnob The relative knob to bind
      * @param type The MIDI binding type
      * @param channel The MIDI channel
-     * @param value The MIDI command (CC, Note, ...)
+     * @param control The MIDI command (CC, Note, ...)
      */
-    void bind (IHwRelativeKnob relativeKnob, BindType type, int channel, int value);
+    void bind (IHwRelativeKnob relativeKnob, BindType type, int channel, int control);
 
 
     /**

@@ -573,7 +573,7 @@ public class TrackHandler extends AbstractHandler
         {
             case TRACK_TOGGLE_TRACK_BANK:
                 if (isButtonPressed)
-                    this.toggleTrackBankCommand.execute (ButtonEvent.DOWN);
+                    this.toggleTrackBankCommand.execute (ButtonEvent.DOWN, 127);
                 break;
             // Track: Add Audio Track
             case TRACK_ADD_AUDIO_TRACK:

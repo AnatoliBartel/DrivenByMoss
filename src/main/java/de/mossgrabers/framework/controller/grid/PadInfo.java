@@ -13,7 +13,9 @@ public class PadInfo
 {
     private int     color      = -1;
     private int     blinkColor = -1;
-    private boolean fast;
+    private boolean fast       = false;
+
+    private int     encoded    = -1;
 
 
     /**
@@ -28,6 +30,23 @@ public class PadInfo
 
 
     /**
+     * Set all pad info values at once.
+     *
+     * @param color The color
+     * @param blinkColor The new blink color
+     * @param fast True to blink fast
+     */
+    public void setColors (final int color, final int blinkColor, final boolean fast)
+    {
+        this.color = color;
+        this.blinkColor = blinkColor;
+        this.fast = fast;
+
+        this.encode ();
+    }
+
+
+    /**
      * Set the color of the pad.
      *
      * @param color The color
@@ -35,6 +54,7 @@ public class PadInfo
     public void setColor (final int color)
     {
         this.color = color;
+        this.encode ();
     }
 
 
@@ -57,6 +77,7 @@ public class PadInfo
     public void setBlinkColor (final int blinkColor)
     {
         this.blinkColor = blinkColor;
+        this.encode ();
     }
 
 
@@ -79,5 +100,28 @@ public class PadInfo
     public void setFast (final boolean fast)
     {
         this.fast = fast;
+        this.encode ();
+    }
+
+
+    /**
+     * Get the encoded state.
+     *
+     * @return The encoded state
+     */
+    public int getEncoded ()
+    {
+        return this.encoded;
+    }
+
+
+    /**
+     * Encode the color and blink states as one integer and store it in the encode field.
+     */
+    private void encode ()
+    {
+        int codeBlinkColor = this.blinkColor << 8;
+        int codeFast = this.fast ? 1 << 16 : 0;
+        this.encoded = codeFast + codeBlinkColor + this.color;
     }
 }

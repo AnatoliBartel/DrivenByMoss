@@ -337,9 +337,9 @@ public class ControlView extends ControlOnlyView<SLControlSurface, SLConfigurati
         if (Modes.FUNCTIONS.equals (activeModeId) || Modes.FIXED.equals (activeModeId))
             this.onButtonRow1Select ();
         else if (Modes.VOLUME.equals (activeModeId))
-            new P2ButtonCommand (isUp, this.model, this.surface).execute (event);
+            new P2ButtonCommand (isUp, this.model, this.surface).execute (ButtonEvent.DOWN, 127);
         else if (Modes.TRACK.equals (activeModeId) || Modes.MASTER.equals (activeModeId))
-            new ButtonRowSelectCommand<> (3, this.model, this.surface).execute (event);
+            new ButtonRowSelectCommand<> (3, this.model, this.surface).execute (ButtonEvent.DOWN, 127);
         else if (Modes.TRACK_DETAILS.equals (activeModeId) || Modes.FRAME.equals (activeModeId))
             this.onButtonRow2Select ();
         else
@@ -513,7 +513,7 @@ public class ControlView extends ControlOnlyView<SLControlSurface, SLConfigurati
             if (velocity > 0)
             {
                 final int index = note - 36;
-                new ButtonRowSelectCommand<> (index > 3 ? 5 : index, this.model, this.surface).execute (ButtonEvent.DOWN);
+                new ButtonRowSelectCommand<> (index > 3 ? 5 : index, this.model, this.surface).execute (ButtonEvent.DOWN, 127);
             }
             return;
         }

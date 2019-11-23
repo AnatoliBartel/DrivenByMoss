@@ -90,8 +90,7 @@ public class SessionView extends AbstractSessionView<APCminiControlSurface, APCm
     @Override
     public String getButtonColorID (final ButtonID buttonID)
     {
-        final int index = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
-        return this.surface.getNoteVelocity (index) > 0 ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
+        return this.surface.getButton (buttonID).isPressed () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
     }
 
 

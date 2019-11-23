@@ -34,7 +34,7 @@ public class SelectCommand extends AbstractTriggerCommand<PushControlSurface, Pu
 
     /** {@inheritDoc} */
     @Override
-    public void execute (final ButtonEvent event)
+    public void execute (final ButtonEvent event, final int velocity)
     {
         // Update for key combinations
         this.surface.getViewManager ().getActiveView ().updateNoteMapping ();

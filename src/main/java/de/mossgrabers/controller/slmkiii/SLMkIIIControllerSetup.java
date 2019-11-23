@@ -202,7 +202,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
         }
 
         final ModeSelectCommand<SLMkIIIControlSurface, SLMkIIIConfiguration> deviceModeSelectCommand = new ModeSelectCommand<> (this.model, surface, Modes.DEVICE_PARAMS);
-        this.addButton (ButtonID.ARROW_UP, "Up", event -> {
+        this.addButton (ButtonID.ARROW_UP, "Up", (event, value) -> {
             if (event != ButtonEvent.DOWN)
                 return;
             final IBrowser browser = this.model.getBrowser ();
@@ -212,7 +212,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
             if (modeManager.isActiveMode (Modes.DEVICE_PARAMS))
                 ((ParametersMode) modeManager.getMode (Modes.DEVICE_PARAMS)).toggleShowDevices ();
             else
-                deviceModeSelectCommand.execute (event);
+                deviceModeSelectCommand.execute (ButtonEvent.DOWN, 127);
         }, SLMkIIIControlSurface.MKIII_DISPLAY_UP);
 
         this.addButton (ButtonID.ARROW_DOWN, "Down", new TrackModeCommand (this.model, surface), SLMkIIIControlSurface.MKIII_DISPLAY_DOWN);
@@ -220,11 +220,11 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
         this.addButton (ButtonID.SHIFT, "Shift", new ShiftCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_SHIFT);
         this.addButton (ButtonID.USER, "User", new ModeSelectCommand<> (this.model, surface, Modes.FUNCTIONS, true), SLMkIIIControlSurface.MKIII_OPTIONS);
 
-        this.addButton (ButtonID.OCTAVE_UP, "Octave Up", event -> {
+        this.addButton (ButtonID.OCTAVE_UP, "Octave Up", (event, value) -> {
             if (event == ButtonEvent.UP)
                 surface.toggleMuteSolo ();
         }, SLMkIIIControlSurface.MKIII_BUTTONS_UP);
-        this.addButton (ButtonID.OCTAVE_DOWN, "Octave Down", event -> {
+        this.addButton (ButtonID.OCTAVE_DOWN, "Octave Down", (event, value) -> {
             if (event == ButtonEvent.UP)
                 surface.toggleMuteSolo ();
         }, SLMkIIIControlSurface.MKIII_BUTTONS_DOWN);
@@ -235,7 +235,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
         this.addButton (ButtonID.SCENE1, "Scene 1", new SceneCommand<> (0, this.model, surface), SLMkIIIControlSurface.MKIII_SCENE_1);
         this.addButton (ButtonID.SCENE2, "Scene 2", new SceneCommand<> (1, this.model, surface), SLMkIIIControlSurface.MKIII_SCENE_2);
 
-        this.addButton (ButtonID.SCENE7, "TODO", event -> {
+        this.addButton (ButtonID.SCENE7, "TODO", (event, value) -> {
             if (event != ButtonEvent.DOWN)
                 return;
             final ViewManager viewManager = this.getSurface ().getViewManager ();
@@ -252,7 +252,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
             else if (viewManager.isActiveView (Views.COLOR))
                 ((ColorView) viewManager.getView (Views.COLOR)).setFlip (false);
         }, SLMkIIIControlSurface.MKIII_SCENE_UP);
-        this.addButton (ButtonID.SCENE8, "TODO", event -> {
+        this.addButton (ButtonID.SCENE8, "TODO", (event, value) -> {
             if (event != ButtonEvent.DOWN)
                 return;
             final ViewManager viewManager = this.getSurface ().getViewManager ();
@@ -270,7 +270,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
                 ((ColorView) viewManager.getView (Views.COLOR)).setFlip (true);
         }, SLMkIIIControlSurface.MKIII_SCENE_DOWN);
 
-        this.addButton (ButtonID.SESSION, "Session", event -> {
+        this.addButton (ButtonID.SESSION, "Session", (event, value) -> {
             if (event != ButtonEvent.DOWN)
                 return;
             final ViewManager viewManager = surface.getViewManager ();

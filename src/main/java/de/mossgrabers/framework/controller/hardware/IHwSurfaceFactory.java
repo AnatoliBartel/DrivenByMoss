@@ -39,9 +39,10 @@ public interface IHwSurfaceFactory
      * @param sendValueConsumer Callback for sending the state to the controller device
      * @param stateToColorFunction Convert the state of the light to a color, which can be displayed
      *            in the simulated GUI
+     * @param button Binds the light to this button, can be null
      * @return The created light
      */
-    IHwLight createLight (IntSupplier supplier, IntConsumer sendValueConsumer, IntFunction<ColorEx> stateToColorFunction);
+    IHwLight createLight (IntSupplier supplier, IntConsumer sendValueConsumer, IntFunction<ColorEx> stateToColorFunction, IHwButton button);
 
 
     /**
@@ -88,7 +89,7 @@ public interface IHwSurfaceFactory
      * Create a proxy to a hardware graphics display.
      * 
      * @param outputID The ID of the display
-     * @param bitmap TODO
+     * @param bitmap The bitmap
      * @return The created display
      */
     IHwGraphicsDisplay createGraphicsDisplay (OutputID outputID, IBitmap bitmap);

@@ -4,7 +4,6 @@
 
 package de.mossgrabers.framework.controller.hardware;
 
-import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.utils.ButtonEvent;
 
@@ -29,7 +28,7 @@ public interface IHwButton extends IHwInputControl
      *
      * @param command The command to assign
      */
-    void bindDynamic (ContinuousCommand command);
+    void bindDynamic (TriggerCommand command);
 
 
     /**
@@ -92,4 +91,12 @@ public interface IHwButton extends IHwInputControl
      * @return True if set
      */
     boolean isConsumed ();
+
+
+    /**
+     * Get the velocity of the last (dynamic) button press.
+     *
+     * @return The velocity
+     */
+    int getPressedVelocity ();
 }

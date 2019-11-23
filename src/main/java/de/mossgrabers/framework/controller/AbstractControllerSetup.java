@@ -465,13 +465,13 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
         button.bind (surface.getInput (), this.getTriggerBindType (), midiValue);
         final IntSupplier intSupplier = () -> button.isPressed () ? 1 : 0;
         final IntSupplier supp = supplier == null ? intSupplier : supplier;
-        button.addLight (surface.createLight ( () -> {
+        surface.createLight ( () -> {
             final int state = supp.getAsInt ();
             // Color is the state if there are no colors provided!
             if (colorIds == null || colorIds.length == 0)
                 return state;
             return this.colorManager.getColorIndex (state < 0 ? ColorManager.BUTTON_STATE_OFF : colorIds[state]);
-        }, color -> surface.setTrigger (midiChannel, midiValue, color), state -> this.colorManager.getColor (state, buttonID)));
+        }, color -> surface.setTrigger (midiChannel, midiValue, color), state -> this.colorManager.getColor (state, buttonID), button);
     }
 
 

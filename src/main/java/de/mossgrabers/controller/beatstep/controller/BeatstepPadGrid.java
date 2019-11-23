@@ -51,19 +51,19 @@ public class BeatstepPadGrid extends PadGridImpl
         this.output.sendSysex (data);
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void flush ()
-    {
-        for (int i = 36; i < 52; i++)
-        {
-            final int note = this.translateToController (i);
-            if (this.currentButtonColors[i] != this.buttonColors[i])
-            {
-                this.currentButtonColors[i] = this.buttonColors[i];
-                this.sendNoteState (note, this.buttonColors[i]);
-            }
-        }
-    }
+    // TODO Remove
+    // /** {@inheritDoc} */
+    // @Override
+    // public void flush ()
+    // {
+    // for (int i = 36; i < 52; i++)
+    // {
+    // final int note = this.translateToController (i);
+    // if (this.currentButtonColors[i] != this.buttonColors[i])
+    // {
+    // this.currentButtonColors[i] = this.buttonColors[i];
+    // this.sendNoteState (note, this.buttonColors[i]);
+    // }
+    // }
+    // }
 }

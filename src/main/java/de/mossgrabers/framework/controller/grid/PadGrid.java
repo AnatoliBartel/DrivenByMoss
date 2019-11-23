@@ -100,12 +100,6 @@ public interface PadGrid
 
 
     /**
-     * Flush out all changes of the pad states.
-     */
-    void flush ();
-
-
-    /**
      * Resets the caching which forces a complete flush.
      */
     void forceFlush ();
@@ -176,8 +170,19 @@ public interface PadGrid
     boolean isGridNote (int note);
 
 
-    int getEncodedNoteState (int index);
+    /**
+     * Get the color and blink states of a pad.
+     *
+     * @param note The pad of the note (0-127)
+     * @return The info
+     */
+    PadInfo getPadInfo (int note);
 
 
-    void sendEncodedNoteState (int index, int encodedColorState);
+    /**
+     * Set the state to the controller.
+     *
+     * @param note The pad of the note (0-127)
+     */
+    void sendPadState (int note);
 }

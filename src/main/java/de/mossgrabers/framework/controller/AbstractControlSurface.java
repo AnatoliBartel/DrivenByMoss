@@ -33,7 +33,6 @@ import de.mossgrabers.framework.view.View;
 import de.mossgrabers.framework.view.ViewManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -70,16 +69,12 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     private Map<ButtonID, IHwButton>                buttons               = new EnumMap<> (ButtonID.class);
     private Map<ContinuousID, IHwContinuousControl> continuous            = new EnumMap<> (ContinuousID.class);
     private final ContinuousInfo [] []              continuousInfos       = new ContinuousInfo [16] [NUM_INFOS];
-    private final int []                            noteVelocities;
 
     protected List<ITextDisplay>                    textDisplays          = new ArrayList<> (1);
     protected List<IGraphicDisplay>                 graphicsDisplays      = new ArrayList<> (1);
 
     protected final PadGrid                         pads;
 
-    private final boolean []                        gridNoteConsumed;
-    private final ButtonEvent []                    gridNoteStates;
-    private final int []                            gridNoteVelocities;
     private int []                                  keyTranslationTable;
 
     private final LatestTaskExecutor                flushExecutor         = new LatestTaskExecutor ();
@@ -95,8 +90,8 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
      * @param output The midi output
      * @param input The midi input
      * @param padGrid The pads if any, may be null
-     * @param width The width of the controller device
-     * @param height The height of the controller device
+     * @param width The physical width of the controller device in mm
+     * @param height The physical height of the controller device in mm
      */
     public AbstractControlSurface (final IHost host, final C configuration, final ColorManager colorManager, final IMidiOutput output, final IMidiInput input, final PadGrid padGrid, final double width, final double height)
     {
@@ -114,30 +109,20 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
         if (this.input != null)
             this.input.setMidiCallback (this::handleMidi);
 
-        // TODO alles ab hier nach PadGrid
-
-        // Notes
-        this.noteVelocities = new int [NUM_NOTES];
-
         // Grid notes
-        this.gridNoteConsumed = new boolean [NUM_NOTES];
-        Arrays.fill (this.gridNoteConsumed, false);
-        final int size = 8 * 8;
-        this.gridNoteStates = new ButtonEvent [NUM_NOTES];
-        this.gridNoteVelocities = new int [NUM_NOTES];
-        for (int i = 0; i < size; i++)
+        if (this.pads != null)
         {
-            final int index = i;
-            this.gridNoteStates[i] = ButtonEvent.UP;
-            this.gridNoteVelocities[i] = 0;
+            final int size = this.pads.getRows () * this.pads.getCols ();
+            for (int i = 0; i < size; i++)
+            {
+                final int note = this.pads.getStartNote () + i;
 
-            final ButtonID buttonID = ButtonID.get (ButtonID.PAD1, i);
-            final IHwButton pad = this.createButton (buttonID, "P " + (i + 1));
-            // TODO Simulator GUI does not support blinking
-            pad.addLight (this.surfaceFactory.createLight ( () -> this.pads.getEncodedNoteState (index), state -> this.pads.sendEncodedNoteState (index, state), state -> this.colorManager.getColor (state & 0x7F, buttonID)));
-            final int note = this.pads.getStartNote () + i;
-            pad.bind (input, BindType.NOTE, this.pads.translateToGrid (note));
-            pad.bindDynamic (value -> this.handleGridNote (note, value));
+                final ButtonID buttonID = ButtonID.get (ButtonID.PAD1, i);
+                final IHwButton pad = this.createButton (buttonID, "P " + (i + 1));
+                pad.addLight (this.surfaceFactory.createLight ( () -> this.pads.getPadInfo (note).getEncoded (), state -> this.pads.sendPadState (note), colorIndex -> this.colorManager.getColor (colorIndex, buttonID), null));
+                pad.bind (input, BindType.NOTE, this.pads.translateToController (note));
+                pad.bindDynamic ( (event, velocity) -> this.handleGridNote (event, note, velocity));
+            }
         }
     }
 
@@ -214,7 +199,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public void addTextDisplay (final ITextDisplay display)
     {
-        display.setHardwareDisplay (this.surfaceFactory.createTextDisplay (OutputID.DISPLAY1, display.getNoOfLines ()));
+        display.setHardwareDisplay (this.surfaceFactory.createTextDisplay (OutputID.get (OutputID.DISPLAY1, this.textDisplays.size ()), display.getNoOfLines ()));
         this.textDisplays.add (display);
     }
 
@@ -386,9 +371,9 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public IHwLight createLight (final IntSupplier supplier, final IntConsumer sendConsumer, IntFunction<ColorEx> stateToColorFunction)
+    public IHwLight createLight (final IntSupplier supplier, final IntConsumer sendConsumer, final IntFunction<ColorEx> stateToColorFunction, final IHwButton button)
     {
-        return this.surfaceFactory.createLight (supplier, sendConsumer, stateToColorFunction);
+        return this.surfaceFactory.createLight (supplier, sendConsumer, stateToColorFunction, button);
     }
 
 
@@ -613,12 +598,12 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
         {
             // Note off
             case 0x80:
-                // TODO Remove this.handleNote (data1, 0);
+                // Handled by bind framework
                 break;
 
             // Note on
             case 0x90:
-                // TODO Remove this.handleNote (data1, data2);
+                // Handled by bind framework
                 break;
 
             // Polyphonic Aftertouch
@@ -628,6 +613,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
             // CC
             case 0xB0:
+                // Handled by bind framework
                 this.host.error ("CC should be handled in framework...");
                 break;
 
@@ -650,21 +636,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
                 this.host.error ("Unhandled midi status: " + status);
                 break;
         }
-    }
-
-
-    /**
-     * Handle a note event
-     *
-     * @param note The note
-     * @param velocity The velocity
-     */
-    protected void handleNote (final int note, final int velocity)
-    {
-        if (this.isGridNote (note))
-            this.handleGridNote (note, velocity);
-        else
-            this.handleNoteEvent (note, velocity);
     }
 
 
@@ -751,90 +722,20 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /**
      * Handle a midi note which belongs to the grid.
-     *
-     * @param note The midi note
+     * 
+     * @param event The button event
+     * @param note The midi note (already transformed to the grid)
      * @param velocity The velocity of the note
      */
-    protected void handleGridNote (final int note, final int velocity)
+    protected void handleGridNote (final ButtonEvent event, final int note, final int velocity)
     {
-        final int gridNote = this.pads.translateToGrid (note);
-
-        this.gridNoteStates[gridNote] = velocity > 0 ? ButtonEvent.DOWN : ButtonEvent.UP;
-        if (velocity > 0)
-            this.gridNoteVelocities[gridNote] = velocity;
-        if (this.gridNoteStates[gridNote] == ButtonEvent.DOWN)
-            this.scheduleTask ( () -> this.checkGridNoteState (gridNote), AbstractControlSurface.BUTTON_STATE_INTERVAL);
-
-        // If consumed flag is set ignore the UP event
-        if (this.gridNoteStates[gridNote] == ButtonEvent.UP && this.gridNoteConsumed[gridNote])
-        {
-            this.gridNoteConsumed[gridNote] = false;
-            return;
-        }
-
         final View view = this.viewManager.getActiveView ();
-        if (view != null)
-            view.onGridNote (gridNote, velocity);
-    }
-
-
-    private void checkGridNoteState (final int note)
-    {
-        if (this.gridNoteStates[note] != ButtonEvent.DOWN)
+        if (view == null)
             return;
-
-        this.gridNoteStates[note] = ButtonEvent.LONG;
-
-        final View view = this.viewManager.getActiveView ();
-        if (view != null)
+        if (event == ButtonEvent.LONG)
             view.onGridNoteLongPress (note);
-    }
-
-
-    /**
-     * Set a grid note as consumed.
-     *
-     * @param note The note to set
-     */
-    public void setGridNoteConsumed (final int note)
-    {
-        this.gridNoteConsumed[note] = true;
-    }
-
-
-    /**
-     * Get the grid note velocity of a note on the grid.
-     *
-     * @param note The note
-     * @return The velocity
-     */
-    public int getGridNoteVelocity (final int note)
-    {
-        return this.gridNoteVelocities[note];
-    }
-
-
-    /**
-     * Get the velocity of a pressed note.
-     *
-     * @param note The note
-     * @return The velocity, 0 if currently not pressed
-     */
-    public int getNoteVelocity (final int note)
-    {
-        return this.noteVelocities[note];
-    }
-
-
-    /**
-     * Handle note events.
-     *
-     * @param note The midi note
-     * @param velocity The velocity
-     */
-    protected void handleNoteEvent (final int note, final int velocity)
-    {
-        this.noteVelocities[note] = velocity;
+        else
+            view.onGridNote (note, velocity);
     }
 
 
@@ -858,11 +759,8 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     protected void redrawGrid ()
     {
         final View view = this.viewManager.getActiveView ();
-        if (view == null)
-            return;
-        view.drawGrid ();
-        if (this.pads != null)
-            this.pads.flush ();
+        if (view != null)
+            view.drawGrid ();
     }
 
 

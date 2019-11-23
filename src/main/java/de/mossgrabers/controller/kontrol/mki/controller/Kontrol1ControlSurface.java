@@ -229,8 +229,9 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
             // Note on/off
             case 0x80:
             case 0x90:
-                if (this.isGridNote (data1))
-                    this.handleGridNote (data1, data2);
+                // TODO
+                // if (this.isGridNote (data1))
+                // this.handleGridNote (data1, data2);
                 break;
 
             // Polyphonic Aftertouch

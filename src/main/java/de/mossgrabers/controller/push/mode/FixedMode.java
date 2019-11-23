@@ -54,7 +54,7 @@ public class FixedMode extends BaseMode
     {
         if (event != ButtonEvent.UP)
             return;
-        new TemporaryNewCommand<> (index, this.model, this.surface).execute (ButtonEvent.DOWN);
+        new TemporaryNewCommand<> (index, this.model, this.surface).execute (ButtonEvent.DOWN, 127);
         this.surface.getModeManager ().restoreMode ();
     }
 

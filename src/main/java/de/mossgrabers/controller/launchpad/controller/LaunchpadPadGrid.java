@@ -79,21 +79,21 @@ public class LaunchpadPadGrid extends PadGridImpl
         return TRANSLATE_MATRIX[note - 36];
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void flush ()
-    {
-        synchronized (this.padInfos)
-        {
-            super.flush ();
-            if (this.padInfos.isEmpty ())
-                return;
-            for (final String update: this.definition.buildLEDUpdate (this.padInfos))
-                this.output.sendSysex (update);
-            this.padInfos.clear ();
-        }
-    }
+    // TODO Remove
+    // /** {@inheritDoc} */
+    // @Override
+    // public void flush ()
+    // {
+    // synchronized (this.padInfos)
+    // {
+    // super.flush ();
+    // if (this.padInfos.isEmpty ())
+    // return;
+    // for (final String update: this.definition.buildLEDUpdate (this.padInfos))
+    // this.output.sendSysex (update);
+    // this.padInfos.clear ();
+    // }
+    // }
 
 
     /** {@inheritDoc} */

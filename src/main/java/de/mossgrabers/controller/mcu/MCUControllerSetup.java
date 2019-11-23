@@ -327,20 +327,22 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
         this.addButton (ButtonID.F4, "F4", new AssignableCommand (5, this.model, surface), MCUControlSurface.MCU_F4);
         this.addButton (ButtonID.F5, "F5", new AssignableCommand (6, this.model, surface), MCUControlSurface.MCU_F5);
 
+        final MoveTrackBankCommand<MCUControlSurface, MCUConfiguration> moveTrackBankLeftCommand = new MoveTrackBankCommand<> (this.model, surface, Modes.DEVICE_PARAMS, true, true);
+        final MoveTrackBankCommand<MCUControlSurface, MCUConfiguration> moveTrackBankRightCommand = new MoveTrackBankCommand<> (this.model, surface, Modes.DEVICE_PARAMS, true, false);
+
         // Assignment
         this.addButton (ButtonID.TRACK, "IO", new TracksCommand (this.model, surface), MCUControlSurface.MCU_MODE_IO);
         this.addButton (ButtonID.PAN_SEND, "Panorama", new ModeSelectCommand<> (this.model, surface, Modes.PAN), MCUControlSurface.MCU_MODE_PAN);
         this.addButton (ButtonID.SENDS, "Sends", new SendSelectCommand (this.model, surface), MCUControlSurface.MCU_MODE_SENDS);
         this.addButton (ButtonID.DEVICE, "Device", new DevicesCommand (this.model, surface), MCUControlSurface.MCU_MODE_PLUGIN);
-        this.addButton (ButtonID.MOVE_TRACK_LEFT, "Eq", new MoveTrackBankCommand<> (this.model, surface, Modes.DEVICE_PARAMS, true, true), MCUControlSurface.MCU_MODE_EQ);
-        this.addButton (ButtonID.MOVE_TRACK_RIGHT, "Dyn", new MoveTrackBankCommand<> (this.model, surface, Modes.DEVICE_PARAMS, true, false), MCUControlSurface.MCU_MODE_DYN);
+        this.addButton (ButtonID.MOVE_TRACK_LEFT, "Left", moveTrackBankLeftCommand, MCUControlSurface.MCU_MODE_EQ);
+        this.addButton (ButtonID.MOVE_TRACK_RIGHT, "Right", moveTrackBankRightCommand, MCUControlSurface.MCU_MODE_DYN);
 
         // Automation
         this.addButton (ButtonID.AUTOMATION_READ, "Read", new AutomationCommand<> (0, this.model, surface), MCUControlSurface.MCU_READ);
         final AutomationCommand<MCUControlSurface, MCUConfiguration> writeCommand = new AutomationCommand<> (1, this.model, surface);
-        // TODO does not work like this...
         this.addButton (ButtonID.AUTOMATION_WRITE, "Write", writeCommand, MCUControlSurface.MCU_WRITE);
-        this.addButton (ButtonID.AUTOMATION_WRITE, "Group", writeCommand, MCUControlSurface.MCU_GROUP);
+        surface.getButton (ButtonID.AUTOMATION_WRITE).bind (surface.getInput (), this.getTriggerBindType (), MCUControlSurface.MCU_GROUP);
         this.addButton (ButtonID.AUTOMATION_TRIM, "Trim", new AutomationCommand<> (2, this.model, surface), MCUControlSurface.MCU_TRIM);
         this.addButton (ButtonID.AUTOMATION_TOUCH, "Touch", new AutomationCommand<> (3, this.model, surface), MCUControlSurface.MCU_TOUCH);
         this.addButton (ButtonID.AUTOMATION_LATCH, "Latch", new AutomationCommand<> (4, this.model, surface), MCUControlSurface.MCU_LATCH);
@@ -378,8 +380,8 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
 
         this.addButton (ButtonID.MOVE_BANK_LEFT, "Bank Left", new MoveTrackBankCommand<> (this.model, surface, Modes.DEVICE_PARAMS, false, true), MCUControlSurface.MCU_BANK_LEFT);
         this.addButton (ButtonID.MOVE_BANK_RIGHT, "Bank Right", new MoveTrackBankCommand<> (this.model, surface, Modes.DEVICE_PARAMS, false, false), MCUControlSurface.MCU_BANK_RIGHT);
-        this.addButton (ButtonID.MOVE_TRACK_LEFT, "Left", new MoveTrackBankCommand<> (this.model, surface, Modes.DEVICE_PARAMS, true, true), MCUControlSurface.MCU_TRACK_LEFT);
-        this.addButton (ButtonID.MOVE_TRACK_RIGHT, "Right", new MoveTrackBankCommand<> (this.model, surface, Modes.DEVICE_PARAMS, true, false), MCUControlSurface.MCU_TRACK_RIGHT);
+        surface.getButton (ButtonID.MOVE_TRACK_LEFT).bind (surface.getInput (), this.getTriggerBindType (), MCUControlSurface.MCU_TRACK_LEFT);
+        surface.getButton (ButtonID.MOVE_TRACK_RIGHT).bind (surface.getInput (), this.getTriggerBindType (), MCUControlSurface.MCU_TRACK_RIGHT);
 
         // Additional commands for footcontrollers
         final ViewManager viewManager = surface.getViewManager ();
@@ -459,6 +461,126 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
         // surface.assignContinuousCommand (1, MCUControlSurface.MCU_CC_VPOT1 + i, commandID);
         // }
         // }
+    }
+
+
+    @Override
+    protected void layoutControls ()
+    {
+        for (int index = 0; index < this.numMCUDevices; index++)
+        {
+            final MCUControlSurface surface = this.getSurface (index);
+            surface.getButton (ButtonID.RECORD).setBounds (920.5, 934.75, 65.0, 39.75);
+            surface.getButton (ButtonID.REWIND).setBounds (503.0, 933.75, 65.0, 39.75);
+            surface.getButton (ButtonID.FORWARD).setBounds (586.5, 934.75, 65.0, 39.75);
+            surface.getButton (ButtonID.STOP).setBounds (753.5, 934.75, 65.0, 39.75);
+            surface.getButton (ButtonID.LOOP).setBounds (670.0, 934.75, 65.0, 39.75);
+            surface.getButton (ButtonID.PLAY).setBounds (837.0, 934.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW1_1).setBounds (14.0, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW2_1).setBounds (14.0, 169.75, 65.0, 39.75);
+            surface.getButton (ButtonID.FOOTSWITCH1).setBounds (566.5, 8.5, 71.0, 39.75);
+            surface.getButton (ButtonID.FOOTSWITCH2).setBounds (644.25, 7.75, 71.0, 39.75);
+            surface.getButton (ButtonID.SCRUB).setBounds (905.75, 759.0, 65.0, 39.75);
+            surface.getButton (ButtonID.ARROW_LEFT).setBounds (706.25, 804.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ARROW_RIGHT).setBounds (851.5, 812.5, 65.0, 39.75);
+            surface.getButton (ButtonID.ARROW_UP).setBounds (779.0, 764.0, 65.0, 39.75);
+            surface.getButton (ButtonID.ARROW_DOWN).setBounds (779.0, 858.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ZOOM).setBounds (779.0, 810.5, 65.0, 39.75);
+            surface.getButton (ButtonID.TOGGLE_DISPLAY).setBounds (718.75, 68.75, 71.0, 39.75);
+            surface.getButton (ButtonID.TEMPO_TICKS).setBounds (882.25, 68.75, 71.0, 39.75);
+            surface.getButton (ButtonID.SHIFT).setBounds (779.0, 580.5, 65.0, 39.75);
+            surface.getButton (ButtonID.SELECT).setBounds (706.25, 580.5, 65.0, 39.75);
+            surface.getButton (ButtonID.PUNCH_IN).setBounds (706.25, 264.75, 65.0, 39.75);
+            surface.getButton (ButtonID.PUNCH_OUT).setBounds (779.0, 264.75, 65.0, 39.75);
+            surface.getButton (ButtonID.F1).setBounds (633.75, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.F2).setBounds (706.25, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.F3).setBounds (779.0, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.F4).setBounds (851.5, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.F5).setBounds (923.5, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.TRACK).setBounds (706.25, 634.0, 65.0, 39.75);
+            surface.getButton (ButtonID.PAN_SEND).setBounds (706.25, 169.75, 65.0, 39.75);
+            surface.getButton (ButtonID.SENDS).setBounds (779.0, 169.75, 65.0, 39.75);
+            surface.getButton (ButtonID.DEVICE).setBounds (851.5, 169.75, 65.0, 39.75);
+            surface.getButton (ButtonID.MOVE_TRACK_LEFT).setBounds (851.5, 485.0, 65.0, 39.75);
+            surface.getButton (ButtonID.MOVE_TRACK_RIGHT).setBounds (923.5, 485.0, 65.0, 39.75);
+            surface.getButton (ButtonID.AUTOMATION_READ).setBounds (633.75, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.AUTOMATION_WRITE).setBounds (706.25, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.AUTOMATION_TRIM).setBounds (779.0, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.AUTOMATION_TOUCH).setBounds (851.5, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.AUTOMATION_LATCH).setBounds (923.5, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.UNDO).setBounds (851.5, 264.75, 65.0, 39.75);
+            surface.getButton (ButtonID.NOTE_EDITOR).setBounds (706.25, 311.25, 65.0, 39.75);
+            surface.getButton (ButtonID.AUTOMATION_EDITOR).setBounds (779.0, 311.25, 65.0, 39.75);
+            surface.getButton (ButtonID.TOGGLE_DEVICE).setBounds (851.5, 311.25, 65.0, 39.75);
+            surface.getButton (ButtonID.MIXER).setBounds (923.5, 311.25, 65.0, 39.75);
+            surface.getButton (ButtonID.LAYOUT_ARRANGE).setBounds (923.5, 686.5, 65.0, 39.75);
+            surface.getButton (ButtonID.LAYOUT_MIX).setBounds (633.75, 169.75, 65.0, 39.75);
+            surface.getButton (ButtonID.LAYOUT_EDIT).setBounds (851.5, 634.0, 65.0, 39.75);
+            surface.getButton (ButtonID.BROWSE).setBounds (706.25, 361.25, 65.0, 39.75);
+            surface.getButton (ButtonID.METRONOME).setBounds (779.0, 361.25, 65.0, 39.75);
+            surface.getButton (ButtonID.GROOVE).setBounds (851.5, 361.25, 65.0, 39.75);
+            surface.getButton (ButtonID.OVERDUB).setBounds (923.5, 361.25, 65.0, 39.75);
+            surface.getButton (ButtonID.TAP_TEMPO).setBounds (779.0, 686.5, 65.0, 39.75);
+            surface.getButton (ButtonID.DUPLICATE).setBounds (851.5, 686.5, 65.0, 39.75);
+            surface.getButton (ButtonID.DEVICE_ON_OFF).setBounds (779.0, 634.0, 65.0, 39.75);
+            surface.getButton (ButtonID.CONTROL).setBounds (923.5, 580.5, 65.0, 39.75);
+            surface.getButton (ButtonID.ALT).setBounds (851.5, 580.5, 65.0, 39.75);
+            surface.getButton (ButtonID.FLIP).setBounds (706.25, 435.75, 65.0, 39.75);
+            surface.getButton (ButtonID.CANCEL).setBounds (851.5, 435.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ENTER).setBounds (923.5, 435.75, 65.0, 39.75);
+            surface.getButton (ButtonID.MOVE_BANK_LEFT).setBounds (706.25, 485.0, 65.0, 39.75);
+            surface.getButton (ButtonID.MOVE_BANK_RIGHT).setBounds (779.0, 485.0, 65.0, 39.75);
+            surface.getButton (ButtonID.SAVE).setBounds (923.5, 264.75, 65.0, 39.75);
+            surface.getButton (ButtonID.MARKER).setBounds (923.5, 634.0, 65.0, 39.75);
+            surface.getButton (ButtonID.TOGGLE_VU).setBounds (800.5, 68.75, 71.0, 39.75);
+            surface.getButton (ButtonID.MASTERTRACK).setBounds (613.0, 435.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW_SELECT_1).setBounds (14.0, 311.25, 65.0, 39.75);
+            surface.getButton (ButtonID.FADER_TOUCH_1).setBounds (12.5, 435.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW3_1).setBounds (14.0, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW4_1).setBounds (14.0, 264.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW_SELECT_2).setBounds (88.5, 311.25, 65.0, 39.75);
+            surface.getButton (ButtonID.FADER_TOUCH_2).setBounds (88.5, 435.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW1_2).setBounds (88.5, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW2_2).setBounds (88.5, 169.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW3_2).setBounds (88.5, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW4_2).setBounds (88.5, 264.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW_SELECT_3).setBounds (165.0, 311.25, 65.0, 39.75);
+            surface.getButton (ButtonID.FADER_TOUCH_3).setBounds (165.0, 435.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW1_3).setBounds (165.0, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW2_3).setBounds (165.0, 169.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW3_3).setBounds (165.0, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW4_3).setBounds (165.0, 264.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW_SELECT_4).setBounds (238.25, 311.25, 65.0, 39.75);
+            surface.getButton (ButtonID.FADER_TOUCH_4).setBounds (238.25, 435.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW1_4).setBounds (238.25, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW2_4).setBounds (238.25, 169.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW3_4).setBounds (238.25, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW4_4).setBounds (238.25, 264.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW_SELECT_5).setBounds (312.5, 311.25, 65.0, 39.75);
+            surface.getButton (ButtonID.FADER_TOUCH_5).setBounds (312.5, 435.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW1_5).setBounds (312.5, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW2_5).setBounds (312.5, 169.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW3_5).setBounds (312.5, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW4_5).setBounds (312.5, 264.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW_SELECT_6).setBounds (387.75, 311.25, 65.0, 39.75);
+            surface.getButton (ButtonID.FADER_TOUCH_6).setBounds (387.75, 435.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW1_6).setBounds (387.75, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW2_6).setBounds (387.75, 169.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW3_6).setBounds (387.75, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW4_6).setBounds (387.75, 264.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW_SELECT_7).setBounds (460.25, 311.25, 65.0, 39.75);
+            surface.getButton (ButtonID.FADER_TOUCH_7).setBounds (460.25, 435.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW1_7).setBounds (460.25, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW2_7).setBounds (460.25, 169.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW3_7).setBounds (460.25, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW4_7).setBounds (460.25, 264.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW_SELECT_8).setBounds (533.5, 311.25, 65.0, 39.75);
+            surface.getButton (ButtonID.FADER_TOUCH_8).setBounds (533.5, 435.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW1_8).setBounds (533.5, 122.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW2_8).setBounds (533.5, 169.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW3_8).setBounds (533.5, 216.75, 65.0, 39.75);
+            surface.getButton (ButtonID.ROW4_8).setBounds (533.5, 264.75, 65.0, 39.75);
+        }
     }
 
 

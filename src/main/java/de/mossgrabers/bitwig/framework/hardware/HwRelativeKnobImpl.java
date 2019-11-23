@@ -69,8 +69,8 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
         this.touchCommand = command;
 
         // TODO Add a description text
-        this.hardwareKnob.beginTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.DOWN), () -> "TODO"));
-        this.hardwareKnob.endTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.UP), () -> "TODO"));
+        this.hardwareKnob.beginTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.DOWN, 127), () -> "TODO"));
+        this.hardwareKnob.endTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.UP, 0), () -> "TODO"));
 
         input.bindTouch (this, type, 0, control);
     }

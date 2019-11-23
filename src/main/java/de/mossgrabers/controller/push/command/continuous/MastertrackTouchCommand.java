@@ -36,7 +36,7 @@ public class MastertrackTouchCommand extends AbstractTriggerCommand<PushControlS
 
     /** {@inheritDoc} */
     @Override
-    public void execute (final ButtonEvent event)
+    public void execute (final ButtonEvent event, final int velocity)
     {
         final boolean isTouched = event == ButtonEvent.DOWN;
 

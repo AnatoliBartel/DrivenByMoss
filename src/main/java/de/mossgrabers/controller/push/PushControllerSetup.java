@@ -553,6 +553,8 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
         this.addButton (ButtonID.STOP_CLIP, "Stop Clip", new StopAllClipsCommand<> (this.model, surface), PushControlSurface.PUSH_BUTTON_STOP_CLIP, () -> surface.isPressed (ButtonID.STOP_CLIP), PushColorManager.PUSH_BUTTON_STATE_STOP_ON, PushColorManager.PUSH_BUTTON_STATE_STOP_HI);
         this.addButton (ButtonID.SESSION, "Session", new SelectSessionViewCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_SESSION, () -> Views.isSessionView (viewManager.getActiveViewId ()));
         this.addButton (ButtonID.REPEAT, "Repeat", new NoteRepeatCommand<> (this.model, surface), PushControlSurface.PUSH_BUTTON_REPEAT, surface.getInput ().getDefaultNoteInput ().getNoteRepeat ()::isActive);
+
+        this.addButton (ButtonID.FOOTSWITCH2, "Foot Controller", new FootswitchCommand<> (this.model, surface), PushControlSurface.PUSH_FOOTSWITCH2);
     }
 
 
@@ -590,8 +592,6 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
 
         final IHwRelativeKnob knobPlayPosition = this.addRelativeKnob (ContinuousID.PLAY_POSITION, "Play Position", new PlayPositionCommand<> (this.model, surface), PushControlSurface.PUSH_SMALL_KNOB2);
         knobPlayPosition.bindTouch (new SmallKnobTouchCommand (this.model, surface, false), input, BindType.NOTE, PushControlSurface.PUSH_SMALL_KNOB2_TOUCH);
-
-        this.addRelativeKnob (ContinuousID.FOOTSWITCH, "Foot Controller", new FootswitchCommand<> (this.model, surface), PushControlSurface.PUSH_FOOTSWITCH2);
 
         final ViewManager viewManager = surface.getViewManager ();
 
@@ -753,6 +753,7 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
             surface.getButton (ButtonID.REPEAT).setBounds (173.5, 93.5, 10.0, 6.25);
             surface.getButton (ButtonID.CONVERT).setBounds (4.75, 58.75, 10.0, 8.5);
             surface.getButton (ButtonID.USER).setBounds (185.5, 20.5, 10.0, 6.25);
+            surface.getButton (ButtonID.FOOTSWITCH2).setBounds (161.5, 1.0, 6.75, 6.5);
 
             surface.getContinuous (ContinuousID.KNOB1).setBounds (34.75, 5.75, 10.0, 10.0);
             surface.getContinuous (ContinuousID.KNOB2).setBounds (50.25, 5.75, 10.0, 10.0);
@@ -766,7 +767,6 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
 
             surface.getContinuous (ContinuousID.TEMPO).setBounds (4.0, 5.75, 10.0, 10.0);
             surface.getContinuous (ContinuousID.PLAY_POSITION).setBounds (17.75, 5.75, 10.0, 10.0);
-            surface.getContinuous (ContinuousID.FOOTSWITCH).setBounds (161.5, 1.0, 6.75, 6.5);
             surface.getContinuous (ContinuousID.TOUCHSTRIP).setBounds (17.75, 58.5, 12.0, 93.0);
         }
         else
@@ -837,6 +837,7 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
             surface.getButton (ButtonID.TRACK).setBounds (174.11462454438796, 24.796891814839974, 10.0, 6.0);
             surface.getButton (ButtonID.UNDO).setBounds (3.9828477685945423, 58.423360817640344, 10.0, 6.0);
             surface.getButton (ButtonID.VOLUME).setBounds (174.11462454438796, 17.09278823980427, 10.0, 6.0);
+            surface.getButton (ButtonID.FOOTSWITCH2).setBounds (4.0, 6.0, 10.0, 10.0);
 
             surface.getContinuous (ContinuousID.KNOB1).setBounds (34.771069269783915, 5.655526992287918, 10.0, 10.0);
             surface.getContinuous (ContinuousID.KNOB2).setBounds (49.71638991176253, 5.655526992287918, 10.0, 10.0);
@@ -850,7 +851,6 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
 
             surface.getContinuous (ContinuousID.TEMPO).setBounds (4.0, 43.5, 10.0, 10.0);
             surface.getContinuous (ContinuousID.PLAY_POSITION).setBounds (17.75, 43.5, 10.0, 10.0);
-            surface.getContinuous (ContinuousID.FOOTSWITCH).setBounds (4.0, 6.0, 10.0, 10.0);
             surface.getContinuous (ContinuousID.TOUCHSTRIP).setBounds (17.75, 58.5, 12.0, 93.0);
         }
     }

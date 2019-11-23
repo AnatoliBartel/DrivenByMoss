@@ -10,6 +10,7 @@ import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
+import de.mossgrabers.framework.utils.ButtonEvent;
 
 import java.util.Arrays;
 
@@ -181,9 +182,10 @@ public class APCControlSurface extends AbstractControlSurface<APCConfiguration>
 
     /** {@inheritDoc} */
     @Override
-    protected void handleGridNote (final int note, final int velocity)
+    protected void handleGridNote (final ButtonEvent event, final int note, final int velocity)
     {
-        super.handleGridNote (36 + note, velocity);
+        // TODO Das ist falsch ???
+        super.handleGridNote (event, 36 + note, velocity);
     }
 
 

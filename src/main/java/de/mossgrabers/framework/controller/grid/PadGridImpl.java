@@ -7,8 +7,6 @@ package de.mossgrabers.framework.controller.grid;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
 
-import java.util.Arrays;
-
 
 /**
  * Implementation of a grid of pads.
@@ -22,14 +20,7 @@ public class PadGridImpl implements PadGrid
     protected final IMidiOutput  output;
     protected final ColorManager colorManager;
 
-    protected final int []       currentButtonColors;
-    protected final int []       buttonColors;
-    protected final int []       currentBlinkColors;
-    protected final int []       blinkColors;
-    protected final boolean []   currentBlinkFast;
-    protected final boolean []   blinkFast;
-
-    protected int []             encodedColors;
+    protected PadInfo []         padStates;
 
     protected final int          rows;
     protected final int          cols;
@@ -69,21 +60,9 @@ public class PadGridImpl implements PadGrid
 
         // Note: The grid contains only 64 pads but is more efficient to use
         // the 128 note values the pads understand
-
-        this.currentButtonColors = new int [NUM_NOTES];
-        this.buttonColors = new int [NUM_NOTES];
-        this.currentBlinkColors = new int [NUM_NOTES];
-        this.blinkColors = new int [NUM_NOTES];
-        this.currentBlinkFast = new boolean [NUM_NOTES];
-        this.encodedColors = new int [NUM_NOTES];
-        this.blinkFast = new boolean [NUM_NOTES];
-
-        Arrays.fill (this.currentButtonColors, -1);
-        Arrays.fill (this.buttonColors, -1);
-        Arrays.fill (this.currentBlinkColors, -1);
-        Arrays.fill (this.blinkColors, -1);
-        Arrays.fill (this.currentBlinkFast, false);
-        Arrays.fill (this.blinkFast, false);
+        this.padStates = new PadInfo [NUM_NOTES];
+        for (int i = 0; i < NUM_NOTES; i++)
+            this.padStates[i] = new PadInfo ();
     }
 
 
@@ -155,24 +134,14 @@ public class PadGridImpl implements PadGrid
     /**
      * Set the lighting state of a pad.
      *
-     * @param index The index in the array (0-127)
+     * @param note The note in the array (0-127)
      * @param color The color or brightness to set
      * @param blinkColor The state to make a pad blink
      * @param fast Blinking is fast if true
      */
-    protected void setLight (final int index, final int color, final int blinkColor, final boolean fast)
+    protected void setLight (final int note, final int color, final int blinkColor, final boolean fast)
     {
-        if (blinkColor >= 0)
-        {
-            this.buttonColors[index] = color;
-            this.blinkColors[index] = blinkColor;
-        }
-        else
-        {
-            this.buttonColors[index] = color;
-            this.blinkColors[index] = this.colorManager.getColorIndex (GRID_OFF);
-        }
-        this.blinkFast[index] = fast;
+        this.padStates[note].setColors (color, blinkColor >= 0 ? blinkColor : this.colorManager.getColorIndex (GRID_OFF), fast);
     }
 
 
@@ -180,9 +149,7 @@ public class PadGridImpl implements PadGrid
     @Override
     public void forceFlush (final int note)
     {
-        this.currentButtonColors[note] = -1;
-        this.currentBlinkColors[note] = -1;
-        this.flush ();
+        this.padStates[note].setColors (-1, -1, false);
     }
 
 
@@ -191,71 +158,29 @@ public class PadGridImpl implements PadGrid
     public void forceFlush ()
     {
         for (int i = this.startNote; i <= this.endNote; i++)
-        {
-            this.currentButtonColors[i] = -1;
-            this.currentBlinkColors[i] = -1;
-        }
-        this.flush ();
+            this.padStates[i].setColors (-1, -1, false);
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public void flush ()
+    public PadInfo getPadInfo (final int note)
     {
-        for (int i = this.startNote; i <= this.endNote; i++)
-        {
-            boolean baseChanged = false;
-            if (this.currentButtonColors[i] != this.buttonColors[i])
-            {
-                this.currentButtonColors[i] = this.buttonColors[i];
-                baseChanged = true;
-            }
-            // No "else" here: Blinking color needs a base color
-            if (baseChanged || this.currentBlinkColors[i] != this.blinkColors[i] || this.currentBlinkFast[i] != this.blinkFast[i])
-            {
-                this.currentBlinkColors[i] = this.blinkColors[i];
-                this.currentBlinkFast[i] = this.blinkFast[i];
-
-                if (this.blinkColors[i] == this.colorManager.getColorIndex (GRID_OFF))
-                    this.encodeNoteState (i - this.startNote, this.currentButtonColors[i], 128, false);
-                else
-                    this.encodeNoteState (i - this.startNote, this.currentButtonColors[i], this.blinkColors[i], this.blinkFast[i]);
-            }
-        }
+        return this.padStates[note];
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public int getEncodedNoteState (final int index)
+    public void sendPadState (int note)
     {
-        return this.encodedColors[index];
-    }
-
-
-    protected void encodeNoteState (int index, int color, int blinkColor, boolean fast)
-    {
-        int codeBlinkColor = blinkColor << 8;
-        int codeFast = fast ? 1 << 16 : 0;
-        this.encodedColors[index] = codeFast + codeBlinkColor + color;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void sendEncodedNoteState (int index, int encodedColorState)
-    {
-        final int color = encodedColorState & 0xFF;
-        final int blinkColor = (encodedColorState >> 8) & 0xFF;
-        final boolean blinkFast = ((encodedColorState >> 16) & 1) > 0;
-
-        final int note = this.startNote + index;
+        final PadInfo state = this.padStates[note];
         final int translated = this.translateToController (note);
-
-        this.sendNoteState (translated, color);
-        if (blinkColor < 128)
-            this.sendBlinkState (translated, blinkColor, blinkFast);
+        final int color = state.getColor ();
+        this.sendNoteState (translated, color < 0 ? 0 : color);
+        final int blinkColor = state.getBlinkColor ();
+        if (blinkColor > 0 && blinkColor < 128)
+            this.sendBlinkState (translated, blinkColor, state.isFast ());
     }
 
 
@@ -291,7 +216,6 @@ public class PadGridImpl implements PadGrid
         final int color = this.colorManager.getColorIndex (GRID_OFF);
         for (int i = this.startNote; i <= this.endNote; i++)
             this.light (i, color, -1, false);
-        this.flush ();
     }
 
 

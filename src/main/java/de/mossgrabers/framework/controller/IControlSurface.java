@@ -320,9 +320,10 @@ public interface IControlSurface<C extends Configuration>
      * @param sendConsumer Callback for sending the update command to the controller surface
      * @param stateToColorFunction Convert the state of the light to a color, which can be displayed
      *            in the simulated GUI
+     * @param button Binds the light to this button, can be null
      * @return The created light
      */
-    IHwLight createLight (IntSupplier supplier, IntConsumer sendConsumer, IntFunction<ColorEx> stateToColorFunction);
+    IHwLight createLight (IntSupplier supplier, IntConsumer sendConsumer, IntFunction<ColorEx> stateToColorFunction, IHwButton button);
 
 
     /**

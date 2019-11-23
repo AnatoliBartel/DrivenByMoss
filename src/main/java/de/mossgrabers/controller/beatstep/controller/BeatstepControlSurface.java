@@ -10,7 +10,7 @@ import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
-import de.mossgrabers.framework.view.Views;
+import de.mossgrabers.framework.utils.ButtonEvent;
 
 
 /**
@@ -134,9 +134,9 @@ public class BeatstepControlSurface extends AbstractControlSurface<BeatstepConfi
 
     /** {@inheritDoc} */
     @Override
-    protected void handleGridNote (final int note, final int velocity)
+    protected void handleGridNote (final ButtonEvent event, final int note, final int velocity)
     {
-        super.handleGridNote (note, velocity);
+        super.handleGridNote (event, note, velocity);
 
         if (note < 36 || note > 51)
             return;
@@ -145,28 +145,29 @@ public class BeatstepControlSurface extends AbstractControlSurface<BeatstepConfi
         this.scheduleTask ( () -> this.pads.forceFlush (note), 100);
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    protected void handleNoteEvent (final int note, final int velocity)
-    {
-        // Shift button pressed?
-        if (note != 7)
-        {
-            this.errorln ("Pad is outside of note range, make sure that you did not accidently transpose the pads (Shift+Wheel)");
-            return;
-        }
-
-        this.isShift = velocity == 127;
-        if (this.isShift)
-            this.getViewManager ().setActiveView (Views.SHIFT);
-        else
-        {
-            if (this.getViewManager ().isActiveView (Views.SHIFT))
-                this.getViewManager ().restoreView ();
-            this.getPadGrid ().forceFlush ();
-        }
-    }
+    // TODO REmove
+    // /** {@inheritDoc} */
+    // @Override
+    // protected void handleNoteEvent (final int note, final int velocity)
+    // {
+    // // Shift button pressed?
+    // if (note != 7)
+    // {
+    // this.errorln ("Pad is outside of note range, make sure that you did not accidently transpose
+    // the pads (Shift+Wheel)");
+    // return;
+    // }
+    //
+    // this.isShift = velocity == 127;
+    // if (this.isShift)
+    // this.getViewManager ().setActiveView (Views.SHIFT);
+    // else
+    // {
+    // if (this.getViewManager ().isActiveView (Views.SHIFT))
+    // this.getViewManager ().restoreView ();
+    // this.getPadGrid ().forceFlush ();
+    // }
+    // }
 
 
     /** {@inheritDoc} */

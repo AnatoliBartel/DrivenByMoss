@@ -284,6 +284,10 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
         {
             double x = i * stepX;
             double y = i * stepY;
+
+            for (int k = 0; k < 8; k++)
+                surface.getButton (ButtonID.get (ButtonID.PAD1, k * 8 + i)).setBounds (space + x, space + (7 - k) * stepY, width, height);
+
             surface.getButton (ButtonID.get (ButtonID.SCENE1, i)).setBounds (space + 8.0 * stepX, space + y, width, height);
             surface.getButton (ButtonID.get (ButtonID.ROW_SELECT_1, i)).setBounds (space + x, space + 8.0 * stepY, width, height);
             surface.getContinuous (ContinuousID.get (ContinuousID.FADER1, i)).setBounds (space + x, space + 9.0 * stepY, width, width * 3);

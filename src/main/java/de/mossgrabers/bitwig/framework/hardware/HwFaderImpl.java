@@ -79,8 +79,8 @@ public class HwFaderImpl extends AbstractHwContinuousControl implements IHwFader
         this.touchCommand = command;
 
         // TODO Add a description text
-        this.hardwareFader.beginTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.DOWN), () -> "TODO"));
-        this.hardwareFader.endTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.UP), () -> "TODO"));
+        this.hardwareFader.beginTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.DOWN, 127), () -> "TODO"));
+        this.hardwareFader.endTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.UP, 0), () -> "TODO"));
 
         input.bindTouch (this, type, 0, control);
     }
