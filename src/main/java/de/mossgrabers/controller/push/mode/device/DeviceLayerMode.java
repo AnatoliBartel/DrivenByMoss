@@ -545,7 +545,7 @@ public class DeviceLayerMode extends BaseMode
         // Drum Pad Bank has size of 16, layers only 8
         final int offset = getDrumPadIndex (cd);
 
-        int index = isButtonRow (0, buttonID);
+        int index = this.isButtonRow (0, buttonID);
         if (index >= 0)
         {
             final IChannel dl = bank.getItem (offset + buttonID.ordinal () - ButtonID.ROW1_1.ordinal ());
@@ -558,7 +558,7 @@ public class DeviceLayerMode extends BaseMode
             return super.getButtonColor (buttonID);
         }
 
-        index = isButtonRow (1, buttonID);
+        index = this.isButtonRow (1, buttonID);
         if (index >= 0)
         {
             final PushConfiguration config = this.surface.getConfiguration ();

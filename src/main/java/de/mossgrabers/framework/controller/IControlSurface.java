@@ -130,7 +130,7 @@ public interface IControlSurface<C extends Configuration>
      *
      * @return The output
      */
-    IMidiOutput getOutput ();
+    IMidiOutput getMidiOutput ();
 
 
     /**
@@ -138,7 +138,7 @@ public interface IControlSurface<C extends Configuration>
      *
      * @return The input
      */
-    IMidiInput getInput ();
+    IMidiInput getMidiInput ();
 
 
     /**
@@ -314,8 +314,18 @@ public interface IControlSurface<C extends Configuration>
 
 
     /**
-     * Creates a light (e.g. LED) for the surface.
+     * Get a light the was created with the given ID.
      *
+     * @param outputID The output ID
+     * @return The light or null if not created
+     */
+    IHwLight getLight (OutputID outputID);
+
+
+    /**
+     * Creates a light (e.g. LED) for the surface.
+     * 
+     * @param outputID The outputID, can be null
      * @param supplier Callback for retrieving the state of the light
      * @param sendConsumer Callback for sending the update command to the controller surface
      * @param stateToColorFunction Convert the state of the light to a color, which can be displayed
@@ -323,7 +333,7 @@ public interface IControlSurface<C extends Configuration>
      * @param button Binds the light to this button, can be null
      * @return The created light
      */
-    IHwLight createLight (IntSupplier supplier, IntConsumer sendConsumer, IntFunction<ColorEx> stateToColorFunction, IHwButton button);
+    IHwLight createLight (OutputID outputID, IntSupplier supplier, IntConsumer sendConsumer, IntFunction<ColorEx> stateToColorFunction, IHwButton button);
 
 
     /**

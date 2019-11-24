@@ -25,16 +25,19 @@ public interface IHwSurfaceFactory
     /**
      * Create a proxy to a hardware button.
      *
+     * @param surfaceID The ID of the surface
      * @param buttonID The button ID to use
      * @param label The label of the button
      * @return The created button
      */
-    IHwButton createButton (ButtonID buttonID, String label);
+    IHwButton createButton (int surfaceID, ButtonID buttonID, String label);
 
 
     /**
      * Create a proxy to a hardware light.
      *
+     * @param surfaceID The ID of the surface
+     * @param outputID The ID of the light, may be null
      * @param supplier Callback for getting the state of the light
      * @param sendValueConsumer Callback for sending the state to the controller device
      * @param stateToColorFunction Convert the state of the light to a color, which can be displayed
@@ -42,57 +45,62 @@ public interface IHwSurfaceFactory
      * @param button Binds the light to this button, can be null
      * @return The created light
      */
-    IHwLight createLight (IntSupplier supplier, IntConsumer sendValueConsumer, IntFunction<ColorEx> stateToColorFunction, IHwButton button);
+    IHwLight createLight (int surfaceID, OutputID outputID, IntSupplier supplier, IntConsumer sendValueConsumer, IntFunction<ColorEx> stateToColorFunction, IHwButton button);
 
 
     /**
      * Create a proxy to a hardware fader.
      *
+     * @param surfaceID The ID of the surface
      * @param faderID The fader ID to use
      * @param label The label of the button
      * @return The created fader
      */
-    IHwFader createFader (ContinuousID faderID, String label);
+    IHwFader createFader (int surfaceID, ContinuousID faderID, String label);
 
 
     /**
      * Create a proxy to a hardware absolute knob.
-     * 
+     *
+     * @param surfaceID The ID of the surface
      * @param knobID The knob ID to use
      * @param label The label of the knob
      * @return The created knob
      */
-    IHwAbsoluteKnob createAbsoluteKnob (ContinuousID knobID, String label);
+    IHwAbsoluteKnob createAbsoluteKnob (int surfaceID, ContinuousID knobID, String label);
 
 
     /**
      * Create a proxy to a hardware relative knob.
      *
+     * @param surfaceID The ID of the surface
      * @param knobID The knob ID to use
      * @param label The label of the knob
      * @return The created knob
      */
-    IHwRelativeKnob createRelativeKnob (ContinuousID knobID, String label);
+    IHwRelativeKnob createRelativeKnob (int surfaceID, ContinuousID knobID, String label);
 
 
     /**
      * Create a proxy to a hardware text display.
-     * 
+     *
+     * @param surfaceID The ID of the surface
      * @param outputID The ID of the display
      * @param numLines The number of lines of the display
      * @return The created display
      */
-    IHwTextDisplay createTextDisplay (OutputID outputID, int numLines);
+    IHwTextDisplay createTextDisplay (int surfaceID, OutputID outputID, int numLines);
 
 
     /**
      * Create a proxy to a hardware graphics display.
-     * 
+     *
+     * @param surfaceID The ID of the surface
      * @param outputID The ID of the display
      * @param bitmap The bitmap
      * @return The created display
      */
-    IHwGraphicsDisplay createGraphicsDisplay (OutputID outputID, IBitmap bitmap);
+    IHwGraphicsDisplay createGraphicsDisplay (int surfaceID, OutputID outputID, IBitmap bitmap);
 
 
     /**

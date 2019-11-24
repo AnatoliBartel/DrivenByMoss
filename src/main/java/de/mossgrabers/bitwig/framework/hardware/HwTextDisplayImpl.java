@@ -35,7 +35,7 @@ public class HwTextDisplayImpl extends AbstractHwControl implements IHwTextDispl
 
     /** {@inheritDoc}} */
     @Override
-    public void setBounds (double x, double y, double width, double height)
+    public void setBounds (final double x, final double y, final double width, final double height)
     {
         this.textDisplay.setBounds (x, y, width, height);
     }

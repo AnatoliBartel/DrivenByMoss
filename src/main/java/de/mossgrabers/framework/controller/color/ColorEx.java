@@ -25,6 +25,8 @@ public class ColorEx
     public static final ColorEx RED        = ColorEx.fromRGB (255, 0, 0);
     /** Color green. */
     public static final ColorEx GREEN      = ColorEx.fromRGB (0, 255, 0);
+    /** Color blue. */
+    public static final ColorEx BLUE       = ColorEx.fromRGB (0, 0, 255);
     /** Color yellow. */
     public static final ColorEx YELLOW     = ColorEx.fromRGB (255, 255, 0);
 

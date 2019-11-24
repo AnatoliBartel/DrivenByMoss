@@ -17,7 +17,7 @@ import de.mossgrabers.framework.view.Views;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class PitchbendCommand extends AbstractPitchbendCommand<PushControlSurface, PushConfiguration>
+public class TouchstripCommand extends AbstractPitchbendCommand<PushControlSurface, PushConfiguration>
 {
     private int pitchValue = 0;
 
@@ -28,7 +28,7 @@ public class PitchbendCommand extends AbstractPitchbendCommand<PushControlSurfac
      * @param model The model
      * @param surface The surface
      */
-    public PitchbendCommand (final IModel model, final PushControlSurface surface)
+    public TouchstripCommand (final IModel model, final PushControlSurface surface)
     {
         super (model, surface);
     }
@@ -36,7 +36,7 @@ public class PitchbendCommand extends AbstractPitchbendCommand<PushControlSurfac
 
     /** {@inheritDoc} */
     @Override
-    public void onPitchbend (final int channel, final int data1, final int data2)
+    public void onPitchbend (final int data1, final int data2)
     {
         if (this.surface.getViewManager ().isActiveView (Views.SESSION))
         {
@@ -97,7 +97,7 @@ public class PitchbendCommand extends AbstractPitchbendCommand<PushControlSurfac
                 break;
         }
 
-        this.surface.getOutput ().sendPitchbend (data1, data2);
+        this.surface.getMidiOutput ().sendPitchbend (data1, data2);
     }
 
 

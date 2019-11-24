@@ -15,7 +15,7 @@ import de.mossgrabers.framework.daw.IHost;
  */
 public class DummyDisplay implements ITextDisplay
 {
-    private IHost host;
+    private final IHost host;
 
 
     /**

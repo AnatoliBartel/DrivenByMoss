@@ -49,7 +49,7 @@ public class NoteRepeatMode extends BaseMode
         this.isTemporary = true;
         this.host = this.model.getHost ();
 
-        final INoteInput defaultNoteInput = surface.getInput ().getDefaultNoteInput ();
+        final INoteInput defaultNoteInput = surface.getMidiInput ().getDefaultNoteInput ();
         this.noteRepeat = defaultNoteInput == null ? null : defaultNoteInput.getNoteRepeat ();
     }
 

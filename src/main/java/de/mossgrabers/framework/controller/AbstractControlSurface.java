@@ -61,12 +61,15 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     protected final IMidiInput                      input;
     protected final IHwSurfaceFactory               surfaceFactory;
 
+    protected final int                             surfaceID;
+
     protected final ViewManager                     viewManager           = new ViewManager ();
     protected final ModeManager                     modeManager           = new ModeManager ();
 
     protected int                                   defaultMidiChannel    = 0;
 
     private Map<ButtonID, IHwButton>                buttons               = new EnumMap<> (ButtonID.class);
+    private Map<OutputID, IHwLight>                 lights                = new EnumMap<> (OutputID.class);
     private Map<ContinuousID, IHwContinuousControl> continuous            = new EnumMap<> (ContinuousID.class);
     private final ContinuousInfo [] []              continuousInfos       = new ContinuousInfo [16] [NUM_INFOS];
 
@@ -95,6 +98,27 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
      */
     public AbstractControlSurface (final IHost host, final C configuration, final ColorManager colorManager, final IMidiOutput output, final IMidiInput input, final PadGrid padGrid, final double width, final double height)
     {
+        this (0, host, configuration, colorManager, output, input, padGrid, width, height);
+    }
+
+
+    /**
+     * Constructor.
+     *
+     * @param surfaceID The ID of the surface
+     * @param host The host
+     * @param configuration The configuration
+     * @param colorManager
+     * @param output The midi output
+     * @param input The midi input
+     * @param padGrid The pads if any, may be null
+     * @param width The physical width of the controller device in mm
+     * @param height The physical height of the controller device in mm
+     */
+    public AbstractControlSurface (final int surfaceID, final IHost host, final C configuration, final ColorManager colorManager, final IMidiOutput output, final IMidiInput input, final PadGrid padGrid, final double width, final double height)
+    {
+        this.surfaceID = surfaceID;
+
         this.host = host;
         this.configuration = configuration;
         this.colorManager = colorManager;
@@ -119,7 +143,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
                 final ButtonID buttonID = ButtonID.get (ButtonID.PAD1, i);
                 final IHwButton pad = this.createButton (buttonID, "P " + (i + 1));
-                pad.addLight (this.surfaceFactory.createLight ( () -> this.pads.getPadInfo (note).getEncoded (), state -> this.pads.sendPadState (note), colorIndex -> this.colorManager.getColor (colorIndex, buttonID), null));
+                pad.addLight (this.surfaceFactory.createLight (this.surfaceID, null, () -> this.pads.getPadInfo (note).getEncoded (), state -> this.pads.sendPadState (note), colorIndex -> this.colorManager.getColor (colorIndex, buttonID), null));
                 pad.bind (input, BindType.NOTE, this.pads.translateToController (note));
                 pad.bindDynamic ( (event, velocity) -> this.handleGridNote (event, note, velocity));
             }
@@ -199,7 +223,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public void addTextDisplay (final ITextDisplay display)
     {
-        display.setHardwareDisplay (this.surfaceFactory.createTextDisplay (OutputID.get (OutputID.DISPLAY1, this.textDisplays.size ()), display.getNoOfLines ()));
+        display.setHardwareDisplay (this.surfaceFactory.createTextDisplay (this.surfaceID, OutputID.get (OutputID.DISPLAY1, this.textDisplays.size ()), display.getNoOfLines ()));
         this.textDisplays.add (display);
     }
 
@@ -209,7 +233,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     public void addGraphicsDisplay (final IGraphicDisplay display)
     {
         final IBitmap bitmap = display.getImage ();
-        display.setHardwareDisplay (this.surfaceFactory.createGraphicsDisplay (OutputID.DISPLAY1, bitmap));
+        display.setHardwareDisplay (this.surfaceFactory.createGraphicsDisplay (this.surfaceID, OutputID.DISPLAY1, bitmap));
         this.graphicsDisplays.add (display);
     }
 
@@ -224,7 +248,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public IMidiOutput getOutput ()
+    public IMidiOutput getMidiOutput ()
     {
         return this.output;
     }
@@ -232,7 +256,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public IMidiInput getInput ()
+    public IMidiInput getMidiInput ()
     {
         return this.input;
     }
@@ -295,9 +319,17 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public IHwContinuousControl getContinuous (ContinuousID continuousID)
+    public IHwContinuousControl getContinuous (final ContinuousID continuousID)
     {
         return this.continuous.get (continuousID);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public IHwLight getLight (final OutputID outputID)
+    {
+        return this.lights.get (outputID);
     }
 
 
@@ -363,7 +395,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public IHwButton createButton (final ButtonID buttonID, final String label)
     {
-        final IHwButton button = this.surfaceFactory.createButton (buttonID, label);
+        final IHwButton button = this.surfaceFactory.createButton (this.surfaceID, buttonID, label);
         this.buttons.put (buttonID, button);
         return button;
     }
@@ -371,9 +403,13 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public IHwLight createLight (final IntSupplier supplier, final IntConsumer sendConsumer, final IntFunction<ColorEx> stateToColorFunction, final IHwButton button)
+    public IHwLight createLight (final OutputID outputID, final IntSupplier supplier, final IntConsumer sendConsumer, final IntFunction<ColorEx> stateToColorFunction, final IHwButton button)
     {
-        return this.surfaceFactory.createLight (supplier, sendConsumer, stateToColorFunction, button);
+
+        final IHwLight light = this.surfaceFactory.createLight (this.surfaceID, outputID, supplier, sendConsumer, stateToColorFunction, button);
+        if (outputID != null)
+            this.lights.put (outputID, light);
+        return light;
     }
 
 
@@ -381,7 +417,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public IHwFader createFader (final ContinuousID faderID, final String label)
     {
-        final IHwFader fader = this.surfaceFactory.createFader (faderID, label);
+        final IHwFader fader = this.surfaceFactory.createFader (this.surfaceID, faderID, label);
         this.continuous.put (faderID, fader);
         return fader;
     }
@@ -391,7 +427,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public IHwAbsoluteKnob createAbsoluteKnob (final ContinuousID knobID, final String label)
     {
-        final IHwAbsoluteKnob knob = this.surfaceFactory.createAbsoluteKnob (knobID, label);
+        final IHwAbsoluteKnob knob = this.surfaceFactory.createAbsoluteKnob (this.surfaceID, knobID, label);
         this.continuous.put (knobID, knob);
         return knob;
     }
@@ -401,7 +437,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public IHwRelativeKnob createRelativeKnob (final ContinuousID knobID, final String label)
     {
-        final IHwRelativeKnob knob = this.surfaceFactory.createRelativeKnob (knobID, label);
+        final IHwRelativeKnob knob = this.surfaceFactory.createRelativeKnob (this.surfaceID, knobID, label);
         this.continuous.put (knobID, knob);
         return knob;
     }
@@ -722,7 +758,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /**
      * Handle a midi note which belongs to the grid.
-     * 
+     *
      * @param event The button event
      * @param note The midi note (already transformed to the grid)
      * @param velocity The velocity of the note

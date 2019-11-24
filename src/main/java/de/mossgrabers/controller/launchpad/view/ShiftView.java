@@ -64,7 +64,7 @@ public class ShiftView extends AbstractView<LaunchpadControlSurface, LaunchpadCo
             padGrid.light (36 + i, i == clipLengthIndex ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
 
         // Note Repeat
-        final INoteRepeat noteRepeat = this.surface.getInput ().getDefaultNoteInput ().getNoteRepeat ();
+        final INoteRepeat noteRepeat = this.surface.getMidiInput ().getDefaultNoteInput ().getNoteRepeat ();
         padGrid.light (87, noteRepeat.isActive () ? LaunchpadColors.LAUNCHPAD_COLOR_ORCHID_HI : LaunchpadColors.LAUNCHPAD_COLOR_ORCHID_LO);
 
         // Note Repeat period
@@ -161,7 +161,7 @@ public class ShiftView extends AbstractView<LaunchpadControlSurface, LaunchpadCo
         if (velocity == 0)
             return;
 
-        final INoteRepeat noteRepeat = this.surface.getInput ().getDefaultNoteInput ().getNoteRepeat ();
+        final INoteRepeat noteRepeat = this.surface.getMidiInput ().getDefaultNoteInput ().getNoteRepeat ();
 
         switch (note)
         {

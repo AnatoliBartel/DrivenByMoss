@@ -333,6 +333,8 @@ public enum ButtonID
     AUTOMATION_READ,
     /** The automation write button. */
     AUTOMATION_WRITE,
+    /** The automation group button. */
+    AUTOMATION_GROUP,
     /** The automation trim button. */
     AUTOMATION_TRIM,
     /** The automation touch button. */

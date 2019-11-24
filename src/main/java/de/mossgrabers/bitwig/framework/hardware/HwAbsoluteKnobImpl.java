@@ -90,7 +90,7 @@ public class HwAbsoluteKnobImpl extends AbstractHwContinuousControl implements I
 
     /** {@inheritDoc} */
     @Override
-    public void setBounds (double x, double y, double width, double height)
+    public void setBounds (final double x, final double y, final double width, final double height)
     {
         this.hardwareKnob.setBounds (x, y, width, height);
     }

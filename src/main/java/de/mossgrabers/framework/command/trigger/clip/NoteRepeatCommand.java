@@ -59,7 +59,7 @@ public class NoteRepeatCommand<S extends IControlSurface<C>, C extends Configura
             return;
         }
 
-        final INoteInput defaultNoteInput = this.surface.getInput ().getDefaultNoteInput ();
+        final INoteInput defaultNoteInput = this.surface.getMidiInput ().getDefaultNoteInput ();
         if (defaultNoteInput == null)
             return;
 

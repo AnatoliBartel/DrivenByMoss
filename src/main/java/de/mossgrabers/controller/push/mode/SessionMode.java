@@ -117,7 +117,7 @@ public class SessionMode extends AbstractTrackMode
     @Override
     public int getButtonColor (final ButtonID buttonID)
     {
-        int index = this.isButtonRow (1, buttonID);
+        final int index = this.isButtonRow (1, buttonID);
         if (index >= 0)
         {
             if (index == 0)

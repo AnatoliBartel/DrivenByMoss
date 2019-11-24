@@ -18,7 +18,12 @@ public enum OutputID
     /** The third display. */
     DISPLAY3,
     /** The fourth display. */
-    DISPLAY4;
+    DISPLAY4,
+
+    /** The first LED. */
+    LED1,
+    /** The second LED. */
+    LED2;
 
 
     /**

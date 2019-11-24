@@ -73,7 +73,7 @@ public class DeviceParamsMode extends AbstractMode<SLControlSurface, SLConfigura
     public void setLEDs ()
     {
         final boolean hasDevice = this.model.hasSelectedDevice ();
-        final IMidiOutput output = this.surface.getOutput ();
+        final IMidiOutput output = this.surface.getMidiOutput ();
         final IParameterBank parameterBank = this.model.getCursorDevice ().getParameterBank ();
         for (int i = 0; i < 8; i++)
         {

@@ -164,15 +164,13 @@ public class MidiInputImpl implements IMidiInput
     @Override
     public void bind (final IHwRelativeKnob knob, final BindType type, final int channel, final int control)
     {
-        RelativeHardwareKnob hardwareKnob = ((HwRelativeKnobImpl) knob).getHardwareKnob ();
+        final RelativeHardwareKnob hardwareKnob = ((HwRelativeKnobImpl) knob).getHardwareKnob ();
 
         // TODO Support different relative mappings, understand what these names really mean...
         switch (type)
         {
             case CC:
                 hardwareKnob.setAdjustValueMatcher (this.port.createRelative2sComplementCCValueMatcher (channel, control));
-                break;
-            case PITCHBEND:
                 break;
             default:
                 throw new BindException (type);
@@ -217,7 +215,7 @@ public class MidiInputImpl implements IMidiInput
     public void bindTouch (final IHwRelativeKnob relativeKnob, final BindType type, final int channel, final int control)
     {
         final RelativeHardwareKnob hardwareControl = ((HwRelativeKnobImpl) relativeKnob).getHardwareKnob ();
-        bindTouch (hardwareControl, type, channel, control);
+        this.bindTouch (hardwareControl, type, channel, control);
     }
 
 
@@ -226,7 +224,7 @@ public class MidiInputImpl implements IMidiInput
     public void bindTouch (final IHwFader fader, final BindType type, final int channel, final int control)
     {
         final HardwareSlider hardwareControl = ((HwFaderImpl) fader).getHardwareFader ();
-        bindTouch (hardwareControl, type, channel, control);
+        this.bindTouch (hardwareControl, type, channel, control);
     }
 
 

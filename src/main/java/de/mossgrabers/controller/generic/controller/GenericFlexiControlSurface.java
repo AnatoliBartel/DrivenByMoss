@@ -378,12 +378,12 @@ public class GenericFlexiControlSurface extends AbstractControlSurface<GenericFl
         {
             case CommandSlot.TYPE_CC:
                 if (value >= 0 && value <= 127)
-                    this.getOutput ().sendCCEx (slot.getMidiChannel (), slot.getNumber (), value);
+                    this.getMidiOutput ().sendCCEx (slot.getMidiChannel (), slot.getNumber (), value);
                 break;
 
             case CommandSlot.TYPE_PITCH_BEND:
                 if (value >= 0 && value <= 127)
-                    this.getOutput ().sendPitchbend (slot.getMidiChannel (), 0, value);
+                    this.getMidiOutput ().sendPitchbend (slot.getMidiChannel (), 0, value);
                 break;
 
             default:

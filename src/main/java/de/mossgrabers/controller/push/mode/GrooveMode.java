@@ -151,7 +151,7 @@ public class GrooveMode extends BaseMode
     @Override
     public String getButtonColorID (final ButtonID buttonID)
     {
-        int index = this.isButtonRow (1, buttonID);
+        final int index = this.isButtonRow (1, buttonID);
         if (index >= 0)
         {
             if (index == 0)

@@ -4,8 +4,8 @@
 
 package de.mossgrabers.framework.controller;
 
-import de.mossgrabers.controller.push.command.pitchbend.PitchbendCommand;
 import de.mossgrabers.framework.command.core.ContinuousCommand;
+import de.mossgrabers.framework.command.core.PitchbendCommand;
 import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.configuration.AbstractConfiguration;
 import de.mossgrabers.framework.configuration.Configuration;
@@ -229,13 +229,31 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      *
      * @param buttonID The ID of the button (for later access)
      * @param label The label of the button
-     * @param supplier Callback for retrieving the state of the light
-     * @param midiValue The MIDI CC or note
      * @param command The command to bind
+     * @param midiControl The MIDI CC or note
+     * @param supplier Callback for retrieving the on/off state of the light
      */
-    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiValue, final BooleanSupplier supplier)
+    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiControl, final BooleanSupplier supplier)
     {
-        this.addButton (buttonID, label, command, midiValue, () -> supplier.getAsBoolean () ? 1 : 0, ColorManager.BUTTON_STATE_ON, ColorManager.BUTTON_STATE_HI);
+        this.addButton (buttonID, label, command, midiControl, () -> supplier.getAsBoolean () ? 1 : 0, ColorManager.BUTTON_STATE_ON, ColorManager.BUTTON_STATE_HI);
+    }
+
+
+    /**
+     * Create a hardware button proxy on controller device 1, bind a trigger command to it and bind
+     * it to a MIDI CC on MIDI channel 1. The button has an on/off state.
+     *
+     * @param surface The control surface
+     * @param buttonID The ID of the button (for later access)
+     * @param label The label of the button
+     * @param command The command to bind
+     * @param midiChannel The MIDI channel
+     * @param midiControl The MIDI CC or note
+     * @param supplier Callback for retrieving the on/off state of the light
+     */
+    protected void addButton (final S surface, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiControl, final BooleanSupplier supplier)
+    {
+        this.addButton (surface, buttonID, label, command, midiChannel, midiControl, () -> supplier.getAsBoolean () ? 1 : 0, ColorManager.BUTTON_STATE_ON, ColorManager.BUTTON_STATE_HI);
     }
 
 
@@ -246,14 +264,14 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param buttonID The ID of the button (for later access)
      * @param label The label of the button
      * @param supplier Callback for retrieving the state of the light
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      * @param colorIdOn The color ID for on state
      * @param colorIdHi The color ID for off state
      */
-    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiValue, final BooleanSupplier supplier, final String colorIdOn, final String colorIdHi)
+    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiControl, final BooleanSupplier supplier, final String colorIdOn, final String colorIdHi)
     {
-        this.addButton (buttonID, label, command, midiValue, () -> supplier.getAsBoolean () ? 1 : 0, colorIdOn, colorIdHi);
+        this.addButton (buttonID, label, command, midiControl, () -> supplier.getAsBoolean () ? 1 : 0, colorIdOn, colorIdHi);
     }
 
 
@@ -263,12 +281,45 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      *
      * @param buttonID The ID of the button (for later access)
      * @param label The label of the button
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      */
-    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiValue)
+    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiControl)
     {
-        this.addButton (buttonID, label, command, 0, midiValue);
+        this.addButton (buttonID, label, command, 0, midiControl);
+    }
+
+
+    /**
+     * Create a hardware button proxy on controller device 1, bind a trigger command to it and bind
+     * it to a MIDI CC on MIDI channel 1. The button has an on/off state.
+     *
+     * @param surface The control surface
+     * @param buttonID The ID of the button (for later access)
+     * @param label The label of the button
+     * @param midiControl The MIDI CC or note
+     * @param command The command to bind
+     */
+    protected void addButton (final S surface, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiControl)
+    {
+        this.addButton (surface, buttonID, label, command, 0, midiControl, (IntSupplier) null, ColorManager.BUTTON_STATE_ON, ColorManager.BUTTON_STATE_HI);
+    }
+
+
+    /**
+     * Create a hardware button proxy on controller device 1, bind a trigger command to it and bind
+     * it to a MIDI CC on MIDI channel 1. The button has an on/off state.
+     *
+     * @param surface The control surface
+     * @param buttonID The ID of the button (for later access)
+     * @param label The label of the button
+     * @param midiChannel The MIDI channel
+     * @param midiControl The MIDI CC or note
+     * @param command The command to bind
+     */
+    protected void addButton (final S surface, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiControl)
+    {
+        this.addButton (surface, buttonID, label, command, midiChannel, midiControl, (IntSupplier) null, ColorManager.BUTTON_STATE_ON, ColorManager.BUTTON_STATE_HI);
     }
 
 
@@ -279,12 +330,12 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param buttonID The ID of the button (for later access)
      * @param label The label of the button
      * @param midiChannel The MIDI channel
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      */
-    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiValue)
+    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiControl)
     {
-        this.addButton (buttonID, label, command, midiChannel, midiValue, (IntSupplier) null, ColorManager.BUTTON_STATE_ON, ColorManager.BUTTON_STATE_HI);
+        this.addButton (buttonID, label, command, midiChannel, midiControl, (IntSupplier) null, ColorManager.BUTTON_STATE_ON, ColorManager.BUTTON_STATE_HI);
     }
 
 
@@ -295,13 +346,13 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param buttonID The ID of the button (for later access)
      * @param label The label of the button
      * @param supplier Callback for retrieving the state of the light
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      * @param colorIds The color IDs to map to the states
      */
-    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiValue, final IntSupplier supplier, final String... colorIds)
+    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiControl, final IntSupplier supplier, final String... colorIds)
     {
-        this.addButton (0, buttonID, label, command, midiValue, supplier, colorIds);
+        this.addButton (0, buttonID, label, command, midiControl, supplier, colorIds);
     }
 
 
@@ -313,13 +364,13 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param label The label of the button
      * @param supplier Callback for retrieving the state of the light
      * @param midiChannel The MIDI channel
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      * @param colorIds The color IDs to map to the states
      */
-    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiValue, final IntSupplier supplier, final String... colorIds)
+    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiControl, final IntSupplier supplier, final String... colorIds)
     {
-        this.addButton (0, buttonID, label, command, midiChannel, midiValue, supplier, colorIds);
+        this.addButton (0, buttonID, label, command, midiChannel, midiControl, supplier, colorIds);
     }
 
 
@@ -331,13 +382,13 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param label The label of the button
      * @param supplier Callback for retrieving the state of the light
      * @param midiChannel The MIDI channel
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      * @param colorIds The color IDs to map to the states
      */
-    protected void addButton (final int deviceIndex, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiValue, final IntSupplier supplier, String... colorIds)
+    protected void addButton (final int deviceIndex, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiControl, final IntSupplier supplier, final String... colorIds)
     {
-        this.addButton (this.surfaces.get (deviceIndex), buttonID, label, command, midiChannel, midiValue, supplier, colorIds);
+        this.addButton (this.surfaces.get (deviceIndex), buttonID, label, command, midiChannel, midiControl, supplier, colorIds);
     }
 
 
@@ -349,13 +400,13 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param buttonID The ID of the button (for later access)
      * @param label The label of the button
      * @param supplier Callback for retrieving the state of the light
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      * @param colorIds The color IDs to map to the states
      */
-    protected void addButton (final int deviceIndex, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiValue, final IntSupplier supplier, final String... colorIds)
+    protected void addButton (final int deviceIndex, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiControl, final IntSupplier supplier, final String... colorIds)
     {
-        this.addButton (this.surfaces.get (deviceIndex), buttonID, label, command, midiValue, supplier, colorIds);
+        this.addButton (this.surfaces.get (deviceIndex), buttonID, label, command, midiControl, supplier, colorIds);
     }
 
 
@@ -366,12 +417,12 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param buttonID The ID of the button (for later access)
      * @param label The label of the button
      * @param supplier Callback for retrieving the state of the light
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      */
-    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiValue, final IntSupplier supplier)
+    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiControl, final IntSupplier supplier)
     {
-        this.addButton (0, buttonID, label, command, midiValue, supplier);
+        this.addButton (0, buttonID, label, command, midiControl, supplier);
     }
 
 
@@ -383,12 +434,12 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param label The label of the button
      * @param supplier Callback for retrieving the state of the light
      * @param midiChannel The MIDI channel
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      */
-    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiValue, final IntSupplier supplier)
+    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiControl, final IntSupplier supplier)
     {
-        this.addButton (0, buttonID, label, command, midiChannel, midiValue, supplier);
+        this.addButton (0, buttonID, label, command, midiChannel, midiControl, supplier);
     }
 
 
@@ -400,12 +451,12 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param buttonID The ID of the button (for later access)
      * @param label The label of the button
      * @param supplier Callback for retrieving the state of the light
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      */
-    protected void addButton (final int deviceIndex, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiValue, final IntSupplier supplier)
+    protected void addButton (final int deviceIndex, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiControl, final IntSupplier supplier)
     {
-        this.addButton (deviceIndex, buttonID, label, command, 0, midiValue, supplier);
+        this.addButton (deviceIndex, buttonID, label, command, 0, midiControl, supplier);
     }
 
 
@@ -418,12 +469,12 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param label The label of the button
      * @param supplier Callback for retrieving the state of the light
      * @param midiChannel The MIDI channel
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      */
-    protected void addButton (final int deviceIndex, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiValue, final IntSupplier supplier)
+    protected void addButton (final int deviceIndex, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiControl, final IntSupplier supplier)
     {
-        this.addButton (this.surfaces.get (deviceIndex), buttonID, label, command, midiChannel, midiValue, supplier);
+        this.addButton (this.surfaces.get (deviceIndex), buttonID, label, command, midiChannel, midiControl, supplier);
     }
 
 
@@ -435,13 +486,13 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param buttonID The ID of the button (for later access)
      * @param label The label of the button
      * @param supplier Callback for retrieving the state of the light
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      * @param colorIds The color IDs to map to the states
      */
-    protected void addButton (final S surface, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiValue, final IntSupplier supplier, final String... colorIds)
+    protected void addButton (final S surface, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiControl, final IntSupplier supplier, final String... colorIds)
     {
-        this.addButton (surface, buttonID, label, command, 0, midiValue, supplier, colorIds);
+        this.addButton (surface, buttonID, label, command, 0, midiControl, supplier, colorIds);
     }
 
 
@@ -454,24 +505,60 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param label The label of the button
      * @param supplier Callback for retrieving the state of the light
      * @param midiChannel The MIDI channel
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      * @param colorIds The color IDs to map to the states
      */
-    protected void addButton (final S surface, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiValue, final IntSupplier supplier, final String... colorIds)
+    protected void addButton (final S surface, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiControl, final IntSupplier supplier, final String... colorIds)
     {
         final IHwButton button = surface.createButton (buttonID, label);
         button.bind (command);
-        button.bind (surface.getInput (), this.getTriggerBindType (), midiValue);
+        if (midiControl < 0)
+            return;
+        button.bind (surface.getMidiInput (), this.getTriggerBindType (), midiControl);
         final IntSupplier intSupplier = () -> button.isPressed () ? 1 : 0;
         final IntSupplier supp = supplier == null ? intSupplier : supplier;
-        surface.createLight ( () -> {
-            final int state = supp.getAsInt ();
+        this.addLight (surface, null, buttonID, button, midiChannel, midiControl, supp, colorIds);
+    }
+
+
+    /**
+     * Creates a light.
+     *
+     * @param surface The control surface
+     * @param outputID The ID of the light (for later access)
+     * @param midiChannel The MIDI channel
+     * @param midiControl The MIDI CC or note
+     * @param supplier The supplier for the color state of the light
+     * @param colorIds The color IDs to map to the states
+     */
+    protected void addLight (final S surface, final OutputID outputID, final int midiChannel, final int midiControl, final IntSupplier supplier, final String... colorIds)
+    {
+        this.addLight (surface, outputID, null, null, midiChannel, midiControl, supplier, colorIds);
+    }
+
+
+    /**
+     * Creates a light and adds it to the given button.
+     *
+     * @param surface The control surface
+     * @param outputID The ID of the light (for later access)
+     * @param buttonID The ID of the button (for later access)
+     * @param button The button to assign it to, may be null
+     * @param midiChannel The MIDI channel
+     * @param midiControl The MIDI CC or note
+     * @param supplier The supplier for the color state of the light
+     * @param colorIds The color IDs to map to the states
+     */
+    protected void addLight (final S surface, final OutputID outputID, final ButtonID buttonID, final IHwButton button, final int midiChannel, final int midiControl, final IntSupplier supplier, final String... colorIds)
+    {
+        surface.createLight (outputID, () -> {
+            final int state = supplier.getAsInt ();
             // Color is the state if there are no colors provided!
             if (colorIds == null || colorIds.length == 0)
                 return state;
             return this.colorManager.getColorIndex (state < 0 ? ColorManager.BUTTON_STATE_OFF : colorIds[state]);
-        }, color -> surface.setTrigger (midiChannel, midiValue, color), state -> this.colorManager.getColor (state, buttonID), button);
+        }, color -> surface.setTrigger (midiChannel, midiControl, color), state -> this.colorManager.getColor (state, buttonID), button);
     }
 
 
@@ -489,7 +576,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
     /**
      * Create a hardware fader proxy on controller device 1, bind a continuous command to it and
      * bind it to a MIDI pitchbend.
-     * 
+     *
      * @param continuousID The ID of the control (for later access)
      * @param label The label of the fader
      * @param command The command to bind
@@ -498,6 +585,22 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
     protected IHwFader addFader (final ContinuousID continuousID, final String label, final PitchbendCommand command)
     {
         return this.addFader (this.getSurface (), continuousID, label, command, 0);
+    }
+
+
+    /**
+     * Create a hardware fader proxy on controller device 1, bind a continuous command to it and
+     * bind it to a MIDI pitchbend.
+     *
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param command The command to bind
+     * @param midiChannel The MIDI channel
+     * @return The created fader
+     */
+    protected IHwFader addFader (final ContinuousID continuousID, final String label, final PitchbendCommand command, final int midiChannel)
+    {
+        return this.addFader (this.getSurface (), continuousID, label, command, midiChannel);
     }
 
 
@@ -516,7 +619,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
     {
         final IHwFader fader = surface.createFader (continuousID, label);
         fader.bind (command);
-        fader.bind (surface.getInput (), BindType.PITCHBEND, midiChannel, 0);
+        fader.bind (surface.getMidiInput (), BindType.PITCHBEND, midiChannel, 0);
         return fader;
     }
 
@@ -524,16 +627,16 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
     /**
      * Create a hardware fader proxy on controller device 1, bind a continuous command to it and
      * bind it to a MIDI CC on MIDI channel 1.
-     * 
+     *
      * @param continuousID The ID of the control (for later access)
      * @param label The label of the fader
      * @param command The command to bind
      * @param bindType The MIDI bind type
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      */
-    protected void addFader (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiValue)
+    protected void addFader (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiControl)
     {
-        this.addFader (continuousID, label, command, bindType, 0, midiValue);
+        this.addFader (continuousID, label, command, bindType, 0, midiControl);
     }
 
 
@@ -546,11 +649,11 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param command The command to bind
      * @param bindType The MIDI bind type
      * @param midiChannel The MIDI channel
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      */
-    protected void addFader (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiValue)
+    protected void addFader (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl)
     {
-        this.addFader (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiValue);
+        this.addFader (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiControl);
     }
 
 
@@ -564,13 +667,13 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param command The command to bind
      * @param bindType The MIDI bind type
      * @param midiChannel The MIDI channel
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      */
-    protected void addFader (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiValue)
+    protected void addFader (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl)
     {
         final IHwFader fader = surface.createFader (continuousID, label);
         fader.bind (command);
-        fader.bind (surface.getInput (), bindType, midiChannel, midiValue);
+        fader.bind (surface.getMidiInput (), bindType, midiChannel, midiControl);
     }
 
 
@@ -580,13 +683,30 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      *
      * @param continuousID The ID of the control (for later access)
      * @param label The label of the fader
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @param command The command to bind
      * @return The created knob
      */
-    protected IHwRelativeKnob addRelativeKnob (final ContinuousID continuousID, final String label, final ContinuousCommand command, final int midiValue)
+    protected IHwRelativeKnob addRelativeKnob (final ContinuousID continuousID, final String label, final ContinuousCommand command, final int midiControl)
     {
-        return addRelativeKnob (continuousID, label, command, BindType.CC, 0, midiValue);
+        return this.addRelativeKnob (continuousID, label, command, BindType.CC, 0, midiControl);
+    }
+
+
+    /**
+     * Create a hardware knob proxy on a controller, which sends relative values, bind a continuous
+     * command to it and bind it to a MIDI CC on MIDI channel 1.
+     *
+     * @param surface The control surface
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param midiControl The MIDI CC or note
+     * @param command The command to bind
+     * @return The created knob
+     */
+    protected IHwRelativeKnob addRelativeKnob (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final int midiControl)
+    {
+        return this.addRelativeKnob (surface, continuousID, label, command, BindType.CC, 0, midiControl);
     }
 
 
@@ -599,12 +719,12 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param command The command to bind
      * @param bindType The MIDI bind type
      * @param midiChannel The MIDI channel
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @return The created knob
      */
-    protected IHwRelativeKnob addRelativeKnob (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiValue)
+    protected IHwRelativeKnob addRelativeKnob (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl)
     {
-        return this.addRelativeKnob (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiValue);
+        return this.addRelativeKnob (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiControl);
     }
 
 
@@ -618,14 +738,14 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param command The command to bind
      * @param bindType The MIDI bind type
      * @param midiChannel The MIDI channel
-     * @param midiValue The MIDI CC or note
+     * @param midiControl The MIDI CC or note
      * @return The created knob
      */
-    protected IHwRelativeKnob addRelativeKnob (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiValue)
+    protected IHwRelativeKnob addRelativeKnob (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl)
     {
         final IHwRelativeKnob knob = surface.createRelativeKnob (continuousID, label);
         knob.bind (command);
-        knob.bind (surface.getInput (), bindType, midiChannel, midiValue);
+        knob.bind (surface.getMidiInput (), bindType, midiChannel, midiControl);
         return knob;
     }
 
@@ -676,5 +796,20 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
             if (view != null)
                 view.updateNoteMapping ();
         }
+    }
+
+
+    /**
+     * Test if record mode (Arrange / Session) is flipped due to Shift press or configuration
+     * setting.
+     *
+     * @param surface The surface
+     * @return True if shifted
+     */
+    protected boolean isRecordShifted (final S surface)
+    {
+        final boolean isShift = surface.isShiftPressed ();
+        final boolean isFlipRecord = this.configuration.isFlipRecord ();
+        return isShift && !isFlipRecord || !isShift && isFlipRecord;
     }
 }

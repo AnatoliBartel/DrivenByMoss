@@ -325,7 +325,7 @@ public class DeviceBrowserMode extends BaseMode
     @Override
     public String getButtonColorID (final ButtonID buttonID)
     {
-        int index = isButtonRow (0, buttonID);
+        int index = this.isButtonRow (0, buttonID);
         if (index >= 0)
         {
             if (index == 7)
@@ -334,7 +334,7 @@ public class DeviceBrowserMode extends BaseMode
             return col != null && col.doesExist () ? AbstractMode.BUTTON_COLOR_ON : AbstractMode.BUTTON_COLOR_OFF;
         }
 
-        index = isButtonRow (1, buttonID);
+        index = this.isButtonRow (1, buttonID);
         if (index >= 0)
         {
             if (index == 7)

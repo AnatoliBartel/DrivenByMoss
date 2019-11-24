@@ -20,7 +20,7 @@ public interface IHwControl
     /**
      * The physical bounds of this hardware element on the controller. The unit is scaled into the
      * GUI window.
-     * 
+     *
      * @param x The X position of the control
      * @param y The Y position of the control
      * @param width The width of the control

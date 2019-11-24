@@ -66,9 +66,9 @@ public class HwFaderImpl extends AbstractHwContinuousControl implements IHwFader
 
     /** {@inheritDoc} */
     @Override
-    public void bind (final IMidiInput input, final BindType type, final int channel, final int value)
+    public void bind (final IMidiInput input, final BindType type, final int channel, final int control)
     {
-        input.bind (this, type, channel, value);
+        input.bind (this, type, channel, control);
     }
 
 
@@ -78,9 +78,8 @@ public class HwFaderImpl extends AbstractHwContinuousControl implements IHwFader
     {
         this.touchCommand = command;
 
-        // TODO Add a description text
-        this.hardwareFader.beginTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.DOWN, 127), () -> "TODO"));
-        this.hardwareFader.endTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.UP, 0), () -> "TODO"));
+        this.hardwareFader.beginTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.DOWN, 127), () -> ""));
+        this.hardwareFader.endTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.UP, 0), () -> ""));
 
         input.bindTouch (this, type, 0, control);
     }
@@ -97,8 +96,7 @@ public class HwFaderImpl extends AbstractHwContinuousControl implements IHwFader
             final double v = value * 16383.0;
             final int data1 = (int) Math.min (127, Math.round (v % 128.0));
             final int data2 = (int) Math.min (127, Math.round (v / 128.0));
-            this.host.println (data1 + ":" + data2);
-            this.pitchbendCommand.onPitchbend (0, data1, data2);
+            this.pitchbendCommand.onPitchbend (data1, data2);
         }
     }
 
@@ -116,7 +114,7 @@ public class HwFaderImpl extends AbstractHwContinuousControl implements IHwFader
 
     /** {@inheritDoc} */
     @Override
-    public void setBounds (double x, double y, double width, double height)
+    public void setBounds (final double x, final double y, final double width, final double height)
     {
         this.hardwareFader.setBounds (x, y, width, height);
     }

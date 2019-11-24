@@ -63,7 +63,7 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
 
     /**
      * Handle a button press with pressure information.
-     * 
+     *
      * @param value The dynamic pressure value
      */
     protected void handleDynamicButtonPressed (final double value)
@@ -78,7 +78,7 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
 
     /**
      * Handle a button release with release information.
-     * 
+     *
      * @param value The dynamic release value
      */
     protected void handleDynamicButtonRelease (final double value)

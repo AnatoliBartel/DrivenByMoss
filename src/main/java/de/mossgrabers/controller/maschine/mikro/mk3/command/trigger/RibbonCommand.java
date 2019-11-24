@@ -64,15 +64,15 @@ public class RibbonCommand extends AbstractTriggerCommand<MaschineMikroMk3Contro
         switch (m)
         {
             case MaschineMikroMk3Configuration.RIBBON_MODE_PITCH_DOWN_UP:
-                this.surface.getOutput ().sendCC (MaschineMikroMk3ControlSurface.MIKRO_3_TOUCHSTRIP, 64);
+                this.surface.getMidiOutput ().sendCC (MaschineMikroMk3ControlSurface.MIKRO_3_TOUCHSTRIP, 64);
                 break;
 
             case MaschineMikroMk3Configuration.RIBBON_MODE_MASTER_VOLUME:
-                this.surface.getOutput ().sendCC (MaschineMikroMk3ControlSurface.MIKRO_3_TOUCHSTRIP, this.model.getValueChanger ().toMidiValue (this.model.getMasterTrack ().getVolume ()));
+                this.surface.getMidiOutput ().sendCC (MaschineMikroMk3ControlSurface.MIKRO_3_TOUCHSTRIP, this.model.getValueChanger ().toMidiValue (this.model.getMasterTrack ().getVolume ()));
                 break;
 
             default:
-                this.surface.getOutput ().sendCC (MaschineMikroMk3ControlSurface.MIKRO_3_TOUCHSTRIP, 0);
+                this.surface.getMidiOutput ().sendCC (MaschineMikroMk3ControlSurface.MIKRO_3_TOUCHSTRIP, 0);
                 break;
         }
 

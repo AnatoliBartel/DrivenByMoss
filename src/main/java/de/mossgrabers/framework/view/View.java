@@ -38,7 +38,7 @@ public interface View
 
     /**
      * Get the color for a button, which is controlled by the view.
-     * 
+     *
      * @param buttonID The ID of the button
      * @return A color index
      */

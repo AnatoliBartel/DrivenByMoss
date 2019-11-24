@@ -7,7 +7,7 @@ package de.mossgrabers.controller.push;
 import de.mossgrabers.controller.push.command.continuous.ConfigurePitchbendCommand;
 import de.mossgrabers.controller.push.command.continuous.MastertrackTouchCommand;
 import de.mossgrabers.controller.push.command.continuous.SmallKnobTouchCommand;
-import de.mossgrabers.controller.push.command.pitchbend.PitchbendCommand;
+import de.mossgrabers.controller.push.command.pitchbend.TouchstripCommand;
 import de.mossgrabers.controller.push.command.trigger.AccentCommand;
 import de.mossgrabers.controller.push.command.trigger.AutomationCommand;
 import de.mossgrabers.controller.push.command.trigger.ClipCommand;
@@ -552,17 +552,9 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
 
         this.addButton (ButtonID.STOP_CLIP, "Stop Clip", new StopAllClipsCommand<> (this.model, surface), PushControlSurface.PUSH_BUTTON_STOP_CLIP, () -> surface.isPressed (ButtonID.STOP_CLIP), PushColorManager.PUSH_BUTTON_STATE_STOP_ON, PushColorManager.PUSH_BUTTON_STATE_STOP_HI);
         this.addButton (ButtonID.SESSION, "Session", new SelectSessionViewCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_SESSION, () -> Views.isSessionView (viewManager.getActiveViewId ()));
-        this.addButton (ButtonID.REPEAT, "Repeat", new NoteRepeatCommand<> (this.model, surface), PushControlSurface.PUSH_BUTTON_REPEAT, surface.getInput ().getDefaultNoteInput ().getNoteRepeat ()::isActive);
+        this.addButton (ButtonID.REPEAT, "Repeat", new NoteRepeatCommand<> (this.model, surface), PushControlSurface.PUSH_BUTTON_REPEAT, surface.getMidiInput ().getDefaultNoteInput ().getNoteRepeat ()::isActive);
 
         this.addButton (ButtonID.FOOTSWITCH2, "Foot Controller", new FootswitchCommand<> (this.model, surface), PushControlSurface.PUSH_FOOTSWITCH2);
-    }
-
-
-    private boolean isRecordShifted (final PushControlSurface surface)
-    {
-        final boolean isShift = surface.isShiftPressed ();
-        final boolean isFlipRecord = this.configuration.isFlipRecord ();
-        return isShift && !isFlipRecord || !isShift && isFlipRecord;
     }
 
 
@@ -576,7 +568,7 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
     protected void registerContinuousCommands ()
     {
         final PushControlSurface surface = this.getSurface ();
-        final IMidiInput input = surface.getInput ();
+        final IMidiInput input = surface.getMidiInput ();
 
         for (int i = 0; i < 8; i++)
         {
@@ -608,7 +600,7 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
             view.registerAftertouchCommand (new AftertouchAbstractViewCommand<> (view, this.model, surface));
         }
 
-        final IHwFader touchstrip = this.addFader (ContinuousID.TOUCHSTRIP, "Touchstrip", new PitchbendCommand (this.model, surface));
+        final IHwFader touchstrip = this.addFader (ContinuousID.TOUCHSTRIP, "Touchstrip", new TouchstripCommand (this.model, surface));
         touchstrip.bindTouch (new ConfigurePitchbendCommand (this.model, surface), input, BindType.NOTE, PushControlSurface.PUSH_RIBBON_TOUCH);
     }
 
@@ -864,7 +856,7 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
         surface.getViewManager ().setActiveView (this.configuration.getDefaultNoteView ());
 
         surface.sendPressureMode (true);
-        surface.getOutput ().sendSysex (DeviceInquiry.createQuery ());
+        surface.getMidiOutput ().sendSysex (DeviceInquiry.createQuery ());
 
         if (this.isPush2)
             surface.updateColorPalette ();

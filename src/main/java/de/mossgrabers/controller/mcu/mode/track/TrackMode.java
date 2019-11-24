@@ -136,7 +136,7 @@ public class TrackMode extends AbstractTrackMode
 
     /** {@inheritDoc} */
     @Override
-    protected void updateKnobLEDs ()
+    public void updateKnobLEDs ()
     {
         final int upperBound = this.model.getValueChanger ().getUpperBound ();
 

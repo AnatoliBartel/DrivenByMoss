@@ -218,8 +218,7 @@ public class MCUControlSurface extends AbstractControlSurface<MCUConfiguration>
      */
     public MCUControlSurface (final List<MCUControlSurface> surfaces, final IHost host, final ColorManager colorManager, final MCUConfiguration configuration, final IMidiOutput output, final IMidiInput input, final int extenderOffset, final boolean isMainDevice)
     {
-        // TODO size
-        super (host, configuration, colorManager, output, input, null, 1000, 1000);
+        super (surfaces.size (), host, configuration, colorManager, output, input, null, surfaces.isEmpty () ? 1000 : 600, 1000);
 
         this.surfaces = surfaces;
         this.extenderOffset = extenderOffset;
@@ -233,7 +232,7 @@ public class MCUControlSurface extends AbstractControlSurface<MCUConfiguration>
     @Override
     public void shutdown ()
     {
-        final IMidiOutput output = this.getOutput ();
+        final IMidiOutput output = this.getMidiOutput ();
         for (int i = 0; i < 8; i++)
         {
             output.sendChannelAftertouch (0x10 * i, 0);
@@ -297,54 +296,6 @@ public class MCUControlSurface extends AbstractControlSurface<MCUConfiguration>
     }
 
 
-    /** {@inheritDoc} */
-    @Override
-    protected void handleMidi (final int status, final int data1, final int data2)
-    {
-        final int code = status & 0xF0;
-        switch (code)
-        {
-            // Note on/off
-            case 0x80:
-            case 0x90:
-                // Reroute all notes to CC buttons
-                // TODO this.handleCC (0, data1, data2);
-                break;
-
-            case 0xB0:
-                // Handle knobs and jog wheel
-                // TODO this.handleCC (1, data1, data2);
-                break;
-
-            default:
-                super.handleMidi (status, data1, data2);
-                break;
-        }
-    }
-
-
-    /**
-     * Get the second display (only on icon QCon Pro X).
-     *
-     * @return The second display
-     */
-    public MCUDisplay getSecondDisplay ()
-    {
-        return (MCUDisplay) this.getTextDisplay (1);
-    }
-
-
-    /**
-     * Get the segment display.
-     *
-     * @return The segment display
-     */
-    public MCUSegmentDisplay getSegmentDisplay ()
-    {
-        return (MCUSegmentDisplay) this.getTextDisplay (2);
-    }
-
-
     /**
      * Get the channel/bank offset if multiple extenders are used.
      *
@@ -369,7 +320,7 @@ public class MCUControlSurface extends AbstractControlSurface<MCUConfiguration>
             else
                 this.activeVuMode = VUMODE_LED;
         }
-        final IMidiOutput out = this.getOutput ();
+        final IMidiOutput out = this.getMidiOutput ();
         // the mcu changes the vu-meter mode when receiving the
         // corresponding sysex message
         switch (this.activeVuMode)

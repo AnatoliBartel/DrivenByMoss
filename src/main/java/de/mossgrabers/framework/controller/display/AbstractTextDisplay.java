@@ -167,6 +167,42 @@ public abstract class AbstractTextDisplay implements ITextDisplay
 
     /** {@inheritDoc} */
     @Override
+    public ITextDisplay clearCell (int row, int column)
+    {
+        // TODO Provide a meaningful default implementation
+        return this;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public ITextDisplay setCell (int row, int column, int value, Format format)
+    {
+        // TODO Provide a meaningful default implementation
+        return this;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public ITextDisplay setCell (int row, int column, String value)
+    {
+        // TODO Provide a meaningful default implementation
+        return this;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public ITextDisplay setBlock (int row, int block, String value)
+    {
+        // TODO Provide a meaningful default implementation
+        return this;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void notify (final String message)
     {
         if (message == null)
@@ -196,7 +232,7 @@ public abstract class AbstractTextDisplay implements ITextDisplay
     {
         if (this.isNotificationActive)
         {
-            this.writeLine (0, this.notificationMessage);
+            this.updateLine (0, this.notificationMessage);
             for (int row = 1; row < this.noOfLines; row++)
                 this.writeLine (row, this.emptyLine);
             return;
@@ -209,8 +245,21 @@ public abstract class AbstractTextDisplay implements ITextDisplay
                 continue;
             this.currentMessage[row] = this.message[row];
             if (this.currentMessage[row] != null)
-                this.writeLine (row, this.currentMessage[row]);
+                this.updateLine (row, this.currentMessage[row]);
         }
+    }
+
+
+    /**
+     * Update the line on the hardware and simulation display.
+     *
+     * @param row The text row
+     * @param text The text
+     */
+    protected void updateLine (final int row, final String text)
+    {
+        this.hwDisplay.setLine (row, text);
+        this.writeLine (row, text);
     }
 
 

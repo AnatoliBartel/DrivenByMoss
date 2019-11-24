@@ -121,7 +121,7 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
 
     /**
      * Get the color ID for a button, which is controlled by the view.
-     * 
+     *
      * @param buttonID The ID of the button
      * @return A color ID
      */

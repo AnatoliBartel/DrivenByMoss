@@ -207,7 +207,7 @@ public class BeatstepControllerSetup extends AbstractControllerSetup<BeatstepCon
     {
         // Enable Shift button to send Midi Note 07
         final BeatstepControlSurface surface = this.getSurface ();
-        surface.getOutput ().sendSysex ("F0 00 20 6B 7F 42 02 00 01 5E 09 F7");
+        surface.getMidiOutput ().sendSysex ("F0 00 20 6B 7F 42 02 00 01 5E 09 F7");
         surface.getViewManager ().setActiveView (Views.TRACK);
     }
 

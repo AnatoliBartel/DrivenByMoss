@@ -48,10 +48,8 @@ public class HwButtonImpl extends AbstractHwButton
         this.command = command;
 
         final ControllerHost controllerHost = ((HostImpl) this.host).getControllerHost ();
-
-        // TODO Add a description text
-        this.hardwareButton.pressedAction ().addBinding (controllerHost.createAction (this::handleButtonPressed, () -> "TODO"));
-        this.hardwareButton.releasedAction ().addBinding (controllerHost.createAction (this::handleButtonRelease, () -> "TODO"));
+        this.hardwareButton.pressedAction ().addBinding (controllerHost.createAction (this::handleButtonPressed, () -> ""));
+        this.hardwareButton.releasedAction ().addBinding (controllerHost.createAction (this::handleButtonRelease, () -> ""));
     }
 
 
@@ -70,10 +68,8 @@ public class HwButtonImpl extends AbstractHwButton
         this.command = command;
 
         final ControllerHost controllerHost = ((HostImpl) this.host).getControllerHost ();
-
-        // TODO Add a description text
-        this.hardwareButton.pressedAction ().addBinding (controllerHost.createAction (this::handleDynamicButtonPressed, () -> "TODO"));
-        this.hardwareButton.releasedAction ().addBinding (controllerHost.createAction (this::handleDynamicButtonRelease, () -> "TODO"));
+        this.hardwareButton.pressedAction ().addBinding (controllerHost.createAction (this::handleDynamicButtonPressed, () -> ""));
+        this.hardwareButton.releasedAction ().addBinding (controllerHost.createAction (this::handleDynamicButtonRelease, () -> ""));
     }
 
 
@@ -100,7 +96,7 @@ public class HwButtonImpl extends AbstractHwButton
 
     /** {@inheritDoc} */
     @Override
-    public void setBounds (double x, double y, double width, double height)
+    public void setBounds (final double x, final double y, final double width, final double height)
     {
         this.hardwareButton.setBounds (x, y, width, height);
     }

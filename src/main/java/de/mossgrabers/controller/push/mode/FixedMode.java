@@ -63,7 +63,7 @@ public class FixedMode extends BaseMode
     @Override
     public int getButtonColor (final ButtonID buttonID)
     {
-        int index = this.isButtonRow (0, buttonID);
+        final int index = this.isButtonRow (0, buttonID);
         if (index >= 0)
         {
             final Configuration configuration = this.surface.getConfiguration ();

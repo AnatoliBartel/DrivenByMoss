@@ -365,7 +365,7 @@ public abstract class AbstractGraphicDisplay implements IGraphicDisplay
 
     /** {@inheritDoc} */
     @Override
-    public void setHardwareDisplay (IHwGraphicsDisplay display)
+    public void setHardwareDisplay (final IHwGraphicsDisplay display)
     {
         this.hardwareDisplay = display;
     }

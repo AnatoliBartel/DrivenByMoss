@@ -63,7 +63,7 @@ public class ScaleLayoutMode extends BaseMode
     @Override
     public String getButtonColorID (final ButtonID buttonID)
     {
-        int index = this.isButtonRow (0, buttonID);
+        final int index = this.isButtonRow (0, buttonID);
         if (index >= 0)
         {
             final int sl = this.scales.getScaleLayout ().ordinal ();

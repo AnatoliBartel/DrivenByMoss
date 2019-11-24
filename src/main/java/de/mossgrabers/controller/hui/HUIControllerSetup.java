@@ -144,7 +144,7 @@ public class HUIControllerSetup extends AbstractControllerSetup<HUIControlSurfac
         this.surfaces.add (surface);
         surface.addTextDisplay (new HUIDisplay (this.host, output));
         surface.addTextDisplay (new HUIMainDisplay (this.host, output));
-        surface.addTextDisplay (new HUISegmentDisplay (output));
+        surface.addTextDisplay (new HUISegmentDisplay (this.host, output));
         surface.getModeManager ().setDefaultMode (Modes.VOLUME);
     }
 
@@ -387,7 +387,7 @@ public class HUIControllerSetup extends AbstractControllerSetup<HUIControlSurfac
 
     private void sendPing ()
     {
-        this.getSurface ().getOutput ().sendNote (0, 0);
+        this.getSurface ().getMidiOutput ().sendNote (0, 0);
         this.host.scheduleTask (this::sendPing, 1000);
     }
 
@@ -484,7 +484,7 @@ public class HUIControllerSetup extends AbstractControllerSetup<HUIControlSurfac
         final ITransport t = this.model.getTransport ();
         String positionText = t.getPositionText ();
         positionText = positionText.substring (0, positionText.length () - 3);
-        this.getSurface ().getSegmentDisplay ().setTransportPositionDisplay (positionText);
+        this.getSurface ().getSegmentDisplay ().setRow (0, positionText);
     }
 
 
@@ -497,7 +497,7 @@ public class HUIControllerSetup extends AbstractControllerSetup<HUIControlSurfac
         final ITrackBank tb = this.model.getCurrentTrackBank ();
         IMidiOutput output;
         final HUIControlSurface surface = this.getSurface ();
-        output = surface.getOutput ();
+        output = surface.getMidiOutput ();
         for (int channel = 0; channel < 8; channel++)
         {
             final ITrack track = tb.getItem (channel);

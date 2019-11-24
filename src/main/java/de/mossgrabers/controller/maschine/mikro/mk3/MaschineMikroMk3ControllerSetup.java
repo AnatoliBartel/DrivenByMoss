@@ -158,7 +158,7 @@ public class MaschineMikroMk3ControllerSetup extends AbstractControllerSetup<Mas
         surface.getViewManager ().addViewChangeListener ( (previousViewId, activeViewId) -> this.updateMode (null));
         surface.getModeManager ().addModeListener ( (previousModeId, activeModeId) -> this.updateMode (activeModeId));
 
-        final INoteRepeat noteRepeat = this.getSurface ().getInput ().getDefaultNoteInput ().getNoteRepeat ();
+        final INoteRepeat noteRepeat = this.getSurface ().getMidiInput ().getDefaultNoteInput ().getNoteRepeat ();
 
         this.configuration.addSettingObserver (AbstractConfiguration.NOTEREPEAT_ACTIVE, () -> noteRepeat.setActive (this.configuration.isNoteRepeatActive ()));
         this.configuration.addSettingObserver (AbstractConfiguration.NOTEREPEAT_PERIOD, () -> noteRepeat.setPeriod (this.configuration.getNoteRepeatPeriod ().getValue ()));

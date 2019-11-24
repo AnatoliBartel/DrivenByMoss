@@ -120,8 +120,8 @@ public class PadInfo
      */
     private void encode ()
     {
-        int codeBlinkColor = this.blinkColor << 8;
-        int codeFast = this.fast ? 1 << 16 : 0;
+        final int codeBlinkColor = this.blinkColor << 8;
+        final int codeFast = this.fast ? 1 << 16 : 0;
         this.encoded = codeFast + codeBlinkColor + this.color;
     }
 }

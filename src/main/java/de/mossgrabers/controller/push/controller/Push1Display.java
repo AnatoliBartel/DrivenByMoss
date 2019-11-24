@@ -127,8 +127,6 @@ public class Push1Display extends AbstractTextDisplay
     @Override
     public void writeLine (final int row, final String text)
     {
-        this.hwDisplay.setLine (row, text);
-
         this.output.sendSysex (Push1Display.SYSEX_MESSAGE[row] + StringUtils.asciiToHex (text) + "F7");
     }
 

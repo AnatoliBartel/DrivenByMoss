@@ -307,7 +307,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
         final ModeManager modeManager = surface.getModeManager ();
         modeManager.setActiveMode (Modes.TRACK);
 
-        this.host.scheduleTask ( () -> surface.getOutput ().sendSysex (DeviceInquiry.createQuery ()), 1000);
+        this.host.scheduleTask ( () -> surface.getMidiOutput ().sendSysex (DeviceInquiry.createQuery ()), 1000);
     }
 
     // /** {@inheritDoc} */

@@ -432,7 +432,7 @@ public class PushColorManager extends ColorManager
 
     /**
      * Private due to utility class.
-     * 
+     *
      * @param isPush2 True if Push 2
      */
     public PushColorManager (final boolean isPush2)
@@ -631,7 +631,7 @@ public class PushColorManager extends ColorManager
                     return this.colorByIndex.get (Integer.valueOf (colorIndex == 1 ? PUSH2_COLOR2_GREY_LO : PUSH2_COLOR2_GREEN_HI));
                 case AUTOMATION:
                 case RECORD:
-                    return this.colorByIndex.get (Integer.valueOf (colorIndex == 1 ? PUSH2_COLOR2_GREY_LO : (colorIndex == 4 ? PUSH2_COLOR2_RED_HI : PUSH2_COLOR2_AMBER)));
+                    return this.colorByIndex.get (Integer.valueOf (colorIndex == 1 ? PUSH2_COLOR2_GREY_LO : colorIndex == 4 ? PUSH2_COLOR2_RED_HI : PUSH2_COLOR2_AMBER));
                 case MUTE:
                     return this.colorByIndex.get (Integer.valueOf (colorIndex == 1 ? PUSH2_COLOR2_GREY_LO : PUSH2_COLOR2_AMBER_LO));
                 case SOLO:

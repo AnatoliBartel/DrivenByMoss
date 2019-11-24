@@ -68,9 +68,8 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
     {
         this.touchCommand = command;
 
-        // TODO Add a description text
-        this.hardwareKnob.beginTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.DOWN, 127), () -> "TODO"));
-        this.hardwareKnob.endTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.UP, 0), () -> "TODO"));
+        this.hardwareKnob.beginTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.DOWN, 127), () -> ""));
+        this.hardwareKnob.endTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.UP, 0), () -> ""));
 
         input.bindTouch (this, type, 0, control);
     }
@@ -80,7 +79,10 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
     @Override
     public void handleValue (final double value)
     {
-        this.command.execute ((int) Math.round (value * 127.0));
+        // Convert the value back from the 2s relative matcher, because we do the conversion our own
+        // way
+        final int v = (int) Math.round (value * 127.0);
+        this.command.execute (v < 0 ? v + 128 : v);
     }
 
 
@@ -97,7 +99,7 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
 
     /** {@inheritDoc} */
     @Override
-    public void setBounds (double x, double y, double width, double height)
+    public void setBounds (final double x, final double y, final double width, final double height)
     {
         this.hardwareKnob.setBounds (x, y, width, height);
     }

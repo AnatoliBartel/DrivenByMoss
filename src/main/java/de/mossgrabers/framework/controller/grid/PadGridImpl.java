@@ -172,7 +172,7 @@ public class PadGridImpl implements PadGrid
 
     /** {@inheritDoc} */
     @Override
-    public void sendPadState (int note)
+    public void sendPadState (final int note)
     {
         final PadInfo state = this.padStates[note];
         final int translated = this.translateToController (note);

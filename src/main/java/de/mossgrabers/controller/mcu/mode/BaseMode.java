@@ -104,12 +104,13 @@ public abstract class BaseMode extends AbstractMode<MCUControlSurface, MCUConfig
         }
 
         return MCUControllerSetup.MCU_BUTTON_STATE_OFF;
-
-        // TODO this.updateKnobLEDs ();
     }
 
 
-    protected abstract void updateKnobLEDs ();
+    /**
+     * Update the knob LED rings.
+     */
+    public abstract void updateKnobLEDs ();
 
 
     protected void drawDisplay2 ()
@@ -120,7 +121,7 @@ public abstract class BaseMode extends AbstractMode<MCUControlSurface, MCUConfig
         final ITrackBank tb = this.model.getCurrentTrackBank ();
 
         // Format track names
-        final ITextDisplay d2 = this.surface.getSecondDisplay ();
+        final ITextDisplay d2 = this.surface.getTextDisplay (1);
         final int extenderOffset = this.surface.getExtenderOffset ();
 
         final boolean isMainDevice = this.surface.isMainDevice ();

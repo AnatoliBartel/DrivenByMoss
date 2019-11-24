@@ -236,7 +236,7 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
                 final View view = viewManager.getActiveView ();
                 if (view instanceof APCminiView)
                 {
-                    int trackButtonColor = ((APCminiView) view).getTrackButtonColor (index);
+                    final int trackButtonColor = ((APCminiView) view).getTrackButtonColor (index);
                     // Track buttons are only red!
                     return trackButtonColor > 0 ? APCminiColors.APC_COLOR_RED : 0;
                 }
@@ -282,8 +282,8 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
 
         for (int i = 0; i < 8; i++)
         {
-            double x = i * stepX;
-            double y = i * stepY;
+            final double x = i * stepX;
+            final double y = i * stepY;
 
             for (int k = 0; k < 8; k++)
                 surface.getButton (ButtonID.get (ButtonID.PAD1, k * 8 + i)).setBounds (space + x, space + (7 - k) * stepY, width, height);
