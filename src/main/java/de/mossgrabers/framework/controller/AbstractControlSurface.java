@@ -485,14 +485,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public void clearTriggerCache ()
-    {
-        this.turnOffTriggers ();
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public void setTriggerConsumed (final ButtonID buttonID)
     {
         final IHwButton button = this.buttons.get (buttonID);
@@ -548,21 +540,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     public void setContinuous (final int cc, final int state)
     {
         this.setContinuous (this.defaultMidiChannel, cc, state);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void clearContinuousCache ()
-    {
-        for (int channel = 0; channel < 16; channel++)
-        {
-            for (int cc = 0; cc < NUM_INFOS; cc++)
-            {
-                if (this.continuousInfos[channel][cc] != null)
-                    this.continuousInfos[channel][cc].setValue (-1);
-            }
-        }
     }
 
 

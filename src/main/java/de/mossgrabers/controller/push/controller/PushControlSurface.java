@@ -498,11 +498,8 @@ public class PushControlSurface extends AbstractControlSurface<PushConfiguration
     @Override
     public void shutdown ()
     {
-        // Turn off 1st/2nd row buttons
-        for (int i = 20; i < 28; i++)
-            this.setTrigger (i, 0);
-        for (int i = 102; i < 110; i++)
-            this.setTrigger (i, 0);
+        this.setRibbonMode (PUSH_RIBBON_PITCHBEND);
+        this.setRibbonValue (0);
 
         super.shutdown ();
     }

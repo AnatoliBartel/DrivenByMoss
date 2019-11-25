@@ -37,7 +37,7 @@ public class HwLightImpl extends AbstractHwControl implements IHwLight
     @Override
     public void turnOff ()
     {
-        this.hardwareLight.state ().setValue (-1);
+        this.hardwareLight.state ().setValueSupplier ( () -> () -> null);
     }
 
 

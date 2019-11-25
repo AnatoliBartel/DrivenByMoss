@@ -376,18 +376,6 @@ public interface IControlSurface<C extends Configuration>
 
 
     /**
-     * Clear the cached lighting state of all triggers.
-     */
-    void clearTriggerCache ();
-
-
-    /**
-     * Clear the cached state of all continuous.
-     */
-    void clearContinuousCache ();
-
-
-    /**
      * Clear the cached state of a continuous of the default MIDI channel.
      *
      * @param cc The trigger

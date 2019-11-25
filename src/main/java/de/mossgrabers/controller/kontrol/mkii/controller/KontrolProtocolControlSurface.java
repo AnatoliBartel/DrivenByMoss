@@ -274,7 +274,6 @@ public class KontrolProtocolControlSurface extends AbstractControlSurface<Kontro
         synchronized (this.cacheLock)
         {
             this.valueCache.clearCache ();
-            this.clearTriggerCache ();
         }
     }
 

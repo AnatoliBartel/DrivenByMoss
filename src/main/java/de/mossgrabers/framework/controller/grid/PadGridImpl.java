@@ -215,7 +215,10 @@ public class PadGridImpl implements PadGrid
     {
         final int color = this.colorManager.getColorIndex (GRID_OFF);
         for (int i = this.startNote; i <= this.endNote; i++)
+        {
             this.light (i, color, -1, false);
+            this.sendPadState (i);
+        }
     }
 
 
