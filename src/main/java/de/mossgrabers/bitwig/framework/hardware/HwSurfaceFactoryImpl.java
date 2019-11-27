@@ -15,6 +15,7 @@ import de.mossgrabers.framework.controller.hardware.IHwButton;
 import de.mossgrabers.framework.controller.hardware.IHwFader;
 import de.mossgrabers.framework.controller.hardware.IHwGraphicsDisplay;
 import de.mossgrabers.framework.controller.hardware.IHwLight;
+import de.mossgrabers.framework.controller.hardware.IHwPianoKeyboard;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
 import de.mossgrabers.framework.controller.hardware.IHwSurfaceFactory;
 import de.mossgrabers.framework.controller.hardware.IHwTextDisplay;
@@ -160,6 +161,18 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
     {
         final String id = createID (surfaceID, outputID.name ());
         return new HwGraphicsDisplayImpl (this.hardwareSurface.createHardwarePixelDisplay (id, ((BitmapImpl) bitmap).getBitmap ()));
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public IHwPianoKeyboard createPianoKeyboard (int surfaceID, int numKeys)
+    {
+        final int octave = 0;
+        final int startKeyInOctave = 36;
+
+        final String id = createID (surfaceID, "KEYBOARD");
+        return new HwPianoKeyboardImpl (this.host, this.hardwareSurface.createPianoKeyboard (id, numKeys, octave, startKeyInOctave));
     }
 
 

@@ -336,7 +336,7 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
         this.addButton (ButtonID.PLAY, "Play", new PlayCommand<> (this.model, surface), MCUControlSurface.MCU_PLAY, t::isPlaying);
         this.addButton (ButtonID.RECORD, "Record", new MCURecordCommand (this.model, surface), MCUControlSurface.MCU_RECORD, () -> {
             final boolean isOn = this.isRecordShifted (surface) ? t.isLauncherOverdub () : t.isRecording ();
-            return isOn ? 2 : 1;
+            return isOn ? 1 : 0;
         });
 
         this.addButton (ButtonID.SCRUB, "Scrub", new ScrubCommand (this.model, surface), MCUControlSurface.MCU_SCRUB, () -> surface.getModeManager ().isActiveOrTempMode (Modes.DEVICE_PARAMS));

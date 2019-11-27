@@ -294,6 +294,9 @@ public interface IControlSurface<C extends Configuration>
     void setTrigger (int channel, int cc, String colorID);
 
 
+    void addPianoKeyboard (int numKeys);
+
+
     /**
      * Creates a button for the surface.
      *
@@ -324,7 +327,7 @@ public interface IControlSurface<C extends Configuration>
 
     /**
      * Creates a light (e.g. LED) for the surface.
-     * 
+     *
      * @param outputID The outputID, can be null
      * @param supplier Callback for retrieving the state of the light
      * @param sendConsumer Callback for sending the update command to the controller surface

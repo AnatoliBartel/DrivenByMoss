@@ -26,7 +26,7 @@ public class PitchbendVolumeCommand extends AbstractPitchbendCommand<MCUControlS
 
     /**
      * Constructor.
-     * 
+     *
      * @param channel The channel on which to change the volume (0-8, 8 = Master)
      * @param model The model
      * @param surface The surface

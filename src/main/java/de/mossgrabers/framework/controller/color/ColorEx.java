@@ -23,8 +23,12 @@ public class ColorEx
     public static final ColorEx DARK_GRAY  = ColorEx.fromRGB (89, 89, 89);
     /** Color red. */
     public static final ColorEx RED        = ColorEx.fromRGB (255, 0, 0);
+    /** Color dark red. */
+    public static final ColorEx DARK_RED   = ColorEx.fromRGB (128, 0, 0);
     /** Color green. */
     public static final ColorEx GREEN      = ColorEx.fromRGB (0, 255, 0);
+    /** Color dark green. */
+    public static final ColorEx DARK_GREEN = ColorEx.fromRGB (0, 128, 0);
     /** Color blue. */
     public static final ColorEx BLUE       = ColorEx.fromRGB (0, 0, 255);
     /** Color yellow. */
@@ -75,6 +79,22 @@ public class ColorEx
     public static ColorEx fromRGB (final int red, final int green, final int blue)
     {
         return new ColorEx (red / 255.0, green / 255.0, blue / 255.0);
+    }
+
+
+    /**
+     * Convert the internal color state to 3 integer RGB values.
+     *
+     * @return The 3 int (0-255) values
+     */
+    public int [] toRGB ()
+    {
+        return new int []
+        {
+            (int) Math.round (this.redValue * 255.0),
+            (int) Math.round (this.greenValue * 255.0),
+            (int) Math.round (this.blueValue * 255.0)
+        };
     }
 
 

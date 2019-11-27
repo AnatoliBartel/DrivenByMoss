@@ -104,6 +104,16 @@ public interface IHwSurfaceFactory
 
 
     /**
+     * Create a proxy to a piano keyboard.
+     *
+     * @param surfaceID The ID of the surface
+     * @param numKeys The number of keys, e.g. 25 or 88
+     * @return The created keyboard
+     */
+    IHwPianoKeyboard createPianoKeyboard (int surfaceID, int numKeys);
+
+
+    /**
      * Flush the state to the hardware device.
      */
     void flush ();

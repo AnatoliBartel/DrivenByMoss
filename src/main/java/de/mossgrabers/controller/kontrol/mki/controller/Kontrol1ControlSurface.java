@@ -6,11 +6,16 @@ package de.mossgrabers.controller.kontrol.mki.controller;
 
 import de.mossgrabers.controller.kontrol.mki.Kontrol1Configuration;
 import de.mossgrabers.framework.controller.AbstractControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.scale.Scales;
+import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.view.View;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -21,96 +26,119 @@ import de.mossgrabers.framework.view.View;
 public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Configuration> implements UIChangeCallback
 {
     /** Clicking the main encoder. */
-    public static final int   BUTTON_MAIN_ENCODER   = 1;
+    public static final int                     BUTTON_MAIN_ENCODER   = 1;
     /** The preset up button. */
-    public static final int   BUTTON_PRESET_UP      = 2;
+    public static final int                     BUTTON_PRESET_UP      = 2;
     /** The enter button. */
-    public static final int   BUTTON_ENTER          = 3;
+    public static final int                     BUTTON_ENTER          = 3;
     /** The preset down button. */
-    public static final int   BUTTON_PRESET_DOWN    = 4;
+    public static final int                     BUTTON_PRESET_DOWN    = 4;
     /** The browse button. */
-    public static final int   BUTTON_BROWSE         = 5;
+    public static final int                     BUTTON_BROWSE         = 5;
     /** The instance button. */
-    public static final int   BUTTON_INSTANCE       = 6;
+    public static final int                     BUTTON_INSTANCE       = 6;
     /** The octave down button. */
-    public static final int   BUTTON_OCTAVE_DOWN    = 7;
+    public static final int                     BUTTON_OCTAVE_DOWN    = 7;
     /** The octave up button. */
-    public static final int   BUTTON_OCTAVE_UP      = 8;
+    public static final int                     BUTTON_OCTAVE_UP      = 8;
 
     /** The stop button. */
-    public static final int   BUTTON_STOP           = 9;
+    public static final int                     BUTTON_STOP           = 9;
     /** The record button. */
-    public static final int   BUTTON_REC            = 10;
+    public static final int                     BUTTON_REC            = 10;
     /** The play button. */
-    public static final int   BUTTON_PLAY           = 11;
+    public static final int                     BUTTON_PLAY           = 11;
     /** The navigate right button. */
-    public static final int   BUTTON_NAVIGATE_RIGHT = 12;
+    public static final int                     BUTTON_NAVIGATE_RIGHT = 12;
     /** The navigate down button. */
-    public static final int   BUTTON_NAVIGATE_DOWN  = 13;
+    public static final int                     BUTTON_NAVIGATE_DOWN  = 13;
     /** The navigate left button. */
-    public static final int   BUTTON_NAVIGATE_LEFT  = 14;
+    public static final int                     BUTTON_NAVIGATE_LEFT  = 14;
     /** The back button. */
-    public static final int   BUTTON_BACK           = 15;
+    public static final int                     BUTTON_BACK           = 15;
     /** The navigate up button. */
-    public static final int   BUTTON_NAVIGATE_UP    = 16;
+    public static final int                     BUTTON_NAVIGATE_UP    = 16;
 
     /** The shift button. */
-    public static final int   BUTTON_SHIFT          = 17;
+    public static final int                     BUTTON_SHIFT          = 17;
     /** The scale button. */
-    public static final int   BUTTON_SCALE          = 18;
+    public static final int                     BUTTON_SCALE          = 18;
     /** The arp button. */
-    public static final int   BUTTON_ARP            = 19;
+    public static final int                     BUTTON_ARP            = 19;
     /** The loop button. */
-    public static final int   BUTTON_LOOP           = 20;
+    public static final int                     BUTTON_LOOP           = 20;
     /** The page right button. */
-    public static final int   BUTTON_PAGE_RIGHT     = 21;
+    public static final int                     BUTTON_PAGE_RIGHT     = 21;
     /** The page left button. */
-    public static final int   BUTTON_PAGE_LEFT      = 22;
+    public static final int                     BUTTON_PAGE_LEFT      = 22;
     /** The rewind button. */
-    public static final int   BUTTON_RWD            = 23;
+    public static final int                     BUTTON_RWD            = 23;
     /** The forward button. */
-    public static final int   BUTTON_FWD            = 24;
+    public static final int                     BUTTON_FWD            = 24;
 
     /** Touching encoder 1. */
-    public static final int   TOUCH_ENCODER_1       = 25;
+    public static final int                     TOUCH_ENCODER_1       = 25;
     /** Touching encoder 2. */
-    public static final int   TOUCH_ENCODER_2       = 26;
+    public static final int                     TOUCH_ENCODER_2       = 26;
     /** Touching encoder 3. */
-    public static final int   TOUCH_ENCODER_3       = 27;
+    public static final int                     TOUCH_ENCODER_3       = 27;
     /** Touching encoder 4. */
-    public static final int   TOUCH_ENCODER_4       = 28;
+    public static final int                     TOUCH_ENCODER_4       = 28;
     /** Touching encoder 5. */
-    public static final int   TOUCH_ENCODER_5       = 29;
+    public static final int                     TOUCH_ENCODER_5       = 29;
     /** Touching encoder 6. */
-    public static final int   TOUCH_ENCODER_6       = 30;
+    public static final int                     TOUCH_ENCODER_6       = 30;
     /** Touching encoder 7. */
-    public static final int   TOUCH_ENCODER_7       = 31;
+    public static final int                     TOUCH_ENCODER_7       = 31;
     /** Touching encoder 8. */
-    public static final int   TOUCH_ENCODER_8       = 32;
+    public static final int                     TOUCH_ENCODER_8       = 32;
 
     /** Touching the main encoder. */
-    public static final int   TOUCH_ENCODER_MAIN    = 33;
+    public static final int                     TOUCH_ENCODER_MAIN    = 33;
 
     // Continuous
 
     /** Moving encoder 1. */
-    public static final int   ENCODER_1             = 40;
+    public static final int                     ENCODER_1             = 40;
     /** Moving encoder 2. */
-    public static final int   ENCODER_2             = 41;
+    public static final int                     ENCODER_2             = 41;
     /** Moving encoder 3. */
-    public static final int   ENCODER_3             = 42;
+    public static final int                     ENCODER_3             = 42;
     /** Moving encoder 4. */
-    public static final int   ENCODER_4             = 43;
+    public static final int                     ENCODER_4             = 43;
     /** Moving encoder 5. */
-    public static final int   ENCODER_5             = 44;
+    public static final int                     ENCODER_5             = 44;
     /** Moving encoder 6. */
-    public static final int   ENCODER_6             = 45;
+    public static final int                     ENCODER_6             = 45;
     /** Moving encoder 7. */
-    public static final int   ENCODER_7             = 46;
+    public static final int                     ENCODER_7             = 46;
     /** Moving encoder 8. */
-    public static final int   ENCODER_8             = 47;
+    public static final int                     ENCODER_8             = 47;
     /** Moving the main encoder. */
-    public static final int   MAIN_ENCODER          = 48;
+    public static final int                     MAIN_ENCODER          = 48;
+
+    private static final Map<Integer, ButtonID> BUTTON_MAP            = new HashMap<> ();
+    static
+    {
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_SCALE), ButtonID.SCALES);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_ARP), ButtonID.METRONOME);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_PLAY), ButtonID.PLAY);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_REC), ButtonID.RECORD);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_STOP), ButtonID.STOP);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_RWD), ButtonID.REWIND);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_FWD), ButtonID.FORWARD);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_LOOP), ButtonID.LOOP);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_PAGE_LEFT), ButtonID.PAGE_LEFT);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_PAGE_RIGHT), ButtonID.PAGE_RIGHT);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_MAIN_ENCODER), ButtonID.MASTERTRACK);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_NAVIGATE_DOWN), ButtonID.ARROW_DOWN);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_NAVIGATE_UP), ButtonID.ARROW_UP);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_NAVIGATE_LEFT), ButtonID.ARROW_LEFT);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_NAVIGATE_RIGHT), ButtonID.ARROW_RIGHT);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_BACK), ButtonID.MUTE);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_ENTER), ButtonID.SOLO);
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_BROWSE), ButtonID.BROWSE);
+    }
 
     private Kontrol1UsbDevice usbDevice;
 
@@ -127,9 +155,15 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
     public Kontrol1ControlSurface (final IHost host, final ColorManager colorManager, final Kontrol1Configuration configuration, final IMidiInput input, final Kontrol1UsbDevice usbDevice)
     {
         // TODO size
-        super (host, configuration, colorManager, null, input, new Kontrol1PadGrid (colorManager, usbDevice), 100, 50);
+        super (host, configuration, colorManager, null, input, new Kontrol1PadGrid (colorManager, usbDevice), 600, 200);
 
         this.usbDevice = usbDevice;
+    }
+
+
+    public static ButtonID getMappedButton (final int usbControlNumber)
+    {
+        return BUTTON_MAP.get (Integer.valueOf (usbControlNumber));
     }
 
 
@@ -176,16 +210,19 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
 
     /** {@inheritDoc} */
     @Override
-    public void buttonChange (final int buttonID, final boolean isPressed)
+    public void buttonChange (final int usbControlNumber, final boolean isPressed)
     {
-        // TODO
-        // if (isPressed)
-        // {
-        // if (!this.isPressed (buttonID))
-        // this.handleCC (0, buttonID, 127);
-        // }
-        // else if (this.isPressed (buttonID))
-        // this.handleCC (0, buttonID, 0);
+        final ButtonID buttonID = getMappedButton (usbControlNumber);
+        if (buttonID == null)
+            return;
+
+        if (isPressed)
+        {
+            if (!this.isPressed (buttonID))
+                this.getButton (buttonID).trigger (ButtonEvent.DOWN);
+        }
+        else if (this.isPressed (buttonID))
+            this.getButton (buttonID).trigger (ButtonEvent.UP);
     }
 
 
@@ -283,5 +320,15 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
     public void updateKeyLEDs ()
     {
         this.usbDevice.updateKeyLEDs ();
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void flush ()
+    {
+        super.flush ();
+
+        this.updateButtonLEDs ();
     }
 }

@@ -240,6 +240,14 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
+    public void addPianoKeyboard (final int numKeys)
+    {
+        this.surfaceFactory.createPianoKeyboard (this.surfaceID, numKeys);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public PadGrid getPadGrid ()
     {
         return this.pads;

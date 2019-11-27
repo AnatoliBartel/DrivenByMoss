@@ -167,7 +167,7 @@ public abstract class AbstractTextDisplay implements ITextDisplay
 
     /** {@inheritDoc} */
     @Override
-    public ITextDisplay clearCell (int row, int column)
+    public ITextDisplay clearCell (final int row, final int column)
     {
         // TODO Provide a meaningful default implementation
         return this;
@@ -176,7 +176,7 @@ public abstract class AbstractTextDisplay implements ITextDisplay
 
     /** {@inheritDoc} */
     @Override
-    public ITextDisplay setCell (int row, int column, int value, Format format)
+    public ITextDisplay setCell (final int row, final int column, final int value, final Format format)
     {
         // TODO Provide a meaningful default implementation
         return this;
@@ -185,7 +185,7 @@ public abstract class AbstractTextDisplay implements ITextDisplay
 
     /** {@inheritDoc} */
     @Override
-    public ITextDisplay setCell (int row, int column, String value)
+    public ITextDisplay setCell (final int row, final int column, final String value)
     {
         // TODO Provide a meaningful default implementation
         return this;
@@ -194,7 +194,7 @@ public abstract class AbstractTextDisplay implements ITextDisplay
 
     /** {@inheritDoc} */
     @Override
-    public ITextDisplay setBlock (int row, int block, String value)
+    public ITextDisplay setBlock (final int row, final int block, final String value)
     {
         // TODO Provide a meaningful default implementation
         return this;

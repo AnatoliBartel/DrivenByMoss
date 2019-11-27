@@ -38,12 +38,14 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
-import de.mossgrabers.framework.controller.color.ColorManager;
+import de.mossgrabers.framework.controller.hardware.BindType;
+import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.IParameterBank;
 import de.mossgrabers.framework.daw.ISendBank;
 import de.mossgrabers.framework.daw.ITrackBank;
+import de.mossgrabers.framework.daw.ITransport;
 import de.mossgrabers.framework.daw.ModelSetup;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.daw.midi.IMidiAccess;
@@ -80,7 +82,7 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
         super (factory, host, globalSettings, documentSettings);
         this.modelIndex = modelIndex;
         this.valueChanger = new DefaultValueChanger (1024, 10, 1);
-        this.colorManager = new ColorManager ();
+        this.colorManager = new Kontrol1Colors ();
         this.configuration = new Kontrol1Configuration (host, this.valueChanger);
     }
 
@@ -101,16 +103,7 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
         final ModelSetup ms = new ModelSetup ();
         ms.setNumDrumPadLayers (128);
         this.model = this.factory.createModel (this.colorManager, this.valueChanger, this.scales, ms);
-        final ITrackBank trackBank = this.model.getTrackBank ();
-        trackBank.addSelectionObserver ( (index, isSelected) -> {
-            final View activeView = this.getSurface ().getViewManager ().getActiveView ();
-            // TODO
-            // if (activeView instanceof ControlView)
-            // ((ControlView) activeView).updateButtons ();
-        });
-
-        final ICursorDevice primary = this.model.getInstrumentDevice ();
-        primary.getDrumPadBank ().setIndication (true);
+        this.model.getInstrumentDevice ().getDrumPadBank ().setIndication (true);
     }
 
 
@@ -126,8 +119,6 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
                 "80????" /* Note off */, "90????" /* Note on */, "B040??",
                 "B001??" /* Sustainpedal + Modulation */, "D0????" /* Channel Aftertouch */,
                 "E0????" /* Pitchbend */);
-
-        Kontrol1Colors.addColors (this.colorManager);
 
         final Kontrol1ControlSurface surface = new Kontrol1ControlSurface (this.host, this.colorManager, this.configuration, input, usbDevice);
         usbDevice.setCallback (surface);
@@ -187,16 +178,17 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
     protected void registerTriggerCommands ()
     {
         final Kontrol1ControlSurface surface = this.getSurface ();
+        final ITransport t = this.model.getTransport ();
 
-        this.addButton (ButtonID.SCALES, "Scales", new ScaleButtonCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_SCALE);
-        this.addButton (ButtonID.METRONOME, "Metronome", new MetronomeCommand<> (this.model, surface), Kontrol1ControlSurface.BUTTON_ARP);
+        this.addButton (ButtonID.SCALES, "Scales", new ScaleButtonCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_SCALE, this.configuration::isScaleIsActive);
+        this.addButton (ButtonID.METRONOME, "Metronome", new MetronomeCommand<> (this.model, surface), Kontrol1ControlSurface.BUTTON_ARP, () -> surface.isShiftPressed () && t.isMetronomeTicksOn () || !surface.isShiftPressed () && t.isMetronomeOn ());
 
-        this.addButton (ButtonID.PLAY, "Play", new Kontrol1PlayCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_PLAY);
-        this.addButton (ButtonID.RECORD, "Record", new RecordCommand<> (this.model, surface), Kontrol1ControlSurface.BUTTON_REC);
-        this.addButton (ButtonID.STOP, "Stop", new StopCommand<> (this.model, surface), Kontrol1ControlSurface.BUTTON_STOP);
-        this.addButton (ButtonID.REWIND, "<<", new WindCommand<> (this.model, surface, false), Kontrol1ControlSurface.BUTTON_RWD);
-        this.addButton (ButtonID.FORWARD, ">>", new WindCommand<> (this.model, surface, true), Kontrol1ControlSurface.BUTTON_FWD);
-        this.addButton (ButtonID.LOOP, "Loop", new ToggleLoopCommand<> (this.model, surface), Kontrol1ControlSurface.BUTTON_LOOP);
+        this.addButton (ButtonID.PLAY, "PLAY", new Kontrol1PlayCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_PLAY, t::isPlaying);
+        this.addButton (ButtonID.RECORD, "REC", new RecordCommand<> (this.model, surface), Kontrol1ControlSurface.BUTTON_REC, t::isRecording);
+        this.addButton (ButtonID.STOP, "STOP", new StopCommand<> (this.model, surface), Kontrol1ControlSurface.BUTTON_STOP, () -> !t.isPlaying ());
+        this.addButton (ButtonID.REWIND, "RWD", new WindCommand<> (this.model, surface, false), Kontrol1ControlSurface.BUTTON_RWD, () -> surface.isPressed (ButtonID.REWIND));
+        this.addButton (ButtonID.FORWARD, "FFW", new WindCommand<> (this.model, surface, true), Kontrol1ControlSurface.BUTTON_FWD, () -> surface.isPressed (ButtonID.FORWARD));
+        this.addButton (ButtonID.LOOP, "LOOP", new ToggleLoopCommand<> (this.model, surface), Kontrol1ControlSurface.BUTTON_LOOP, t::isLoop);
 
         this.addButton (ButtonID.PAGE_LEFT, "Left", new ModeMultiSelectCommand<> (this.model, surface, Modes.DEVICE_PARAMS, Modes.VOLUME, Modes.TRACK), Kontrol1ControlSurface.BUTTON_PAGE_LEFT);
         this.addButton (ButtonID.PAGE_RIGHT, "Right", new ModeMultiSelectCommand<> (this.model, surface, Modes.TRACK, Modes.VOLUME, Modes.DEVICE_PARAMS), Kontrol1ControlSurface.BUTTON_PAGE_RIGHT);
@@ -213,17 +205,31 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
 
         this.addButton (ButtonID.BROWSE, "Browse", new BrowserCommand<> (Modes.BROWSER, this.model, surface), Kontrol1ControlSurface.BUTTON_BROWSE);
 
-        for (int i = 0; i < 8; i++)
-            this.addButton (ButtonID.get (ButtonID.FADER_TOUCH_1, i), "Knob Touch " + (i + 1), new KnobRowTouchModeCommand<> (i, this.model, surface), Kontrol1ControlSurface.TOUCH_ENCODER_1 + i);
-
         // Block unused buttons and touches
-        this.addButton (ButtonID.ROW1_1, "", NopCommand.INSTANCE, Kontrol1ControlSurface.TOUCH_ENCODER_MAIN);
-        this.addButton (ButtonID.ROW1_2, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_INSTANCE);
-        this.addButton (ButtonID.ROW1_3, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_PRESET_UP);
-        this.addButton (ButtonID.ROW1_4, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_PRESET_DOWN);
-        this.addButton (ButtonID.ROW1_5, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_OCTAVE_DOWN);
-        this.addButton (ButtonID.ROW1_6, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_OCTAVE_UP);
+        // this.addButton (ButtonID.ROW1_1, "", NopCommand.INSTANCE,
+        // Kontrol1ControlSurface.TOUCH_ENCODER_MAIN);
+        // this.addButton (ButtonID.ROW1_2, "", NopCommand.INSTANCE,
+        // Kontrol1ControlSurface.BUTTON_INSTANCE);
+        // this.addButton (ButtonID.ROW1_3, "", NopCommand.INSTANCE,
+        // Kontrol1ControlSurface.BUTTON_PRESET_UP);
+        // this.addButton (ButtonID.ROW1_4, "", NopCommand.INSTANCE,
+        // Kontrol1ControlSurface.BUTTON_PRESET_DOWN);
+        // this.addButton (ButtonID.ROW1_5, "", NopCommand.INSTANCE,
+        // Kontrol1ControlSurface.BUTTON_OCTAVE_DOWN);
+        // this.addButton (ButtonID.ROW1_6, "", NopCommand.INSTANCE,
+        // Kontrol1ControlSurface.BUTTON_OCTAVE_UP);
         this.addButton (ButtonID.SHIFT, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_SHIFT);
+
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_SHIFT,
+        // this.surface.isShiftPressed () ? Kontrol1Colors.BUTTON_STATE_HI :
+        // Kontrol1Colors.BUTTON_STATE_ON);
+
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_PAGE_LEFT,
+        // this.surface.isPressed (Kontrol1ControlSurface.BUTTON_PAGE_LEFT) ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_PAGE_RIGHT,
+        // this.surface.isPressed (Kontrol1ControlSurface.BUTTON_PAGE_RIGHT) ?
+        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
     }
 
 
@@ -232,11 +238,19 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
     protected void registerContinuousCommands ()
     {
         final Kontrol1ControlSurface surface = this.getSurface ();
+        final IMidiInput input = surface.getMidiInput ();
 
         for (int i = 0; i < 8; i++)
-            this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), new KnobRowModeCommand<> (i, this.model, surface), Kontrol1ControlSurface.ENCODER_1 + i);
+        {
+            final IHwRelativeKnob knob = this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), new KnobRowModeCommand<> (i, this.model, surface), Kontrol1ControlSurface.ENCODER_1 + i);
+
+            // TODO are these notes of CC?
+            knob.bindTouch (new KnobRowTouchModeCommand<> (i, this.model, surface), input, BindType.NOTE, Kontrol1ControlSurface.TOUCH_ENCODER_1 + i);
+        }
 
         this.addRelativeKnob (ContinuousID.MASTER_KNOB, "Master", new MainEncoderCommand (this.model, surface), Kontrol1ControlSurface.MAIN_ENCODER);
+
+        surface.addPianoKeyboard (25);
     }
 
 
@@ -318,5 +332,20 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
 
             parameterBank.getItem (i).setIndication (isDevice);
         }
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    protected void layoutControls ()
+    {
+        final Kontrol1ControlSurface surface = this.getSurface ();
+
+        surface.getButton (ButtonID.PLAY).setBounds (190.25, 94.25, 42.25, 23.5);
+        surface.getButton (ButtonID.STOP).setBounds (298.0, 94.25, 42.25, 23.5);
+        surface.getButton (ButtonID.RECORD).setBounds (244.25, 94.25, 42.25, 23.5);
+        surface.getButton (ButtonID.LOOP).setBounds (190.25, 60.75, 42.25, 23.5);
+        surface.getButton (ButtonID.REWIND).setBounds (244.25, 60.75, 42.25, 23.5);
+        surface.getButton (ButtonID.FORWARD).setBounds (298.0, 60.75, 42.25, 23.5);
     }
 }

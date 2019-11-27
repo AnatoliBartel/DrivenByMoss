@@ -570,7 +570,55 @@ public enum ButtonID
     /** Pad 63. */
     PAD63,
     /** Pad 64. */
-    PAD64;
+    PAD64,
+    /** Pad 65. */
+    PAD65,
+    /** Pad 66. */
+    PAD66,
+    /** Pad 67. */
+    PAD67,
+    /** Pad 68. */
+    PAD68,
+    /** Pad 69. */
+    PAD69,
+    /** Pad 70. */
+    PAD70,
+    /** Pad 71. */
+    PAD71,
+    /** Pad 72. */
+    PAD72,
+    /** Pad 73. */
+    PAD73,
+    /** Pad 74. */
+    PAD74,
+    /** Pad 75. */
+    PAD75,
+    /** Pad 76. */
+    PAD76,
+    /** Pad 77. */
+    PAD77,
+    /** Pad 78. */
+    PAD78,
+    /** Pad 79. */
+    PAD79,
+    /** Pad 80. */
+    PAD80,
+    /** Pad 81. */
+    PAD81,
+    /** Pad 82. */
+    PAD82,
+    /** Pad 83. */
+    PAD83,
+    /** Pad 84. */
+    PAD84,
+    /** Pad 85. */
+    PAD85,
+    /** Pad 86. */
+    PAD86,
+    /** Pad 87. */
+    PAD87,
+    /** Pad 88. */
+    PAD88;
 
 
     /**
