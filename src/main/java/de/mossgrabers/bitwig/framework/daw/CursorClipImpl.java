@@ -381,7 +381,7 @@ public class CursorClipImpl implements INoteClip
     @Override
     public IStepInfo getStep (final int channel, final int step, final int row)
     {
-        final IStepInfo [] [] [] stepInfos = getStepInfos ();
+        final IStepInfo [] [] [] stepInfos = this.getStepInfos ();
         try
         {
             if (stepInfos[channel][step] == null || stepInfos[channel][step][row] == null)
@@ -600,7 +600,7 @@ public class CursorClipImpl implements INoteClip
     @Override
     public boolean hasRowData (final int channel, final int row)
     {
-        final IStepInfo [] [] [] data = getStepInfos ();
+        final IStepInfo [] [] [] data = this.getStepInfos ();
         for (int step = 0; step < this.numSteps; step++)
         {
             if (data[channel][step][row].getState () > 0)
@@ -827,7 +827,7 @@ public class CursorClipImpl implements INoteClip
      */
     private StepInfoImpl getUpdateableStep (final int channel, final int step, final int row)
     {
-        final IStepInfo [] [] [] stepInfos = getStepInfos ();
+        final IStepInfo [] [] [] stepInfos = this.getStepInfos ();
         synchronized (stepInfos)
         {
             try

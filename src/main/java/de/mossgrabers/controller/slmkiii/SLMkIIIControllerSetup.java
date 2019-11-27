@@ -8,7 +8,7 @@ import de.mossgrabers.controller.slmkiii.command.continuous.VolumeFaderCommand;
 import de.mossgrabers.controller.slmkiii.command.trigger.ButtonAreaCommand;
 import de.mossgrabers.controller.slmkiii.command.trigger.SLMkIIICursorCommand;
 import de.mossgrabers.controller.slmkiii.command.trigger.TrackModeCommand;
-import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
+import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIScales;
 import de.mossgrabers.controller.slmkiii.mode.BrowserMode;
@@ -40,7 +40,6 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
-import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.daw.IBrowser;
 import de.mossgrabers.framework.daw.ICursorDevice;
@@ -48,6 +47,7 @@ import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.IParameterBank;
 import de.mossgrabers.framework.daw.ISendBank;
 import de.mossgrabers.framework.daw.ITrackBank;
+import de.mossgrabers.framework.daw.ITransport;
 import de.mossgrabers.framework.daw.ModelSetup;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.daw.midi.DeviceInquiry;
@@ -95,9 +95,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
     {
         super (factory, host, globalSettings, documentSettings);
 
-        this.colorManager = new ColorManager ();
-        SLMkIIIColors.addColors (this.colorManager);
-
+        this.colorManager = new SLMkIIIColorManager ();
         this.valueChanger = new DefaultValueChanger (1024, 8, 1);
         this.configuration = new SLMkIIIConfiguration (host, this.valueChanger);
     }
@@ -132,10 +130,14 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
     {
         final IMidiAccess midiAccess = this.factory.createMidiAccess ();
         final IMidiOutput output = midiAccess.createOutput ();
-        midiAccess.createInput (1, "Keyboard", "8?????", "9?????", "B?????", "D?????", "E?????");
+        final IMidiInput keyboardInput = midiAccess.createInput (1, "Keyboard", "8?????", "9?????", "B?????", "D?????", "E?????");
         final IHost hostProxy = this.model.getHost ();
         final IMidiInput input = midiAccess.createInput ("Pads", "8?????", "9?????");
-        this.surfaces.add (new SLMkIIIControlSurface (hostProxy, this.colorManager, this.configuration, output, input));
+        final SLMkIIIControlSurface surface = new SLMkIIIControlSurface (hostProxy, this.colorManager, this.configuration, output, input);
+        this.surfaces.add (surface);
+
+        surface.addPianoKeyboard (49);
+        surface.getPianoKeyboard ().bind (keyboardInput);
     }
 
 
@@ -186,13 +188,20 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
     protected void registerTriggerCommands ()
     {
         final SLMkIIIControlSurface surface = this.getSurface ();
+        final ITransport t = this.model.getTransport ();
 
-        this.addButton (ButtonID.REWIND, "<<", new WindCommand<> (this.model, surface, false), SLMkIIIControlSurface.MKIII_TRANSPORT_REWIND);
-        this.addButton (ButtonID.FORWARD, ">>", new WindCommand<> (this.model, surface, true), SLMkIIIControlSurface.MKIII_TRANSPORT_FORWARD);
-        this.addButton (ButtonID.LOOP, "Loop", new ToggleLoopCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_TRANSPORT_LOOP);
-        this.addButton (ButtonID.STOP, "Stop", new StopCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_TRANSPORT_STOP);
-        this.addButton (ButtonID.PLAY, "Play", new PlayCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_TRANSPORT_PLAY);
-        this.addButton (ButtonID.RECORD, "Record", new RecordCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_TRANSPORT_RECORD);
+        final WindCommand<SLMkIIIControlSurface, SLMkIIIConfiguration> rewindCommand = new WindCommand<> (this.model, surface, false);
+        final WindCommand<SLMkIIIControlSurface, SLMkIIIConfiguration> forwardCommand = new WindCommand<> (this.model, surface, true);
+        this.addButton (ButtonID.REWIND, "<<", rewindCommand, SLMkIIIControlSurface.MKIII_TRANSPORT_REWIND, rewindCommand::isRewinding, SLMkIIIColorManager.BUTTON_STATE_WIND_ON, SLMkIIIColorManager.BUTTON_STATE_WIND_HI);
+        this.addButton (ButtonID.FORWARD, ">>", forwardCommand, SLMkIIIControlSurface.MKIII_TRANSPORT_FORWARD, forwardCommand::isForwarding, SLMkIIIColorManager.BUTTON_STATE_WIND_ON, SLMkIIIColorManager.BUTTON_STATE_WIND_HI);
+        this.addButton (ButtonID.LOOP, "Loop", new ToggleLoopCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_TRANSPORT_LOOP, t::isLoop, SLMkIIIColorManager.BUTTON_STATE_LOOP_ON, SLMkIIIColorManager.BUTTON_STATE_LOOP_HI);
+        this.addButton (ButtonID.STOP, "Stop", new StopCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_TRANSPORT_STOP, () -> !t.isPlaying (), SLMkIIIColorManager.BUTTON_STATE_STOP_ON, SLMkIIIColorManager.BUTTON_STATE_STOP_HI);
+        this.addButton (ButtonID.PLAY, "Play", new PlayCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_TRANSPORT_PLAY, t::isPlaying, SLMkIIIColorManager.BUTTON_STATE_PLAY_ON, SLMkIIIColorManager.BUTTON_STATE_PLAY_HI);
+        // TODO Test colors
+        this.addButton (ButtonID.RECORD, "Record", new RecordCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_TRANSPORT_RECORD, () -> {
+            final boolean isOn = this.isRecordShifted (surface) ? t.isLauncherOverdub () : t.isRecording ();
+            return isOn ? 1 : 0;
+        }, SLMkIIIColorManager.BUTTON_STATE_REC_ON, SLMkIIIColorManager.BUTTON_STATE_REC_HI, SLMkIIIColorManager.BUTTON_STATE_OVR_ON, SLMkIIIColorManager.BUTTON_STATE_OVR_HI);
 
         for (int i = 0; i < 8; i++)
         {
@@ -218,7 +227,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
         this.addButton (ButtonID.ARROW_DOWN, "Down", new TrackModeCommand (this.model, surface), SLMkIIIControlSurface.MKIII_DISPLAY_DOWN);
 
         this.addButton (ButtonID.SHIFT, "Shift", new ShiftCommand<> (this.model, surface), SLMkIIIControlSurface.MKIII_SHIFT);
-        this.addButton (ButtonID.USER, "User", new ModeSelectCommand<> (this.model, surface, Modes.FUNCTIONS, true), SLMkIIIControlSurface.MKIII_OPTIONS);
+        this.addButton (ButtonID.USER, "Options", new ModeSelectCommand<> (this.model, surface, Modes.FUNCTIONS, true), SLMkIIIControlSurface.MKIII_OPTIONS);
 
         this.addButton (ButtonID.OCTAVE_UP, "Octave Up", (event, value) -> {
             if (event == ButtonEvent.UP)
@@ -235,7 +244,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
         this.addButton (ButtonID.SCENE1, "Scene 1", new SceneCommand<> (0, this.model, surface), SLMkIIIControlSurface.MKIII_SCENE_1);
         this.addButton (ButtonID.SCENE2, "Scene 2", new SceneCommand<> (1, this.model, surface), SLMkIIIControlSurface.MKIII_SCENE_2);
 
-        this.addButton (ButtonID.SCENE7, "TODO", (event, value) -> {
+        this.addButton (ButtonID.SCENE7, "Scene Up", (event, value) -> {
             if (event != ButtonEvent.DOWN)
                 return;
             final ViewManager viewManager = this.getSurface ().getViewManager ();
@@ -252,7 +261,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
             else if (viewManager.isActiveView (Views.COLOR))
                 ((ColorView) viewManager.getView (Views.COLOR)).setFlip (false);
         }, SLMkIIIControlSurface.MKIII_SCENE_UP);
-        this.addButton (ButtonID.SCENE8, "TODO", (event, value) -> {
+        this.addButton (ButtonID.SCENE8, "Scene Down", (event, value) -> {
             if (event != ButtonEvent.DOWN)
                 return;
             final ViewManager viewManager = this.getSurface ().getViewManager ();
@@ -270,7 +279,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
                 ((ColorView) viewManager.getView (Views.COLOR)).setFlip (true);
         }, SLMkIIIControlSurface.MKIII_SCENE_DOWN);
 
-        this.addButton (ButtonID.SESSION, "Session", (event, value) -> {
+        this.addButton (ButtonID.SESSION, "Grid", (event, value) -> {
             if (event != ButtonEvent.DOWN)
                 return;
             final ViewManager viewManager = surface.getViewManager ();
@@ -279,7 +288,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
         }, SLMkIIIControlSurface.MKIII_GRID);
 
         this.addButton (ButtonID.DUPLICATE, "Duplicate", NopCommand.INSTANCE, SLMkIIIControlSurface.MKIII_DUPLICATE);
-        this.addButton (ButtonID.DELETE, "Delete", NopCommand.INSTANCE, SLMkIIIControlSurface.MKIII_CLEAR);
+        this.addButton (ButtonID.DELETE, "Clear", NopCommand.INSTANCE, SLMkIIIControlSurface.MKIII_CLEAR);
 
     }
 
@@ -294,6 +303,97 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
             this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), new KnobRowModeCommand<> (i, this.model, surface), SLMkIIIControlSurface.MKIII_KNOB_1 + i);
             this.addFader (ContinuousID.get (ContinuousID.FADER1, i), "Fader " + (i + 1), new VolumeFaderCommand (i, this.model, surface), BindType.CC, SLMkIIIControlSurface.MKIII_FADER_1 + i);
         }
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    protected void layoutControls ()
+    {
+        final SLMkIIIControlSurface surface = this.getSurface ();
+
+        surface.getPianoKeyboard ().setBounds (129.5, 201.0, 834.0, 157.0);
+
+        surface.getTextDisplay ().getHardwareDisplay ().setBounds (277.25, 50.0, 280.5, 41.0);
+
+        surface.getButton (ButtonID.PAD1).setBounds (273.25, 149.0, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD2).setBounds (302.75, 149.0, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD3).setBounds (332.25, 149.0, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD4).setBounds (361.75, 149.0, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD5).setBounds (391.25, 149.0, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD6).setBounds (420.75, 149.0, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD7).setBounds (450.25, 149.0, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD8).setBounds (479.75, 149.0, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD9).setBounds (273.5, 121.25, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD10).setBounds (303.0, 121.25, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD11).setBounds (332.5, 121.25, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD12).setBounds (362.0, 121.25, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD13).setBounds (391.5, 121.25, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD14).setBounds (420.75, 121.25, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD15).setBounds (450.25, 121.25, 24.25, 22.5);
+        surface.getButton (ButtonID.PAD16).setBounds (479.75, 121.25, 24.25, 22.5);
+        surface.getButton (ButtonID.REWIND).setBounds (821.25, 153.0, 21.0, 18.5);
+        surface.getButton (ButtonID.FORWARD).setBounds (846.25, 153.0, 21.0, 18.5);
+        surface.getButton (ButtonID.LOOP).setBounds (921.0, 153.0, 21.0, 18.5);
+        surface.getButton (ButtonID.STOP).setBounds (871.0, 153.0, 21.0, 18.5);
+        surface.getButton (ButtonID.PLAY).setBounds (896.0, 153.0, 21.0, 18.5);
+        surface.getButton (ButtonID.RECORD).setBounds (946.0, 153.0, 21.0, 18.5);
+        surface.getButton (ButtonID.ROW1_1).setBounds (274.25, 103.0, 23.75, 12.75);
+        surface.getButton (ButtonID.ROW2_1).setBounds (573.75, 53.0, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW3_1).setBounds (573.75, 70.0, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW1_2).setBounds (303.5, 103.0, 23.75, 12.75);
+        surface.getButton (ButtonID.ROW2_2).setBounds (603.75, 53.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW3_2).setBounds (603.75, 70.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW1_3).setBounds (332.75, 103.0, 23.75, 12.75);
+        surface.getButton (ButtonID.ROW2_3).setBounds (633.75, 53.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW3_3).setBounds (633.75, 70.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW1_4).setBounds (362.0, 103.0, 23.75, 12.75);
+        surface.getButton (ButtonID.ROW2_4).setBounds (663.75, 53.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW3_4).setBounds (663.75, 70.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW1_5).setBounds (391.25, 103.0, 23.75, 12.75);
+        surface.getButton (ButtonID.ROW2_5).setBounds (693.75, 53.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW3_5).setBounds (693.75, 70.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW1_6).setBounds (420.5, 103.0, 23.75, 12.75);
+        surface.getButton (ButtonID.ROW2_6).setBounds (723.75, 53.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW3_6).setBounds (723.75, 70.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW1_7).setBounds (450.0, 103.0, 23.75, 12.75);
+        surface.getButton (ButtonID.ROW2_7).setBounds (753.75, 53.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW3_7).setBounds (753.75, 70.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW1_8).setBounds (479.25, 103.0, 23.75, 12.75);
+        surface.getButton (ButtonID.ROW2_8).setBounds (783.75, 53.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ROW3_8).setBounds (783.75, 70.5, 22.0, 12.75);
+        surface.getButton (ButtonID.ARROW_UP).setBounds (238.75, 53.0, 28.5, 12.75);
+        surface.getButton (ButtonID.ARROW_DOWN).setBounds (238.75, 68.25, 28.5, 12.75);
+        surface.getButton (ButtonID.SHIFT).setBounds (32.25, 63.0, 27.25, 13.75);
+        surface.getButton (ButtonID.USER).setBounds (513.25, 103.0, 22.0, 12.75);
+        surface.getButton (ButtonID.OCTAVE_UP).setBounds (74.5, 193.25, 27.25, 13.75);
+        surface.getButton (ButtonID.OCTAVE_DOWN).setBounds (32.25, 193.25, 27.25, 13.75);
+        surface.getButton (ButtonID.ARROW_LEFT).setBounds (32.25, 164.0, 27.25, 13.75);
+        surface.getButton (ButtonID.ARROW_RIGHT).setBounds (74.5, 164.0, 27.25, 13.75);
+        surface.getButton (ButtonID.SCENE1).setBounds (513.25, 121.25, 24.25, 22.5);
+        surface.getButton (ButtonID.SCENE2).setBounds (513.25, 149.0, 24.25, 22.5);
+        surface.getButton (ButtonID.SCENE7).setBounds (238.75, 120.25, 29.25, 22.5);
+        surface.getButton (ButtonID.SCENE8).setBounds (238.75, 149.0, 29.25, 22.5);
+        surface.getButton (ButtonID.SESSION).setBounds (238.75, 102.0, 29.5, 12.75);
+        surface.getButton (ButtonID.DUPLICATE).setBounds (32.25, 126.75, 27.25, 13.75);
+        surface.getButton (ButtonID.DELETE).setBounds (32.25, 144.5, 27.25, 13.75);
+
+        surface.getContinuous (ContinuousID.KNOB1).setBounds (271.5, 11.25, 24.5, 23.75);
+        surface.getContinuous (ContinuousID.KNOB2).setBounds (301.0, 11.25, 24.5, 23.75);
+        surface.getContinuous (ContinuousID.KNOB3).setBounds (330.75, 11.25, 24.5, 23.75);
+        surface.getContinuous (ContinuousID.KNOB4).setBounds (360.25, 11.25, 24.5, 23.75);
+        surface.getContinuous (ContinuousID.KNOB5).setBounds (389.75, 11.25, 24.5, 23.75);
+        surface.getContinuous (ContinuousID.KNOB6).setBounds (419.5, 11.25, 24.5, 23.75);
+        surface.getContinuous (ContinuousID.KNOB7).setBounds (449.0, 11.25, 24.5, 23.75);
+        surface.getContinuous (ContinuousID.KNOB8).setBounds (478.5, 11.25, 24.5, 23.75);
+        surface.getContinuous (ContinuousID.FADER1).setBounds (575.75, 107.75, 21.25, 63.25);
+        surface.getContinuous (ContinuousID.FADER2).setBounds (605.75, 107.75, 21.25, 63.25);
+        surface.getContinuous (ContinuousID.FADER3).setBounds (635.5, 107.75, 21.25, 63.25);
+        surface.getContinuous (ContinuousID.FADER4).setBounds (665.5, 107.75, 21.25, 63.25);
+        surface.getContinuous (ContinuousID.FADER5).setBounds (695.5, 107.75, 21.25, 63.25);
+        surface.getContinuous (ContinuousID.FADER6).setBounds (725.25, 107.75, 21.25, 63.25);
+        surface.getContinuous (ContinuousID.FADER7).setBounds (755.25, 107.75, 21.25, 63.25);
+        surface.getContinuous (ContinuousID.FADER8).setBounds (785.25, 107.75, 21.25, 63.25);
     }
 
 
@@ -321,22 +421,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
     // final ViewManager viewManager = surface.getViewManager ();
 
     // TODO Button color udpate
-    // surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_REWIND, ((WindCommand<?, ?>)
-    // surface.getButton (ButtonID.REWIND)).isRewinding () ? SLMkIIIColors.SLMKIII_YELLOW :
-    // SLMkIIIColors.SLMKIII_YELLOW_HALF);
-    // surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_FORWARD, ((WindCommand<?,
-    // ?>) surface.getButton (ButtonID.FORWARD)).isForwarding () ? SLMkIIIColors.SLMKIII_YELLOW
-    // : SLMkIIIColors.SLMKIII_YELLOW_HALF);
-    // surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_LOOP, t.isLoop () ?
-    // SLMkIIIColors.SLMKIII_BLUE : SLMkIIIColors.SLMKIII_BLUE_HALF);
-    // surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_STOP, !t.isPlaying () ?
-    // SLMkIIIColors.SLMKIII_GREY : SLMkIIIColors.SLMKIII_DARK_GREY);
-    // surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_PLAY, t.isPlaying () ?
-    // SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_GREEN_HALF);
-    // surface.updateTrigger (SLMkIIIControlSurface.MKIII_TRANSPORT_RECORD, isShift ?
-    // t.isLauncherOverdub () ? SLMkIIIColors.SLMKIII_AMBER : SLMkIIIColors.SLMKIII_AMBER_HALF :
-    // t.isRecording () ? SLMkIIIColors.SLMKIII_RED : SLMkIIIColors.SLMKIII_RED_HALF);
-    //
+
     // final ModeManager modeManager = surface.getModeManager ();
     //
     // surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_UP, getDeviceModeColor
@@ -409,13 +494,13 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
             final boolean exists = track.doesExist ();
             if (surface.isMuteSolo ())
             {
-                color1 = exists ? track.isMute () ? SLMkIIIColors.SLMKIII_ORANGE : SLMkIIIColors.SLMKIII_ORANGE_HALF : SLMkIIIColors.SLMKIII_BLACK;
-                color2 = exists ? track.isSolo () ? SLMkIIIColors.SLMKIII_YELLOW : SLMkIIIColors.SLMKIII_YELLOW_HALF : SLMkIIIColors.SLMKIII_BLACK;
+                color1 = exists ? track.isMute () ? SLMkIIIColorManager.SLMKIII_ORANGE : SLMkIIIColorManager.SLMKIII_ORANGE_HALF : SLMkIIIColorManager.SLMKIII_BLACK;
+                color2 = exists ? track.isSolo () ? SLMkIIIColorManager.SLMKIII_YELLOW : SLMkIIIColorManager.SLMKIII_YELLOW_HALF : SLMkIIIColorManager.SLMKIII_BLACK;
             }
             else
             {
-                color1 = exists ? track.isMonitor () ? SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_GREEN_HALF : SLMkIIIColors.SLMKIII_BLACK;
-                color2 = exists ? track.isRecArm () ? SLMkIIIColors.SLMKIII_RED : SLMkIIIColors.SLMKIII_RED_HALF : SLMkIIIColors.SLMKIII_BLACK;
+                color1 = exists ? track.isMonitor () ? SLMkIIIColorManager.SLMKIII_GREEN : SLMkIIIColorManager.SLMKIII_GREEN_HALF : SLMkIIIColorManager.SLMKIII_BLACK;
+                color2 = exists ? track.isRecArm () ? SLMkIIIColorManager.SLMKIII_RED : SLMkIIIColorManager.SLMKIII_RED_HALF : SLMkIIIColorManager.SLMKIII_BLACK;
             }
 
             // TODO
@@ -429,12 +514,12 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
     {
         final ViewManager viewManager = this.getSurface ().getViewManager ();
         if (viewManager.isActiveView (Views.SESSION))
-            return this.model.getSceneBank ().canScrollForwards () ? SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_BLACK;
+            return this.model.getSceneBank ().canScrollForwards () ? SLMkIIIColorManager.SLMKIII_GREEN : SLMkIIIColorManager.SLMKIII_BLACK;
         else if (viewManager.isActiveView (Views.DRUM))
-            return ((DrumView) viewManager.getView (Views.DRUM)).isPlayMode () ? SLMkIIIColors.SLMKIII_BLUE : SLMkIIIColors.SLMKIII_SKY_BLUE;
+            return ((DrumView) viewManager.getView (Views.DRUM)).isPlayMode () ? SLMkIIIColorManager.SLMKIII_BLUE : SLMkIIIColorManager.SLMKIII_SKY_BLUE;
         else if (viewManager.isActiveView (Views.COLOR))
-            return !((ColorView) viewManager.getView (Views.COLOR)).isFlip () ? SLMkIIIColors.SLMKIII_RED : SLMkIIIColors.SLMKIII_BLACK;
-        return SLMkIIIColors.SLMKIII_BLACK;
+            return !((ColorView) viewManager.getView (Views.COLOR)).isFlip () ? SLMkIIIColorManager.SLMKIII_RED : SLMkIIIColorManager.SLMKIII_BLACK;
+        return SLMkIIIColorManager.SLMKIII_BLACK;
     }
 
 
@@ -442,12 +527,12 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
     {
         final ViewManager viewManager = this.getSurface ().getViewManager ();
         if (viewManager.isActiveView (Views.SESSION))
-            return this.model.getSceneBank ().canScrollBackwards () ? SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_BLACK;
+            return this.model.getSceneBank ().canScrollBackwards () ? SLMkIIIColorManager.SLMKIII_GREEN : SLMkIIIColorManager.SLMKIII_BLACK;
         else if (viewManager.isActiveView (Views.DRUM))
-            return ((DrumView) viewManager.getView (Views.DRUM)).isPlayMode () ? SLMkIIIColors.SLMKIII_BLUE : SLMkIIIColors.SLMKIII_SKY_BLUE;
+            return ((DrumView) viewManager.getView (Views.DRUM)).isPlayMode () ? SLMkIIIColorManager.SLMKIII_BLUE : SLMkIIIColorManager.SLMKIII_SKY_BLUE;
         else if (viewManager.isActiveView (Views.COLOR))
-            return ((ColorView) viewManager.getView (Views.COLOR)).isFlip () ? SLMkIIIColors.SLMKIII_RED : SLMkIIIColors.SLMKIII_BLACK;
-        return SLMkIIIColors.SLMKIII_BLACK;
+            return ((ColorView) viewManager.getView (Views.COLOR)).isFlip () ? SLMkIIIColorManager.SLMKIII_RED : SLMkIIIColorManager.SLMKIII_BLACK;
+        return SLMkIIIColorManager.SLMKIII_BLACK;
     }
 
 
@@ -456,25 +541,25 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
         if (modeManager.isActiveMode (Modes.DEVICE_PARAMS))
         {
             if (((ParametersMode) modeManager.getMode (Modes.DEVICE_PARAMS)).isShowDevices ())
-                return SLMkIIIColors.SLMKIII_MINT;
-            return SLMkIIIColors.SLMKIII_PURPLE;
+                return SLMkIIIColorManager.SLMKIII_MINT;
+            return SLMkIIIColorManager.SLMKIII_PURPLE;
         }
-        return SLMkIIIColors.SLMKIII_WHITE_HALF;
+        return SLMkIIIColorManager.SLMKIII_WHITE_HALF;
     }
 
 
     private static int getTrackModeColor (final ModeManager modeManager)
     {
         if (modeManager.isActiveMode (Modes.TRACK))
-            return SLMkIIIColors.SLMKIII_GREEN;
+            return SLMkIIIColorManager.SLMKIII_GREEN;
         if (modeManager.isActiveMode (Modes.VOLUME))
-            return SLMkIIIColors.SLMKIII_BLUE;
+            return SLMkIIIColorManager.SLMKIII_BLUE;
         if (modeManager.isActiveMode (Modes.PAN))
-            return SLMkIIIColors.SLMKIII_ORANGE;
+            return SLMkIIIColorManager.SLMKIII_ORANGE;
         if (Modes.isSendMode (modeManager.getActiveModeId ()))
-            return SLMkIIIColors.SLMKIII_YELLOW;
+            return SLMkIIIColorManager.SLMKIII_YELLOW;
 
-        return SLMkIIIColors.SLMKIII_WHITE_HALF;
+        return SLMkIIIColorManager.SLMKIII_WHITE_HALF;
     }
 
 

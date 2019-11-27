@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.slmkiii.mode;
 
-import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
+import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.controller.slmkiii.view.DrumView;
@@ -86,13 +86,13 @@ public class SequencerResolutionMode extends BaseMode
         for (int i = 0; i < 8; i++)
         {
             d.setCell (3, i, Resolution.getNameAt (i));
-            d.setPropertyColor (i, 2, SLMkIIIColors.SLMKIII_PINK);
+            d.setPropertyColor (i, 2, SLMkIIIColorManager.SLMKIII_PINK);
             d.setPropertyValue (i, 1, match == i ? 1 : 0);
         }
 
         d.setCell (0, 8, "Sequencer");
         d.setCell (1, 8, "Resoltion");
-        d.setPropertyColor (8, 0, SLMkIIIColors.SLMKIII_PINK);
+        d.setPropertyColor (8, 0, SLMkIIIColorManager.SLMKIII_PINK);
 
         this.setButtonInfo (d);
 

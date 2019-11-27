@@ -119,8 +119,7 @@ public class SLMkIIIControlSurface extends AbstractControlSurface<SLMkIIIConfigu
      */
     public SLMkIIIControlSurface (final IHost host, final ColorManager colorManager, final SLMkIIIConfiguration configuration, final IMidiOutput output, final IMidiInput input)
     {
-        // TODO size
-        super (host, configuration, colorManager, output, input, new SLMkIIIPadGrid (colorManager, output), 100, 100);
+        super (host, configuration, colorManager, output, input, new SLMkIIIPadGrid (colorManager, output), 1000, 360);
 
         this.defaultMidiChannel = 15;
 

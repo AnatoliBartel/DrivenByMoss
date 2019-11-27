@@ -15,6 +15,7 @@ import de.mossgrabers.framework.controller.hardware.IHwButton;
 import de.mossgrabers.framework.controller.hardware.IHwContinuousControl;
 import de.mossgrabers.framework.controller.hardware.IHwFader;
 import de.mossgrabers.framework.controller.hardware.IHwLight;
+import de.mossgrabers.framework.controller.hardware.IHwPianoKeyboard;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
@@ -294,7 +295,20 @@ public interface IControlSurface<C extends Configuration>
     void setTrigger (int channel, int cc, String colorID);
 
 
+    /**
+     * Add a piano keyboard.
+     *
+     * @param numKeys The number of the keys, e.g. 25 or 88
+     */
     void addPianoKeyboard (int numKeys);
+
+
+    /**
+     * Get the piano keyboard, if added.
+     *
+     * @return The piano keyboard or null if not added
+     */
+    IHwPianoKeyboard getPianoKeyboard ();
 
 
     /**

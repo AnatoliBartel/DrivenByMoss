@@ -149,8 +149,8 @@ public class SLMkIIIDisplay extends AbstractTextDisplay
     {
         for (int i = 0; i < 8; i++)
         {
-            this.setPropertyColor (i, 0, SLMkIIIColors.SLMKIII_BLACK);
-            this.setPropertyColor (i, 1, SLMkIIIColors.SLMKIII_BLACK);
+            this.setPropertyColor (i, 0, SLMkIIIColorManager.SLMKIII_BLACK);
+            this.setPropertyColor (i, 1, SLMkIIIColorManager.SLMKIII_BLACK);
         }
     }
 
@@ -291,12 +291,12 @@ public class SLMkIIIDisplay extends AbstractTextDisplay
     public void shutdown ()
     {
         this.hideAllElements ();
-        this.setPropertyColor (8, 0, SLMkIIIColors.SLMKIII_BLACK);
-        this.setPropertyColor (8, 1, SLMkIIIColors.SLMKIII_BLACK);
+        this.setPropertyColor (8, 0, SLMkIIIColorManager.SLMKIII_BLACK);
+        this.setPropertyColor (8, 1, SLMkIIIColorManager.SLMKIII_BLACK);
 
         for (int i = 0; i < 9; i++)
         {
-            this.setPropertyColor (i, 2, SLMkIIIColors.SLMKIII_BLACK);
+            this.setPropertyColor (i, 2, SLMkIIIColorManager.SLMKIII_BLACK);
             this.setPropertyValue (i, 1, 0);
         }
 

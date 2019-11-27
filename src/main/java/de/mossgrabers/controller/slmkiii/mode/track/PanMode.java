@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.slmkiii.mode.track;
 
-import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
+import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.framework.controller.IValueChanger;
@@ -62,13 +62,13 @@ public class PanMode extends AbstractTrackMode
                 d.setCell (0, i, "Pan").setCell (1, i, t.getPanStr (9));
 
             this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_1 + i, valueChanger.toMidiValue (t.getPan ()));
-            this.setColumnColors (d, i, t, SLMkIIIColors.SLMKIII_AMBER);
+            this.setColumnColors (d, i, t, SLMkIIIColorManager.SLMKIII_AMBER);
         }
 
         final ITrack t = this.model.getSelectedTrack ();
         d.setCell (1, 8, t == null ? "" : StringUtils.fixASCII (t.getName (9)));
 
-        d.setPropertyColor (8, 0, SLMkIIIColors.SLMKIII_AMBER);
+        d.setPropertyColor (8, 0, SLMkIIIColorManager.SLMKIII_AMBER);
 
         this.drawRow4 ();
         this.setButtonInfo (d);

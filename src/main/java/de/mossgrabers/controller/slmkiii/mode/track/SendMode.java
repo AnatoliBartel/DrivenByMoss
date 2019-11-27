@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.slmkiii.mode.track;
 
-import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
+import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.framework.controller.IValueChanger;
@@ -64,7 +64,7 @@ public class SendMode extends AbstractTrackMode
         final ITrackBank tb = this.model.getCurrentTrackBank ();
         for (int i = 0; i < 8; i++)
         {
-            int color = SLMkIIIColors.SLMKIII_BLACK;
+            int color = SLMkIIIColorManager.SLMKIII_BLACK;
             final ITrack t = tb.getItem (i);
             if (t.doesExist ())
             {
@@ -73,7 +73,7 @@ public class SendMode extends AbstractTrackMode
                 {
                     d.setCell (0, i, send.getName (9)).setCell (1, i, send.getDisplayedValue (9));
                     this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_1 + i, valueChanger.toMidiValue (send.getValue ()));
-                    color = SLMkIIIColors.SLMKIII_YELLOW;
+                    color = SLMkIIIColorManager.SLMKIII_YELLOW;
                 }
             }
 
@@ -83,7 +83,7 @@ public class SendMode extends AbstractTrackMode
         final ITrack t = this.model.getSelectedTrack ();
         d.setCell (1, 8, t == null ? "" : StringUtils.fixASCII (t.getName (9)));
 
-        d.setPropertyColor (8, 0, SLMkIIIColors.SLMKIII_YELLOW);
+        d.setPropertyColor (8, 0, SLMkIIIColorManager.SLMKIII_YELLOW);
 
         this.drawRow4 ();
         this.setButtonInfo (d);

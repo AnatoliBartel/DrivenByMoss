@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.slmkiii.mode;
 
-import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
+import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.framework.controller.ButtonID;
@@ -144,60 +144,60 @@ public class OptionsMode extends BaseMode
         d.clear ();
 
         d.setCell (3, 0, "Undo");
-        d.setPropertyColor (0, 2, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (0, 2, SLMkIIIColorManager.SLMKIII_BROWN);
         d.setPropertyValue (0, 1, 0);
 
         d.setCell (3, 1, "Redo");
-        d.setPropertyColor (1, 2, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (1, 2, SLMkIIIColorManager.SLMKIII_BROWN);
         d.setPropertyValue (1, 1, 0);
 
         d.setCell (3, 2, "<< Project");
-        d.setPropertyColor (2, 2, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (2, 2, SLMkIIIColorManager.SLMKIII_BROWN);
         d.setPropertyValue (2, 1, 0);
 
         d.setCell (3, 3, "Project >>");
-        d.setPropertyColor (3, 2, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (3, 2, SLMkIIIColorManager.SLMKIII_BROWN);
         d.setPropertyValue (3, 1, 0);
 
         d.setCell (3, 4, "Tap");
-        d.setPropertyColor (4, 2, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (4, 2, SLMkIIIColorManager.SLMKIII_BROWN);
         d.setPropertyValue (4, 1, 0);
 
         d.setCell (3, 5, transport.isMetronomeOn () ? "On" : "Off");
-        d.setPropertyColor (5, 2, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (5, 2, SLMkIIIColorManager.SLMKIII_BROWN);
         d.setPropertyValue (5, 1, transport.isMetronomeOn () ? 1 : 0);
 
         d.setCell (3, 6, "Engine");
-        d.setPropertyColor (6, 2, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (6, 2, SLMkIIIColorManager.SLMKIII_BROWN);
         d.setPropertyValue (6, 1, this.model.getApplication ().isEngineActive () ? 1 : 0);
 
         d.setCell (3, 7, "Quantize");
-        d.setPropertyColor (7, 2, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (7, 2, SLMkIIIColorManager.SLMKIII_BROWN);
         d.setPropertyValue (7, 1, 0);
 
         final IMasterTrack master = this.model.getMasterTrack ();
         d.setCell (0, 0, StringUtils.fixASCII ("Mstr Vol")).setCell (1, 0, master.getVolumeStr (9));
         this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_1, valueChanger.toMidiValue (master.getVolume ()));
-        d.setPropertyColor (0, 0, SLMkIIIColors.SLMKIII_BROWN);
-        d.setPropertyColor (0, 1, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (0, 0, SLMkIIIColorManager.SLMKIII_BROWN);
+        d.setPropertyColor (0, 1, SLMkIIIColorManager.SLMKIII_BROWN);
 
         d.setCell (0, 1, StringUtils.fixASCII ("Mstr Pan")).setCell (1, 1, master.getPanStr (9));
         this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_2, valueChanger.toMidiValue (master.getPan ()));
-        d.setPropertyColor (1, 0, SLMkIIIColors.SLMKIII_BROWN);
-        d.setPropertyColor (1, 1, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (1, 0, SLMkIIIColorManager.SLMKIII_BROWN);
+        d.setPropertyColor (1, 1, SLMkIIIColorManager.SLMKIII_BROWN);
 
         d.setCell (0, 4, StringUtils.fixASCII ("Tempo")).setCell (1, 4, transport.formatTempo (transport.getTempo ()));
         this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_5, valueChanger.toMidiValue ((int) transport.rescaleTempo (transport.getTempo (), valueChanger.getUpperBound ())));
-        d.setPropertyColor (4, 0, SLMkIIIColors.SLMKIII_BROWN);
-        d.setPropertyColor (4, 1, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (4, 0, SLMkIIIColorManager.SLMKIII_BROWN);
+        d.setPropertyColor (4, 1, SLMkIIIColorManager.SLMKIII_BROWN);
 
         d.setCell (0, 5, StringUtils.fixASCII ("Metronome")).setCell (1, 5, transport.getMetronomeVolumeStr ());
         this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_6, valueChanger.toMidiValue (transport.getMetronomeVolume ()));
-        d.setPropertyColor (5, 0, SLMkIIIColors.SLMKIII_BROWN);
-        d.setPropertyColor (5, 1, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (5, 0, SLMkIIIColorManager.SLMKIII_BROWN);
+        d.setPropertyColor (5, 1, SLMkIIIColorManager.SLMKIII_BROWN);
 
         d.setCell (0, 8, "Master");
-        d.setPropertyColor (8, 0, SLMkIIIColors.SLMKIII_BROWN);
+        d.setPropertyColor (8, 0, SLMkIIIColorManager.SLMKIII_BROWN);
 
         this.setButtonInfo (d);
 

@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.slmkiii.mode.track;
 
-import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
+import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.framework.controller.IValueChanger;
@@ -62,13 +62,13 @@ public class VolumeMode extends AbstractTrackMode
                 d.setCell (0, i, "Volume").setCell (1, i, t.getVolumeStr (9));
 
             this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_1 + i, valueChanger.toMidiValue (t.getVolume ()));
-            this.setColumnColors (d, i, t, SLMkIIIColors.SLMKIII_BLUE);
+            this.setColumnColors (d, i, t, SLMkIIIColorManager.SLMKIII_BLUE);
         }
 
         final ITrack t = this.model.getSelectedTrack ();
         d.setCell (1, 8, t == null ? "" : StringUtils.fixASCII (t.getName (9)));
 
-        d.setPropertyColor (8, 0, SLMkIIIColors.SLMKIII_BLUE);
+        d.setPropertyColor (8, 0, SLMkIIIColorManager.SLMKIII_BLUE);
 
         this.drawRow4 ();
         this.setButtonInfo (d);

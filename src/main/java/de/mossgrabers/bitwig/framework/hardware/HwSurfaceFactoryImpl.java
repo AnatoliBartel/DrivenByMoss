@@ -166,13 +166,13 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
 
     /** {@inheritDoc} */
     @Override
-    public IHwPianoKeyboard createPianoKeyboard (int surfaceID, int numKeys)
+    public IHwPianoKeyboard createPianoKeyboard (final int surfaceID, final int numKeys)
     {
         final int octave = 0;
         final int startKeyInOctave = 36;
 
         final String id = createID (surfaceID, "KEYBOARD");
-        return new HwPianoKeyboardImpl (this.host, this.hardwareSurface.createPianoKeyboard (id, numKeys, octave, startKeyInOctave));
+        return new HwPianoKeyboardImpl (this.hardwareSurface.createPianoKeyboard (id, numKeys, octave, startKeyInOctave));
     }
 
 

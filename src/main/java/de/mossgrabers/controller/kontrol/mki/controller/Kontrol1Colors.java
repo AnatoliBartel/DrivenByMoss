@@ -61,7 +61,7 @@ public class Kontrol1Colors extends ColorManager
             return ColorEx.BLACK;
         }
 
-        if ((buttonID.ordinal () >= ButtonID.PAD1.ordinal () && buttonID.ordinal () <= ButtonID.PAD88.ordinal ()))
+        if (buttonID.ordinal () >= ButtonID.PAD1.ordinal () && buttonID.ordinal () <= ButtonID.PAD88.ordinal ())
         {
             switch (colorIndex)
             {

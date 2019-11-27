@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.slmkiii.mode;
 
 import de.mossgrabers.controller.slmkiii.SLMkIIIConfiguration;
-import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
+import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.framework.controller.ButtonID;
@@ -101,14 +101,14 @@ public abstract class BaseMode extends AbstractMode<SLMkIIIControlSurface, SLMkI
         if (this.surface.isMuteSolo ())
         {
             display.setCell (2, 8, "Mute").setCell (3, 8, "Solo");
-            display.setPropertyColor (8, 1, SLMkIIIColors.SLMKIII_AMBER);
-            display.setPropertyColor (8, 2, SLMkIIIColors.SLMKIII_YELLOW);
+            display.setPropertyColor (8, 1, SLMkIIIColorManager.SLMKIII_AMBER);
+            display.setPropertyColor (8, 2, SLMkIIIColorManager.SLMKIII_YELLOW);
         }
         else
         {
             display.setCell (2, 8, "Monitor").setCell (3, 8, "Arm");
-            display.setPropertyColor (8, 1, SLMkIIIColors.SLMKIII_GREEN);
-            display.setPropertyColor (8, 2, SLMkIIIColors.SLMKIII_RED);
+            display.setPropertyColor (8, 1, SLMkIIIColorManager.SLMKIII_GREEN);
+            display.setPropertyColor (8, 2, SLMkIIIColorManager.SLMKIII_RED);
         }
     }
 }

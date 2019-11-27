@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.slmkiii.view;
 
 import de.mossgrabers.controller.slmkiii.SLMkIIIConfiguration;
-import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
+import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -34,13 +34,13 @@ public class SessionView extends AbstractSessionView<SLMkIIIControlSurface, SLMk
     {
         super ("Session", surface, model, 2, 8, true);
 
-        final SessionColor isRecording = new SessionColor (SLMkIIIColors.SLMKIII_RED, SLMkIIIColors.SLMKIII_RED, false);
-        final SessionColor isRecordingQueued = new SessionColor (SLMkIIIColors.SLMKIII_RED_HALF, SLMkIIIColors.SLMKIII_RED_HALF, true);
-        final SessionColor isPlaying = new SessionColor (SLMkIIIColors.SLMKIII_GREEN_GRASS, SLMkIIIColors.SLMKIII_GREEN, false);
-        final SessionColor isPlayingQueued = new SessionColor (SLMkIIIColors.SLMKIII_GREEN_GRASS, SLMkIIIColors.SLMKIII_GREEN, true);
-        final SessionColor hasContent = new SessionColor (SLMkIIIColors.SLMKIII_AMBER, -1, false);
-        final SessionColor noContent = new SessionColor (SLMkIIIColors.SLMKIII_BLACK, -1, false);
-        final SessionColor recArmed = new SessionColor (SLMkIIIColors.SLMKIII_RED_HALF, -1, false);
+        final SessionColor isRecording = new SessionColor (SLMkIIIColorManager.SLMKIII_RED, SLMkIIIColorManager.SLMKIII_RED, false);
+        final SessionColor isRecordingQueued = new SessionColor (SLMkIIIColorManager.SLMKIII_RED_HALF, SLMkIIIColorManager.SLMKIII_RED_HALF, true);
+        final SessionColor isPlaying = new SessionColor (SLMkIIIColorManager.SLMKIII_GREEN_GRASS, SLMkIIIColorManager.SLMKIII_GREEN, false);
+        final SessionColor isPlayingQueued = new SessionColor (SLMkIIIColorManager.SLMKIII_GREEN_GRASS, SLMkIIIColorManager.SLMKIII_GREEN, true);
+        final SessionColor hasContent = new SessionColor (SLMkIIIColorManager.SLMKIII_AMBER, -1, false);
+        final SessionColor noContent = new SessionColor (SLMkIIIColorManager.SLMKIII_BLACK, -1, false);
+        final SessionColor recArmed = new SessionColor (SLMkIIIColorManager.SLMKIII_RED_HALF, -1, false);
         this.setColors (isRecording, isRecordingQueued, isPlaying, isPlayingQueued, hasContent, noContent, recArmed);
     }
 

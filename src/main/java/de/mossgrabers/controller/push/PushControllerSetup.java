@@ -763,7 +763,7 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
         }
         else
         {
-            surface.getTextDisplay ().getHardwareDisplay ().setBounds (31.176039029402443, 21.700861503612785, 125.97429884459471, 15.363162648509674);
+            surface.getTextDisplay ().getHardwareDisplay ().setBounds (32.5, 23.25, 124.75, 17.0);
 
             surface.getButton (ButtonID.SETUP).setBounds (185.5, 58.0, 10.0, 6.25);
             surface.getButton (ButtonID.ACCENT).setBounds (185.38487435513716, 65.78321712343, 10.0, 6.366389099167296);

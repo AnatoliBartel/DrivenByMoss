@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.slmkiii.view;
 
 import de.mossgrabers.controller.slmkiii.SLMkIIIConfiguration;
-import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
+import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.DAWColors;
@@ -135,16 +135,16 @@ public class DrumView extends AbstractDrumView<SLMkIIIControlSurface, SLMkIIICon
     private int getStepColor (final ICursorDevice primary)
     {
         if (this.selectedPad < 0)
-            return SLMkIIIColors.SLMKIII_BLACK;
+            return SLMkIIIColorManager.SLMKIII_BLACK;
 
         // If we cannot get the color from the drum pads use a default color
         if (!primary.getName ().equals ("Drum Machine"))
-            return SLMkIIIColors.SLMKIII_BLUE;
+            return SLMkIIIColorManager.SLMKIII_BLUE;
 
         // Exists and active?
         final IChannel drumPad = primary.getDrumPadBank ().getItem (this.selectedPad);
         if (!drumPad.doesExist () || !drumPad.isActivated ())
-            return SLMkIIIColors.SLMKIII_BLACK;
+            return SLMkIIIColorManager.SLMKIII_BLACK;
 
         return this.model.getColorManager ().getColorIndex (DAWColors.getColorIndex (drumPad.getColor ()));
     }
@@ -153,8 +153,8 @@ public class DrumView extends AbstractDrumView<SLMkIIIControlSurface, SLMkIIICon
     private static int getSequencerPadColor (final int isSet, final boolean hilite, final int stepColor)
     {
         if (isSet > 0)
-            return hilite ? SLMkIIIColors.SLMKIII_GREEN : stepColor;
-        return hilite ? SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_BLACK;
+            return hilite ? SLMkIIIColorManager.SLMKIII_GREEN : stepColor;
+        return hilite ? SLMkIIIColorManager.SLMKIII_GREEN : SLMkIIIColorManager.SLMKIII_BLACK;
     }
 
     // /** {@inheritDoc} */

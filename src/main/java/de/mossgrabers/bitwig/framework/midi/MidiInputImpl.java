@@ -248,4 +248,15 @@ public class MidiInputImpl implements IMidiInput
         hardwareControl.beginTouchAction ().setActionMatcher (pressedMatcher);
         hardwareControl.endTouchAction ().setActionMatcher (releasedMatcher);
     }
+
+
+    /**
+     * Get the MIDI input port.
+     *
+     * @return The MIDI input port
+     */
+    public MidiIn getPort ()
+    {
+        return this.port;
+    }
 }

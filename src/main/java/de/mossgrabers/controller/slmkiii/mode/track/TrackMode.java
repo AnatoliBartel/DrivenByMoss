@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.slmkiii.mode.track;
 
-import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
+import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.framework.controller.IValueChanger;
@@ -86,13 +86,13 @@ public class TrackMode extends AbstractTrackMode
         else
         {
             d.setCell (0, 0, "Volume").setCell (1, 0, t.getVolumeStr (9));
-            d.setPropertyColor (0, 0, SLMkIIIColors.SLMKIII_BLUE);
-            d.setPropertyColor (0, 1, SLMkIIIColors.SLMKIII_BLUE);
+            d.setPropertyColor (0, 0, SLMkIIIColorManager.SLMKIII_BLUE);
+            d.setPropertyColor (0, 1, SLMkIIIColorManager.SLMKIII_BLUE);
             this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_1, valueChanger.toMidiValue (t.getVolume ()));
 
             d.setCell (0, 1, "Pan").setCell (1, 1, t.getPanStr (9));
-            d.setPropertyColor (1, 0, SLMkIIIColors.SLMKIII_ORANGE);
-            d.setPropertyColor (1, 1, SLMkIIIColors.SLMKIII_ORANGE);
+            d.setPropertyColor (1, 0, SLMkIIIColorManager.SLMKIII_ORANGE);
+            d.setPropertyColor (1, 1, SLMkIIIColorManager.SLMKIII_ORANGE);
             this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_1 + 1, valueChanger.toMidiValue (t.getPan ()));
 
             final ISendBank sendBank = t.getSendBank ();
@@ -100,14 +100,14 @@ public class TrackMode extends AbstractTrackMode
             {
                 final int pos = 2 + i;
 
-                int color = SLMkIIIColors.SLMKIII_BLACK;
+                int color = SLMkIIIColorManager.SLMKIII_BLACK;
                 if (sendBank.getItemCount () > 0)
                 {
                     final ISend send = sendBank.getItem (i);
                     if (send.doesExist ())
                     {
                         d.setCell (0, pos, send.getName (9)).setCell (1, pos, send.getDisplayedValue (9));
-                        color = SLMkIIIColors.SLMKIII_YELLOW;
+                        color = SLMkIIIColorManager.SLMKIII_YELLOW;
 
                         this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_1 + pos, valueChanger.toMidiValue (send.getValue ()));
                     }
@@ -120,7 +120,7 @@ public class TrackMode extends AbstractTrackMode
             d.setCell (1, 8, StringUtils.fixASCII (t.getName (9)));
         }
 
-        d.setPropertyColor (8, 0, SLMkIIIColors.SLMKIII_GREEN);
+        d.setPropertyColor (8, 0, SLMkIIIColorManager.SLMKIII_GREEN);
 
         this.drawRow4 ();
         this.setButtonInfo (d);

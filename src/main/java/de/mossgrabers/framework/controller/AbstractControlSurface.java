@@ -18,6 +18,7 @@ import de.mossgrabers.framework.controller.hardware.IHwButton;
 import de.mossgrabers.framework.controller.hardware.IHwContinuousControl;
 import de.mossgrabers.framework.controller.hardware.IHwFader;
 import de.mossgrabers.framework.controller.hardware.IHwLight;
+import de.mossgrabers.framework.controller.hardware.IHwPianoKeyboard;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
 import de.mossgrabers.framework.controller.hardware.IHwSurfaceFactory;
 import de.mossgrabers.framework.daw.IHost;
@@ -82,6 +83,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     private final LatestTaskExecutor                flushExecutor         = new LatestTaskExecutor ();
     private final DummyDisplay                      dummyDisplay;
+    private IHwPianoKeyboard                        pianoKeyboard;
 
 
     /**
@@ -242,7 +244,15 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     @Override
     public void addPianoKeyboard (final int numKeys)
     {
-        this.surfaceFactory.createPianoKeyboard (this.surfaceID, numKeys);
+        this.pianoKeyboard = this.surfaceFactory.createPianoKeyboard (this.surfaceID, numKeys);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public IHwPianoKeyboard getPianoKeyboard ()
+    {
+        return this.pianoKeyboard;
     }
 
 

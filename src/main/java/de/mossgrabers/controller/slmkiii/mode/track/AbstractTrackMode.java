@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.slmkiii.mode.track;
 
-import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
+import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.controller.slmkiii.mode.BaseMode;
@@ -261,7 +261,7 @@ public abstract class AbstractTrackMode extends BaseMode
             for (int i = 0; i < 8; i++)
             {
                 d.setCell (3, i, MODE_MENU[i]);
-                d.setPropertyColor (i, 2, SLMkIIIColors.SLMKIII_GREEN);
+                d.setPropertyColor (i, 2, SLMkIIIColorManager.SLMKIII_GREEN);
                 d.setPropertyValue (i, 1, modeManager.isActiveMode (MODES[i]) ? 1 : 0);
             }
             return;
@@ -282,7 +282,7 @@ public abstract class AbstractTrackMode extends BaseMode
                 color = this.model.getColorManager ().getColorIndex (colorIndex);
             }
             else
-                color = SLMkIIIColors.SLMKIII_DARK_GREY;
+                color = SLMkIIIColorManager.SLMKIII_DARK_GREY;
 
             d.setPropertyColor (i, 2, color);
             d.setPropertyValue (i, 1, exists && t.isSelected () ? 1 : 0);
@@ -296,43 +296,43 @@ public abstract class AbstractTrackMode extends BaseMode
         {
             for (int i = 0; i < 3; i++)
             {
-                d.setPropertyColor (i, 2, SLMkIIIColors.SLMKIII_BLACK);
+                d.setPropertyColor (i, 2, SLMkIIIColorManager.SLMKIII_BLACK);
                 d.setPropertyValue (i, 1, 0);
             }
         }
         else
         {
             d.setCell (3, 0, "On/Off");
-            d.setPropertyColor (0, 2, SLMkIIIColors.SLMKIII_RED);
+            d.setPropertyColor (0, 2, SLMkIIIColorManager.SLMKIII_RED);
             d.setPropertyValue (0, 1, selectedTrack.isActivated () ? 1 : 0);
 
             d.setCell (3, 1, "Pin");
-            d.setPropertyColor (1, 2, SLMkIIIColors.SLMKIII_RED);
+            d.setPropertyColor (1, 2, SLMkIIIColorManager.SLMKIII_RED);
             d.setPropertyValue (1, 1, this.model.isCursorTrackPinned () ? 1 : 0);
 
             d.setCell (3, 2, "Color");
-            d.setPropertyColor (2, 2, SLMkIIIColors.SLMKIII_RED);
+            d.setPropertyColor (2, 2, SLMkIIIColorManager.SLMKIII_RED);
             d.setPropertyValue (2, 1, 0);
         }
 
         d.setCell (3, 3, "");
-        d.setPropertyColor (3, 2, SLMkIIIColors.SLMKIII_BLACK);
+        d.setPropertyColor (3, 2, SLMkIIIColorManager.SLMKIII_BLACK);
         d.setPropertyValue (3, 1, 0);
 
         d.setCell (3, 4, "");
-        d.setPropertyColor (4, 2, SLMkIIIColors.SLMKIII_BLACK);
+        d.setPropertyColor (4, 2, SLMkIIIColorManager.SLMKIII_BLACK);
         d.setPropertyValue (4, 1, 0);
 
         d.setCell (3, 5, "Add Instr");
-        d.setPropertyColor (5, 2, SLMkIIIColors.SLMKIII_RED);
+        d.setPropertyColor (5, 2, SLMkIIIColorManager.SLMKIII_RED);
         d.setPropertyValue (5, 1, 0);
 
         d.setCell (3, 6, "Add Audio");
-        d.setPropertyColor (6, 2, SLMkIIIColors.SLMKIII_RED);
+        d.setPropertyColor (6, 2, SLMkIIIColorManager.SLMKIII_RED);
         d.setPropertyValue (6, 1, 0);
 
         d.setCell (3, 7, "Add FX");
-        d.setPropertyColor (7, 2, SLMkIIIColors.SLMKIII_RED);
+        d.setPropertyColor (7, 2, SLMkIIIColorManager.SLMKIII_RED);
         d.setPropertyValue (7, 1, 0);
     }
 
@@ -347,8 +347,8 @@ public abstract class AbstractTrackMode extends BaseMode
 
     protected void setColumnColors (final SLMkIIIDisplay display, final int column, final ITrack track, final int knobColorIndex)
     {
-        int color = track.doesExist () ? knobColorIndex : SLMkIIIColors.SLMKIII_BLACK;
-        display.setPropertyColor (column, 1, track.isActivated () ? color : SLMkIIIColors.SLMKIII_DARK_GREY);
+        int color = track.doesExist () ? knobColorIndex : SLMkIIIColorManager.SLMKIII_BLACK;
+        display.setPropertyColor (column, 1, track.isActivated () ? color : SLMkIIIColorManager.SLMKIII_DARK_GREY);
         if (track.doesExist ())
         {
             if (track.isActivated ())
@@ -357,7 +357,7 @@ public abstract class AbstractTrackMode extends BaseMode
                 color = this.model.getColorManager ().getColorIndex (colorIndex);
             }
             else
-                color = SLMkIIIColors.SLMKIII_DARK_GREY;
+                color = SLMkIIIColorManager.SLMKIII_DARK_GREY;
         }
         display.setPropertyColor (column, 0, color);
     }

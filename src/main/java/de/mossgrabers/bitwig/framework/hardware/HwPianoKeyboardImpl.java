@@ -4,13 +4,10 @@
 
 package de.mossgrabers.bitwig.framework.hardware;
 
-import de.mossgrabers.bitwig.framework.daw.HostImpl;
-import de.mossgrabers.framework.controller.hardware.AbstractHwControl;
-import de.mossgrabers.framework.controller.hardware.BindType;
+import de.mossgrabers.bitwig.framework.midi.MidiInputImpl;
 import de.mossgrabers.framework.controller.hardware.IHwPianoKeyboard;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 
-import com.bitwig.extension.controller.api.ControllerHost;
 import com.bitwig.extension.controller.api.PianoKeyboard;
 
 
@@ -19,23 +16,18 @@ import com.bitwig.extension.controller.api.PianoKeyboard;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class HwPianoKeyboardImpl extends AbstractHwControl implements IHwPianoKeyboard
+public class HwPianoKeyboardImpl implements IHwPianoKeyboard
 {
-    private final PianoKeyboard  hardwarePianoKeyboard;
-    private final ControllerHost controllerHost;
+    private final PianoKeyboard hardwarePianoKeyboard;
 
 
     /**
      * Constructor.
      *
-     * @param host The controller host
      * @param hardwarePianoKeyboard The Bitwig hardware piano keyboard
      */
-    public HwPianoKeyboardImpl (final HostImpl host, final PianoKeyboard hardwarePianoKeyboard)
+    public HwPianoKeyboardImpl (final PianoKeyboard hardwarePianoKeyboard)
     {
-        super (host, "");
-
-        this.controllerHost = host.getControllerHost ();
         this.hardwarePianoKeyboard = hardwarePianoKeyboard;
     }
 
@@ -48,18 +40,18 @@ public class HwPianoKeyboardImpl extends AbstractHwControl implements IHwPianoKe
     }
 
 
+    /** {@inheritDoc} */
     @Override
-    public void bind (IMidiInput input, BindType type, int control)
+    public void bind (final IMidiInput input)
     {
-        // TODO Auto-generated method stub
-
+        this.hardwarePianoKeyboard.setMidiIn (((MidiInputImpl) input).getPort ());
     }
 
 
+    /** {@inheritDoc} */
     @Override
-    public void bind (IMidiInput input, BindType type, int channel, int control)
+    public void update ()
     {
-        // TODO Auto-generated method stub
-
+        // Intentionally empty
     }
 }

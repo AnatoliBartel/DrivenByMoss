@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.slmkiii.mode;
 
-import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColors;
+import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.framework.controller.ButtonID;
@@ -168,37 +168,37 @@ public class BrowserMode extends BaseMode
         d.clear ();
 
         d.setCell (0, 0, StringUtils.fixASCII (browser.getSelectedContentType ()));
-        d.setPropertyColor (0, 0, SLMkIIIColors.SLMKIII_GREEN);
+        d.setPropertyColor (0, 0, SLMkIIIColorManager.SLMKIII_GREEN);
         d.setCell (3, 0, "<< Tab");
-        d.setPropertyColor (0, 2, SLMkIIIColors.SLMKIII_GREEN);
+        d.setPropertyColor (0, 2, SLMkIIIColorManager.SLMKIII_GREEN);
         d.setPropertyValue (0, 1, 0);
 
-        d.setPropertyColor (1, 0, SLMkIIIColors.SLMKIII_GREEN);
+        d.setPropertyColor (1, 0, SLMkIIIColorManager.SLMKIII_GREEN);
         d.setCell (3, 1, "Tab >>");
-        d.setPropertyColor (1, 2, SLMkIIIColors.SLMKIII_GREEN);
+        d.setPropertyColor (1, 2, SLMkIIIColorManager.SLMKIII_GREEN);
         d.setPropertyValue (1, 1, 0);
 
         final IBrowserColumn selectedFilterColumn = browser.getSelectedFilterColumn ();
         d.setCell (0, 2, selectedFilterColumn.doesExist () ? StringUtils.fixASCII (selectedFilterColumn.getName ()) : "-");
-        d.setPropertyColor (2, 0, SLMkIIIColors.SLMKIII_DARK_GREEN_HALF);
+        d.setPropertyColor (2, 0, SLMkIIIColorManager.SLMKIII_DARK_GREEN_HALF);
         d.setCell (3, 2, "<< Filter");
-        d.setPropertyColor (2, 2, SLMkIIIColors.SLMKIII_DARK_GREEN_HALF);
+        d.setPropertyColor (2, 2, SLMkIIIColorManager.SLMKIII_DARK_GREEN_HALF);
         d.setPropertyValue (2, 1, 0);
 
-        d.setPropertyColor (3, 0, SLMkIIIColors.SLMKIII_DARK_GREEN_HALF);
+        d.setPropertyColor (3, 0, SLMkIIIColorManager.SLMKIII_DARK_GREEN_HALF);
         d.setCell (3, 3, "Filter >>");
-        d.setPropertyColor (3, 2, SLMkIIIColors.SLMKIII_DARK_GREEN_HALF);
+        d.setPropertyColor (3, 2, SLMkIIIColorManager.SLMKIII_DARK_GREEN_HALF);
         d.setPropertyValue (3, 1, 0);
 
         d.setCell (0, 4, selectedFilterColumn.doesExist () ? StringUtils.fixASCII (selectedFilterColumn.getCursorName ()) : "-");
-        d.setPropertyColor (4, 0, SLMkIIIColors.SLMKIII_GREEN_LIGHT);
+        d.setPropertyColor (4, 0, SLMkIIIColorManager.SLMKIII_GREEN_LIGHT);
         d.setCell (3, 4, "<< F-Sel");
-        d.setPropertyColor (4, 2, SLMkIIIColors.SLMKIII_GREEN_LIGHT);
+        d.setPropertyColor (4, 2, SLMkIIIColorManager.SLMKIII_GREEN_LIGHT);
         d.setPropertyValue (4, 1, 0);
 
-        d.setPropertyColor (5, 0, SLMkIIIColors.SLMKIII_GREEN_LIGHT);
+        d.setPropertyColor (5, 0, SLMkIIIColorManager.SLMKIII_GREEN_LIGHT);
         d.setCell (3, 5, "F-Sel >>");
-        d.setPropertyColor (5, 2, SLMkIIIColors.SLMKIII_GREEN_LIGHT);
+        d.setPropertyColor (5, 2, SLMkIIIColorManager.SLMKIII_GREEN_LIGHT);
         d.setPropertyValue (5, 1, 0);
 
         final String resultName = StringUtils.pad (StringUtils.fixASCII (browser.getSelectedResult ()), 18, ' ');
@@ -206,19 +206,19 @@ public class BrowserMode extends BaseMode
         final String name2 = resultName.substring (9, 18);
 
         d.setCell (0, 6, name1);
-        d.setPropertyColor (6, 0, SLMkIIIColors.SLMKIII_GREEN_GRASS);
+        d.setPropertyColor (6, 0, SLMkIIIColorManager.SLMKIII_GREEN_GRASS);
         d.setCell (3, 6, "<< Result");
-        d.setPropertyColor (6, 2, SLMkIIIColors.SLMKIII_GREEN_GRASS);
+        d.setPropertyColor (6, 2, SLMkIIIColorManager.SLMKIII_GREEN_GRASS);
         d.setPropertyValue (6, 1, 0);
 
         d.setCell (0, 7, name2);
-        d.setPropertyColor (7, 0, SLMkIIIColors.SLMKIII_GREEN_GRASS);
+        d.setPropertyColor (7, 0, SLMkIIIColorManager.SLMKIII_GREEN_GRASS);
         d.setCell (3, 7, "Result >>");
-        d.setPropertyColor (7, 2, SLMkIIIColors.SLMKIII_GREEN_GRASS);
+        d.setPropertyColor (7, 2, SLMkIIIColorManager.SLMKIII_GREEN_GRASS);
         d.setPropertyValue (7, 1, 0);
 
         d.setCell (0, 8, "Browser");
-        d.setPropertyColor (8, 0, SLMkIIIColors.SLMKIII_GREEN_GRASS);
+        d.setPropertyColor (8, 0, SLMkIIIColorManager.SLMKIII_GREEN_GRASS);
 
         this.setButtonInfo (d);
         d.allDone ();
