@@ -7,9 +7,10 @@ package de.mossgrabers.controller.apc;
 import de.mossgrabers.controller.apc.command.trigger.APCBrowserCommand;
 import de.mossgrabers.controller.apc.command.trigger.APCQuantizeCommand;
 import de.mossgrabers.controller.apc.command.trigger.APCRecordCommand;
+import de.mossgrabers.controller.apc.command.trigger.SelectTrackSendOrClipLengthCommand;
 import de.mossgrabers.controller.apc.command.trigger.SendModeCommand;
 import de.mossgrabers.controller.apc.command.trigger.StopAllClipsOrBrowseCommand;
-import de.mossgrabers.controller.apc.controller.APCColors;
+import de.mossgrabers.controller.apc.controller.APCColorManager;
 import de.mossgrabers.controller.apc.controller.APCControlSurface;
 import de.mossgrabers.controller.apc.mode.BrowserMode;
 import de.mossgrabers.controller.apc.mode.PanMode;
@@ -27,13 +28,18 @@ import de.mossgrabers.framework.command.continuous.KnobRowModeCommand;
 import de.mossgrabers.framework.command.continuous.MasterFaderAbsoluteCommand;
 import de.mossgrabers.framework.command.continuous.PlayPositionCommand;
 import de.mossgrabers.framework.command.continuous.TempoCommand;
+import de.mossgrabers.framework.command.trigger.clip.StopClipCommand;
 import de.mossgrabers.framework.command.trigger.device.DeviceParamsKnobRowCommand;
 import de.mossgrabers.framework.command.trigger.device.SelectNextDeviceOrParamPageCommand;
 import de.mossgrabers.framework.command.trigger.device.SelectPreviousDeviceOrParamPageCommand;
 import de.mossgrabers.framework.command.trigger.mode.CursorCommand;
 import de.mossgrabers.framework.command.trigger.mode.ModeCursorCommand.Direction;
 import de.mossgrabers.framework.command.trigger.mode.ModeSelectCommand;
+import de.mossgrabers.framework.command.trigger.track.CrossfadeModeCommand;
 import de.mossgrabers.framework.command.trigger.track.MasterCommand;
+import de.mossgrabers.framework.command.trigger.track.MuteCommand;
+import de.mossgrabers.framework.command.trigger.track.RecArmCommand;
+import de.mossgrabers.framework.command.trigger.track.SoloCommand;
 import de.mossgrabers.framework.command.trigger.transport.PlayCommand;
 import de.mossgrabers.framework.command.trigger.transport.TapTempoCommand;
 import de.mossgrabers.framework.command.trigger.view.ToggleShiftViewCommand;
@@ -86,8 +92,7 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
     {
         super (factory, host, globalSettings, documentSettings);
         this.isMkII = isMkII;
-        this.colorManager = new ColorManager ();
-        APCColors.addColors (this.colorManager, isMkII);
+        this.colorManager = new APCColorManager (isMkII);
         this.valueChanger = new DefaultValueChanger (128, 1, 0.5);
         this.configuration = new APCConfiguration (host, this.valueChanger);
     }
@@ -192,100 +197,71 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
 
         for (int i = 0; i < 8; i++)
         {
-            // final TriggerCommandID selectCommand = TriggerCommandID.get (TriggerCommandID.ROW1_1,
-            // i);
-            // final TriggerCommandID soloCommand = TriggerCommandID.get (TriggerCommandID.ROW2_1,
-            // i);
-            // final TriggerCommandID muteCommand = TriggerCommandID.get (TriggerCommandID.ROW3_1,
-            // i);
-            // final TriggerCommandID recArmCommand = TriggerCommandID.get (TriggerCommandID.ROW4_1,
-            // i);
-            // final TriggerCommandID crossfadeCommand = TriggerCommandID.get
-            // (TriggerCommandID.ROW5_1, i);
-            // final TriggerCommandID stopClipCommand = TriggerCommandID.get
-            // (TriggerCommandID.ROW6_1, i);
-            //
-            // viewManager.registerTriggerCommand (selectCommand, new
-            // SelectTrackSendOrClipLengthCommand (i, this.model, surface));
-            // viewManager.registerTriggerCommand (soloCommand, new SoloCommand<> (i, this.model,
-            // surface));
-            // viewManager.registerTriggerCommand (muteCommand, new MuteCommand<> (i, this.model,
-            // surface));
-            // viewManager.registerTriggerCommand (recArmCommand, new RecArmCommand<> (i,
-            // this.model, surface));
-            // viewManager.registerTriggerCommand (crossfadeCommand, new CrossfadeModeCommand<> (i,
-            // this.model, surface));
-            // viewManager.registerTriggerCommand (stopClipCommand, new StopClipCommand<> (i,
-            // this.model, surface));
-            // surface.assignTriggerCommand (i, APCControlSurface.APC_BUTTON_TRACK_SELECTION,
-            // selectCommand);
-            // surface.assignTriggerCommand (i, APCControlSurface.APC_BUTTON_SOLO, soloCommand);
-            // surface.assignTriggerCommand (i, APCControlSurface.APC_BUTTON_ACTIVATOR,
-            // muteCommand);
-            // surface.assignTriggerCommand (i, APCControlSurface.APC_BUTTON_RECORD_ARM,
-            // recArmCommand);
-            // surface.assignTriggerCommand (i, APCControlSurface.APC_BUTTON_A_B, crossfadeCommand);
-            // surface.assignTriggerCommand (i, APCControlSurface.APC_BUTTON_CLIP_STOP,
-            // stopClipCommand);
+            this.addButton (ButtonID.get (ButtonID.ROW1_1, i), "Select " + (i + 1), new SelectTrackSendOrClipLengthCommand (i, this.model, surface), i, APCControlSurface.APC_BUTTON_TRACK_SELECTION);
+            this.addButton (ButtonID.get (ButtonID.ROW2_1, i), "Solo " + (i + 1), new SoloCommand<> (i, this.model, surface), i, APCControlSurface.APC_BUTTON_SOLO);
+            this.addButton (ButtonID.get (ButtonID.ROW3_1, i), "Mute " + (i + 1), new MuteCommand<> (i, this.model, surface), i, APCControlSurface.APC_BUTTON_ACTIVATOR);
+            this.addButton (ButtonID.get (ButtonID.ROW4_1, i), "Arm " + (i + 1), new RecArmCommand<> (i, this.model, surface), i, APCControlSurface.APC_BUTTON_RECORD_ARM);
+            this.addButton (ButtonID.get (ButtonID.ROW5_1, i), "X-fade " + (i + 1), new CrossfadeModeCommand<> (i, this.model, surface), i, APCControlSurface.APC_BUTTON_A_B);
+            this.addButton (ButtonID.get (ButtonID.ROW6_1, i), "Stop " + (i + 1), new StopClipCommand<> (i, this.model, surface), i, APCControlSurface.APC_BUTTON_CLIP_STOP);
         }
 
-        // viewManager.registerTriggerCommand (TriggerCommandID.DEVICE_LEFT, new
+        // this.addButton (ButtonID.DEVICE_LEFT, new
         // DeviceLayerLeftCommand<> (this.model, surface));
-        // viewManager.registerTriggerCommand (TriggerCommandID.DEVICE_RIGHT, new
+        // this.addButton (ButtonID.DEVICE_RIGHT, new
         // DeviceLayerRightCommand<> (this.model, surface));
-        // viewManager.registerTriggerCommand (TriggerCommandID.CLIP, new SessionRecordCommand
+        // this.addButton (ButtonID.CLIP, new SessionRecordCommand
         // (this.model, surface));
-        // viewManager.registerTriggerCommand (TriggerCommandID.METRONOME, new MetronomeCommand<>
+        // this.addButton (ButtonID.METRONOME, new MetronomeCommand<>
         // (this.model, surface));
-        // viewManager.registerTriggerCommand (TriggerCommandID.NUDGE_MINUS, new RedoCommand<>
+        // this.addButton (ButtonID.NUDGE_MINUS, new RedoCommand<>
         // (this.model, surface));
-        // viewManager.registerTriggerCommand (TriggerCommandID.NUDGE_PLUS, new UndoCommand<>
+        // this.addButton (ButtonID.NUDGE_PLUS, new UndoCommand<>
         // (this.model, surface));
-        // viewManager.registerTriggerCommand (TriggerCommandID.LAYOUT, new PanelLayoutCommand<>
+        // this.addButton (ButtonID.LAYOUT, new PanelLayoutCommand<>
         // (this.model, surface));
-        // viewManager.registerTriggerCommand (TriggerCommandID.DEVICE_ON_OFF, new
+        // this.addButton (ButtonID.DEVICE_ON_OFF, new
         // DeviceOnOffCommand<> (this.model, surface));
-        // viewManager.registerTriggerCommand (TriggerCommandID.TOGGLE_DEVICES_PANE, new
+        // this.addButton (ButtonID.TOGGLE_DEVICES_PANE, new
         // PaneCommand<> (Panels.DEVICE, this.model, surface));
         // if (this.isMkII)
         // {
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_SESSION,
-        // TriggerCommandID.CLIP);
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_SEND_C,
-        // TriggerCommandID.METRONOME);
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_NUDGE_MINUS,
-        // TriggerCommandID.NUDGE_MINUS);
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_NUDGE_PLUS,
-        // TriggerCommandID.NUDGE_PLUS);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_SESSION,
+        // ButtonID.CLIP);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_SEND_C,
+        // ButtonID.METRONOME);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_NUDGE_MINUS,
+        // ButtonID.NUDGE_MINUS);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_NUDGE_PLUS,
+        // ButtonID.NUDGE_PLUS);
         // // Detail View
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_METRONOME,
-        // TriggerCommandID.LAYOUT);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_METRONOME,
+        // ButtonID.LAYOUT);
         // // Device on/off
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_DETAIL_VIEW,
-        // TriggerCommandID.DEVICE_ON_OFF);
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_CLIP_TRACK,
-        // TriggerCommandID.DEVICE_LEFT);
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_DEVICE_ON_OFF,
-        // TriggerCommandID.DEVICE_RIGHT);
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_MIDI_OVERDUB,
-        // TriggerCommandID.TOGGLE_DEVICES_PANE);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_DETAIL_VIEW,
+        // ButtonID.DEVICE_ON_OFF);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_CLIP_TRACK,
+        // ButtonID.DEVICE_LEFT);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_DEVICE_ON_OFF,
+        // ButtonID.DEVICE_RIGHT);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_MIDI_OVERDUB,
+        // ButtonID.TOGGLE_DEVICES_PANE);
         // }
         // else
         // {
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_MIDI_OVERDUB,
-        // TriggerCommandID.CLIP);
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_METRONOME,
-        // TriggerCommandID.METRONOME);
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_NUDGE_PLUS,
-        // TriggerCommandID.NUDGE_MINUS);
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_NUDGE_MINUS,
-        // TriggerCommandID.NUDGE_PLUS);
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_DETAIL_VIEW,
-        // TriggerCommandID.LAYOUT);
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_DEVICE_ON_OFF,
-        // TriggerCommandID.DEVICE_ON_OFF);
-        // surface.assignTriggerCommand (APCControlSurface.APC_BUTTON_CLIP_TRACK,
-        // TriggerCommandID.TOGGLE_DEVICES_PANE);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_MIDI_OVERDUB,
+        // ButtonID.CLIP);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_METRONOME,
+        // ButtonID.METRONOME);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_NUDGE_PLUS,
+        // ButtonID.NUDGE_MINUS);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_NUDGE_MINUS,
+        // ButtonID.NUDGE_PLUS);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_DETAIL_VIEW,
+        // ButtonID.LAYOUT);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_DEVICE_ON_OFF,
+        // ButtonID.DEVICE_ON_OFF);
+        // surface.assignButton (APCControlSurface.APC_BUTTON_CLIP_TRACK,
+        // ButtonID.TOGGLE_DEVICES_PANE);
         //
         // this.setupButton (ButtonID.STOP, "Stop", new StopCommand<> (this.model, surface),
         // APCControlSurface.APC_BUTTON_STOP);
@@ -334,6 +310,157 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
 
     /** {@inheritDoc} */
     @Override
+    protected void layoutControls ()
+    {
+        final APCControlSurface surface = this.getSurface ();
+
+        surface.getButton (ButtonID.PAD1).setBounds (13.0, 194.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD2).setBounds (74.25, 194.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD3).setBounds (135.25, 194.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD4).setBounds (196.5, 194.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD5).setBounds (257.75, 194.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD6).setBounds (318.75, 194.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD7).setBounds (380.0, 194.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD8).setBounds (441.0, 194.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD9).setBounds (12.0, 165.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD10).setBounds (73.25, 165.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD11).setBounds (134.5, 165.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD12).setBounds (196.0, 165.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD13).setBounds (257.25, 165.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD14).setBounds (318.5, 165.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD15).setBounds (379.75, 165.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD16).setBounds (441.0, 165.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD17).setBounds (11.75, 135.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD18).setBounds (73.25, 135.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD19).setBounds (135.0, 135.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD20).setBounds (196.5, 135.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD21).setBounds (258.0, 135.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD22).setBounds (319.5, 135.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD23).setBounds (381.25, 135.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD24).setBounds (441.0, 137.5, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD25).setBounds (12.5, 108.75, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD26).setBounds (73.75, 108.75, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD27).setBounds (135.25, 108.75, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD28).setBounds (196.5, 108.75, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD29).setBounds (257.75, 108.75, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD30).setBounds (319.25, 108.75, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD31).setBounds (380.5, 108.75, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD32).setBounds (441.0, 108.75, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD33).setBounds (12.75, 78.0, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD34).setBounds (74.25, 78.0, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD35).setBounds (135.5, 78.0, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD36).setBounds (196.75, 78.0, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD37).setBounds (256.5, 78.0, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD38).setBounds (318.0, 78.0, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD39).setBounds (379.5, 78.0, 52.25, 18.5);
+        surface.getButton (ButtonID.PAD40).setBounds (441.0, 78.0, 52.25, 18.5);
+        surface.getButton (ButtonID.SHIFT).setBounds (688.25, 360.5, 33.25, 15.25);
+        surface.getButton (ButtonID.PLAY).setBounds (626.75, 57.0, 23.5, 20.0);
+        surface.getButton (ButtonID.RECORD).setBounds (688.25, 57.0, 23.5, 20.0);
+        surface.getButton (ButtonID.TAP_TEMPO).setBounds (688.25, 99.0, 33.25, 15.25);
+        surface.getButton (ButtonID.QUANTIZE).setBounds (627.0, 327.25, 33.25, 15.25);
+        surface.getButton (ButtonID.PAN_SEND).setBounds (562.25, 64.0, 33.25, 15.25);
+        surface.getButton (ButtonID.MASTERTRACK).setBounds (502.0, 263.0, 36.0, 15.75);
+        surface.getButton (ButtonID.STOP_ALL_CLIPS).setBounds (502.25, 224.25, 33.25, 25.0);
+        surface.getButton (ButtonID.SEND1).setBounds (562.25, 96.0, 33.25, 15.25);
+        surface.getButton (ButtonID.SEND2).setBounds (562.25, 132.0, 33.25, 15.25);
+        surface.getButton (ButtonID.BROWSE).setBounds (746.5, 360.5, 33.25, 15.25);
+        surface.getButton (ButtonID.BANK_LEFT).setBounds (562.25, 289.75, 33.25, 15.25);
+        surface.getButton (ButtonID.BANK_RIGHT).setBounds (627.0, 289.75, 33.25, 15.25);
+        surface.getButton (ButtonID.ARROW_DOWN).setBounds (581.25, 361.75, 33.25, 25.0);
+        surface.getButton (ButtonID.ARROW_UP).setBounds (581.5, 386.25, 33.25, 25.0);
+        surface.getButton (ButtonID.ARROW_LEFT).setBounds (562.5, 361.75, 17.0, 49.25);
+        surface.getButton (ButtonID.ARROW_RIGHT).setBounds (616.0, 361.75, 17.0, 49.25);
+        surface.getButton (ButtonID.SCENE1).setBounds (502.75, 78.0, 34.75, 18.5);
+        surface.getButton (ButtonID.SCENE2).setBounds (504.5, 108.75, 34.75, 18.5);
+        surface.getButton (ButtonID.SCENE3).setBounds (502.5, 137.5, 34.75, 18.5);
+        surface.getButton (ButtonID.SCENE4).setBounds (501.75, 165.5, 34.75, 18.5);
+        surface.getButton (ButtonID.SCENE5).setBounds (500.75, 194.5, 34.75, 18.5);
+
+        surface.getButton (ButtonID.ROW1_1).setBounds (12.5, 262.5, 50.5, 15.75);
+        surface.getButton (ButtonID.ROW1_2).setBounds (74.0, 262.5, 50.5, 15.75);
+        surface.getButton (ButtonID.ROW1_3).setBounds (135.25, 262.5, 50.5, 15.75);
+        surface.getButton (ButtonID.ROW1_4).setBounds (196.75, 262.5, 50.5, 15.75);
+        surface.getButton (ButtonID.ROW1_5).setBounds (258.25, 262.5, 50.5, 15.75);
+        surface.getButton (ButtonID.ROW1_6).setBounds (319.5, 262.5, 50.5, 15.75);
+        surface.getButton (ButtonID.ROW1_7).setBounds (381.0, 262.5, 50.5, 15.75);
+        surface.getButton (ButtonID.ROW1_8).setBounds (442.5, 262.5, 50.5, 15.75);
+        surface.getButton (ButtonID.ROW2_1).setBounds (14.0, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW2_2).setBounds (75.25, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW2_3).setBounds (136.5, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW2_4).setBounds (197.5, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW2_5).setBounds (258.75, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW2_6).setBounds (320.0, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW2_7).setBounds (381.25, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW2_8).setBounds (442.5, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW3_1).setBounds (14.25, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW3_2).setBounds (75.5, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW3_3).setBounds (136.5, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW3_4).setBounds (197.75, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW3_5).setBounds (259.0, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW3_6).setBounds (320.0, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW3_7).setBounds (381.25, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW3_8).setBounds (442.5, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW4_1).setBounds (44.5, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW4_2).setBounds (105.75, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW4_3).setBounds (167.0, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW4_4).setBounds (228.25, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW4_5).setBounds (289.5, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW4_6).setBounds (350.75, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW4_7).setBounds (411.75, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW4_8).setBounds (473.0, 317.75, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW5_1).setBounds (44.75, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW5_2).setBounds (106.0, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW5_3).setBounds (167.25, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW5_4).setBounds (228.25, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW5_5).setBounds (289.5, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW6_5).setBounds (350.75, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW5_7).setBounds (411.75, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW5_8).setBounds (473.0, 291.5, 19.5, 18.0);
+        surface.getButton (ButtonID.ROW6_1).setBounds (21.25, 227.25, 31.5, 18.75);
+        surface.getButton (ButtonID.ROW6_2).setBounds (82.75, 227.25, 31.5, 18.75);
+        surface.getButton (ButtonID.ROW6_3).setBounds (144.25, 227.25, 31.5, 18.75);
+        surface.getButton (ButtonID.ROW6_4).setBounds (205.75, 227.25, 31.5, 18.75);
+        surface.getButton (ButtonID.ROW5_6).setBounds (267.0, 227.25, 31.5, 18.75);
+        surface.getButton (ButtonID.ROW6_6).setBounds (328.5, 227.25, 31.5, 18.75);
+        surface.getButton (ButtonID.ROW6_7).setBounds (390.0, 227.25, 31.5, 18.75);
+        surface.getButton (ButtonID.ROW6_8).setBounds (451.5, 227.25, 31.5, 18.75);
+
+        surface.getContinuous (ContinuousID.MASTER_KNOB).setBounds (500.25, 348.5, 40.5, 115.0);
+        surface.getContinuous (ContinuousID.PLAY_POSITION).setBounds (497.75, 293.75, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.CROSSFADER).setBounds (651.25, 419.5, 104.0, 50.0);
+        surface.getContinuous (ContinuousID.FADER1).setBounds (19.75, 348.5, 40.5, 115.0);
+        surface.getContinuous (ContinuousID.KNOB1).setBounds (16.75, 19.0, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.DEVICE_KNOB1).setBounds (560.25, 173.75, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.FADER2).setBounds (80.75, 348.5, 40.5, 115.0);
+        surface.getContinuous (ContinuousID.KNOB2).setBounds (78.5, 19.0, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.DEVICE_KNOB2).setBounds (620.75, 173.75, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.FADER3).setBounds (141.5, 348.5, 40.5, 115.0);
+        surface.getContinuous (ContinuousID.KNOB3).setBounds (140.25, 19.0, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.DEVICE_KNOB3).setBounds (682.5, 173.75, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.FADER4).setBounds (202.5, 348.5, 40.5, 115.0);
+        surface.getContinuous (ContinuousID.KNOB4).setBounds (202.0, 19.0, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.DEVICE_KNOB4).setBounds (744.25, 173.75, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.FADER5).setBounds (263.5, 348.5, 40.5, 115.0);
+        surface.getContinuous (ContinuousID.KNOB5).setBounds (263.5, 19.0, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.DEVICE_KNOB5).setBounds (560.25, 235.75, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.FADER6).setBounds (324.25, 348.5, 40.5, 115.0);
+        surface.getContinuous (ContinuousID.KNOB6).setBounds (325.25, 19.0, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.DEVICE_KNOB6).setBounds (620.75, 235.75, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.FADER7).setBounds (385.25, 348.5, 40.5, 115.0);
+        surface.getContinuous (ContinuousID.KNOB7).setBounds (387.0, 19.0, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.DEVICE_KNOB7).setBounds (682.5, 235.75, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.FADER8).setBounds (446.25, 348.5, 40.5, 115.0);
+        surface.getContinuous (ContinuousID.KNOB8).setBounds (448.75, 19.0, 40.25, 37.75);
+        surface.getContinuous (ContinuousID.DEVICE_KNOB8).setBounds (744.25, 235.75, 40.25, 37.75);
+
+        if (this.isMkII)
+            surface.getContinuous (ContinuousID.TEMPO).setBounds (743.25, 106.75, 40.25, 37.75);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void startup ()
     {
         final APCControlSurface surface = this.getSurface ();
@@ -350,8 +477,8 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
     // final View activeView = viewManager.getActiveView ();
     // if (activeView != null)
     // {
-    // TODO((CursorCommand<?, ?>) activeView.getTriggerCommand
-    // (TriggerCommandID.ARROW_DOWN)).updateArrows ();
+    // TODO((CursorCommand<?, ?>) activeView.getButton
+    // (ButtonID.ARROW_DOWN)).updateArrows ();
     // for (int i = 0; i < this.model.getSceneBank ().getPageSize (); i++)
     // ((SceneView) activeView).updateSceneButton (i);
     // }
@@ -476,7 +603,7 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
         if ("AB".equals (crossfadeMode))
             return ColorManager.BUTTON_STATE_OFF;
 
-        return "A".equals (crossfadeMode) ? ColorManager.BUTTON_STATE_ON : APCColors.BUTTON_STATE_BLINK;
+        return "A".equals (crossfadeMode) ? ColorManager.BUTTON_STATE_ON : APCColorManager.BUTTON_STATE_BLINK;
     }
 
 

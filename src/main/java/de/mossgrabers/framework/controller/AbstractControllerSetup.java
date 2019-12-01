@@ -515,7 +515,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
         button.bind (command);
         if (midiControl < 0)
             return;
-        button.bind (surface.getMidiInput (), this.getTriggerBindType (buttonID), midiControl);
+        button.bind (surface.getMidiInput (), this.getTriggerBindType (buttonID), midiChannel, midiControl);
         final IntSupplier intSupplier = () -> button.isPressed () ? 1 : 0;
         final IntSupplier supp = supplier == null ? intSupplier : supplier;
         this.addLight (surface, null, buttonID, button, midiChannel, midiControl, supp, colorIds);

@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.apcmini;
 
 import de.mossgrabers.controller.apcmini.command.trigger.TrackSelectCommand;
-import de.mossgrabers.controller.apcmini.controller.APCminiColors;
+import de.mossgrabers.controller.apcmini.controller.APCminiColorManager;
 import de.mossgrabers.controller.apcmini.controller.APCminiControlSurface;
 import de.mossgrabers.controller.apcmini.controller.APCminiScales;
 import de.mossgrabers.controller.apcmini.view.APCminiView;
@@ -27,7 +27,6 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
-import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IHost;
@@ -113,8 +112,7 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
     {
         super (factory, host, globalSettings, documentSettings);
 
-        this.colorManager = new ColorManager ();
-        APCminiColors.addColors (this.colorManager);
+        this.colorManager = new APCminiColorManager ();
         this.valueChanger = new DefaultValueChanger (128, 1, 0.5);
         this.configuration = new APCminiConfiguration (host, this.valueChanger);
     }
@@ -229,7 +227,7 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
                 final View view = viewManager.getActiveView ();
                 if (view instanceof SceneView)
                     return view.getButtonColor (ButtonID.get (ButtonID.SCENE1, index));
-                return APCminiColors.APC_COLOR_BLACK;
+                return APCminiColorManager.APC_COLOR_BLACK;
             });
 
             this.addButton (ButtonID.get (ButtonID.ROW_SELECT_1, i), ROW_NAMES[i], new TrackSelectCommand (i, this.model, surface), APCminiControlSurface.APC_BUTTON_TRACK_BUTTON1 + i, () -> {
@@ -238,9 +236,9 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
                 {
                     final int trackButtonColor = ((APCminiView) view).getTrackButtonColor (index);
                     // Track buttons are only red!
-                    return trackButtonColor > 0 ? APCminiColors.APC_COLOR_RED : 0;
+                    return trackButtonColor > 0 ? APCminiColorManager.APC_COLOR_RED : 0;
                 }
-                return APCminiColors.APC_COLOR_BLACK;
+                return APCminiColorManager.APC_COLOR_BLACK;
             });
         }
     }

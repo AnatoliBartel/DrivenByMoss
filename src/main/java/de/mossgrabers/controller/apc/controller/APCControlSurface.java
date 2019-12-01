@@ -156,8 +156,7 @@ public class APCControlSurface extends AbstractControlSurface<APCConfiguration>
      */
     public APCControlSurface (final IHost host, final ColorManager colorManager, final APCConfiguration configuration, final IMidiOutput output, final IMidiInput input, final boolean isMkII)
     {
-        // TODO size
-        super (host, configuration, colorManager, output, input, new APCPadGrid (colorManager, output, isMkII), 100, 80);
+        super (host, configuration, colorManager, output, input, new APCPadGrid (colorManager, output, isMkII), 800, 480);
 
         this.isMkII = isMkII;
 

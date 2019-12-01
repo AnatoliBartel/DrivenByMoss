@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.apc.view;
 
 import de.mossgrabers.controller.apc.APCConfiguration;
-import de.mossgrabers.controller.apc.controller.APCColors;
+import de.mossgrabers.controller.apc.controller.APCColorManager;
 import de.mossgrabers.controller.apc.controller.APCControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.IModel;
@@ -33,24 +33,24 @@ public class SessionView extends AbstractSessionView<APCControlSurface, APCConfi
 
         if (surface.isMkII ())
         {
-            final SessionColor isRecording = new SessionColor (APCColors.APC_MKII_COLOR_RED_HI, APCColors.APC_MKII_COLOR_RED_HI, false);
-            final SessionColor isRecordingQueued = new SessionColor (APCColors.APC_MKII_COLOR_RED_HI, APCColors.APC_MKII_COLOR_RED_HI, true);
-            final SessionColor isPlaying = new SessionColor (APCColors.APC_MKII_COLOR_GREEN_HI, APCColors.APC_MKII_COLOR_GREEN_HI, false);
-            final SessionColor isPlayingQueued = new SessionColor (APCColors.APC_MKII_COLOR_GREEN_HI, APCColors.APC_MKII_COLOR_GREEN_HI, true);
-            final SessionColor hasContent = new SessionColor (APCColors.APC_MKII_COLOR_AMBER, -1, false);
-            final SessionColor noContent = new SessionColor (APCColors.APC_MKII_COLOR_BLACK, -1, false);
-            final SessionColor recArmed = new SessionColor (APCColors.APC_MKII_COLOR_RED_LO, -1, false);
+            final SessionColor isRecording = new SessionColor (APCColorManager.APC_MKII_COLOR_RED_HI, APCColorManager.APC_MKII_COLOR_RED_HI, false);
+            final SessionColor isRecordingQueued = new SessionColor (APCColorManager.APC_MKII_COLOR_RED_HI, APCColorManager.APC_MKII_COLOR_RED_HI, true);
+            final SessionColor isPlaying = new SessionColor (APCColorManager.APC_MKII_COLOR_GREEN_HI, APCColorManager.APC_MKII_COLOR_GREEN_HI, false);
+            final SessionColor isPlayingQueued = new SessionColor (APCColorManager.APC_MKII_COLOR_GREEN_HI, APCColorManager.APC_MKII_COLOR_GREEN_HI, true);
+            final SessionColor hasContent = new SessionColor (APCColorManager.APC_MKII_COLOR_AMBER, -1, false);
+            final SessionColor noContent = new SessionColor (APCColorManager.APC_MKII_COLOR_BLACK, -1, false);
+            final SessionColor recArmed = new SessionColor (APCColorManager.APC_MKII_COLOR_RED_LO, -1, false);
             this.setColors (isRecording, isRecordingQueued, isPlaying, isPlayingQueued, hasContent, noContent, recArmed);
         }
         else
         {
-            final SessionColor isRecording = new SessionColor (APCColors.APC_COLOR_RED, -1, false);
-            final SessionColor isRecordingQueued = new SessionColor (APCColors.APC_COLOR_RED, APCColors.APC_COLOR_RED_BLINK, false);
-            final SessionColor isPlaying = new SessionColor (APCColors.APC_COLOR_GREEN, -1, false);
-            final SessionColor isPlayingQueued = new SessionColor (APCColors.APC_COLOR_GREEN, APCColors.APC_COLOR_GREEN_BLINK, false);
-            final SessionColor hasContent = new SessionColor (APCColors.APC_COLOR_YELLOW, -1, false);
-            final SessionColor noContent = new SessionColor (APCColors.APC_COLOR_BLACK, -1, false);
-            final SessionColor recArmed = new SessionColor (APCColors.APC_COLOR_BLACK, -1, false);
+            final SessionColor isRecording = new SessionColor (APCColorManager.APC_COLOR_RED, -1, false);
+            final SessionColor isRecordingQueued = new SessionColor (APCColorManager.APC_COLOR_RED, APCColorManager.APC_COLOR_RED_BLINK, false);
+            final SessionColor isPlaying = new SessionColor (APCColorManager.APC_COLOR_GREEN, -1, false);
+            final SessionColor isPlayingQueued = new SessionColor (APCColorManager.APC_COLOR_GREEN, APCColorManager.APC_COLOR_GREEN_BLINK, false);
+            final SessionColor hasContent = new SessionColor (APCColorManager.APC_COLOR_YELLOW, -1, false);
+            final SessionColor noContent = new SessionColor (APCColorManager.APC_COLOR_BLACK, -1, false);
+            final SessionColor recArmed = new SessionColor (APCColorManager.APC_COLOR_BLACK, -1, false);
             this.setColors (isRecording, isRecordingQueued, isPlaying, isPlayingQueued, hasContent, noContent, recArmed);
         }
     }
@@ -77,7 +77,7 @@ public class SessionView extends AbstractSessionView<APCControlSurface, APCConfi
     @Override
     public int getButtonColor (final ButtonID buttonID)
     {
-        return this.surface.isMkII () ? APCColors.APC_MKII_COLOR_GREEN : APCColors.APC_COLOR_GREEN;
+        return this.surface.isMkII () ? APCColorManager.APC_MKII_COLOR_GREEN : APCColorManager.APC_COLOR_GREEN;
     }
 
 

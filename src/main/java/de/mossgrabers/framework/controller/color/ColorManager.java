@@ -78,6 +78,8 @@ public class ColorManager
      */
     public void registerColor (final int colorIndex, final ColorEx color)
     {
+        if (colorIndex < 0 || colorIndex > 127)
+            throw new ColorIndexException ("Color index must be in the range of 0..127!");
         this.colorByIndex.put (Integer.valueOf (colorIndex), color);
     }
 

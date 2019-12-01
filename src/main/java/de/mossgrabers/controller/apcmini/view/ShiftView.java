@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.apcmini.view;
 
 import de.mossgrabers.controller.apcmini.APCminiConfiguration;
-import de.mossgrabers.controller.apcmini.controller.APCminiColors;
+import de.mossgrabers.controller.apcmini.controller.APCminiColorManager;
 import de.mossgrabers.controller.apcmini.controller.APCminiControlSurface;
 import de.mossgrabers.framework.command.trigger.clip.NewCommand;
 import de.mossgrabers.framework.command.trigger.transport.PlayCommand;
@@ -84,51 +84,51 @@ public class ShiftView extends AbstractView<APCminiControlSurface, APCminiConfig
         // 0'C', 1'G', 2'D', 3'A', 4'E', 5'B', 6'F', 7'Bb', 8'Eb', 9'Ab', 10'Db', 11'Gb'
         final PadGrid padGrid = this.surface.getPadGrid ();
         for (int i = 7; i < 64; i++)
-            padGrid.light (36 + i, APCminiColors.APC_COLOR_BLACK);
-        padGrid.light (36 + 0, scaleOffset == 0 ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 1, scaleOffset == 2 ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 2, scaleOffset == 4 ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 3, scaleOffset == 6 ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 4, scaleOffset == 1 ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 5, scaleOffset == 3 ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 6, scaleOffset == 5 ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 9, scaleOffset == 10 ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_RED);
-        padGrid.light (36 + 10, scaleOffset == 8 ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_RED);
-        padGrid.light (36 + 12, scaleOffset == 11 ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_RED);
-        padGrid.light (36 + 13, scaleOffset == 9 ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_RED);
-        padGrid.light (36 + 14, scaleOffset == 7 ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_RED);
+            padGrid.light (36 + i, APCminiColorManager.APC_COLOR_BLACK);
+        padGrid.light (36 + 0, scaleOffset == 0 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 1, scaleOffset == 2 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 2, scaleOffset == 4 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 3, scaleOffset == 6 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 4, scaleOffset == 1 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 5, scaleOffset == 3 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 6, scaleOffset == 5 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 9, scaleOffset == 10 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_RED);
+        padGrid.light (36 + 10, scaleOffset == 8 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_RED);
+        padGrid.light (36 + 12, scaleOffset == 11 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_RED);
+        padGrid.light (36 + 13, scaleOffset == 9 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_RED);
+        padGrid.light (36 + 14, scaleOffset == 7 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_RED);
 
         // Device Parameters up/down
-        padGrid.light (36 + 24, APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 25, APCminiColors.APC_COLOR_YELLOW);
+        padGrid.light (36 + 24, APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 25, APCminiColorManager.APC_COLOR_YELLOW);
         // Device up/down
-        padGrid.light (36 + 32, APCminiColors.APC_COLOR_GREEN);
-        padGrid.light (36 + 33, APCminiColors.APC_COLOR_GREEN);
+        padGrid.light (36 + 32, APCminiColorManager.APC_COLOR_GREEN);
+        padGrid.light (36 + 33, APCminiColorManager.APC_COLOR_GREEN);
 
         // Change the scale
-        padGrid.light (36 + 35, APCminiColors.APC_COLOR_RED);
-        padGrid.light (36 + 36, APCminiColors.APC_COLOR_RED);
-        padGrid.light (36 + 27, APCminiColors.APC_COLOR_GREEN);
+        padGrid.light (36 + 35, APCminiColorManager.APC_COLOR_RED);
+        padGrid.light (36 + 36, APCminiColorManager.APC_COLOR_RED);
+        padGrid.light (36 + 27, APCminiColorManager.APC_COLOR_GREEN);
 
         // Draw the view selection: Session, Note, Drum, Sequencer
         final Views previousViewId = this.surface.getViewManager ().getPreviousViewId ();
-        padGrid.light (36 + 56, Views.SESSION == previousViewId ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 57, Views.PLAY == previousViewId ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 58, Views.DRUM == previousViewId ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 59, Views.SEQUENCER == previousViewId ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 60, Views.RAINDROPS == previousViewId ? APCminiColors.APC_COLOR_GREEN : APCminiColors.APC_COLOR_YELLOW);
+        padGrid.light (36 + 56, Views.SESSION == previousViewId ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 57, Views.PLAY == previousViewId ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 58, Views.DRUM == previousViewId ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 59, Views.SEQUENCER == previousViewId ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 60, Views.RAINDROPS == previousViewId ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);
 
         // Draw transport
         final ITransport transport = this.model.getTransport ();
-        padGrid.light (36 + 63, transport.isPlaying () ? APCminiColors.APC_COLOR_GREEN_BLINK : APCminiColors.APC_COLOR_GREEN);
-        padGrid.light (36 + 55, transport.isRecording () ? APCminiColors.APC_COLOR_RED_BLINK : APCminiColors.APC_COLOR_RED);
-        padGrid.light (36 + 47, APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 39, APCminiColors.APC_COLOR_YELLOW);
+        padGrid.light (36 + 63, transport.isPlaying () ? APCminiColorManager.APC_COLOR_GREEN_BLINK : APCminiColorManager.APC_COLOR_GREEN);
+        padGrid.light (36 + 55, transport.isRecording () ? APCminiColorManager.APC_COLOR_RED_BLINK : APCminiColorManager.APC_COLOR_RED);
+        padGrid.light (36 + 47, APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 39, APCminiColorManager.APC_COLOR_YELLOW);
 
-        padGrid.light (36 + 62, APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 54, transport.isLauncherOverdub () ? APCminiColors.APC_COLOR_RED_BLINK : APCminiColors.APC_COLOR_RED);
-        padGrid.light (36 + 46, APCminiColors.APC_COLOR_YELLOW);
-        padGrid.light (36 + 38, APCminiColors.APC_COLOR_YELLOW);
+        padGrid.light (36 + 62, APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 54, transport.isLauncherOverdub () ? APCminiColorManager.APC_COLOR_RED_BLINK : APCminiColorManager.APC_COLOR_RED);
+        padGrid.light (36 + 46, APCminiColorManager.APC_COLOR_YELLOW);
+        padGrid.light (36 + 38, APCminiColorManager.APC_COLOR_YELLOW);
     }
 
 
@@ -398,7 +398,7 @@ public class ShiftView extends AbstractView<APCminiControlSurface, APCminiConfig
                 return Modes.DEVICE_PARAMS.equals (mode) ? APCminiControlSurface.APC_BUTTON_STATE_ON : APCminiControlSurface.APC_BUTTON_STATE_OFF;
         }
 
-        return APCminiColors.APC_COLOR_BLACK;
+        return APCminiColorManager.APC_COLOR_BLACK;
     }
 
 

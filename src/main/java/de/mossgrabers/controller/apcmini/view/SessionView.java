@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.apcmini.view;
 
 import de.mossgrabers.controller.apcmini.APCminiConfiguration;
-import de.mossgrabers.controller.apcmini.controller.APCminiColors;
+import de.mossgrabers.controller.apcmini.controller.APCminiColorManager;
 import de.mossgrabers.controller.apcmini.controller.APCminiControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -69,18 +69,18 @@ public class SessionView extends AbstractSessionView<APCminiControlSurface, APCm
     @Override
     public void drawPad (final ISlot slot, final int x, final int y, final boolean isArmed)
     {
-        int color = APCminiColors.APC_COLOR_BLACK;
+        int color = APCminiColorManager.APC_COLOR_BLACK;
 
         if (slot.isRecording ())
-            color = APCminiColors.APC_COLOR_RED;
+            color = APCminiColorManager.APC_COLOR_RED;
         else if (slot.isRecordingQueued ())
-            color = APCminiColors.APC_COLOR_RED_BLINK;
+            color = APCminiColorManager.APC_COLOR_RED_BLINK;
         else if (slot.isPlaying ())
-            color = APCminiColors.APC_COLOR_GREEN;
+            color = APCminiColorManager.APC_COLOR_GREEN;
         else if (slot.isPlayingQueued ())
-            color = APCminiColors.APC_COLOR_GREEN_BLINK;
+            color = APCminiColorManager.APC_COLOR_GREEN_BLINK;
         else if (slot.hasContent ())
-            color = APCminiColors.APC_COLOR_YELLOW;
+            color = APCminiColorManager.APC_COLOR_YELLOW;
 
         this.surface.getPadGrid ().light (36 + (7 - y) * 8 + x, color);
     }
