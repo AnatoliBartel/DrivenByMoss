@@ -234,7 +234,7 @@ public abstract class AbstractTextDisplay implements ITextDisplay
         {
             this.updateLine (0, this.notificationMessage);
             for (int row = 1; row < this.noOfLines; row++)
-                this.writeLine (row, this.emptyLine);
+                this.updateLine (row, this.emptyLine);
             return;
         }
 

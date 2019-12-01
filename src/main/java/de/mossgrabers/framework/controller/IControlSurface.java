@@ -37,6 +37,14 @@ import java.util.function.IntSupplier;
 public interface IControlSurface<C extends Configuration>
 {
     /**
+     * Get the surface ID.
+     *
+     * @return The surface ID
+     */
+    int getSurfaceID ();
+
+
+    /**
      * Get the view manager.
      *
      * @return The view manager

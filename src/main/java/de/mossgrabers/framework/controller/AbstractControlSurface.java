@@ -155,6 +155,14 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
+    public int getSurfaceID ()
+    {
+        return this.surfaceID;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public ViewManager getViewManager ()
     {
         return this.viewManager;

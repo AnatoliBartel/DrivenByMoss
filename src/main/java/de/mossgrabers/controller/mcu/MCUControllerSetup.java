@@ -465,7 +465,7 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
     protected void registerContinuousCommands ()
     {
         MCUControlSurface surface = this.getSurface ();
-        final IMidiInput input = surface.getMidiInput ();
+        IMidiInput input = surface.getMidiInput ();
 
         this.addRelativeKnob (ContinuousID.PLAY_POSITION, "Jog Wheel", new PlayPositionTempoCommand (this.model, surface), MCUControlSurface.MCU_CC_JOG);
 
@@ -475,6 +475,8 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
         for (int index = 0; index < this.numMCUDevices; index++)
         {
             surface = this.getSurface (index);
+            input = surface.getMidiInput ();
+
             for (int i = 0; i < 8; i++)
             {
                 final IHwRelativeKnob knob = this.addRelativeKnob (surface, ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + i, new KnobRowModeCommand<> (i, this.model, surface), MCUControlSurface.MCU_CC_VPOT1 + i);
@@ -560,7 +562,7 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
         surface.getContinuous (ContinuousID.PLAY_POSITION).setBounds (859.5, 806.5, 115.25, 115.75);
         surface.getContinuous (ContinuousID.FADER_MASTER).setBounds (613.5, 501.5, 65.0, 419.0);
 
-        surface.getTextDisplay (2).getHardwareDisplay ().setBounds (635.25, 11.75, 351.5, 44.25);
+        surface.getTextDisplay (2).getHardwareDisplay ().setBounds (699.0, 27.0, 263.25, 44.25);
         surface.getTextDisplay (3).getHardwareDisplay ().setBounds (633.5, 92.5, 49.5, 39.75);
 
         surface.getLight (OutputID.LED1).setBounds (968.5, 92.5, 21.25, 12.75);
@@ -620,8 +622,8 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
             surface.getContinuous (ContinuousID.FADER7).setBounds (459.0, 501.5, 65.0, 419.0);
             surface.getContinuous (ContinuousID.FADER8).setBounds (532.25, 501.5, 65.0, 419.0);
 
-            surface.getTextDisplay (0).getHardwareDisplay ().setBounds (11.75, 11.75, 593.75, 73.25);
-            surface.getTextDisplay (1).getHardwareDisplay ().setBounds (10.75, 413.0, 667.0, 73.25);
+            surface.getTextDisplay (0).getHardwareDisplay ().setBounds (11.75, 11.75, 601.0, 73.25);
+            surface.getTextDisplay (1).getHardwareDisplay ().setBounds (11.5, 419.5, 668.25, 73.25);
         }
     }
 
