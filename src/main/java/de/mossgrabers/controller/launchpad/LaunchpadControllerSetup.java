@@ -6,18 +6,22 @@ package de.mossgrabers.controller.launchpad;
 
 import de.mossgrabers.controller.launchpad.command.continuous.FaderCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.ClickCommand;
+import de.mossgrabers.controller.launchpad.command.trigger.LaunchpadCursorCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.LaunchpadDuplicateCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.MuteCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.PanCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.PlayAndNewCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.RecordArmCommand;
+import de.mossgrabers.controller.launchpad.command.trigger.SelectDeviceViewCommand;
+import de.mossgrabers.controller.launchpad.command.trigger.SelectNoteViewCommand;
+import de.mossgrabers.controller.launchpad.command.trigger.SelectSessionViewCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.SendsCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.ShiftCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.SoloCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.StopClipCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.TrackSelectCommand;
 import de.mossgrabers.controller.launchpad.command.trigger.VolumeCommand;
-import de.mossgrabers.controller.launchpad.controller.LaunchpadColors;
+import de.mossgrabers.controller.launchpad.controller.LaunchpadColorManager;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadScales;
 import de.mossgrabers.controller.launchpad.definition.ILaunchpadControllerDefinition;
@@ -42,10 +46,12 @@ import de.mossgrabers.controller.launchpad.view.SessionView;
 import de.mossgrabers.controller.launchpad.view.ShiftView;
 import de.mossgrabers.controller.launchpad.view.UserView;
 import de.mossgrabers.controller.launchpad.view.VolumeView;
+import de.mossgrabers.framework.command.SceneCommand;
 import de.mossgrabers.framework.command.aftertouch.AftertouchAbstractViewCommand;
 import de.mossgrabers.framework.command.trigger.application.DeleteCommand;
 import de.mossgrabers.framework.command.trigger.application.UndoCommand;
 import de.mossgrabers.framework.command.trigger.clip.QuantizeCommand;
+import de.mossgrabers.framework.command.trigger.mode.ModeCursorCommand.Direction;
 import de.mossgrabers.framework.command.trigger.transport.RecordCommand;
 import de.mossgrabers.framework.command.trigger.view.ViewMultiSelectCommand;
 import de.mossgrabers.framework.configuration.ISettingsUI;
@@ -54,7 +60,6 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
-import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IHost;
@@ -76,6 +81,8 @@ import de.mossgrabers.framework.view.AbstractView;
 import de.mossgrabers.framework.view.View;
 import de.mossgrabers.framework.view.ViewManager;
 import de.mossgrabers.framework.view.Views;
+
+import java.util.Map;
 
 
 /**
@@ -103,8 +110,7 @@ public class LaunchpadControllerSetup extends AbstractControllerSetup<LaunchpadC
         super (factory, host, globalSettings, documentSettings);
 
         this.definition = definition;
-        this.colorManager = new ColorManager ();
-        LaunchpadColors.addColors (this.colorManager);
+        this.colorManager = new LaunchpadColorManager ();
         this.valueChanger = new DefaultValueChanger (128, 1, 0.5);
         this.configuration = new LaunchpadConfiguration (host, this.valueChanger, definition);
     }
@@ -202,38 +208,21 @@ public class LaunchpadControllerSetup extends AbstractControllerSetup<LaunchpadC
     {
         final LaunchpadControlSurface surface = this.getSurface ();
 
-        this.addButton (ButtonID.SHIFT, "Shift", new ShiftCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_SHIFT);
+        final Map<ButtonID, Integer> buttonIDs = this.definition.getButtonIDs ();
+
+        this.addButton (ButtonID.SHIFT, "Shift", new ShiftCommand (this.model, surface), buttonIDs.get (ButtonID.SHIFT).intValue ());
 
         if (this.definition.isPro () && this.host.hasUserParameters ())
             this.addButton (ButtonID.USER, "User", new ViewMultiSelectCommand<> (this.model, surface, true, Views.CONTROL), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER);
 
-        final ViewManager viewManager = surface.getViewManager ();
-        // TODO
-        // viewManager.registerTriggerCommand (TriggerCommandID.PLAY, new PlayCommand<> (this.model,
-        // surface));
-        // viewManager.registerTriggerCommand (TriggerCommandID.NEW, new NewCommand<> (this.model,
-        // surface));
+        this.addButton (ButtonID.UP, "Up", new LaunchpadCursorCommand (Direction.UP, this.model, surface), buttonIDs.get (ButtonID.UP).intValue ());
+        this.addButton (ButtonID.DOWN, "Down", new LaunchpadCursorCommand (Direction.DOWN, this.model, surface), buttonIDs.get (ButtonID.DOWN).intValue ());
+        this.addButton (ButtonID.LEFT, "Left", new LaunchpadCursorCommand (Direction.LEFT, this.model, surface), buttonIDs.get (ButtonID.LEFT).intValue ());
+        this.addButton (ButtonID.RIGHT, "Right", new LaunchpadCursorCommand (Direction.RIGHT, this.model, surface), buttonIDs.get (ButtonID.RIGHT).intValue ());
 
-        // TODO buttons need to be configured per controller model
-        // this.setupButton (ButtonID.ARROW_DOWN,
-        // LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_DOWN, new LaunchpadCursorCommand
-        // (Direction.DOWN, this.model, surface));
-        // this.setupButton (ButtonID.ARROW_UP,
-        // LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_UP, new LaunchpadCursorCommand
-        // (Direction.UP, this.model, surface));
-        // this.setupButton (ButtonID.ARROW_LEFT,
-        // LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_LEFT, new LaunchpadCursorCommand
-        // (Direction.LEFT, this.model, surface));
-        // this.setupButton (ButtonID.ARROW_RIGHT,
-        // LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_RIGHT, new LaunchpadCursorCommand
-        // (Direction.RIGHT, this.model, surface));
-        //
-        // this.setupButton (ButtonID.SELECT_SESSION_VIEW, surface.getTriggerId
-        // (ButtonID.SESSION), new SelectSessionViewCommand (this.model, surface));
-        // this.setupButton (ButtonID.SELECT_PLAY_VIEW, surface.getTriggerId
-        // (ButtonID.NOTE), new SelectNoteViewCommand (this.model, surface));
-        // this.setupButton (ButtonID.DEVICE, surface.getTriggerId (ButtonID.DEVICE),
-        // new SelectDeviceViewCommand (this.model, surface));
+        this.addButton (ButtonID.SESSION, "Session", new SelectSessionViewCommand (this.model, surface), buttonIDs.get (ButtonID.SESSION).intValue ());
+        this.addButton (ButtonID.NOTE, "Note", new SelectNoteViewCommand (this.model, surface), buttonIDs.get (ButtonID.NOTE).intValue ());
+        this.addButton (ButtonID.DEVICE, "Device", new SelectDeviceViewCommand (this.model, surface), buttonIDs.get (ButtonID.DEVICE).intValue ());
 
         // The following buttons are only available on the Pro but the commands are used by all
         // Launchpad models!
@@ -253,53 +242,21 @@ public class LaunchpadControllerSetup extends AbstractControllerSetup<LaunchpadC
         this.addButton (ButtonID.SENDS, "Sends", new SendsCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_SENDS);
         this.addButton (ButtonID.STOP_CLIP, "Stop Clip", new StopClipCommand (this.model, surface), LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_STOP_CLIP);
 
-        // TODO
-        // if (this.definition.sceneButtonsUseCC ())
-        // {
-        // this.setupButton (ButtonID.SCENE1, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE1, new
-        // SceneCommand<> (0, this.model, surface));
-        // this.setupButton (ButtonID.SCENE2, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE2, new
-        // SceneCommand<> (1, this.model, surface));
-        // this.setupButton (ButtonID.SCENE3, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE3, new
-        // SceneCommand<> (2, this.model, surface));
-        // this.setupButton (ButtonID.SCENE4, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE4, new
-        // SceneCommand<> (3, this.model, surface));
-        // this.setupButton (ButtonID.SCENE5, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE5, new
-        // SceneCommand<> (4, this.model, surface));
-        // this.setupButton (ButtonID.SCENE6, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE6, new
-        // SceneCommand<> (5, this.model, surface));
-        // this.setupButton (ButtonID.SCENE7, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7, new
-        // SceneCommand<> (6, this.model, surface));
-        // this.setupButton (ButtonID.SCENE8, LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8, new
-        // SceneCommand<> (7, this.model, surface));
-        // }
-        // else
-        // {
-        // this.addNoteCommand (TriggerCommandID.SCENE1,
-        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE1, new SceneCommand<> (0, this.model,
-        // surface));
-        // this.addNoteCommand (TriggerCommandID.SCENE2,
-        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE2, new SceneCommand<> (1, this.model,
-        // surface));
-        // this.addNoteCommand (TriggerCommandID.SCENE3,
-        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE3, new SceneCommand<> (2, this.model,
-        // surface));
-        // this.addNoteCommand (TriggerCommandID.SCENE4,
-        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE4, new SceneCommand<> (3, this.model,
-        // surface));
-        // this.addNoteCommand (TriggerCommandID.SCENE5,
-        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE5, new SceneCommand<> (4, this.model,
-        // surface));
-        // this.addNoteCommand (TriggerCommandID.SCENE6,
-        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE6, new SceneCommand<> (5, this.model,
-        // surface));
-        // this.addNoteCommand (TriggerCommandID.SCENE7,
-        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7, new SceneCommand<> (6, this.model,
-        // surface));
-        // this.addNoteCommand (TriggerCommandID.SCENE8,
-        // LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8, new SceneCommand<> (7, this.model,
-        // surface));
-        // }
+        for (int i = 0; i < 8; i++)
+        {
+            final ButtonID buttonID = ButtonID.get (ButtonID.SCENE1, i);
+            this.addButton (buttonID, "Scene " + (i + 1), new SceneCommand<> (i, this.model, surface), buttonIDs.get (buttonID).intValue ());
+        }
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    protected BindType getTriggerBindType (final ButtonID buttonID)
+    {
+        if (ButtonID.isSceneButton (buttonID))
+            return this.definition.sceneButtonsUseCC () ? BindType.CC : BindType.NOTE;
+        return super.getTriggerBindType (buttonID);
     }
 
 
@@ -314,7 +271,7 @@ public class LaunchpadControllerSetup extends AbstractControllerSetup<LaunchpadC
     {
         final LaunchpadControlSurface surface = this.getSurface ();
         for (int i = 0; i < 8; i++)
-            this.addFader (ContinuousID.get (ContinuousID.KNOB1, i), "Fader " + (i + 1), new FaderCommand (i, this.model, surface), BindType.CC, LaunchpadControlSurface.LAUNCHPAD_FADER_1 + i);
+            this.addFader (ContinuousID.get (ContinuousID.FADER1, i), "Fader " + (i + 1), new FaderCommand (i, this.model, surface), BindType.CC, LaunchpadControlSurface.LAUNCHPAD_FADER_1 + i);
         final ViewManager viewManager = surface.getViewManager ();
 
         final Views [] views =
@@ -334,17 +291,126 @@ public class LaunchpadControllerSetup extends AbstractControllerSetup<LaunchpadC
 
     /** {@inheritDoc} */
     @Override
+    protected void layoutControls ()
+    {
+        final LaunchpadControlSurface surface = this.getSurface ();
+
+        surface.getButton (ButtonID.PAD1).setBounds (104.75, 632.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD2).setBounds (179.25, 632.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD3).setBounds (253.0, 632.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD4).setBounds (326.5, 632.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD5).setBounds (401.0, 632.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD6).setBounds (473.75, 632.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD7).setBounds (550.0, 632.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD8).setBounds (623.5, 632.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD9).setBounds (104.75, 558.25, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD10).setBounds (179.25, 558.25, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD11).setBounds (253.0, 558.25, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD12).setBounds (326.5, 558.25, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD13).setBounds (401.0, 558.25, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD14).setBounds (473.75, 558.25, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD15).setBounds (550.0, 558.25, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD16).setBounds (623.5, 558.25, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD17).setBounds (104.75, 486.5, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD18).setBounds (179.25, 486.5, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD19).setBounds (253.0, 486.5, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD20).setBounds (326.5, 486.5, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD21).setBounds (401.0, 486.5, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD22).setBounds (473.75, 486.5, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD23).setBounds (550.0, 486.5, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD24).setBounds (623.5, 486.5, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD25).setBounds (104.75, 409.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD26).setBounds (179.25, 409.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD27).setBounds (253.0, 409.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD28).setBounds (326.5, 409.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD29).setBounds (401.0, 409.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD30).setBounds (473.75, 409.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD31).setBounds (550.0, 409.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD32).setBounds (623.5, 409.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD33).setBounds (104.75, 335.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD34).setBounds (179.25, 335.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD35).setBounds (253.0, 335.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD36).setBounds (326.5, 335.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD37).setBounds (401.0, 335.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD38).setBounds (473.75, 335.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD39).setBounds (550.0, 335.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD40).setBounds (623.5, 335.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD41).setBounds (104.75, 262.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD42).setBounds (179.25, 262.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD43).setBounds (253.0, 262.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD44).setBounds (326.5, 262.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD45).setBounds (401.0, 262.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD46).setBounds (473.75, 262.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD47).setBounds (550.0, 262.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD48).setBounds (623.5, 262.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD49).setBounds (104.75, 186.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD50).setBounds (179.25, 186.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD51).setBounds (253.0, 186.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD52).setBounds (326.5, 186.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD53).setBounds (401.0, 186.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD54).setBounds (473.75, 186.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD55).setBounds (550.0, 186.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD56).setBounds (623.5, 186.75, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD57).setBounds (104.75, 115.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD58).setBounds (179.25, 115.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD59).setBounds (253.0, 115.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD60).setBounds (326.5, 115.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD61).setBounds (401.0, 115.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD62).setBounds (473.75, 115.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD63).setBounds (550.0, 115.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAD64).setBounds (623.5, 115.0, 61.0, 60.0);
+        surface.getButton (ButtonID.SHIFT).setBounds (31.75, 115.0, 61.0, 60.0);
+        surface.getButton (ButtonID.USER).setBounds (623.5, 44.5, 61.0, 60.0);
+        surface.getButton (ButtonID.UP).setBounds (104.75, 44.5, 61.0, 60.0);
+        surface.getButton (ButtonID.DOWN).setBounds (179.25, 44.5, 61.0, 60.0);
+        surface.getButton (ButtonID.LEFT).setBounds (253.0, 44.5, 61.0, 60.0);
+        surface.getButton (ButtonID.RIGHT).setBounds (326.5, 44.5, 61.0, 60.0);
+        surface.getButton (ButtonID.SESSION).setBounds (401.0, 44.5, 61.0, 60.0);
+        surface.getButton (ButtonID.NOTE).setBounds (473.75, 44.5, 61.0, 60.0);
+        surface.getButton (ButtonID.DEVICE).setBounds (550.0, 44.5, 61.0, 60.0);
+        surface.getButton (ButtonID.METRONOME).setBounds (31.75, 186.75, 61.0, 60.0);
+        surface.getButton (ButtonID.UNDO).setBounds (31.75, 262.75, 61.0, 60.0);
+        surface.getButton (ButtonID.DELETE).setBounds (31.75, 335.75, 61.0, 60.0);
+        surface.getButton (ButtonID.QUANTIZE).setBounds (31.75, 409.0, 61.0, 60.0);
+        surface.getButton (ButtonID.DUPLICATE).setBounds (31.75, 486.5, 61.0, 60.0);
+        surface.getButton (ButtonID.DOUBLE).setBounds (31.75, 558.25, 61.0, 60.0);
+        surface.getButton (ButtonID.RECORD).setBounds (31.75, 632.0, 61.0, 60.0);
+        surface.getButton (ButtonID.REC_ARM).setBounds (104.0, 704.0, 61.0, 60.0);
+        surface.getButton (ButtonID.TRACK).setBounds (179.25, 704.0, 61.0, 60.0);
+        surface.getButton (ButtonID.MUTE).setBounds (253.0, 704.0, 61.0, 60.0);
+        surface.getButton (ButtonID.SOLO).setBounds (326.5, 704.0, 61.0, 60.0);
+        surface.getButton (ButtonID.VOLUME).setBounds (401.0, 704.0, 61.0, 60.0);
+        surface.getButton (ButtonID.PAN_SEND).setBounds (473.75, 704.0, 61.0, 60.0);
+        surface.getButton (ButtonID.SENDS).setBounds (550.0, 704.0, 61.0, 60.0);
+        surface.getButton (ButtonID.STOP_CLIP).setBounds (623.5, 704.0, 61.0, 60.0);
+        surface.getButton (ButtonID.SCENE1).setBounds (697.75, 115.0, 61.0, 60.0);
+        surface.getButton (ButtonID.SCENE2).setBounds (697.75, 186.75, 61.0, 60.0);
+        surface.getButton (ButtonID.SCENE3).setBounds (697.75, 262.75, 61.0, 60.0);
+        surface.getButton (ButtonID.SCENE4).setBounds (697.75, 335.75, 61.0, 60.0);
+        surface.getButton (ButtonID.SCENE5).setBounds (697.75, 409.0, 61.0, 60.0);
+        surface.getButton (ButtonID.SCENE6).setBounds (697.75, 486.5, 61.0, 60.0);
+        surface.getButton (ButtonID.SCENE7).setBounds (697.75, 632.0, 53.5, 52.5);
+        surface.getButton (ButtonID.SCENE8).setBounds (697.75, 558.25, 53.5, 52.5);
+
+        surface.getContinuous (ContinuousID.FADER1).setBounds (83.5, 765.0, 65.5, 92.5);
+        surface.getContinuous (ContinuousID.FADER2).setBounds (166.0, 765.0, 65.5, 92.5);
+        surface.getContinuous (ContinuousID.FADER3).setBounds (248.25, 765.0, 65.5, 92.5);
+        surface.getContinuous (ContinuousID.FADER4).setBounds (330.75, 765.0, 65.5, 92.5);
+        surface.getContinuous (ContinuousID.FADER5).setBounds (413.25, 765.0, 65.5, 92.5);
+        surface.getContinuous (ContinuousID.FADER6).setBounds (495.5, 765.0, 65.5, 92.5);
+        surface.getContinuous (ContinuousID.FADER7).setBounds (578.0, 765.0, 65.5, 92.5);
+        surface.getContinuous (ContinuousID.FADER8).setBounds (660.5, 765.0, 65.5, 92.5);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void startup ()
     {
         this.getSurface ().getViewManager ().setActiveView (Views.PLAY);
     }
 
     // TODO
-    // /** {@inheritDoc} */
-    // @Override
-    // protected void updateButtons ()
-    // {
-    // final LaunchpadControlSurface surface = this.getSurface ();
     // final ViewManager viewManager = surface.getViewManager ();
     // final View activeView = viewManager.getActiveView ();
     // if (activeView != null)

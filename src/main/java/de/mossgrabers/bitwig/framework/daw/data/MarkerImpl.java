@@ -4,6 +4,7 @@
 
 package de.mossgrabers.bitwig.framework.daw.data;
 
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.daw.data.AbstractItemImpl;
 import de.mossgrabers.framework.daw.data.IMarker;
 import de.mossgrabers.framework.observer.IValueObserver;
@@ -84,15 +85,10 @@ public class MarkerImpl extends AbstractItemImpl implements IMarker
 
     /** {@inheritDoc} */
     @Override
-    public double [] getColor ()
+    public ColorEx getColor ()
     {
         final ColorValue color = this.marker.getColor ();
-        return new double []
-        {
-            color.red (),
-            color.green (),
-            color.blue ()
-        };
+        return new ColorEx (color.red (), color.green (), color.blue ());
     }
 
 

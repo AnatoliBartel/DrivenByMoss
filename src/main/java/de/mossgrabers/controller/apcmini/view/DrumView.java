@@ -101,6 +101,7 @@ public class DrumView extends AbstractDrumView<APCminiControlSurface, APCminiCon
     {
         final boolean isKeyboardEnabled = this.model.canSelectedTrackHoldNotes ();
         final int index = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
-        return isKeyboardEnabled && index == this.selectedResolutionIndex ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
+        final int res = 7 - index;
+        return isKeyboardEnabled && res == this.selectedResolutionIndex ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
     }
 }

@@ -9,6 +9,7 @@ import de.mossgrabers.controller.push.controller.PushColorManager;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.controller.push.mode.track.AbstractTrackMode;
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.daw.IModel;
@@ -226,8 +227,8 @@ public class SessionMode extends AbstractTrackMode
                     // https://github.com/teotigraphix/Framework4Bitwig/issues/193
                     if (name.isEmpty ())
                     {
-                        final double [] color = slot.getColor ();
-                        if (color[0] != 0 || color[1] != 0 || color[2] != 0)
+                        final ColorEx color = slot.getColor ();
+                        if (color.getRed () != 0 || color.getGreen () != 0 || color.getBlue () != 0)
                             name = "--------";
                     }
                 }

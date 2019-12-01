@@ -89,13 +89,29 @@ public class ColorEx
      *
      * @return The 3 int (0-255) values
      */
-    public int [] toRGB ()
+    public int [] toIntRGB ()
     {
         return new int []
         {
             (int) Math.round (this.redValue * 255.0),
             (int) Math.round (this.greenValue * 255.0),
             (int) Math.round (this.blueValue * 255.0)
+        };
+    }
+
+
+    /**
+     * Convert the internal color state to 3 double RGB values.
+     *
+     * @return The 3 int (0-1) values
+     */
+    public double [] toDoubleRGB ()
+    {
+        return new double []
+        {
+            this.redValue,
+            this.greenValue,
+            this.blueValue
         };
     }
 
@@ -178,6 +194,19 @@ public class ColorEx
         }
 
         return ColorEx.evenDarker (color);
+    }
+
+
+    /**
+     * Calculate the difference between colors. See https://www.compuphase.com/cmetric.htm
+     *
+     * @param color1 The first color
+     * @param color2 The second color
+     * @return The distance
+     */
+    public static double calcDistance (final ColorEx color1, final ColorEx color2)
+    {
+        return calcDistance (color1.toDoubleRGB (), color2.toDoubleRGB ());
     }
 
 

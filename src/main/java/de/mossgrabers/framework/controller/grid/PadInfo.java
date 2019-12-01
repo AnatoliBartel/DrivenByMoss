@@ -11,11 +11,10 @@ package de.mossgrabers.framework.controller.grid;
  */
 public class PadInfo
 {
-    private int     color      = -1;
-    private int     blinkColor = -1;
+    private int     color      = 0;
+    private int     blinkColor = 0;
     private boolean fast       = false;
-
-    private int     encoded    = -1;
+    private int     encoded    = 0;
 
 
     /**
@@ -38,6 +37,11 @@ public class PadInfo
      */
     public void setColors (final int color, final int blinkColor, final boolean fast)
     {
+        if (color < 0 || color > 127)
+            throw new RuntimeException ("color must be in the range of 0..127");
+        if (blinkColor < 0 || blinkColor > 127)
+            throw new RuntimeException ("blinkColor must be in the range of 0..127");
+
         this.color = color;
         this.blinkColor = blinkColor;
         this.fast = fast;

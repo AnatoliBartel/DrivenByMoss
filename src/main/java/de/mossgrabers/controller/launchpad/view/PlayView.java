@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.launchpad.view;
 
 import de.mossgrabers.controller.launchpad.LaunchpadConfiguration;
-import de.mossgrabers.controller.launchpad.controller.LaunchpadColors;
+import de.mossgrabers.controller.launchpad.controller.LaunchpadColorManager;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
 import de.mossgrabers.framework.configuration.AbstractConfiguration;
@@ -76,7 +76,7 @@ public class PlayView extends AbstractPlayView<LaunchpadControlSurface, Launchpa
         // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.DEVICE),
         // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
         if (this.surface.isPro ())
-            this.surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER, this.model.getHost ().hasUserParameters () ? LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO : LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+            this.surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER, this.model.getHost ().hasUserParameters () ? LaunchpadColorManager.LAUNCHPAD_COLOR_GREY_LO : LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
     }
 
 
@@ -87,13 +87,13 @@ public class PlayView extends AbstractPlayView<LaunchpadControlSurface, Launchpa
         if (this.model.canSelectedTrackHoldNotes ())
         {
             if (buttonID == ButtonID.SCENE1 || buttonID == ButtonID.SCENE2 || buttonID == ButtonID.SCENE7 || buttonID == ButtonID.SCENE8)
-                return LaunchpadColors.LAUNCHPAD_COLOR_OCEAN_HI;
+                return LaunchpadColorManager.LAUNCHPAD_COLOR_OCEAN_HI;
 
             if (buttonID == ButtonID.SCENE6)
-                return LaunchpadColors.LAUNCHPAD_COLOR_WHITE;
+                return LaunchpadColorManager.LAUNCHPAD_COLOR_WHITE;
         }
 
-        return LaunchpadColors.LAUNCHPAD_COLOR_BLACK;
+        return LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK;
     }
 
 

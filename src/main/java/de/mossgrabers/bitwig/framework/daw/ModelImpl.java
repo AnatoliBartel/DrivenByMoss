@@ -134,6 +134,21 @@ public class ModelImpl extends AbstractModel
         this.masterTrackEqualsValue.markInterested ();
 
         this.currentTrackBank = this.trackBank;
+
+        controllerHost.scheduleTask (this::flushWorkaround, 4000);
+    }
+
+
+    /**
+     * Workaround for flush only happening if state changes since Bitwig 3.1 (which is intended and
+     * not a bug).
+     */
+    private void flushWorkaround ()
+    {
+        // There are enough flushs happening if playback is active
+        if (!getTransport ().isPlaying ())
+            this.controllerHost.requestFlush ();
+        this.controllerHost.scheduleTask (this::flushWorkaround, 100);
     }
 
 

@@ -158,7 +158,7 @@ public class PadGridImpl implements PadGrid
     public void forceFlush ()
     {
         for (int i = this.startNote; i <= this.endNote; i++)
-            this.padStates[i].setColors (-1, -1, false);
+            this.padStates[i].setColors (0, 0, false);
     }
 
 

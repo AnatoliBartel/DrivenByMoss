@@ -542,15 +542,7 @@ public class PushColorManager extends ColorManager
     public static int [] getPaletteColorRGB (final int index)
     {
         if (index >= 70 && index <= 96)
-        {
-            final double [] colorEntry = DAWColors.getColorEntry (index - 70);
-            return new int []
-            {
-                (int) Math.round (colorEntry[0] * 255.0),
-                (int) Math.round (colorEntry[1] * 255.0),
-                (int) Math.round (colorEntry[2] * 255.0)
-            };
-        }
+            return DAWColors.getColorEntry (index - 69).toIntRGB ();
         return DEFAULT_PALETTE[index];
     }
 
@@ -564,7 +556,7 @@ public class PushColorManager extends ColorManager
     public static ColorEx getPaletteColor (final int index)
     {
         if (index >= 70 && index <= 96)
-            return new ColorEx (DAWColors.getColorEntry (index - 70));
+            return DAWColors.getColorEntry (index - 69);
         return ColorEx.fromRGB (DEFAULT_PALETTE[index][0], DEFAULT_PALETTE[index][1], DEFAULT_PALETTE[index][2]);
     }
 

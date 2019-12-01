@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.launchpad.view;
 
-import de.mossgrabers.controller.launchpad.controller.LaunchpadColors;
+import de.mossgrabers.controller.launchpad.controller.LaunchpadColorManager;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
 import de.mossgrabers.framework.daw.IModel;
@@ -42,7 +42,7 @@ public class UserView extends AbstractFaderView
         // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
         // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.DEVICE),
         // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        this.surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER, this.model.getHost ().hasUserParameters () ? LaunchpadColors.LAUNCHPAD_COLOR_MAGENTA : LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+        this.surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER, this.model.getHost ().hasUserParameters () ? LaunchpadColorManager.LAUNCHPAD_COLOR_MAGENTA : LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
     }
 
 
@@ -50,7 +50,7 @@ public class UserView extends AbstractFaderView
     @Override
     public void setupFader (final int index)
     {
-        this.surface.setupFader (index, LaunchpadColors.DAW_INDICATOR_COLORS[index], false);
+        this.surface.setupFader (index, LaunchpadColorManager.DAW_INDICATOR_COLORS[index], false);
     }
 
 

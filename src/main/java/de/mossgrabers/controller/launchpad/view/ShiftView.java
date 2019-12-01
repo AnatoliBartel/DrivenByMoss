@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.launchpad.view;
 
 import de.mossgrabers.controller.launchpad.LaunchpadConfiguration;
-import de.mossgrabers.controller.launchpad.controller.LaunchpadColors;
+import de.mossgrabers.controller.launchpad.controller.LaunchpadColorManager;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.framework.command.core.AbstractTriggerCommand;
 import de.mossgrabers.framework.configuration.AbstractConfiguration;
@@ -55,102 +55,102 @@ public class ShiftView extends AbstractView<LaunchpadControlSurface, LaunchpadCo
     {
         final PadGrid padGrid = this.surface.getPadGrid ();
 
-        padGrid.light (97, LaunchpadColors.LAUNCHPAD_COLOR_GREEN);
-        padGrid.light (98, LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING);
-        padGrid.light (99, LaunchpadColors.LAUNCHPAD_COLOR_TURQUOISE_CYAN);
+        padGrid.light (97, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN);
+        padGrid.light (98, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN_SPRING);
+        padGrid.light (99, LaunchpadColorManager.LAUNCHPAD_COLOR_TURQUOISE_CYAN);
 
         final int clipLengthIndex = this.surface.getConfiguration ().getNewClipLength ();
         for (int i = 0; i < 8; i++)
-            padGrid.light (36 + i, i == clipLengthIndex ? LaunchpadColors.LAUNCHPAD_COLOR_WHITE : LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
+            padGrid.light (36 + i, i == clipLengthIndex ? LaunchpadColorManager.LAUNCHPAD_COLOR_WHITE : LaunchpadColorManager.LAUNCHPAD_COLOR_GREY_LO);
 
         // Note Repeat
         final INoteRepeat noteRepeat = this.surface.getMidiInput ().getDefaultNoteInput ().getNoteRepeat ();
-        padGrid.light (87, noteRepeat.isActive () ? LaunchpadColors.LAUNCHPAD_COLOR_ORCHID_HI : LaunchpadColors.LAUNCHPAD_COLOR_ORCHID_LO);
+        padGrid.light (87, noteRepeat.isActive () ? LaunchpadColorManager.LAUNCHPAD_COLOR_ORCHID_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_ORCHID_LO);
 
         // Note Repeat period
         final int periodIndex = Resolution.getMatch (noteRepeat.getPeriod ());
-        padGrid.light (79, periodIndex == 0 ? LaunchpadColors.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColors.LAUNCHPAD_COLOR_SKY_LO);
-        padGrid.light (71, periodIndex == 2 ? LaunchpadColors.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColors.LAUNCHPAD_COLOR_SKY_LO);
-        padGrid.light (63, periodIndex == 4 ? LaunchpadColors.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColors.LAUNCHPAD_COLOR_SKY_LO);
-        padGrid.light (55, periodIndex == 6 ? LaunchpadColors.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColors.LAUNCHPAD_COLOR_SKY_LO);
+        padGrid.light (79, periodIndex == 0 ? LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_LO);
+        padGrid.light (71, periodIndex == 2 ? LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_LO);
+        padGrid.light (63, periodIndex == 4 ? LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_LO);
+        padGrid.light (55, periodIndex == 6 ? LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_LO);
 
-        padGrid.light (80, periodIndex == 1 ? LaunchpadColors.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColors.LAUNCHPAD_COLOR_PINK_LO);
-        padGrid.light (72, periodIndex == 3 ? LaunchpadColors.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColors.LAUNCHPAD_COLOR_PINK_LO);
-        padGrid.light (64, periodIndex == 5 ? LaunchpadColors.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColors.LAUNCHPAD_COLOR_PINK_LO);
-        padGrid.light (56, periodIndex == 7 ? LaunchpadColors.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColors.LAUNCHPAD_COLOR_PINK_LO);
+        padGrid.light (80, periodIndex == 1 ? LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_LO);
+        padGrid.light (72, periodIndex == 3 ? LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_LO);
+        padGrid.light (64, periodIndex == 5 ? LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_LO);
+        padGrid.light (56, periodIndex == 7 ? LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_LO);
 
         // Note Repeat length
         final int lengthIndex = Resolution.getMatch (noteRepeat.getNoteLength ());
-        padGrid.light (81, lengthIndex == 0 ? LaunchpadColors.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColors.LAUNCHPAD_COLOR_SKY_LO);
-        padGrid.light (73, lengthIndex == 2 ? LaunchpadColors.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColors.LAUNCHPAD_COLOR_SKY_LO);
-        padGrid.light (65, lengthIndex == 4 ? LaunchpadColors.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColors.LAUNCHPAD_COLOR_SKY_LO);
-        padGrid.light (57, lengthIndex == 6 ? LaunchpadColors.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColors.LAUNCHPAD_COLOR_SKY_LO);
+        padGrid.light (81, lengthIndex == 0 ? LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_LO);
+        padGrid.light (73, lengthIndex == 2 ? LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_LO);
+        padGrid.light (65, lengthIndex == 4 ? LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_LO);
+        padGrid.light (57, lengthIndex == 6 ? LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_SKY_LO);
 
-        padGrid.light (82, lengthIndex == 1 ? LaunchpadColors.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColors.LAUNCHPAD_COLOR_PINK_LO);
-        padGrid.light (74, lengthIndex == 3 ? LaunchpadColors.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColors.LAUNCHPAD_COLOR_PINK_LO);
-        padGrid.light (66, lengthIndex == 5 ? LaunchpadColors.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColors.LAUNCHPAD_COLOR_PINK_LO);
-        padGrid.light (58, lengthIndex == 7 ? LaunchpadColors.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColors.LAUNCHPAD_COLOR_PINK_LO);
+        padGrid.light (82, lengthIndex == 1 ? LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_LO);
+        padGrid.light (74, lengthIndex == 3 ? LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_LO);
+        padGrid.light (66, lengthIndex == 5 ? LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_LO);
+        padGrid.light (58, lengthIndex == 7 ? LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_HI : LaunchpadColorManager.LAUNCHPAD_COLOR_PINK_LO);
 
         if (this.surface.isPro ())
         {
             for (int i = 44; i < 55; i++)
-                padGrid.light (i, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+                padGrid.light (i, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
             for (int i = 59; i < 63; i++)
-                padGrid.light (i, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+                padGrid.light (i, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
             for (int i = 67; i < 71; i++)
-                padGrid.light (i, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+                padGrid.light (i, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
             for (int i = 75; i < 79; i++)
-                padGrid.light (i, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+                padGrid.light (i, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
             for (int i = 83; i < 87; i++)
-                padGrid.light (i, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+                padGrid.light (i, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
             for (int i = 88; i < 97; i++)
-                padGrid.light (i, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+                padGrid.light (i, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
             return;
         }
 
-        padGrid.light (44, LaunchpadColors.LAUNCHPAD_COLOR_RED);
-        padGrid.light (45, LaunchpadColors.LAUNCHPAD_COLOR_ROSE);
+        padGrid.light (44, LaunchpadColorManager.LAUNCHPAD_COLOR_RED);
+        padGrid.light (45, LaunchpadColorManager.LAUNCHPAD_COLOR_ROSE);
 
         for (int i = 46; i < 51; i++)
-            padGrid.light (i, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+            padGrid.light (i, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
 
-        padGrid.light (51, LaunchpadColors.LAUNCHPAD_COLOR_RED);
-        padGrid.light (52, LaunchpadColors.LAUNCHPAD_COLOR_GREEN);
-        padGrid.light (53, LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING);
+        padGrid.light (51, LaunchpadColorManager.LAUNCHPAD_COLOR_RED);
+        padGrid.light (52, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN);
+        padGrid.light (53, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN_SPRING);
 
-        padGrid.light (54, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-        padGrid.light (59, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+        padGrid.light (54, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
+        padGrid.light (59, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
 
-        padGrid.light (60, LaunchpadColors.LAUNCHPAD_COLOR_GREEN);
-        padGrid.light (61, LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING);
+        padGrid.light (60, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN);
+        padGrid.light (61, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN_SPRING);
 
-        padGrid.light (62, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-        padGrid.light (67, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+        padGrid.light (62, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
+        padGrid.light (67, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
 
-        padGrid.light (68, LaunchpadColors.LAUNCHPAD_COLOR_GREEN);
-        padGrid.light (69, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+        padGrid.light (68, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN);
+        padGrid.light (69, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
 
-        padGrid.light (70, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-        padGrid.light (75, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+        padGrid.light (70, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
+        padGrid.light (75, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
 
-        padGrid.light (76, LaunchpadColors.LAUNCHPAD_COLOR_GREEN);
+        padGrid.light (76, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN);
 
-        padGrid.light (78, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-        padGrid.light (83, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+        padGrid.light (78, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
+        padGrid.light (83, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
 
-        padGrid.light (84, LaunchpadColors.LAUNCHPAD_COLOR_GREEN);
-        padGrid.light (85, LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING);
+        padGrid.light (84, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN);
+        padGrid.light (85, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN_SPRING);
 
-        padGrid.light (86, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+        padGrid.light (86, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
 
         for (int i = 88; i < 92; i++)
-            padGrid.light (i, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+            padGrid.light (i, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
 
-        padGrid.light (92, LaunchpadColors.LAUNCHPAD_COLOR_GREEN);
-        padGrid.light (93, LaunchpadColors.LAUNCHPAD_COLOR_GREEN_SPRING);
+        padGrid.light (92, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN);
+        padGrid.light (93, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN_SPRING);
 
         for (int i = 94; i < 97; i++)
-            padGrid.light (i, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+            padGrid.light (i, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
     }
 
 
@@ -305,23 +305,23 @@ public class ShiftView extends AbstractView<LaunchpadControlSurface, LaunchpadCo
         switch (buttonID)
         {
             case SCENE1:
-                return isPro ? LaunchpadColors.LAUNCHPAD_COLOR_BLACK : LaunchpadColors.LAUNCHPAD_COLOR_CYAN;
+                return isPro ? LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK : LaunchpadColorManager.LAUNCHPAD_COLOR_CYAN;
             case SCENE2:
-                return isPro ? LaunchpadColors.LAUNCHPAD_COLOR_BLACK : LaunchpadColors.LAUNCHPAD_COLOR_SKY;
+                return isPro ? LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK : LaunchpadColorManager.LAUNCHPAD_COLOR_SKY;
             case SCENE3:
-                return isPro ? LaunchpadColors.LAUNCHPAD_COLOR_BLACK : LaunchpadColors.LAUNCHPAD_COLOR_ORCHID;
+                return isPro ? LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK : LaunchpadColorManager.LAUNCHPAD_COLOR_ORCHID;
             case SCENE4:
-                return isPro ? LaunchpadColors.LAUNCHPAD_COLOR_BLACK : LaunchpadColors.LAUNCHPAD_COLOR_GREEN;
+                return isPro ? LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK : LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN;
             case SCENE5:
-                return isPro ? LaunchpadColors.LAUNCHPAD_COLOR_BLACK : LaunchpadColors.LAUNCHPAD_COLOR_ROSE;
+                return isPro ? LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK : LaunchpadColorManager.LAUNCHPAD_COLOR_ROSE;
             case SCENE6:
-                return isPro ? LaunchpadColors.LAUNCHPAD_COLOR_BLACK : LaunchpadColors.LAUNCHPAD_COLOR_YELLOW;
+                return isPro ? LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK : LaunchpadColorManager.LAUNCHPAD_COLOR_YELLOW;
             case SCENE7:
-                return isPro ? LaunchpadColors.LAUNCHPAD_COLOR_BLACK : LaunchpadColors.LAUNCHPAD_COLOR_BLUE;
+                return isPro ? LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK : LaunchpadColorManager.LAUNCHPAD_COLOR_BLUE;
             case SCENE8:
-                return isPro ? LaunchpadColors.LAUNCHPAD_COLOR_BLACK : LaunchpadColors.LAUNCHPAD_COLOR_RED;
+                return isPro ? LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK : LaunchpadColorManager.LAUNCHPAD_COLOR_RED;
             default:
-                return LaunchpadColors.LAUNCHPAD_COLOR_BLACK;
+                return LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK;
         }
     }
 

@@ -4,6 +4,7 @@
 
 package de.mossgrabers.bitwig.framework.daw.data;
 
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.daw.data.AbstractItemImpl;
 import de.mossgrabers.framework.daw.data.IScene;
 import de.mossgrabers.framework.observer.IValueObserver;
@@ -95,23 +96,18 @@ public class SceneImpl extends AbstractItemImpl implements IScene
 
     /** {@inheritDoc} */
     @Override
-    public double [] getColor ()
+    public ColorEx getColor ()
     {
         final SettableColorValue color = this.scene.color ();
-        return new double []
-        {
-            color.red (),
-            color.green (),
-            color.blue ()
-        };
+        return new ColorEx (color.red (), color.green (), color.blue ());
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public void setColor (final double red, final double green, final double blue)
+    public void setColor (final ColorEx color)
     {
-        this.scene.color ().set ((float) red, (float) green, (float) blue);
+        this.scene.color ().set ((float) color.getRed (), (float) color.getGreen (), (float) color.getBlue ());
     }
 
 

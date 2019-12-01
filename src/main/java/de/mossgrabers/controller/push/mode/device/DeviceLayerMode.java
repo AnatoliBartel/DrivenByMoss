@@ -11,6 +11,7 @@ import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.controller.push.mode.BaseMode;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IValueChanger;
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.display.Format;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
@@ -408,7 +409,7 @@ public class DeviceLayerMode extends BaseMode
 
             // Channel info
             final String bottomMenu = layer.doesExist () ? layer.getName (12) : "";
-            final double [] bottomMenuColor = layer.getColor ();
+            final ColorEx bottomMenuColor = layer.getColor ();
             final boolean isBottomMenuOn = layer.isSelected ();
 
             if (layer.isSelected ())

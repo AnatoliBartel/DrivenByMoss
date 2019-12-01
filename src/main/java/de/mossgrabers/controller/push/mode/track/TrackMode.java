@@ -9,6 +9,7 @@ import de.mossgrabers.controller.push.controller.Push1Display;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IValueChanger;
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.display.Format;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
@@ -277,7 +278,7 @@ public class TrackMode extends AbstractTrackMode
 
             // Channel info
             final String bottomMenu = t.doesExist () ? t.getName () : "";
-            final double [] bottomMenuColor = t.getColor ();
+            final ColorEx bottomMenuColor = t.getColor ();
             final boolean isBottomMenuOn = t.isSelected ();
 
             final IValueChanger valueChanger = this.model.getValueChanger ();

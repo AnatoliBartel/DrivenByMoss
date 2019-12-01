@@ -4,6 +4,7 @@
 
 package de.mossgrabers.framework.controller.display;
 
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.hardware.IHwGraphicsDisplay;
 import de.mossgrabers.framework.daw.INoteClip;
 import de.mossgrabers.framework.daw.data.IScene;
@@ -88,7 +89,7 @@ public interface IGraphicDisplay extends IDisplay
      * @param isBottomMenuOn True if the bottom menu is selected
      * @param isActive True if channel is activated
      */
-    void addChannelSelectorElement (String topMenu, boolean isTopMenuOn, String bottomMenu, ChannelType type, double [] bottomMenuColor, boolean isBottomMenuOn, boolean isActive);
+    void addChannelSelectorElement (String topMenu, boolean isTopMenuOn, String bottomMenu, ChannelType type, ColorEx bottomMenuColor, boolean isBottomMenuOn, boolean isActive);
 
 
     /**
@@ -114,7 +115,7 @@ public interface IGraphicDisplay extends IDisplay
      * @param isActive True if channel is activated
      * @param crossfadeMode Crossfade mode (0-2)
      */
-    void addChannelElement (String topMenu, boolean isTopMenuOn, String bottomMenu, ChannelType type, double [] bottomMenuColor, boolean isBottomMenuOn, int volume, int modulatedVolume, String volumeStr, int pan, int modulatedPan, String panStr, int vuLeft, int vuRight, boolean mute, boolean solo, boolean recarm, boolean isActive, int crossfadeMode);
+    void addChannelElement (String topMenu, boolean isTopMenuOn, String bottomMenu, ChannelType type, ColorEx bottomMenuColor, boolean isBottomMenuOn, int volume, int modulatedVolume, String volumeStr, int pan, int modulatedPan, String panStr, int vuLeft, int vuRight, boolean mute, boolean solo, boolean recarm, boolean isActive, int crossfadeMode);
 
 
     /**
@@ -141,7 +142,7 @@ public interface IGraphicDisplay extends IDisplay
      * @param isActive True if channel is activated
      * @param crossfadeMode Crossfade mode (0-2)
      */
-    void addChannelElement (int channelType, String topMenu, boolean isTopMenuOn, String bottomMenu, ChannelType type, double [] bottomMenuColor, boolean isBottomMenuOn, int volume, int modulatedVolume, String volumeStr, int pan, int modulatedPan, String panStr, int vuLeft, int vuRight, boolean mute, boolean solo, boolean recarm, boolean isActive, int crossfadeMode);
+    void addChannelElement (int channelType, String topMenu, boolean isTopMenuOn, String bottomMenu, ChannelType type, ColorEx bottomMenuColor, boolean isBottomMenuOn, int volume, int modulatedVolume, String volumeStr, int pan, int modulatedPan, String panStr, int vuLeft, int vuRight, boolean mute, boolean solo, boolean recarm, boolean isActive, int crossfadeMode);
 
 
     /**
@@ -158,7 +159,7 @@ public interface IGraphicDisplay extends IDisplay
      * @param isSendActive True if the upper send part is activated
      * @param isChannelLabelActive True if channel is activated
      */
-    void addSendsElement (String topMenu, boolean isTopMenuOn, String bottomMenu, ChannelType type, double [] bottomMenuColor, boolean isBottomMenuOn, SendData [] sendData, boolean isTrackMode, boolean isSendActive, boolean isChannelLabelActive);
+    void addSendsElement (String topMenu, boolean isTopMenuOn, String bottomMenu, ChannelType type, ColorEx bottomMenuColor, boolean isBottomMenuOn, SendData [] sendData, boolean isTrackMode, boolean isSendActive, boolean isChannelLabelActive);
 
 
     /**
@@ -188,7 +189,7 @@ public interface IGraphicDisplay extends IDisplay
      * @param parameterIsActive The parameter is currently edited
      * @param parameterModulatedValue The modulated numeric value
      */
-    void addParameterElement (String topMenu, boolean isTopMenuOn, String bottomMenu, ChannelType type, double [] bottomMenuColor, boolean isBottomMenuOn, String parameterName, int parameterValue, String parameterValueStr, boolean parameterIsActive, int parameterModulatedValue);
+    void addParameterElement (String topMenu, boolean isTopMenuOn, String bottomMenu, ChannelType type, ColorEx bottomMenuColor, boolean isBottomMenuOn, String parameterName, int parameterValue, String parameterValueStr, boolean parameterIsActive, int parameterModulatedValue);
 
 
     /**
@@ -205,7 +206,7 @@ public interface IGraphicDisplay extends IDisplay
      * @param parameterIsActive The parameter is currently edited
      * @param parameterModulatedValue The modulated numeric value
      */
-    void addParameterElementWithPlainMenu (String topMenu, boolean isTopMenuOn, String bottomMenu, double [] bottomMenuColor, boolean isBottomMenuOn, String parameterName, int parameterValue, String parameterValueStr, boolean parameterIsActive, int parameterModulatedValue);
+    void addParameterElementWithPlainMenu (String topMenu, boolean isTopMenuOn, String bottomMenu, ColorEx bottomMenuColor, boolean isBottomMenuOn, String parameterName, int parameterValue, String parameterValueStr, boolean parameterIsActive, int parameterModulatedValue);
 
 
     /**
@@ -223,7 +224,7 @@ public interface IGraphicDisplay extends IDisplay
      * @param parameterIsActive The parameter is currently edited
      * @param parameterModulatedValue The modulated numeric value
      */
-    void addParameterElement (String topMenu, boolean isTopMenuOn, String bottomMenu, String deviceName, double [] bottomMenuColor, boolean isBottomMenuOn, String parameterName, int parameterValue, String parameterValueStr, boolean parameterIsActive, int parameterModulatedValue);
+    void addParameterElement (String topMenu, boolean isTopMenuOn, String bottomMenu, String deviceName, ColorEx bottomMenuColor, boolean isBottomMenuOn, String parameterName, int parameterValue, String parameterValueStr, boolean parameterIsActive, int parameterModulatedValue);
 
 
     /**
@@ -253,7 +254,7 @@ public interface IGraphicDisplay extends IDisplay
      * @param menuBottomColor The color to use for the background bottom menu, may be null
      * @param useSmallTopMenu If true use small menus
      */
-    void addOptionElement (String headerTopName, String menuTopName, boolean isMenuTopSelected, double [] menuTopColor, String headerBottomName, String menuBottomName, boolean isMenuBottomSelected, double [] menuBottomColor, boolean useSmallTopMenu);
+    void addOptionElement (String headerTopName, String menuTopName, boolean isMenuTopSelected, ColorEx menuTopColor, String headerBottomName, String menuBottomName, boolean isMenuBottomSelected, ColorEx menuBottomColor, boolean useSmallTopMenu);
 
 
     /**
@@ -270,7 +271,7 @@ public interface IGraphicDisplay extends IDisplay
      * @param useSmallTopMenu If true use small menus
      * @param isBottomHeaderSelected True to draw the lower header selected
      */
-    void addOptionElement (String headerTopName, String menuTopName, boolean isMenuTopSelected, double [] menuTopColor, String headerBottomName, String menuBottomName, boolean isMenuBottomSelected, double [] menuBottomColor, boolean useSmallTopMenu, boolean isBottomHeaderSelected);
+    void addOptionElement (String headerTopName, String menuTopName, boolean isMenuTopSelected, ColorEx menuTopColor, String headerBottomName, String menuBottomName, boolean isMenuBottomSelected, ColorEx menuBottomColor, boolean useSmallTopMenu, boolean isBottomHeaderSelected);
 
 
     /**

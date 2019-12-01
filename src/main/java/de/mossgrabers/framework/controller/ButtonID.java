@@ -632,4 +632,17 @@ public enum ButtonID
     {
         return ButtonID.values ()[bid.ordinal () + offset];
     }
+
+
+    /**
+     * Test if the given button ID belongs to a scene button.
+     *
+     * @param bid The button ID to test
+     * @return True if it is a scene button
+     */
+    public static boolean isSceneButton (final ButtonID bid)
+    {
+        final int ordinal = bid.ordinal ();
+        return ordinal >= SCENE1.ordinal () && ordinal <= SCENE8.ordinal ();
+    }
 }

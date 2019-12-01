@@ -10,6 +10,7 @@ import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.controller.push.mode.BaseMode;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IValueChanger;
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.daw.IBank;
@@ -153,13 +154,7 @@ public class UserParamsMode extends BaseMode
     @Override
     public void updateDisplay2 (final IGraphicDisplay display)
     {
-        final double [] bottomMenuColor =
-        {
-            1,
-            1,
-            1
-        };
-
+        final ColorEx bottomMenuColor = ColorEx.WHITE;
         final IValueChanger valueChanger = this.model.getValueChanger ();
         final IParameterBank bank = this.model.getUserParameterBank ();
         final int selectedPage = bank.getScrollPosition () / bank.getPageSize ();

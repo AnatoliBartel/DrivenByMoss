@@ -188,8 +188,7 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
         {
             if (track == null)
                 return Scales.SCALE_COLOR_OCTAVE;
-            final double [] color = track.getColor ();
-            final String c = DAWColors.getColorIndex (color[0], color[1], color[2]);
+            final String c = DAWColors.getColorIndex (track.getColor ());
             return c == null ? Scales.SCALE_COLOR_OCTAVE : c;
         }
         return colorID;

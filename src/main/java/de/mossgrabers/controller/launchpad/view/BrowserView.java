@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.launchpad.view;
 
 import de.mossgrabers.controller.launchpad.LaunchpadConfiguration;
-import de.mossgrabers.controller.launchpad.controller.LaunchpadColors;
+import de.mossgrabers.controller.launchpad.controller.LaunchpadColorManager;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
 import de.mossgrabers.framework.controller.ButtonID;
@@ -39,14 +39,14 @@ public class BrowserView extends AbstractView<LaunchpadControlSurface, Launchpad
 
     private static final int [] COLUMN_COLORS =
     {
-        LaunchpadColors.LAUNCHPAD_COLOR_WHITE,
-        LaunchpadColors.LAUNCHPAD_COLOR_GREY_MD,
-        LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO,
-        LaunchpadColors.LAUNCHPAD_COLOR_ROSE,
-        LaunchpadColors.LAUNCHPAD_COLOR_SPRING,
-        LaunchpadColors.LAUNCHPAD_COLOR_OCEAN,
-        LaunchpadColors.LAUNCHPAD_COLOR_BLACK,
-        LaunchpadColors.LAUNCHPAD_COLOR_YELLOW
+        LaunchpadColorManager.LAUNCHPAD_COLOR_WHITE,
+        LaunchpadColorManager.LAUNCHPAD_COLOR_GREY_MD,
+        LaunchpadColorManager.LAUNCHPAD_COLOR_GREY_LO,
+        LaunchpadColorManager.LAUNCHPAD_COLOR_ROSE,
+        LaunchpadColorManager.LAUNCHPAD_COLOR_SPRING,
+        LaunchpadColorManager.LAUNCHPAD_COLOR_OCEAN,
+        LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK,
+        LaunchpadColorManager.LAUNCHPAD_COLOR_YELLOW
     };
 
 
@@ -84,7 +84,7 @@ public class BrowserView extends AbstractView<LaunchpadControlSurface, Launchpad
         // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.DEVICE),
         // LaunchpadColors.LAUNCHPAD_COLOR_TURQUOISE);
         if (this.surface.isPro ())
-            this.surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER, this.model.getHost ().hasUserParameters () ? LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO : LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+            this.surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER, this.model.getHost ().hasUserParameters () ? LaunchpadColorManager.LAUNCHPAD_COLOR_GREY_LO : LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
     }
 
 
@@ -93,14 +93,14 @@ public class BrowserView extends AbstractView<LaunchpadControlSurface, Launchpad
     public void drawGrid ()
     {
         final PadGrid padGrid = this.surface.getPadGrid ();
-        padGrid.light (36, LaunchpadColors.LAUNCHPAD_COLOR_RED);
-        padGrid.light (37, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+        padGrid.light (36, LaunchpadColorManager.LAUNCHPAD_COLOR_RED);
+        padGrid.light (37, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
         for (int i = 38; i < 42; i++)
-            padGrid.light (i, LaunchpadColors.LAUNCHPAD_COLOR_ORCHID_LO);
-        padGrid.light (42, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-        padGrid.light (43, LaunchpadColors.LAUNCHPAD_COLOR_GREEN_HI);
+            padGrid.light (i, LaunchpadColorManager.LAUNCHPAD_COLOR_ORCHID_LO);
+        padGrid.light (42, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
+        padGrid.light (43, LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN_HI);
         for (int i = 44; i < 52; i++)
-            padGrid.light (i, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+            padGrid.light (i, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
 
         for (int i = 52; i < 60; i++)
             padGrid.light (i, COLUMN_COLORS[i - 52]);
@@ -112,7 +112,7 @@ public class BrowserView extends AbstractView<LaunchpadControlSurface, Launchpad
             padGrid.light (i, COLUMN_COLORS[i - 76]);
 
         for (int i = 84; i < 100; i++)
-            padGrid.light (i, LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+            padGrid.light (i, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
     }
 
 

@@ -6,316 +6,108 @@ package de.mossgrabers.framework.daw;
 
 import de.mossgrabers.framework.controller.color.ColorEx;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 /**
  * Support for handling the colors used in the DAW.
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class DAWColors
+public enum DAWColors
 {
-    /** All track colors. */
-    private static final double [] []           COLORS                  =
-    {
-        // Gray - not assigned
-        new double []
-        {
-            0.5,
-            0.5,
-            0.5
-        },
-        // Dark Gray
-        new double []
-        {
-            0.3294117748737335,
-            0.3294117748737335,
-            0.3294117748737335
-        },
-        // Gray
-        new double []
-        {
-            0.47843137383461,
-            0.47843137383461,
-            0.47843137383461
-        },
-        // Light Gray
-        new double []
-        {
-            0.7882353067398071,
-            0.7882353067398071,
-            0.7882353067398071
-        },
-        // Silver
-        new double []
-        {
-            0.5254902243614197,
-            0.5372549295425415,
-            0.6745098233222961
-        },
-        // Dark Brown
-        new double []
-        {
-            0.6392157077789307,
-            0.4745098054409027,
-            0.26274511218070984
-        },
-        // Brown
-        new double []
-        {
-            0.7764706015586853,
-            0.6235294342041016,
-            0.43921568989753723
-        },
-        // Dark Blue
-        new double []
-        {
-            0.34117648005485535,
-            0.3803921639919281,
-            0.7764706015586853
-        },
-        // Light Blue
-        new double []
-        {
-            0.5176470875740051,
-            0.5411764979362488,
-            0.8784313797950745
-        },
-        // Purple
-        new double []
-        {
-            0.5843137502670288,
-            0.2862745225429535,
-            0.7960784435272217
-        },
-        // Pink
-        new double []
-        {
-            0.8509804010391235,
-            0.21960784494876862,
-            0.4431372582912445
-        },
-        // Red
-        new double []
-        {
-            0.8509804010391235,
-            0.18039216101169586,
-            0.1411764770746231
-        },
-        // Orange
-        new double []
-        {
-            1,
-            0.34117648005485535,
-            0.0235294122248888
-        },
-        // Light Orange
-        new double []
-        {
-            0.8509804010391235,
-            0.615686297416687,
-            0.062745101749897
-        },
-        // Green
-        new double []
-        {
-            0.45098039507865906,
-            0.5960784554481506,
-            0.0784313753247261
-        },
-        // Cold Green
-        new double []
-        {
-            0,
-            0.615686297416687,
-            0.27843138575553894
-        },
-        // Bluish Green
-        new double []
-        {
-            0,
-            0.6509804129600525,
-            0.5803921818733215
-        },
-        // Light Blue
-        new double []
-        {
-            0,
-            0.6000000238418579,
-            0.8509804010391235
-        },
-        // Light Purple
-        new double []
-        {
-            0.7372549176216125,
-            0.4627451002597809,
-            0.9411764740943909
-        },
-        // Light Pink
-        new double []
-        {
-            0.8823529481887817,
-            0.4000000059604645,
-            0.5686274766921997
-        },
-        // Skin
-        new double []
-        {
-            0.9254902005195618,
-            0.3803921639919281,
-            0.34117648005485535
-        },
-        // Redish Brown
-        new double []
-        {
-            1,
-            0.5137255191802979,
-            0.24313725531101227
-        },
-
-        // Light Brown
-        new double []
-        {
-            0.8941176533699036,
-            0.7176470756530762,
-            0.30588236451148987
-        },
-        // Light Green
-        new double []
-        {
-            0.6274510025978088,
-            0.7529411911964417,
-            0.2980392277240753
-        },
-        // Bluish Green
-        new double []
-        {
-            0.24313725531101227,
-            0.7333333492279053,
-            0.3843137323856354
-        },
-        // Light Blue
-        new double []
-        {
-            0.26274511218070984,
-            0.8235294222831726,
-            0.7254902124404907
-        },
-        // Blue
-        new double []
-        {
-            0.2666666805744171,
-            0.7843137383460999,
-            1
-        }
-    };
-
     /** Color off. */
-    public static final String                  COLOR_OFF               = "COLOR_OFF";
+    COLOR_OFF("Off", new ColorEx (0.5, 0.5, 0.5)),
     /** Color half grey. */
-    public static final String                  DAW_COLOR_GRAY_HALF     = "DAW_COLOR_GRAY_HALF";
+    DAW_COLOR_GRAY_HALF("Gray half", new ColorEx (0.5, 0.5, 0.5)),
     /** Color dark grey. */
-    public static final String                  DAW_COLOR_DARK_GRAY     = "DAW_COLOR_DARK_GRAY";
-    /** Color grey. */
-    public static final String                  DAW_COLOR_GRAY          = "DAW_COLOR_GRAY";
+    DAW_COLOR_DARK_GRAY("Dark Gray", new ColorEx (0.3294117748737335, 0.3294117748737335, 0.3294117748737335)),
+    /** Color gray. */
+    DAW_COLOR_GRAY("Gray", new ColorEx (0.47843137383461, 0.47843137383461, 0.47843137383461)),
     /** Color light grey. */
-    public static final String                  DAW_COLOR_LIGHT_GRAY    = "DAW_COLOR_LIGHT_GRAY";
+    DAW_COLOR_LIGHT_GRAY("Light Gray", new ColorEx (0.7882353067398071, 0.7882353067398071, 0.7882353067398071)),
     /** Color silver. */
-    public static final String                  DAW_COLOR_SILVER        = "DAW_COLOR_SILVER";
+    DAW_COLOR_SILVER("Silver", new ColorEx (0.5254902243614197, 0.5372549295425415, 0.6745098233222961)),
     /** Color dark brown. */
-    public static final String                  DAW_COLOR_DARK_BROWN    = "DAW_COLOR_DARK_BROWN";
+    DAW_COLOR_DARK_BROWN("Dark Brown", new ColorEx (0.6392157077789307, 0.4745098054409027, 0.26274511218070984)),
     /** Color brown. */
-    public static final String                  DAW_COLOR_BROWN         = "DAW_COLOR_BROWN";
+    DAW_COLOR_BROWN("Brown", new ColorEx (0.7764706015586853, 0.6235294342041016, 0.43921568989753723)),
     /** Color dark blue. */
-    public static final String                  DAW_COLOR_DARK_BLUE     = "DAW_COLOR_DARK_BLUE";
+    DAW_COLOR_DARK_BLUE("Dark Blue", new ColorEx (0.34117648005485535, 0.3803921639919281, 0.7764706015586853)),
     /** Color purple blue. */
-    public static final String                  DAW_COLOR_PURPLE_BLUE   = "DAW_COLOR_PURPLE_BLUE";
+    DAW_COLOR_PURPLE_BLUE("Purplish Blue", new ColorEx (0.5176470875740051, 0.5411764979362488, 0.8784313797950745)),
     /** Color purple. */
-    public static final String                  DAW_COLOR_PURPLE        = "DAW_COLOR_PURPLE";
+    DAW_COLOR_PURPLE("Purple", new ColorEx (0.5843137502670288, 0.2862745225429535, 0.7960784435272217)),
     /** Color pink. */
-    public static final String                  DAW_COLOR_PINK          = "DAW_COLOR_PINK";
+    DAW_COLOR_PINK("Pink", new ColorEx (0.8509804010391235, 0.21960784494876862, 0.4431372582912445)),
     /** Color red. */
-    public static final String                  DAW_COLOR_RED           = "DAW_COLOR_RED";
+    DAW_COLOR_RED("Red", new ColorEx (0.8509804010391235, 0.18039216101169586, 0.1411764770746231)),
     /** Color orange. */
-    public static final String                  DAW_COLOR_ORANGE        = "DAW_COLOR_ORANGE";
+    DAW_COLOR_ORANGE("Orange", new ColorEx (1, 0.34117648005485535, 0.0235294122248888)),
     /** Color light orange. */
-    public static final String                  DAW_COLOR_LIGHT_ORANGE  = "DAW_COLOR_LIGHT_ORANGE";
+    DAW_COLOR_LIGHT_ORANGE("Light Orange", new ColorEx (0.8509804010391235, 0.615686297416687, 0.062745101749897)),
     /** Color moss green. */
-    public static final String                  DAW_COLOR_MOSS_GREEN    = "DAW_COLOR_MOSS_GREEN";
+    DAW_COLOR_MOSS_GREEN("Moss Green", new ColorEx (0.26274511218070984, 0.8235294222831726, 0.7254902124404907)),
     /** Color green. */
-    public static final String                  DAW_COLOR_GREEN         = "DAW_COLOR_GREEN";
+    DAW_COLOR_GREEN("Green", new ColorEx (0.45098039507865906, 0.5960784554481506, 0.0784313753247261)),
     /** Color cold green. */
-    public static final String                  DAW_COLOR_COLD_GREEN    = "DAW_COLOR_COLD_GREEN";
+    DAW_COLOR_COLD_GREEN("Cold Green", new ColorEx (0, 0.615686297416687, 0.27843138575553894)),
     /** Color blue. */
-    public static final String                  DAW_COLOR_BLUE          = "DAW_COLOR_BLUE";
+    DAW_COLOR_BLUE("Blue", new ColorEx (0.2666666805744171, 0.7843137383460999, 1)),
     /** Color purple. */
-    public static final String                  DAW_COLOR_LIGHT_PURPLE  = "DAW_COLOR_LIGHT_PURPLE";
+    DAW_COLOR_LIGHT_PURPLE("Light Purple", new ColorEx (0.7372549176216125, 0.4627451002597809, 0.9411764740943909)),
     /** Color light pink. */
-    public static final String                  DAW_COLOR_LIGHT_PINK    = "DAW_COLOR_LIGHT_PINK";
+    DAW_COLOR_LIGHT_PINK("Light Pink", new ColorEx (0.8823529481887817, 0.4000000059604645, 0.5686274766921997)),
     /** Color skin. */
-    public static final String                  DAW_COLOR_SKIN          = "DAW_COLOR_SKIN";
+    DAW_COLOR_SKIN("Skin", new ColorEx (0.9254902005195618, 0.3803921639919281, 0.34117648005485535)),
     /** Color reddish brown. */
-    public static final String                  DAW_COLOR_REDDISH_BROWN = "DAW_COLOR_REDDISH_BROWN";
+    DAW_COLOR_REDDISH_BROWN("Redish Brown", new ColorEx (1, 0.5137255191802979, 0.24313725531101227)),
     /** Color light brown. */
-    public static final String                  DAW_COLOR_LIGHT_BROWN   = "DAW_COLOR_LIGHT_BROWN";
+    DAW_COLOR_LIGHT_BROWN("Light Brown", new ColorEx (0.8941176533699036, 0.7176470756530762, 0.30588236451148987)),
     /** Color light green. */
-    public static final String                  DAW_COLOR_LIGHT_GREEN   = "DAW_COLOR_LIGHT_GREEN";
+    DAW_COLOR_LIGHT_GREEN("Light Green", new ColorEx (0.6274510025978088, 0.7529411911964417, 0.2980392277240753)),
     /** Color bluish green. */
-    public static final String                  DAW_COLOR_BLUISH_GREEN  = "DAW_COLOR_BLUISH_GREEN";
+    DAW_COLOR_BLUISH_GREEN("Bluish Green", new ColorEx (0, 0.6509804129600525, 0.5803921818733215)),
     /** Color green blue. */
-    public static final String                  DAW_COLOR_GREEN_BLUE    = "DAW_COLOR_GREEN_BLUE";
+    DAW_COLOR_GREEN_BLUE("Greenish Blue", new ColorEx (0.24313725531101227, 0.7333333492279053, 0.3843137323856354)),
     /** Color light blue. */
-    public static final String                  DAW_COLOR_LIGHT_BLUE    = "DAW_COLOR_LIGHT_BLUE";
+    DAW_COLOR_LIGHT_BLUE("Light Blue", new ColorEx (0, 0.6000000238418579, 0.8509804010391235));
 
-    /** All IDs for the track colors. */
-    public static final String []               DAW_COLORS              = new String []
+
+    private String  name;
+    private ColorEx color;
+
+
+    /**
+     * Constructor.
+     *
+     * @param name The name of the color
+     * @param color The color
+     */
+    DAWColors (final String name, final ColorEx color)
     {
-        DAW_COLOR_GRAY_HALF,
-        DAW_COLOR_DARK_GRAY,
-        DAW_COLOR_GRAY,
-        DAW_COLOR_LIGHT_GRAY,
-        DAW_COLOR_SILVER,
-        DAW_COLOR_DARK_BROWN,
-        DAW_COLOR_BROWN,
-        DAW_COLOR_DARK_BLUE,
-        DAW_COLOR_PURPLE_BLUE,
-        DAW_COLOR_PURPLE,
-        DAW_COLOR_PINK,
-        DAW_COLOR_RED,
-        DAW_COLOR_ORANGE,
-        DAW_COLOR_LIGHT_ORANGE,
-        DAW_COLOR_MOSS_GREEN,
-        DAW_COLOR_GREEN,
-        DAW_COLOR_COLD_GREEN,
-        DAW_COLOR_BLUE,
-        DAW_COLOR_LIGHT_PURPLE,
-        DAW_COLOR_LIGHT_PINK,
-        DAW_COLOR_SKIN,
-        DAW_COLOR_REDDISH_BROWN,
-        DAW_COLOR_LIGHT_BROWN,
-        DAW_COLOR_LIGHT_GREEN,
-        DAW_COLOR_BLUISH_GREEN,
-        DAW_COLOR_GREEN_BLUE,
-        DAW_COLOR_LIGHT_BLUE
-    };
-
-    private static final Map<String, double []> COLOR_LOOKUP            = new HashMap<> (DAW_COLORS.length);
-
-    static
-    {
-        for (int i = 0; i < DAW_COLORS.length; i++)
-            COLOR_LOOKUP.put (DAW_COLORS[i], COLORS[i]);
+        this.name = name;
+        this.color = color;
     }
 
 
     /**
-     * Private due to utility class.
+     * Get the name of the color.
+     *
+     * @return The name
      */
-    private DAWColors ()
+    public String getName ()
     {
-        // Intentionally empty
+        return this.name;
+    }
+
+
+    /**
+     * Get the color.
+     *
+     * @return The color
+     */
+    public ColorEx getColor ()
+    {
+        return this.color;
     }
 
 
@@ -325,10 +117,10 @@ public class DAWColors
      * @param colorId The ID of the color
      * @return The RGB values of the color
      */
-    public static double [] getColorEntry (final String colorId)
+    public static ColorEx getColorEntry (final String colorId)
     {
-        final double [] ds = COLOR_LOOKUP.get (colorId);
-        return ds == null ? COLORS[0] : ds;
+        final DAWColors value = DAWColors.valueOf (colorId);
+        return value == null ? COLOR_OFF.getColor () : value.getColor ();
     }
 
 
@@ -338,9 +130,22 @@ public class DAWColors
      * @param colorIndex The index of the color
      * @return The RGB values of the color
      */
-    public static double [] getColorEntry (final int colorIndex)
+    public static ColorEx getColorEntry (final int colorIndex)
     {
-        return COLORS[colorIndex >= 0 && colorIndex < COLORS.length ? colorIndex : 0];
+        final DAWColors [] values = DAWColors.values ();
+        return values[colorIndex >= 0 && colorIndex < values.length ? colorIndex : 0].getColor ();
+    }
+
+
+    /**
+     * Get the color ID that is assigned to the given RGB values.
+     *
+     * @param color The color
+     * @return The ID or the COLOR_OFF ID if none is mapped
+     */
+    public static String getColorIndex (final ColorEx color)
+    {
+        return getColorIndex (color.toDoubleRGB ());
     }
 
 
@@ -366,23 +171,19 @@ public class DAWColors
      */
     public static String getColorIndex (final double red, final double green, final double blue)
     {
-        String cid = COLOR_OFF;
+        final DAWColors [] values = DAWColors.values ();
+        DAWColors cid = values[0];
         double minError = 5.0;
-        final double [] color =
+        final ColorEx color = new ColorEx (red, green, blue);
+        for (int i = 1; i < values.length; i++)
         {
-            red,
-            green,
-            blue
-        };
-        for (int i = 0; i < COLORS.length; i++)
-        {
-            final double error = ColorEx.calcDistance (COLORS[i], color);
+            final double error = ColorEx.calcDistance (values[i].getColor (), color);
             if (error < minError)
             {
-                cid = DAW_COLORS[i];
+                cid = values[i];
                 minError = error;
             }
         }
-        return cid;
+        return cid.name ();
     }
 }

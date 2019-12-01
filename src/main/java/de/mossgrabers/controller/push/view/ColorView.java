@@ -7,6 +7,7 @@ package de.mossgrabers.controller.push.view;
 import de.mossgrabers.controller.push.PushConfiguration;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.DAWColors;
 import de.mossgrabers.framework.daw.IClip;
@@ -71,8 +72,9 @@ public class ColorView extends AbstractView<PushControlSurface, PushConfiguratio
     public void drawGrid ()
     {
         final PadGrid padGrid = this.surface.getPadGrid ();
+        final DAWColors [] dawColors = DAWColors.values ();
         for (int i = 0; i < 64; i++)
-            padGrid.light (36 + i, i < DAWColors.DAW_COLORS.length ? DAWColors.DAW_COLORS[i] : PadGrid.GRID_OFF);
+            padGrid.light (36 + i, i < dawColors.length ? dawColors[i].name () : PadGrid.GRID_OFF);
     }
 
 
@@ -84,9 +86,10 @@ public class ColorView extends AbstractView<PushControlSurface, PushConfiguratio
             return;
 
         final int color = note - 36;
-        if (color < DAWColors.DAW_COLORS.length)
+        final DAWColors [] dawColors = DAWColors.values ();
+        if (color < dawColors.length)
         {
-            final double [] entry = DAWColors.getColorEntry (DAWColors.DAW_COLORS[color]);
+            final ColorEx entry = dawColors[color].getColor ();
             switch (this.mode)
             {
                 case MODE_TRACK:
@@ -95,20 +98,20 @@ public class ColorView extends AbstractView<PushControlSurface, PushConfiguratio
                     {
                         final IMasterTrack master = this.model.getMasterTrack ();
                         if (master.isSelected ())
-                            master.setColor (entry[0], entry[1], entry[2]);
+                            master.setColor (entry);
                     }
                     else
-                        t.setColor (entry[0], entry[1], entry[2]);
+                        t.setColor (entry);
                     break;
 
                 case MODE_LAYER:
-                    this.model.getCursorDevice ().getLayerOrDrumPadBank ().getSelectedItem ().setColor (entry[0], entry[1], entry[2]);
+                    this.model.getCursorDevice ().getLayerOrDrumPadBank ().getSelectedItem ().setColor (entry);
                     break;
 
                 case MODE_CLIP:
                     final IClip clip = this.model.getClip ();
                     if (clip.doesExist ())
-                        clip.setColor (entry[0], entry[1], entry[2]);
+                        clip.setColor (entry);
                     break;
             }
         }

@@ -79,7 +79,7 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
 
         final MultiStateHardwareLight hardwareLight = this.hardwareSurface.createMultiStateHardwareLight (id);
 
-        hardwareLight.state ().setValueSupplier ( () -> () -> {
+        hardwareLight.state ().setValueSupplier ( () -> new DefaultInternalHardwareLightState ( () -> {
             final int encodedColorState = supplier.getAsInt ();
 
             if (encodedColorState == -1)
@@ -104,7 +104,7 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
 
             final double blinkTimeInSec = blinkFast ? 0.5 : 1;
             return HardwareLightVisualState.createBlinking (blinkColor, color, contrastBlinkColor, contrastColor, blinkTimeInSec, blinkTimeInSec);
-        });
+        }));
 
         hardwareLight.state ().onUpdateHardware (state -> {
             final HardwareLightVisualState visualState = state.getVisualState ();

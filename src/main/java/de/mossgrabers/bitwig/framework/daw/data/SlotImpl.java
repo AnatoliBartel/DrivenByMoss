@@ -4,6 +4,7 @@
 
 package de.mossgrabers.bitwig.framework.daw.data;
 
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.daw.data.AbstractItemImpl;
 import de.mossgrabers.framework.daw.data.ISlot;
 import de.mossgrabers.framework.daw.data.ITrack;
@@ -170,27 +171,22 @@ public class SlotImpl extends AbstractItemImpl implements ISlot
 
     /** {@inheritDoc} */
     @Override
-    public double [] getColor ()
+    public ColorEx getColor ()
     {
         // TODO API extension required - https://github.com/teotigraphix/Framework4Bitwig/issues/218
         if (this.track.isGroup ())
             return this.track.getColor ();
 
         final ColorValue color = this.slot.color ();
-        return new double []
-        {
-            color.red (),
-            color.green (),
-            color.blue ()
-        };
+        return new ColorEx (color.red (), color.green (), color.blue ());
     }
 
 
     /** {@inheritDoc} */
     @Override
-    public void setColor (final double red, final double green, final double blue)
+    public void setColor (final ColorEx color)
     {
-        this.slot.color ().set ((float) red, (float) green, (float) blue);
+        this.slot.color ().set ((float) color.getRed (), (float) color.getGreen (), (float) color.getBlue ());
     }
 
 

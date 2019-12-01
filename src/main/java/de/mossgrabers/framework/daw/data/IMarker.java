@@ -4,6 +4,8 @@
 
 package de.mossgrabers.framework.daw.data;
 
+import de.mossgrabers.framework.controller.color.ColorEx;
+
 /**
  * The interface to a marker (on a timeline).
  *
@@ -16,7 +18,7 @@ public interface IMarker extends IItem
      *
      * @return The color in RGB
      */
-    double [] getColor ();
+    ColorEx getColor ();
 
 
     /**

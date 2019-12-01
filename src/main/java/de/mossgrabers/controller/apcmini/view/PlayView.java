@@ -59,7 +59,7 @@ public class PlayView extends AbstractPlayView<APCminiControlSurface, APCminiCon
     @Override
     public String getButtonColorID (final ButtonID buttonID)
     {
-        return ButtonID.SCENE2 == buttonID ? ColorManager.BUTTON_STATE_OFF : ColorManager.BUTTON_STATE_ON;
+        return ButtonID.SCENE3 == buttonID ? ColorManager.BUTTON_STATE_OFF : ColorManager.BUTTON_STATE_ON;
     }
 
 

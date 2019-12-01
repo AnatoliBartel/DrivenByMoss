@@ -71,8 +71,9 @@ public class SequencerView extends AbstractNoteSequencerView<APCminiControlSurfa
     public String getButtonColorID (final ButtonID buttonID)
     {
         final int index = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
+        final int res = 7 - index;
         final boolean isKeyboardEnabled = this.model.canSelectedTrackHoldNotes ();
-        return isKeyboardEnabled && index == this.selectedResolutionIndex ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
+        return isKeyboardEnabled && res == this.selectedResolutionIndex ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
     }
 
 

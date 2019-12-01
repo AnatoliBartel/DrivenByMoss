@@ -45,8 +45,9 @@ public class Kontrol1Colors extends ColorManager
         this.registerColorIndex (PadGrid.GRID_OFF, 0);
 
         this.registerColorIndex (DAWColors.COLOR_OFF, 0);
-        for (int i = 0; i < DAWColors.DAW_COLORS.length; i++)
-            this.registerColorIndex (DAWColors.DAW_COLORS[i], DAW_COLOR_START + i);
+        final DAWColors [] values = DAWColors.values ();
+        for (int i = 0; i < values.length; i++)
+            this.registerColorIndex (values[i], DAW_COLOR_START + i);
     }
 
 
@@ -57,7 +58,7 @@ public class Kontrol1Colors extends ColorManager
         if (buttonID == null)
         {
             if (colorIndex >= DAW_COLOR_START)
-                return new ColorEx (DAWColors.getColorEntry (colorIndex - DAW_COLOR_START));
+                return DAWColors.getColorEntry (colorIndex - DAW_COLOR_START);
             return ColorEx.BLACK;
         }
 

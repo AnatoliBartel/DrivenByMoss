@@ -310,8 +310,7 @@ public abstract class AbstractSessionView<S extends IControlSurface<C>, C extend
 
     protected SessionColor getPadColor (final ISlot slot, final boolean isArmed)
     {
-        final double [] slotColor = slot.getColor ();
-        final String colorIndex = DAWColors.getColorIndex (slotColor[0], slotColor[1], slotColor[2]);
+        final String colorIndex = DAWColors.getColorIndex (slot.getColor ());
         final ColorManager cm = this.model.getColorManager ();
 
         if (slot.isRecordingQueued ())

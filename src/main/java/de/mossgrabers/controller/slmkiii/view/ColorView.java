@@ -7,6 +7,7 @@ package de.mossgrabers.controller.slmkiii.view;
 import de.mossgrabers.controller.slmkiii.SLMkIIIConfiguration;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.DAWColors;
 import de.mossgrabers.framework.daw.IModel;
@@ -45,10 +46,11 @@ public class ColorView extends AbstractView<SLMkIIIControlSurface, SLMkIIIConfig
     public void drawGrid ()
     {
         final PadGrid padGrid = this.surface.getPadGrid ();
+        final DAWColors [] dawColors = DAWColors.values ();
         for (int i = 0; i < 16; i++)
         {
             final int pos = (this.flip ? 16 : 0) + i;
-            padGrid.light (36 + i, pos < DAWColors.DAW_COLORS.length ? DAWColors.DAW_COLORS[pos] : PadGrid.GRID_OFF);
+            padGrid.light (36 + i, pos < dawColors.length ? dawColors[pos].name () : PadGrid.GRID_OFF);
         }
     }
 
@@ -61,18 +63,19 @@ public class ColorView extends AbstractView<SLMkIIIControlSurface, SLMkIIIConfig
             return;
 
         final int color = note - 36 + (this.flip ? 16 : 0);
-        if (color < DAWColors.DAW_COLORS.length)
+        final DAWColors [] dawColors = DAWColors.values ();
+        if (color < dawColors.length)
         {
-            final double [] entry = DAWColors.getColorEntry (DAWColors.DAW_COLORS[color]);
+            final ColorEx entry = dawColors[color].getColor ();
             final ITrack t = this.model.getSelectedTrack ();
             if (t == null)
             {
                 final IMasterTrack master = this.model.getMasterTrack ();
                 if (master.isSelected ())
-                    master.setColor (entry[0], entry[1], entry[2]);
+                    master.setColor (entry);
             }
             else
-                t.setColor (entry[0], entry[1], entry[2]);
+                t.setColor (entry);
         }
         this.surface.getViewManager ().restoreView ();
     }

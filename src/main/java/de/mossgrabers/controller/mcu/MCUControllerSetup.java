@@ -416,8 +416,8 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
 
         this.addButton (ButtonID.MOVE_BANK_LEFT, "Bank Left", new MoveTrackBankCommand<> (this.model, surface, Modes.DEVICE_PARAMS, false, true), MCUControlSurface.MCU_BANK_LEFT);
         this.addButton (ButtonID.MOVE_BANK_RIGHT, "Bank Right", new MoveTrackBankCommand<> (this.model, surface, Modes.DEVICE_PARAMS, false, false), MCUControlSurface.MCU_BANK_RIGHT);
-        surface.getButton (ButtonID.MOVE_TRACK_LEFT).bind (surface.getMidiInput (), this.getTriggerBindType (), MCUControlSurface.MCU_TRACK_LEFT);
-        surface.getButton (ButtonID.MOVE_TRACK_RIGHT).bind (surface.getMidiInput (), this.getTriggerBindType (), MCUControlSurface.MCU_TRACK_RIGHT);
+        surface.getButton (ButtonID.MOVE_TRACK_LEFT).bind (surface.getMidiInput (), this.getTriggerBindType (null), MCUControlSurface.MCU_TRACK_LEFT);
+        surface.getButton (ButtonID.MOVE_TRACK_RIGHT).bind (surface.getMidiInput (), this.getTriggerBindType (null), MCUControlSurface.MCU_TRACK_RIGHT);
 
         // Additional command for footcontrollers
         this.addButton (ButtonID.NEW, "New", new NewCommand<> (this.model, surface), -1);
@@ -869,7 +869,7 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
 
     /** {@inheritDoc} */
     @Override
-    protected BindType getTriggerBindType ()
+    protected BindType getTriggerBindType (ButtonID buttonID)
     {
         return BindType.NOTE;
     }

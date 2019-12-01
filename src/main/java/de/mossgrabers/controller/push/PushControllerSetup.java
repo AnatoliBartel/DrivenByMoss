@@ -694,18 +694,19 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
             surface.getButton (ButtonID.DEVICE).setBounds (173.5, 30.0, 10.0, 8.75);
             surface.getButton (ButtonID.BROWSE).setBounds (173.5, 40.75, 10.0, 8.75);
             surface.getButton (ButtonID.CLIP).setBounds (185.5, 40.75, 10.0, 8.75);
+
             surface.getButton (ButtonID.ROW1_1).setBounds (33.5, 51.25, 13.0, 5.5);
             surface.getButton (ButtonID.ROW2_1).setBounds (34.0, 20.25, 13.0, 5.5);
-            surface.getButton (ButtonID.SCENE1).setBounds (159.75, 58.0, 10.0, 10.0);
+            surface.getButton (ButtonID.SCENE1).setBounds (159.75, 59.25, 10.0, 10.0);
             surface.getButton (ButtonID.ROW1_2).setBounds (49.0, 51.25, 13.0, 5.5);
             surface.getButton (ButtonID.ROW2_2).setBounds (49.5, 20.25, 13.0, 5.5);
-            surface.getButton (ButtonID.SCENE2).setBounds (159.75, 70.25, 10.0, 10.0);
+            surface.getButton (ButtonID.SCENE2).setBounds (159.75, 70.75, 10.0, 10.0);
             surface.getButton (ButtonID.ROW1_3).setBounds (64.75, 51.25, 13.0, 5.5);
             surface.getButton (ButtonID.ROW2_3).setBounds (65.25, 20.25, 13.0, 5.5);
             surface.getButton (ButtonID.SCENE3).setBounds (159.75, 82.0, 10.0, 10.0);
             surface.getButton (ButtonID.ROW1_4).setBounds (80.25, 51.25, 13.0, 5.5);
             surface.getButton (ButtonID.ROW2_4).setBounds (80.75, 20.25, 13.0, 5.5);
-            surface.getButton (ButtonID.SCENE4).setBounds (159.75, 93.5, 10.0, 10.0);
+            surface.getButton (ButtonID.SCENE4).setBounds (159.75, 93.75, 10.0, 10.0);
             surface.getButton (ButtonID.ROW1_5).setBounds (95.75, 51.25, 13.0, 5.5);
             surface.getButton (ButtonID.ROW2_5).setBounds (96.25, 20.25, 13.0, 5.5);
             surface.getButton (ButtonID.SCENE5).setBounds (159.75, 105.75, 10.0, 10.0);
@@ -718,6 +719,7 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
             surface.getButton (ButtonID.ROW1_8).setBounds (142.5, 51.25, 13.0, 5.5);
             surface.getButton (ButtonID.ROW2_8).setBounds (143.0, 20.25, 13.0, 5.5);
             surface.getButton (ButtonID.SCENE8).setBounds (159.75, 141.75, 10.0, 10.0);
+
             surface.getButton (ButtonID.SHIFT).setBounds (173.5, 145.0, 10.0, 6.0);
             surface.getButton (ButtonID.SELECT).setBounds (185.5, 145.0, 10.0, 6.0);
             surface.getButton (ButtonID.TAP_TEMPO).setBounds (4.5, 20.25, 11.25, 5.5);
@@ -727,8 +729,8 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
             surface.getButton (ButtonID.PAGE_RIGHT).setBounds (185.75, 131.0, 10.0, 6.25);
             surface.getButton (ButtonID.MUTE).setBounds (4.5, 51.0, 8.25, 5.5);
             surface.getButton (ButtonID.SOLO).setBounds (12.5, 51.0, 8.25, 5.5);
-            surface.getButton (ButtonID.SCALES).setBounds (173.5, 106.5, 10.0, 6.25);
-            surface.getButton (ButtonID.ACCENT).setBounds (185.5, 93.5, 10.0, 6.25);
+            surface.getButton (ButtonID.SCALES).setBounds (173.5, 105.75, 10.0, 6.25);
+            surface.getButton (ButtonID.ACCENT).setBounds (185.5, 93.75, 10.0, 6.25);
             surface.getButton (ButtonID.ADD_EFFECT).setBounds (160.0, 30.0, 10.0, 8.75);
             surface.getButton (ButtonID.ADD_TRACK).setBounds (160.0, 40.75, 10.0, 8.75);
             surface.getButton (ButtonID.NOTE).setBounds (173.5, 113.75, 10.0, 6.25);
@@ -738,14 +740,14 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
             surface.getButton (ButtonID.ARROW_RIGHT).setBounds (187.75, 58.75, 7.25, 5.75);
             surface.getButton (ButtonID.OCTAVE_DOWN).setBounds (180.25, 137.25, 10.0, 6.25);
             surface.getButton (ButtonID.OCTAVE_UP).setBounds (179.75, 124.5, 10.0, 6.25);
-            surface.getButton (ButtonID.LAYOUT).setBounds (185.5, 106.5, 10.0, 6.25);
+            surface.getButton (ButtonID.LAYOUT).setBounds (185.5, 105.75, 10.0, 6.25);
             surface.getButton (ButtonID.SETUP).setBounds (173.5, 20.75, 10.0, 6.25);
             surface.getButton (ButtonID.STOP_CLIP).setBounds (21.0, 51.0, 8.25, 5.5);
             surface.getButton (ButtonID.SESSION).setBounds (185.5, 113.75, 10.0, 6.25);
-            surface.getButton (ButtonID.REPEAT).setBounds (173.5, 93.5, 10.0, 6.25);
+            surface.getButton (ButtonID.REPEAT).setBounds (173.5, 93.75, 10.0, 6.25);
             surface.getButton (ButtonID.CONVERT).setBounds (4.75, 58.75, 10.0, 8.5);
             surface.getButton (ButtonID.USER).setBounds (185.5, 20.5, 10.0, 6.25);
-            surface.getButton (ButtonID.FOOTSWITCH2).setBounds (161.5, 1.0, 6.75, 6.5);
+            surface.getButton (ButtonID.FOOTSWITCH2).setBounds (160.0, 1.0, 12.0, 8.25);
 
             surface.getContinuous (ContinuousID.KNOB1).setBounds (34.75, 5.75, 10.0, 10.0);
             surface.getContinuous (ContinuousID.KNOB2).setBounds (50.25, 5.75, 10.0, 10.0);

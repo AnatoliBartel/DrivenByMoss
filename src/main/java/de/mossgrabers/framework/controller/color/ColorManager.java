@@ -5,6 +5,7 @@
 package de.mossgrabers.framework.controller.color;
 
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.daw.DAWColors;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +40,18 @@ public class ColorManager
         if (this.colorIndexByKey.containsKey (key))
             throw new ColorIndexException ("Color for key " + key + " is already registered!");
         this.colorIndexByKey.put (key, Integer.valueOf (colorIndex));
+    }
+
+
+    /**
+     * Registers a a color index. An exception is thrown if the color index is already registered.
+     *
+     * @param dawColor The daw color key under which to register the color index
+     * @param colorIndex The color index
+     */
+    public void registerColorIndex (final DAWColors dawColor, final int colorIndex)
+    {
+        this.registerColorIndex (dawColor.name (), colorIndex);
     }
 
 

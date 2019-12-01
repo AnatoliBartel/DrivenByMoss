@@ -161,6 +161,12 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
     }
 
 
+    /**
+     * Get the button which is mapped to an USB control number.
+     *
+     * @param usbControlNumber The control number
+     * @return The mapped button
+     */
     public static ButtonID getMappedButton (final int usbControlNumber)
     {
         return BUTTON_MAP.get (Integer.valueOf (usbControlNumber));

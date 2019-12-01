@@ -515,7 +515,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
         button.bind (command);
         if (midiControl < 0)
             return;
-        button.bind (surface.getMidiInput (), this.getTriggerBindType (), midiControl);
+        button.bind (surface.getMidiInput (), this.getTriggerBindType (buttonID), midiControl);
         final IntSupplier intSupplier = () -> button.isPressed () ? 1 : 0;
         final IntSupplier supp = supplier == null ? intSupplier : supplier;
         this.addLight (surface, null, buttonID, button, midiChannel, midiControl, supp, colorIds);
@@ -564,10 +564,11 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
 
     /**
      * Get the default bind type for triggering buttons.
-     *
+     * 
+     * @param buttonID The button ID
      * @return The default, returns CC as default
      */
-    protected BindType getTriggerBindType ()
+    protected BindType getTriggerBindType (final ButtonID buttonID)
     {
         return BindType.CC;
     }
