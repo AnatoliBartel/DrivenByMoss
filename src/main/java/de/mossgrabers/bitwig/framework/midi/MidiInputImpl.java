@@ -170,7 +170,7 @@ public class MidiInputImpl implements IMidiInput
         switch (type)
         {
             case CC:
-                hardwareKnob.setAdjustValueMatcher (this.port.createRelative2sComplementCCValueMatcher (channel, control));
+                hardwareKnob.setAdjustValueMatcher (this.port.createRelative2sComplementCCValueMatcher (channel, control, -1));
                 break;
             default:
                 throw new BindException (type);
