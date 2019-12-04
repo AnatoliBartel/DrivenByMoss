@@ -7,7 +7,7 @@ package de.mossgrabers.framework.view;
 import de.mossgrabers.framework.configuration.Configuration;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IControlSurface;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IDrumPadBank;
 import de.mossgrabers.framework.daw.IModel;
@@ -193,7 +193,7 @@ public abstract class AbstractDrumView64<S extends IControlSurface<C>, C extends
 
     protected String getPadContentColor (final IChannel drumPad)
     {
-        return DAWColors.getColorIndex (drumPad.getColor ());
+        return DAWColor.getColorIndex (drumPad.getColor ());
     }
 
 

@@ -12,7 +12,7 @@ import de.mossgrabers.framework.controller.color.ColorEx;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public enum DAWColors
+public enum DAWColor
 {
     /** Color off. */
     COLOR_OFF("Off", new ColorEx (0.5, 0.5, 0.5)),
@@ -82,7 +82,7 @@ public enum DAWColors
      * @param name The name of the color
      * @param color The color
      */
-    DAWColors (final String name, final ColorEx color)
+    DAWColor (final String name, final ColorEx color)
     {
         this.name = name;
         this.color = color;
@@ -119,7 +119,7 @@ public enum DAWColors
      */
     public static ColorEx getColorEntry (final String colorId)
     {
-        final DAWColors value = DAWColors.valueOf (colorId);
+        final DAWColor value = DAWColor.valueOf (colorId);
         return value == null ? COLOR_OFF.getColor () : value.getColor ();
     }
 
@@ -132,7 +132,7 @@ public enum DAWColors
      */
     public static ColorEx getColorEntry (final int colorIndex)
     {
-        final DAWColors [] values = DAWColors.values ();
+        final DAWColor [] values = DAWColor.values ();
         return values[colorIndex >= 0 && colorIndex < values.length ? colorIndex : 0].getColor ();
     }
 
@@ -171,8 +171,8 @@ public enum DAWColors
      */
     public static String getColorIndex (final double red, final double green, final double blue)
     {
-        final DAWColors [] values = DAWColors.values ();
-        DAWColors cid = values[0];
+        final DAWColor [] values = DAWColor.values ();
+        DAWColor cid = values[0];
         double minError = 5.0;
         final ColorEx color = new ColorEx (red, green, blue);
         for (int i = 1; i < values.length; i++)

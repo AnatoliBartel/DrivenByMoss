@@ -8,7 +8,7 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.view.AbstractDrumView;
@@ -128,38 +128,38 @@ public class SLMkIIIColorManager extends ColorManager
 
         this.registerColorIndex (PadGrid.GRID_OFF, SLMKIII_BLACK);
 
-        this.registerColorIndex (DAWColors.COLOR_OFF, SLMKIII_BLACK);
-        this.registerColorIndex (DAWColors.DAW_COLOR_GRAY_HALF, SLMKIII_BLACK);
+        this.registerColorIndex (DAWColor.COLOR_OFF, SLMKIII_BLACK);
+        this.registerColorIndex (DAWColor.DAW_COLOR_GRAY_HALF, SLMKIII_BLACK);
 
-        this.registerColorIndex (DAWColors.DAW_COLOR_DARK_GRAY, SLMKIII_DARK_GREY);
-        this.registerColorIndex (DAWColors.DAW_COLOR_GRAY, SLMKIII_WHITE_HALF);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GRAY, SLMKIII_WHITE);
-        this.registerColorIndex (DAWColors.DAW_COLOR_SILVER, SLMKIII_GREY);
+        this.registerColorIndex (DAWColor.DAW_COLOR_DARK_GRAY, SLMKIII_DARK_GREY);
+        this.registerColorIndex (DAWColor.DAW_COLOR_GRAY, SLMKIII_WHITE_HALF);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_GRAY, SLMKIII_WHITE);
+        this.registerColorIndex (DAWColor.DAW_COLOR_SILVER, SLMKIII_GREY);
 
-        this.registerColorIndex (DAWColors.DAW_COLOR_DARK_BROWN, SLMKIII_DARK_BROWN);
-        this.registerColorIndex (DAWColors.DAW_COLOR_BROWN, SLMKIII_BROWN);
-        this.registerColorIndex (DAWColors.DAW_COLOR_DARK_BLUE, SLMKIII_DARK_BLUE);
-        this.registerColorIndex (DAWColors.DAW_COLOR_PURPLE_BLUE, SLMKIII_BLUE_PURPLISH);
-        this.registerColorIndex (DAWColors.DAW_COLOR_PURPLE, SLMKIII_PURPLE_HALF);
+        this.registerColorIndex (DAWColor.DAW_COLOR_DARK_BROWN, SLMKIII_DARK_BROWN);
+        this.registerColorIndex (DAWColor.DAW_COLOR_BROWN, SLMKIII_BROWN);
+        this.registerColorIndex (DAWColor.DAW_COLOR_DARK_BLUE, SLMKIII_DARK_BLUE);
+        this.registerColorIndex (DAWColor.DAW_COLOR_PURPLE_BLUE, SLMKIII_BLUE_PURPLISH);
+        this.registerColorIndex (DAWColor.DAW_COLOR_PURPLE, SLMKIII_PURPLE_HALF);
 
-        this.registerColorIndex (DAWColors.DAW_COLOR_PINK, SLMKIII_PINK);
-        this.registerColorIndex (DAWColors.DAW_COLOR_RED, SLMKIII_RED);
-        this.registerColorIndex (DAWColors.DAW_COLOR_ORANGE, SLMKIII_ORANGE);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_ORANGE, SLMKIII_AMBER);
-        this.registerColorIndex (DAWColors.DAW_COLOR_MOSS_GREEN, SLMKIII_GREEN_GRASS);
-        this.registerColorIndex (DAWColors.DAW_COLOR_GREEN, SLMKIII_GREEN);
-        this.registerColorIndex (DAWColors.DAW_COLOR_COLD_GREEN, SLMKIII_GREEN_LIGHT);
-        this.registerColorIndex (DAWColors.DAW_COLOR_BLUE, SLMKIII_BLUE);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PURPLE, SLMKIII_PURPLE);
+        this.registerColorIndex (DAWColor.DAW_COLOR_PINK, SLMKIII_PINK);
+        this.registerColorIndex (DAWColor.DAW_COLOR_RED, SLMKIII_RED);
+        this.registerColorIndex (DAWColor.DAW_COLOR_ORANGE, SLMKIII_ORANGE);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_ORANGE, SLMKIII_AMBER);
+        this.registerColorIndex (DAWColor.DAW_COLOR_MOSS_GREEN, SLMKIII_GREEN_GRASS);
+        this.registerColorIndex (DAWColor.DAW_COLOR_GREEN, SLMKIII_GREEN);
+        this.registerColorIndex (DAWColor.DAW_COLOR_COLD_GREEN, SLMKIII_GREEN_LIGHT);
+        this.registerColorIndex (DAWColor.DAW_COLOR_BLUE, SLMKIII_BLUE);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_PURPLE, SLMKIII_PURPLE);
 
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PINK, SLMKIII_PINK_LIGHT);
-        this.registerColorIndex (DAWColors.DAW_COLOR_SKIN, SLMKIII_SKIN);
-        this.registerColorIndex (DAWColors.DAW_COLOR_REDDISH_BROWN, SLMKIII_DARK_RED);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BROWN, SLMKIII_AMBER_HALF);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GREEN, SLMKIII_GREEN_LIGHT);
-        this.registerColorIndex (DAWColors.DAW_COLOR_BLUISH_GREEN, SLMKIII_MINT);
-        this.registerColorIndex (DAWColors.DAW_COLOR_GREEN_BLUE, SLMKIII_LIGHT_BLUE);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BLUE, SLMKIII_SKY_BLUE);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_PINK, SLMKIII_PINK_LIGHT);
+        this.registerColorIndex (DAWColor.DAW_COLOR_SKIN, SLMKIII_SKIN);
+        this.registerColorIndex (DAWColor.DAW_COLOR_REDDISH_BROWN, SLMKIII_DARK_RED);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_BROWN, SLMKIII_AMBER_HALF);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_GREEN, SLMKIII_GREEN_LIGHT);
+        this.registerColorIndex (DAWColor.DAW_COLOR_BLUISH_GREEN, SLMKIII_MINT);
+        this.registerColorIndex (DAWColor.DAW_COLOR_GREEN_BLUE, SLMKIII_LIGHT_BLUE);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_BLUE, SLMKIII_SKY_BLUE);
 
         this.registerColorIndex (ColorManager.BUTTON_STATE_OFF, SLMKIII_BLACK);
         this.registerColorIndex (ColorManager.BUTTON_STATE_ON, SLMKIII_WHITE);

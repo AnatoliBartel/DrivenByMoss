@@ -235,7 +235,24 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      */
     protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiControl, final BooleanSupplier supplier)
     {
-        this.addButton (buttonID, label, command, midiControl, () -> supplier.getAsBoolean () ? 1 : 0, ColorManager.BUTTON_STATE_ON, ColorManager.BUTTON_STATE_HI);
+        this.addButton (buttonID, label, command, 0, midiControl, supplier);
+    }
+
+
+    /**
+     * Create a hardware button on/off proxy on controller device 1, bind a trigger command to it
+     * and bind it to a MIDI CC on MIDI channel 1. State colors are ON and HI.
+     *
+     * @param buttonID The ID of the button (for later access)
+     * @param label The label of the button
+     * @param command The command to bind
+     * @param midiChannel The MIDI channel
+     * @param midiControl The MIDI CC or note
+     * @param supplier Callback for retrieving the on/off state of the light
+     */
+    protected void addButton (final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiControl, final BooleanSupplier supplier)
+    {
+        this.addButton (buttonID, label, command, midiChannel, midiControl, () -> supplier.getAsBoolean () ? 1 : 0, ColorManager.BUTTON_STATE_ON, ColorManager.BUTTON_STATE_HI);
     }
 
 

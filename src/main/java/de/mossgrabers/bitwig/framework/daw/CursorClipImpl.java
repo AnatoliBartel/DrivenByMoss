@@ -4,6 +4,7 @@
 
 package de.mossgrabers.bitwig.framework.daw;
 
+import de.mossgrabers.bitwig.framework.daw.data.Util;
 import de.mossgrabers.framework.controller.IValueChanger;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.daw.INoteClip;
@@ -98,31 +99,31 @@ public class CursorClipImpl implements INoteClip
     @Override
     public void enableObservers (final boolean enable)
     {
-        this.launcherClip.exists ().setIsSubscribed (enable);
-        this.launcherClip.playingStep ().setIsSubscribed (enable);
-        this.launcherClip.getPlayStart ().setIsSubscribed (enable);
-        this.launcherClip.getPlayStop ().setIsSubscribed (enable);
-        this.launcherClip.getLoopStart ().setIsSubscribed (enable);
-        this.launcherClip.getLoopLength ().setIsSubscribed (enable);
-        this.launcherClip.isLoopEnabled ().setIsSubscribed (enable);
-        this.launcherClip.getShuffle ().setIsSubscribed (enable);
-        this.launcherClip.getAccent ().setIsSubscribed (enable);
-        this.launcherClip.canScrollStepsBackwards ().setIsSubscribed (enable);
-        this.launcherClip.canScrollStepsForwards ().setIsSubscribed (enable);
-        this.launcherClip.color ().setIsSubscribed (enable);
+        Util.setIsSubscribed (this.launcherClip.exists (), enable);
+        Util.setIsSubscribed (this.launcherClip.playingStep (), enable);
+        Util.setIsSubscribed (this.launcherClip.getPlayStart (), enable);
+        Util.setIsSubscribed (this.launcherClip.getPlayStop (), enable);
+        Util.setIsSubscribed (this.launcherClip.getLoopStart (), enable);
+        Util.setIsSubscribed (this.launcherClip.getLoopLength (), enable);
+        Util.setIsSubscribed (this.launcherClip.isLoopEnabled (), enable);
+        Util.setIsSubscribed (this.launcherClip.getShuffle (), enable);
+        Util.setIsSubscribed (this.launcherClip.getAccent (), enable);
+        Util.setIsSubscribed (this.launcherClip.canScrollStepsBackwards (), enable);
+        Util.setIsSubscribed (this.launcherClip.canScrollStepsForwards (), enable);
+        Util.setIsSubscribed (this.launcherClip.color (), enable);
 
-        this.arrangerClip.exists ().setIsSubscribed (enable);
-        this.arrangerClip.playingStep ().setIsSubscribed (enable);
-        this.arrangerClip.getPlayStart ().setIsSubscribed (enable);
-        this.arrangerClip.getPlayStop ().setIsSubscribed (enable);
-        this.arrangerClip.getLoopStart ().setIsSubscribed (enable);
-        this.arrangerClip.getLoopLength ().setIsSubscribed (enable);
-        this.arrangerClip.isLoopEnabled ().setIsSubscribed (enable);
-        this.arrangerClip.getShuffle ().setIsSubscribed (enable);
-        this.arrangerClip.getAccent ().setIsSubscribed (enable);
-        this.arrangerClip.canScrollStepsBackwards ().setIsSubscribed (enable);
-        this.arrangerClip.canScrollStepsForwards ().setIsSubscribed (enable);
-        this.arrangerClip.color ().setIsSubscribed (enable);
+        Util.setIsSubscribed (this.arrangerClip.exists (), enable);
+        Util.setIsSubscribed (this.arrangerClip.playingStep (), enable);
+        Util.setIsSubscribed (this.arrangerClip.getPlayStart (), enable);
+        Util.setIsSubscribed (this.arrangerClip.getPlayStop (), enable);
+        Util.setIsSubscribed (this.arrangerClip.getLoopStart (), enable);
+        Util.setIsSubscribed (this.arrangerClip.getLoopLength (), enable);
+        Util.setIsSubscribed (this.arrangerClip.isLoopEnabled (), enable);
+        Util.setIsSubscribed (this.arrangerClip.getShuffle (), enable);
+        Util.setIsSubscribed (this.arrangerClip.getAccent (), enable);
+        Util.setIsSubscribed (this.arrangerClip.canScrollStepsBackwards (), enable);
+        Util.setIsSubscribed (this.arrangerClip.canScrollStepsForwards (), enable);
+        Util.setIsSubscribed (this.arrangerClip.color (), enable);
     }
 
 

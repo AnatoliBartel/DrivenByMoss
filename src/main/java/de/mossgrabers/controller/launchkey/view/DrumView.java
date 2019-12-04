@@ -8,7 +8,7 @@ import de.mossgrabers.controller.launchkey.LaunchkeyMiniMk3Configuration;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3Colors;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ControlSurface;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.INoteClip;
@@ -147,7 +147,7 @@ public class DrumView extends AbstractDrumView<LaunchkeyMiniMk3ControlSurface, L
         if (!drumPad.doesExist () || !drumPad.isActivated ())
             return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK;
 
-        return this.model.getColorManager ().getColorIndex (DAWColors.getColorIndex (drumPad.getColor ()));
+        return this.model.getColorManager ().getColorIndex (DAWColor.getColorIndex (drumPad.getColor ()));
     }
 
 

@@ -47,10 +47,10 @@ public class SceneImpl extends AbstractItemImpl implements IScene
     @Override
     public void enableObservers (final boolean enable)
     {
-        this.scene.exists ().setIsSubscribed (enable);
-        this.scene.name ().setIsSubscribed (enable);
-        this.scene.sceneIndex ().setIsSubscribed (enable);
-        this.scene.color ().setIsSubscribed (enable);
+        Util.setIsSubscribed (this.scene.exists (), enable);
+        Util.setIsSubscribed (this.scene.name (), enable);
+        Util.setIsSubscribed (this.scene.sceneIndex (), enable);
+        Util.setIsSubscribed (this.scene.color (), enable);
     }
 
 

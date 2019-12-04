@@ -5,6 +5,7 @@
 package de.mossgrabers.bitwig.framework.daw;
 
 import de.mossgrabers.bitwig.framework.daw.data.ParameterImpl;
+import de.mossgrabers.bitwig.framework.daw.data.Util;
 import de.mossgrabers.framework.controller.IValueChanger;
 import de.mossgrabers.framework.daw.AbstractBank;
 import de.mossgrabers.framework.daw.IHost;
@@ -71,10 +72,10 @@ public class ParameterBankImpl extends AbstractBank<IParameter> implements IPara
         for (final IItem item: this.items)
             item.enableObservers (enable);
 
-        this.remoteControls.hasPrevious ().setIsSubscribed (enable);
-        this.remoteControls.hasNext ().setIsSubscribed (enable);
-        this.remoteControls.selectedPageIndex ().setIsSubscribed (enable);
-        this.remoteControls.pageCount ().setIsSubscribed (enable);
+        Util.setIsSubscribed (this.remoteControls.hasPrevious (), enable);
+        Util.setIsSubscribed (this.remoteControls.hasNext (), enable);
+        Util.setIsSubscribed (this.remoteControls.selectedPageIndex (), enable);
+        Util.setIsSubscribed (this.remoteControls.pageCount (), enable);
     }
 
 

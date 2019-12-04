@@ -6,7 +6,9 @@ package de.mossgrabers.controller.apc.view;
 
 import de.mossgrabers.controller.apc.APCConfiguration;
 import de.mossgrabers.controller.apc.controller.APCControlSurface;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.color.ColorManager;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.IChannel;
 import de.mossgrabers.framework.utils.ButtonEvent;
@@ -36,7 +38,7 @@ public class DrumView extends AbstractDrumView<APCControlSurface, APCConfigurati
     @Override
     protected String getPadContentColor (final IChannel drumPad)
     {
-        return this.surface.isMkII () ? DAWColors.getColorIndex (drumPad.getColor ()) : AbstractDrumView.COLOR_PAD_HAS_CONTENT;
+        return this.surface.isMkII () ? DAWColor.getColorIndex (drumPad.getColor ()) : AbstractDrumView.COLOR_PAD_HAS_CONTENT;
     }
 
 
@@ -78,13 +80,13 @@ public class DrumView extends AbstractDrumView<APCControlSurface, APCConfigurati
         }
     }
 
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // final String color = this.isActive () ? ColorManager.BUTTON_STATE_ON :
-    // ColorManager.BUTTON_STATE_OFF;
-    // TODO this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene,
-    // scene == 2 ? ColorManager.BUTTON_STATE_OFF : color);
-    // }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getButtonColorID (final ButtonID buttonID)
+    {
+        if (buttonID == ButtonID.SCENE3)
+            return ColorManager.BUTTON_STATE_OFF;
+        return this.isActive () ? ColorManager.BUTTON_STATE_ON : ColorManager.BUTTON_STATE_OFF;
+    }
 }

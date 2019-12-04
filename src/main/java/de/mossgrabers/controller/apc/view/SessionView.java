@@ -9,7 +9,9 @@ import de.mossgrabers.controller.apc.controller.APCColorManager;
 import de.mossgrabers.controller.apc.controller.APCControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.IModel;
-import de.mossgrabers.framework.utils.ButtonEvent;
+import de.mossgrabers.framework.daw.ISceneBank;
+import de.mossgrabers.framework.daw.data.IScene;
+import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.view.AbstractSessionView;
 import de.mossgrabers.framework.view.SessionColor;
 
@@ -58,26 +60,17 @@ public class SessionView extends AbstractSessionView<APCControlSurface, APCConfi
 
     /** {@inheritDoc} */
     @Override
-    public void onScene (final int scene, final ButtonEvent event)
+    public String getButtonColorID (final ButtonID buttonID)
     {
-        if (event == ButtonEvent.DOWN)
-        {
-            this.model.getCurrentTrackBank ().getSceneBank ().getItem (scene).launch ();
-            // TODO this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene,
-            // ColorManager.BUTTON_STATE_ON);
-        }
-        // TODO
-        // else if (event == ButtonEvent.UP)
-        // this.surface.updateTrigger (APCControlSurface.APC_BUTTON_SCENE_LAUNCH_1 + scene,
-        // ColorManager.BUTTON_STATE_OFF);
-    }
+        final int scene = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
+        if (scene < 0 || scene >= 8)
+            return AbstractMode.BUTTON_COLOR_OFF;
 
-
-    /** {@inheritDoc} */
-    @Override
-    public int getButtonColor (final ButtonID buttonID)
-    {
-        return this.surface.isMkII () ? APCColorManager.APC_MKII_COLOR_GREEN : APCColorManager.APC_COLOR_GREEN;
+        final ISceneBank sceneBank = this.model.getSceneBank ();
+        final IScene s = sceneBank.getItem (scene);
+        if (s.doesExist ())
+            return s.isSelected () ? AbstractSessionView.COLOR_SELECTED_SCENE : AbstractSessionView.COLOR_SCENE;
+        return AbstractSessionView.COLOR_SCENE_OFF;
     }
 
 

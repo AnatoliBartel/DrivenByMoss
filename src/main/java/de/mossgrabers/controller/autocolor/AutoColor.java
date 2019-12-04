@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.autocolor;
 
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.ITrackBank;
 import de.mossgrabers.framework.daw.data.ITrack;
 
@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  */
 public class AutoColor
 {
-    private final EnumMap<DAWColors, List<Pattern>> colorRegex = new EnumMap<> (DAWColors.class);
+    private final EnumMap<DAWColor, List<Pattern>> colorRegex = new EnumMap<> (DAWColor.class);
     private final AutoColorConfiguration            configuration;
     private ITrackBank                              trackBank;
 
@@ -47,7 +47,7 @@ public class AutoColor
      * @param color The color
      * @param filter The substring
      */
-    public void handleRegExChange (final DAWColors color, final String filter)
+    public void handleRegExChange (final DAWColor color, final String filter)
     {
         if (!this.configuration.isEnableAutoColor ())
             return;
@@ -86,7 +86,7 @@ public class AutoColor
      * @param color The color to match for
      * @param patterns The patterns to match
      */
-    private void updateTracks (final DAWColors color, final List<Pattern> patterns)
+    private void updateTracks (final DAWColor color, final List<Pattern> patterns)
     {
         for (int i = 0; i < this.trackBank.getPageSize (); i++)
         {
@@ -107,7 +107,7 @@ public class AutoColor
     {
         synchronized (this.colorRegex)
         {
-            for (final Entry<DAWColors, List<Pattern>> e: this.colorRegex.entrySet ())
+            for (final Entry<DAWColor, List<Pattern>> e: this.colorRegex.entrySet ())
                 matchColorToTrack (track, trackName, e.getKey (), e.getValue ());
         }
     }
@@ -123,7 +123,7 @@ public class AutoColor
      * @param color The color to apply
      * @param patterns The pattern to test against
      */
-    private static void matchColorToTrack (final ITrack track, final String trackName, final DAWColors color, final List<Pattern> patterns)
+    private static void matchColorToTrack (final ITrack track, final String trackName, final DAWColor color, final List<Pattern> patterns)
     {
         for (final Pattern pattern: patterns)
         {

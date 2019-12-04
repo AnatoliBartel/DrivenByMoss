@@ -9,7 +9,7 @@ import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorIndexException;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.view.AbstractDrumView;
@@ -483,34 +483,34 @@ public class PushColorManager extends ColorManager
         this.registerColorIndex (PadGrid.GRID_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
 
         // Push 2 DAW colors are set in the color palette from indices 70 to 96
-        this.registerColorIndex (DAWColors.COLOR_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
-        this.registerColorIndex (DAWColors.DAW_COLOR_GRAY_HALF, isPush2 ? 70 : PUSH1_COLOR2_GREY_MD);
-        this.registerColorIndex (DAWColors.DAW_COLOR_DARK_GRAY, isPush2 ? 71 : 1);
-        this.registerColorIndex (DAWColors.DAW_COLOR_GRAY, isPush2 ? 72 : PUSH1_COLOR2_GREY_MD);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GRAY, isPush2 ? 73 : PUSH1_COLOR2_GREY_LT);
-        this.registerColorIndex (DAWColors.DAW_COLOR_SILVER, isPush2 ? 74 : 40);
-        this.registerColorIndex (DAWColors.DAW_COLOR_DARK_BROWN, isPush2 ? 75 : 11);
-        this.registerColorIndex (DAWColors.DAW_COLOR_BROWN, isPush2 ? 76 : 12);
-        this.registerColorIndex (DAWColors.DAW_COLOR_DARK_BLUE, isPush2 ? 77 : 42);
-        this.registerColorIndex (DAWColors.DAW_COLOR_PURPLE_BLUE, isPush2 ? 78 : 44);
-        this.registerColorIndex (DAWColors.DAW_COLOR_PURPLE, isPush2 ? 79 : 81);
-        this.registerColorIndex (DAWColors.DAW_COLOR_PINK, isPush2 ? 80 : 57);
-        this.registerColorIndex (DAWColors.DAW_COLOR_RED, isPush2 ? 81 : 6);
-        this.registerColorIndex (DAWColors.DAW_COLOR_ORANGE, isPush2 ? 82 : 60);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_ORANGE, isPush2 ? 83 : 62);
-        this.registerColorIndex (DAWColors.DAW_COLOR_MOSS_GREEN, isPush2 ? 84 : 19);
-        this.registerColorIndex (DAWColors.DAW_COLOR_GREEN, isPush2 ? 85 : 26);
-        this.registerColorIndex (DAWColors.DAW_COLOR_COLD_GREEN, isPush2 ? 86 : 30);
-        this.registerColorIndex (DAWColors.DAW_COLOR_BLUE, isPush2 ? 87 : 37);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PURPLE, isPush2 ? 88 : 48);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PINK, isPush2 ? 89 : 56);
-        this.registerColorIndex (DAWColors.DAW_COLOR_SKIN, isPush2 ? 90 : 4);
-        this.registerColorIndex (DAWColors.DAW_COLOR_REDDISH_BROWN, isPush2 ? 91 : 10);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BROWN, isPush2 ? 92 : 61);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GREEN, isPush2 ? 93 : 18);
-        this.registerColorIndex (DAWColors.DAW_COLOR_BLUISH_GREEN, isPush2 ? 94 : 25);
-        this.registerColorIndex (DAWColors.DAW_COLOR_GREEN_BLUE, isPush2 ? 95 : 32);
-        this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BLUE, isPush2 ? 96 : 41);
+        this.registerColorIndex (DAWColor.COLOR_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
+        this.registerColorIndex (DAWColor.DAW_COLOR_GRAY_HALF, isPush2 ? 70 : PUSH1_COLOR2_GREY_MD);
+        this.registerColorIndex (DAWColor.DAW_COLOR_DARK_GRAY, isPush2 ? 71 : 1);
+        this.registerColorIndex (DAWColor.DAW_COLOR_GRAY, isPush2 ? 72 : PUSH1_COLOR2_GREY_MD);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_GRAY, isPush2 ? 73 : PUSH1_COLOR2_GREY_LT);
+        this.registerColorIndex (DAWColor.DAW_COLOR_SILVER, isPush2 ? 74 : 40);
+        this.registerColorIndex (DAWColor.DAW_COLOR_DARK_BROWN, isPush2 ? 75 : 11);
+        this.registerColorIndex (DAWColor.DAW_COLOR_BROWN, isPush2 ? 76 : 12);
+        this.registerColorIndex (DAWColor.DAW_COLOR_DARK_BLUE, isPush2 ? 77 : 42);
+        this.registerColorIndex (DAWColor.DAW_COLOR_PURPLE_BLUE, isPush2 ? 78 : 44);
+        this.registerColorIndex (DAWColor.DAW_COLOR_PURPLE, isPush2 ? 79 : 81);
+        this.registerColorIndex (DAWColor.DAW_COLOR_PINK, isPush2 ? 80 : 57);
+        this.registerColorIndex (DAWColor.DAW_COLOR_RED, isPush2 ? 81 : 6);
+        this.registerColorIndex (DAWColor.DAW_COLOR_ORANGE, isPush2 ? 82 : 60);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_ORANGE, isPush2 ? 83 : 62);
+        this.registerColorIndex (DAWColor.DAW_COLOR_MOSS_GREEN, isPush2 ? 84 : 19);
+        this.registerColorIndex (DAWColor.DAW_COLOR_GREEN, isPush2 ? 85 : 26);
+        this.registerColorIndex (DAWColor.DAW_COLOR_COLD_GREEN, isPush2 ? 86 : 30);
+        this.registerColorIndex (DAWColor.DAW_COLOR_BLUE, isPush2 ? 87 : 37);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_PURPLE, isPush2 ? 88 : 48);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_PINK, isPush2 ? 89 : 56);
+        this.registerColorIndex (DAWColor.DAW_COLOR_SKIN, isPush2 ? 90 : 4);
+        this.registerColorIndex (DAWColor.DAW_COLOR_REDDISH_BROWN, isPush2 ? 91 : 10);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_BROWN, isPush2 ? 92 : 61);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_GREEN, isPush2 ? 93 : 18);
+        this.registerColorIndex (DAWColor.DAW_COLOR_BLUISH_GREEN, isPush2 ? 94 : 25);
+        this.registerColorIndex (DAWColor.DAW_COLOR_GREEN_BLUE, isPush2 ? 95 : 32);
+        this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_BLUE, isPush2 ? 96 : 41);
 
         this.registerColorIndex (ColorManager.BUTTON_STATE_OFF, 0);
         this.registerColorIndex (ColorManager.BUTTON_STATE_ON, isPush2 ? 8 : 1);
@@ -542,7 +542,7 @@ public class PushColorManager extends ColorManager
     public static int [] getPaletteColorRGB (final int index)
     {
         if (index >= 70 && index <= 96)
-            return DAWColors.getColorEntry (index - 69).toIntRGB ();
+            return DAWColor.getColorEntry (index - 69).toIntRGB ();
         return DEFAULT_PALETTE[index];
     }
 
@@ -556,7 +556,7 @@ public class PushColorManager extends ColorManager
     public static ColorEx getPaletteColor (final int index)
     {
         if (index >= 70 && index <= 96)
-            return DAWColors.getColorEntry (index - 69);
+            return DAWColor.getColorEntry (index - 69);
         return ColorEx.fromRGB (DEFAULT_PALETTE[index][0], DEFAULT_PALETTE[index][1], DEFAULT_PALETTE[index][2]);
     }
 

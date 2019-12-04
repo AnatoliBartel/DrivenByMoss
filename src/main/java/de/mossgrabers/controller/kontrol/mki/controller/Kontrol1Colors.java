@@ -8,7 +8,7 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.scale.Scales;
 
 
@@ -44,8 +44,8 @@ public class Kontrol1Colors extends ColorManager
 
         this.registerColorIndex (PadGrid.GRID_OFF, 0);
 
-        this.registerColorIndex (DAWColors.COLOR_OFF, 0);
-        final DAWColors [] values = DAWColors.values ();
+        this.registerColorIndex (DAWColor.COLOR_OFF, 0);
+        final DAWColor [] values = DAWColor.values ();
         for (int i = 0; i < values.length; i++)
             this.registerColorIndex (values[i], DAW_COLOR_START + i);
     }
@@ -58,7 +58,7 @@ public class Kontrol1Colors extends ColorManager
         if (buttonID == null)
         {
             if (colorIndex >= DAW_COLOR_START)
-                return DAWColors.getColorEntry (colorIndex - DAW_COLOR_START);
+                return DAWColor.getColorEntry (colorIndex - DAW_COLOR_START);
             return ColorEx.BLACK;
         }
 

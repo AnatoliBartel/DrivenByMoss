@@ -4,14 +4,17 @@
 
 package de.mossgrabers.controller.apc.controller;
 
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
+import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.view.AbstractDrumView;
 import de.mossgrabers.framework.view.AbstractPlayView;
 import de.mossgrabers.framework.view.AbstractSequencerView;
+import de.mossgrabers.framework.view.AbstractSessionView;
 
 
 /**
@@ -123,6 +126,12 @@ public class APCColorManager extends ColorManager
         this.registerColorIndex (Scales.SCALE_COLOR_NOTE, isMkII ? APC_MKII_COLOR_WHITE : APC_COLOR_BLACK);
         this.registerColorIndex (Scales.SCALE_COLOR_OUT_OF_SCALE, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
 
+        this.registerColorIndex (AbstractMode.BUTTON_COLOR_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
+
+        this.registerColorIndex (AbstractSessionView.COLOR_SCENE, isMkII ? APC_MKII_COLOR_GREEN : APC_COLOR_GREEN);
+        this.registerColorIndex (AbstractSessionView.COLOR_SELECTED_SCENE, isMkII ? APC_MKII_COLOR_GREEN_HI : APC_COLOR_GREEN_BLINK);
+        this.registerColorIndex (AbstractSessionView.COLOR_SCENE_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
+
         this.registerColorIndex (AbstractSequencerView.COLOR_STEP_HILITE_NO_CONTENT, isMkII ? APC_MKII_COLOR_GREEN_HI : APC_COLOR_GREEN);
         this.registerColorIndex (AbstractSequencerView.COLOR_STEP_HILITE_CONTENT, isMkII ? APC_MKII_COLOR_GREEN_LO : APC_COLOR_GREEN);
         this.registerColorIndex (AbstractSequencerView.COLOR_NO_CONTENT, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
@@ -146,37 +155,36 @@ public class APCColorManager extends ColorManager
 
         this.registerColorIndex (PadGrid.GRID_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
 
-        this.registerColorIndex (DAWColors.COLOR_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
-
+        this.registerColorIndex (DAWColor.COLOR_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
         if (isMkII)
         {
-            this.registerColorIndex (DAWColors.DAW_COLOR_GRAY_HALF, APC_MKII_COLOR_GREY_MD);
-            this.registerColorIndex (DAWColors.DAW_COLOR_DARK_GRAY, APC_MKII_COLOR_GREY_LO);
-            this.registerColorIndex (DAWColors.DAW_COLOR_GRAY, APC_MKII_COLOR_GREY_MD);
-            this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GRAY, APC_MKII_COLOR_GREY_LO);
-            this.registerColorIndex (DAWColors.DAW_COLOR_SILVER, APC_MKII_COLOR_SKY_OCEAN);
-            this.registerColorIndex (DAWColors.DAW_COLOR_DARK_BROWN, APC_MKII_COLOR_AMBER_LO);
-            this.registerColorIndex (DAWColors.DAW_COLOR_BROWN, APC_MKII_COLOR_AMBER_YELLOW);
-            this.registerColorIndex (DAWColors.DAW_COLOR_DARK_BLUE, APC_MKII_COLOR_OCEAN);
-            this.registerColorIndex (DAWColors.DAW_COLOR_PURPLE_BLUE, APC_MKII_COLOR_OCEAN_BLUE);
-            this.registerColorIndex (DAWColors.DAW_COLOR_PURPLE, APC_MKII_COLOR_PINK);
-            this.registerColorIndex (DAWColors.DAW_COLOR_PINK, APC_MKII_COLOR_PINK_HI);
-            this.registerColorIndex (DAWColors.DAW_COLOR_RED, APC_MKII_COLOR_RED);
-            this.registerColorIndex (DAWColors.DAW_COLOR_ORANGE, APC_MKII_COLOR_AMBER);
-            this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_ORANGE, APC_MKII_COLOR_RED_LO);
-            this.registerColorIndex (DAWColors.DAW_COLOR_MOSS_GREEN, APC_MKII_COLOR_LIME_LO);
-            this.registerColorIndex (DAWColors.DAW_COLOR_GREEN, APC_MKII_COLOR_SPRING);
-            this.registerColorIndex (DAWColors.DAW_COLOR_COLD_GREEN, APC_MKII_COLOR_TURQUOISE);
-            this.registerColorIndex (DAWColors.DAW_COLOR_BLUE, APC_MKII_COLOR_SKY_HI);
-            this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PURPLE, APC_MKII_COLOR_BLUE_ORCHID);
-            this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_PINK, APC_MKII_COLOR_MAGENTA_PINK);
-            this.registerColorIndex (DAWColors.DAW_COLOR_SKIN, APC_MKII_COLOR_ROSE);
-            this.registerColorIndex (DAWColors.DAW_COLOR_REDDISH_BROWN, APC_MKII_COLOR_AMBER);
-            this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BROWN, APC_MKII_COLOR_AMBER_HI);
-            this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_GREEN, APC_MKII_COLOR_LIME);
-            this.registerColorIndex (DAWColors.DAW_COLOR_BLUISH_GREEN, APC_MKII_COLOR_SPRING_HI);
-            this.registerColorIndex (DAWColors.DAW_COLOR_GREEN_BLUE, APC_MKII_COLOR_TURQUOISE_CYAN);
-            this.registerColorIndex (DAWColors.DAW_COLOR_LIGHT_BLUE, APC_MKII_COLOR_OCEAN_HI);
+            this.registerColorIndex (DAWColor.DAW_COLOR_GRAY_HALF, APC_MKII_COLOR_GREY_MD);
+            this.registerColorIndex (DAWColor.DAW_COLOR_DARK_GRAY, APC_MKII_COLOR_GREY_LO);
+            this.registerColorIndex (DAWColor.DAW_COLOR_GRAY, APC_MKII_COLOR_GREY_MD);
+            this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_GRAY, APC_MKII_COLOR_GREY_LT);
+            this.registerColorIndex (DAWColor.DAW_COLOR_SILVER, APC_MKII_COLOR_SKY_OCEAN);
+            this.registerColorIndex (DAWColor.DAW_COLOR_DARK_BROWN, APC_MKII_COLOR_AMBER_LO);
+            this.registerColorIndex (DAWColor.DAW_COLOR_BROWN, APC_MKII_COLOR_AMBER_YELLOW);
+            this.registerColorIndex (DAWColor.DAW_COLOR_DARK_BLUE, APC_MKII_COLOR_OCEAN);
+            this.registerColorIndex (DAWColor.DAW_COLOR_PURPLE_BLUE, APC_MKII_COLOR_OCEAN_BLUE);
+            this.registerColorIndex (DAWColor.DAW_COLOR_PURPLE, APC_MKII_COLOR_PINK);
+            this.registerColorIndex (DAWColor.DAW_COLOR_PINK, APC_MKII_COLOR_PINK_HI);
+            this.registerColorIndex (DAWColor.DAW_COLOR_RED, APC_MKII_COLOR_RED);
+            this.registerColorIndex (DAWColor.DAW_COLOR_ORANGE, APC_MKII_COLOR_AMBER);
+            this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_ORANGE, APC_MKII_COLOR_YELLOW);
+            this.registerColorIndex (DAWColor.DAW_COLOR_MOSS_GREEN, APC_MKII_COLOR_SPRING);
+            this.registerColorIndex (DAWColor.DAW_COLOR_GREEN, APC_MKII_COLOR_LIME_LO);
+            this.registerColorIndex (DAWColor.DAW_COLOR_COLD_GREEN, APC_MKII_COLOR_TURQUOISE);
+            this.registerColorIndex (DAWColor.DAW_COLOR_BLUE, APC_MKII_COLOR_SKY_HI);
+            this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_PURPLE, APC_MKII_COLOR_BLUE_ORCHID);
+            this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_PINK, APC_MKII_COLOR_MAGENTA_PINK);
+            this.registerColorIndex (DAWColor.DAW_COLOR_SKIN, APC_MKII_COLOR_ROSE);
+            this.registerColorIndex (DAWColor.DAW_COLOR_REDDISH_BROWN, APC_MKII_COLOR_AMBER);
+            this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_BROWN, APC_MKII_COLOR_AMBER_HI);
+            this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_GREEN, APC_MKII_COLOR_LIME);
+            this.registerColorIndex (DAWColor.DAW_COLOR_BLUISH_GREEN, APC_MKII_COLOR_TURQUOISE_CYAN);
+            this.registerColorIndex (DAWColor.DAW_COLOR_GREEN_BLUE, APC_MKII_COLOR_SPRING_HI);
+            this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_BLUE, APC_MKII_COLOR_OCEAN_HI);
         }
 
         this.registerColorIndex (ColorManager.BUTTON_STATE_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
@@ -193,11 +201,24 @@ public class APCColorManager extends ColorManager
 
         if (isMkII)
         {
-            // TODO
-
             for (int i = 0; i < 128; i++)
                 this.registerColor (i, ColorEx.BLACK);
-            // DAWColors.getColorEntry (index + 1);
+
+            for (DAWColor dc: DAWColor.values ())
+            {
+                final String name = dc.name ();
+                this.registerColor (this.getColorIndex (name), DAWColor.getColorEntry (name));
+            }
+
+            this.registerColor (APC_MKII_COLOR_WHITE, ColorEx.WHITE);
+            this.registerColor (APC_MKII_COLOR_RED_HI, ColorEx.RED);
+            this.registerColor (APC_MKII_COLOR_YELLOW_HI, ColorEx.YELLOW);
+            this.registerColor (APC_MKII_COLOR_YELLOW_LO, ColorEx.evenDarker (ColorEx.YELLOW));
+            this.registerColor (APC_MKII_COLOR_GREEN_HI, ColorEx.GREEN);
+            this.registerColor (APC_MKII_COLOR_GREEN, ColorEx.darker (ColorEx.GREEN));
+            this.registerColor (APC_MKII_COLOR_GREEN_LO, ColorEx.evenDarker (ColorEx.GREEN));
+            this.registerColor (APC_MKII_COLOR_BLUE_HI, ColorEx.BLUE);
+            this.registerColor (APC_MKII_COLOR_BLUE_LO, ColorEx.evenDarker (ColorEx.BLUE));
         }
         else
         {
@@ -211,6 +232,72 @@ public class APCColorManager extends ColorManager
 
             for (int i = APC_COLOR_YELLOW_BLINK + 1; i < 128; i++)
                 this.registerColor (i, ColorEx.BLACK);
+        }
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public ColorEx getColor (final int colorIndex, final ButtonID buttonID)
+    {
+        switch (buttonID)
+        {
+            case ROW1_1:
+            case ROW1_2:
+            case ROW1_3:
+            case ROW1_4:
+            case ROW1_5:
+            case ROW1_6:
+            case ROW1_7:
+            case ROW1_8:
+            case ROW3_1:
+            case ROW3_2:
+            case ROW3_3:
+            case ROW3_4:
+            case ROW3_5:
+            case ROW3_6:
+            case ROW3_7:
+            case ROW3_8:
+            case ROW6_1:
+            case ROW6_2:
+            case ROW6_3:
+            case ROW6_4:
+            case ROW6_5:
+            case ROW6_6:
+            case ROW6_7:
+            case ROW6_8:
+            case MASTERTRACK:
+                return colorIndex > 0 ? ColorEx.ORANGE : ColorEx.BLACK;
+
+            case ROW2_1:
+            case ROW2_2:
+            case ROW2_3:
+            case ROW2_4:
+            case ROW2_5:
+            case ROW2_6:
+            case ROW2_7:
+            case ROW2_8:
+                return colorIndex > 0 ? ColorEx.BLUE : ColorEx.BLACK;
+
+            case ROW4_1:
+            case ROW4_2:
+            case ROW4_3:
+            case ROW4_4:
+            case ROW4_5:
+            case ROW4_6:
+            case ROW4_7:
+            case ROW4_8:
+                return colorIndex > 0 ? ColorEx.RED : ColorEx.BLACK;
+
+            case PLAY:
+                return colorIndex > 0 ? ColorEx.GREEN : ColorEx.BLACK;
+
+            case RECORD:
+            case SESSION:
+                return colorIndex > 0 ? ColorEx.RED : ColorEx.BLACK;
+
+            default:
+                return super.getColor (colorIndex, buttonID);
         }
     }
 }

@@ -75,12 +75,12 @@ public class ChannelImpl extends AbstractDeviceChainImpl<Channel> implements ICh
     @Override
     public void enableObservers (final boolean enable)
     {
-        this.deviceChain.exists ().setIsSubscribed (enable);
-        this.deviceChain.name ().setIsSubscribed (enable);
-        this.deviceChain.isActivated ().setIsSubscribed (enable);
-        this.deviceChain.mute ().setIsSubscribed (enable);
-        this.deviceChain.solo ().setIsSubscribed (enable);
-        this.deviceChain.color ().setIsSubscribed (enable);
+        Util.setIsSubscribed (this.deviceChain.exists (), enable);
+        Util.setIsSubscribed (this.deviceChain.name (), enable);
+        Util.setIsSubscribed (this.deviceChain.isActivated (), enable);
+        Util.setIsSubscribed (this.deviceChain.mute (), enable);
+        Util.setIsSubscribed (this.deviceChain.solo (), enable);
+        Util.setIsSubscribed (this.deviceChain.color (), enable);
 
         this.volumeParameter.enableObservers (enable);
         this.panParameter.enableObservers (enable);

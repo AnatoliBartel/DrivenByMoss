@@ -4,6 +4,7 @@
 
 package de.mossgrabers.bitwig.framework.daw;
 
+import de.mossgrabers.bitwig.framework.daw.data.Util;
 import de.mossgrabers.framework.daw.IProject;
 
 import com.bitwig.extension.controller.api.Action;
@@ -41,7 +42,7 @@ public class ProjectImpl implements IProject
     @Override
     public void enableObservers (final boolean enable)
     {
-        this.application.projectName ().setIsSubscribed (enable);
+        Util.setIsSubscribed (this.application.projectName (), enable);
     }
 
 

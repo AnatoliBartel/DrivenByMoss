@@ -59,17 +59,17 @@ public class SlotImpl extends AbstractItemImpl implements ISlot
     @Override
     public void enableObservers (final boolean enable)
     {
-        this.slot.exists ().setIsSubscribed (enable);
-        this.slot.sceneIndex ().setIsSubscribed (enable);
-        this.slot.name ().setIsSubscribed (enable);
-        this.slot.hasContent ().setIsSubscribed (enable);
-        this.slot.color ().setIsSubscribed (enable);
-        this.slot.isPlaying ().setIsSubscribed (enable);
-        this.slot.isPlaybackQueued ().setIsSubscribed (enable);
-        this.slot.isRecording ().setIsSubscribed (enable);
-        this.slot.isRecordingQueued ().setIsSubscribed (enable);
-        this.slot.isStopQueued ().setIsSubscribed (enable);
-        this.slot.isSelected ().setIsSubscribed (enable);
+        Util.setIsSubscribed (this.slot.exists (), enable);
+        Util.setIsSubscribed (this.slot.sceneIndex (), enable);
+        Util.setIsSubscribed (this.slot.name (), enable);
+        Util.setIsSubscribed (this.slot.hasContent (), enable);
+        Util.setIsSubscribed (this.slot.color (), enable);
+        Util.setIsSubscribed (this.slot.isPlaying (), enable);
+        Util.setIsSubscribed (this.slot.isPlaybackQueued (), enable);
+        Util.setIsSubscribed (this.slot.isRecording (), enable);
+        Util.setIsSubscribed (this.slot.isRecordingQueued (), enable);
+        Util.setIsSubscribed (this.slot.isStopQueued (), enable);
+        Util.setIsSubscribed (this.slot.isSelected (), enable);
     }
 
 

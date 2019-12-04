@@ -10,7 +10,7 @@ import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.IControlSurface;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.ITrackBank;
 import de.mossgrabers.framework.daw.ModelSetup;
@@ -107,10 +107,10 @@ public class AutoColorSetup extends AbstractControllerSetup<IControlSurface<Auto
         });
 
         // Monitor all color regex settings
-        final DAWColors [] colors = DAWColors.values ();
+        final DAWColor [] colors = DAWColor.values ();
         for (int i = 0; i < colors.length; i++)
         {
-            final DAWColors color = colors[i];
+            final DAWColor color = colors[i];
             this.configuration.addSettingObserver (Integer.valueOf (AutoColorConfiguration.COLOR_REGEX.intValue () + i), () -> this.autoColor.handleRegExChange (color, this.configuration.getColorRegExValue (color)));
         }
 

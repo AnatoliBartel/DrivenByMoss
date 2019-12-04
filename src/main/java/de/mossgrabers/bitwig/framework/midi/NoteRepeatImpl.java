@@ -4,6 +4,7 @@
 
 package de.mossgrabers.bitwig.framework.midi;
 
+import de.mossgrabers.bitwig.framework.daw.data.Util;
 import de.mossgrabers.framework.daw.midi.ArpeggiatorMode;
 import de.mossgrabers.framework.daw.midi.INoteRepeat;
 
@@ -44,14 +45,14 @@ public class NoteRepeatImpl implements INoteRepeat
     @Override
     public void enableObservers (final boolean enable)
     {
-        this.noteRepeat.isEnabled ().setIsSubscribed (enable);
-        this.noteRepeat.period ().setIsSubscribed (enable);
-        this.noteRepeat.gateLength ().setIsSubscribed (enable);
-        this.noteRepeat.shuffle ().setIsSubscribed (enable);
-        this.noteRepeat.usePressureToVelocity ().setIsSubscribed (enable);
-        this.noteRepeat.mode ().setIsSubscribed (enable);
-        this.noteRepeat.octaves ().setIsSubscribed (enable);
-        this.noteRepeat.isFreeRunning ().setIsSubscribed (enable);
+        Util.setIsSubscribed (this.noteRepeat.isEnabled (), enable);
+        Util.setIsSubscribed (this.noteRepeat.period (), enable);
+        Util.setIsSubscribed (this.noteRepeat.gateLength (), enable);
+        Util.setIsSubscribed (this.noteRepeat.shuffle (), enable);
+        Util.setIsSubscribed (this.noteRepeat.usePressureToVelocity (), enable);
+        Util.setIsSubscribed (this.noteRepeat.mode (), enable);
+        Util.setIsSubscribed (this.noteRepeat.octaves (), enable);
+        Util.setIsSubscribed (this.noteRepeat.isFreeRunning (), enable);
     }
 
 

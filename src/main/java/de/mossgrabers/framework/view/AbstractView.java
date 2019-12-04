@@ -9,7 +9,7 @@ import de.mossgrabers.framework.configuration.Configuration;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IControlSurface;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.mode.AbstractMode;
@@ -188,7 +188,7 @@ public abstract class AbstractView<S extends IControlSurface<C>, C extends Confi
         {
             if (track == null)
                 return Scales.SCALE_COLOR_OCTAVE;
-            final String c = DAWColors.getColorIndex (track.getColor ());
+            final String c = DAWColor.getColorIndex (track.getColor ());
             return c == null ? Scales.SCALE_COLOR_OCTAVE : c;
         }
         return colorID;

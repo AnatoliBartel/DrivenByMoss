@@ -7,7 +7,7 @@ package de.mossgrabers.controller.kontrol.mki.view;
 import de.mossgrabers.controller.kontrol.mki.Kontrol1Configuration;
 import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1ControlSurface;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IDrumPadBank;
 import de.mossgrabers.framework.daw.IModel;
@@ -93,6 +93,6 @@ public class ControlView extends AbstractPlayView<Kontrol1ControlSurface, Kontro
         // Muted or soloed?
         if (drumPad.isMute () || isSoloed && !drumPad.isSolo ())
             return AbstractDrumView.COLOR_PAD_MUTED;
-        return DAWColors.getColorIndex (drumPad.getColor ());
+        return DAWColor.getColorIndex (drumPad.getColor ());
     }
 }

@@ -52,7 +52,7 @@ public class LayerImpl extends ChannelImpl implements ILayer
     {
         super.enableObservers (enable);
 
-        this.firstItem.exists ().setIsSubscribed (enable);
+        Util.setIsSubscribed (this.firstItem.exists (), enable);
     }
 
 

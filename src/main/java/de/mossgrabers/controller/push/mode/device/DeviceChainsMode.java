@@ -10,7 +10,7 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.mode.Modes;
@@ -123,7 +123,7 @@ public class DeviceChainsMode extends DeviceParamsMode
             return;
 
         final String color = this.model.getCurrentTrackBank ().getSelectedChannelColorEntry ();
-        final ColorEx bottomMenuColor = DAWColors.getColorEntry (color);
+        final ColorEx bottomMenuColor = DAWColor.getColorEntry (color);
         final boolean hasPinning = this.model.getHost ().hasPinning ();
         final String [] slotChains = cd.getSlotChains ();
         for (int i = 0; i < 8; i++)

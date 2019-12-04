@@ -4,6 +4,7 @@
 
 package de.mossgrabers.bitwig.framework.daw;
 
+import de.mossgrabers.bitwig.framework.daw.data.Util;
 import de.mossgrabers.framework.daw.IApplication;
 import de.mossgrabers.framework.daw.constants.RecordQuantization;
 
@@ -42,10 +43,10 @@ public class ApplicationImpl implements IApplication
     @Override
     public void enableObservers (final boolean enable)
     {
-        this.application.hasActiveEngine ().setIsSubscribed (enable);
-        this.application.panelLayout ().setIsSubscribed (enable);
-        this.application.recordQuantizationGrid ().setIsSubscribed (enable);
-        this.application.recordQuantizeNoteLength ().setIsSubscribed (enable);
+        Util.setIsSubscribed (this.application.hasActiveEngine (), enable);
+        Util.setIsSubscribed (this.application.panelLayout (), enable);
+        Util.setIsSubscribed (this.application.recordQuantizationGrid (), enable);
+        Util.setIsSubscribed (this.application.recordQuantizeNoteLength (), enable);
     }
 
 

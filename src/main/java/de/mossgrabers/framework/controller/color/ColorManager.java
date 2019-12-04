@@ -5,7 +5,7 @@
 package de.mossgrabers.framework.controller.color;
 
 import de.mossgrabers.framework.controller.ButtonID;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +49,7 @@ public class ColorManager
      * @param dawColor The daw color key under which to register the color index
      * @param colorIndex The color index
      */
-    public void registerColorIndex (final DAWColors dawColor, final int colorIndex)
+    public void registerColorIndex (final DAWColor dawColor, final int colorIndex)
     {
         this.registerColorIndex (dawColor.name (), colorIndex);
     }

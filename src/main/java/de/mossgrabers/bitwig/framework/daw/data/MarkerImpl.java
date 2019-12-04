@@ -45,9 +45,9 @@ public class MarkerImpl extends AbstractItemImpl implements IMarker
     @Override
     public void enableObservers (final boolean enable)
     {
-        this.marker.exists ().setIsSubscribed (enable);
-        this.marker.getName ().setIsSubscribed (enable);
-        this.marker.getColor ().setIsSubscribed (enable);
+        Util.setIsSubscribed (this.marker.exists (), enable);
+        Util.setIsSubscribed (this.marker.getName (), enable);
+        Util.setIsSubscribed (this.marker.getColor (), enable);
     }
 
 

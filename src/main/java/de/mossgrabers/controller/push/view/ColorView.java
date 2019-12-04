@@ -9,7 +9,7 @@ import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IClip;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.IMasterTrack;
@@ -72,7 +72,7 @@ public class ColorView extends AbstractView<PushControlSurface, PushConfiguratio
     public void drawGrid ()
     {
         final PadGrid padGrid = this.surface.getPadGrid ();
-        final DAWColors [] dawColors = DAWColors.values ();
+        final DAWColor [] dawColors = DAWColor.values ();
         for (int i = 0; i < 64; i++)
             padGrid.light (36 + i, i < dawColors.length ? dawColors[i].name () : PadGrid.GRID_OFF);
     }
@@ -86,7 +86,7 @@ public class ColorView extends AbstractView<PushControlSurface, PushConfiguratio
             return;
 
         final int color = note - 36;
-        final DAWColors [] dawColors = DAWColors.values ();
+        final DAWColor [] dawColors = DAWColor.values ();
         if (color < dawColors.length)
         {
             final ColorEx entry = dawColors[color].getColor ();

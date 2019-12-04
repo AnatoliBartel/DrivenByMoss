@@ -10,7 +10,7 @@ import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.daw.ITrackBank;
@@ -198,7 +198,7 @@ public class SessionView extends AbstractSessionView<LaunchpadControlSurface, La
             final IScene s = sceneBank.getItem (index);
 
             if (s.doesExist ())
-                return DAWColors.getColorIndex (s.getColor ());
+                return DAWColor.getColorIndex (s.getColor ());
         }
 
         return AbstractMode.BUTTON_COLOR_OFF;

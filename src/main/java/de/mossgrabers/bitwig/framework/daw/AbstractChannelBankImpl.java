@@ -5,7 +5,7 @@
 package de.mossgrabers.bitwig.framework.daw;
 
 import de.mossgrabers.framework.controller.IValueChanger;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IChannelBank;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.ISceneBank;
@@ -55,8 +55,8 @@ public abstract class AbstractChannelBankImpl<B extends Bank<?>, T extends IChan
     {
         final T sel = this.getSelectedItem ();
         if (sel == null)
-            return DAWColors.COLOR_OFF.name ();
-        return DAWColors.getColorIndex (sel.getColor ());
+            return DAWColor.COLOR_OFF.name ();
+        return DAWColor.getColorIndex (sel.getColor ());
     }
 
 

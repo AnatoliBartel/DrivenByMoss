@@ -104,17 +104,17 @@ public class TrackImpl extends ChannelImpl implements ITrack
     {
         super.enableObservers (enable);
 
-        this.track.trackType ().setIsSubscribed (enable);
-        this.track.position ().setIsSubscribed (enable);
-        this.track.isGroup ().setIsSubscribed (enable);
-        this.track.arm ().setIsSubscribed (enable);
-        this.track.monitor ().setIsSubscribed (enable);
-        this.track.autoMonitor ().setIsSubscribed (enable);
-        this.track.crossFadeMode ().setIsSubscribed (enable);
-        this.track.canHoldNoteData ().setIsSubscribed (enable);
-        this.track.canHoldAudioData ().setIsSubscribed (enable);
-        this.track.isStopped ().setIsSubscribed (enable);
-        this.track.playingNotes ().setIsSubscribed (enable);
+        Util.setIsSubscribed (this.track.trackType (), enable);
+        Util.setIsSubscribed (this.track.position (), enable);
+        Util.setIsSubscribed (this.track.isGroup (), enable);
+        Util.setIsSubscribed (this.track.arm (), enable);
+        Util.setIsSubscribed (this.track.monitor (), enable);
+        Util.setIsSubscribed (this.track.autoMonitor (), enable);
+        Util.setIsSubscribed (this.track.crossFadeMode (), enable);
+        Util.setIsSubscribed (this.track.canHoldNoteData (), enable);
+        Util.setIsSubscribed (this.track.canHoldAudioData (), enable);
+        Util.setIsSubscribed (this.track.isStopped (), enable);
+        Util.setIsSubscribed (this.track.playingNotes (), enable);
 
         this.slotBank.enableObservers (enable);
     }

@@ -9,7 +9,7 @@ import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.controller.slmkiii.mode.BaseMode;
 import de.mossgrabers.framework.controller.ButtonID;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ITrackBank;
 import de.mossgrabers.framework.daw.data.ITrack;
@@ -278,7 +278,7 @@ public abstract class AbstractTrackMode extends BaseMode
             int color;
             if (t.isActivated ())
             {
-                final String colorIndex = DAWColors.getColorIndex (t.getColor ());
+                final String colorIndex = DAWColor.getColorIndex (t.getColor ());
                 color = this.model.getColorManager ().getColorIndex (colorIndex);
             }
             else
@@ -353,7 +353,7 @@ public abstract class AbstractTrackMode extends BaseMode
         {
             if (track.isActivated ())
             {
-                final String colorIndex = DAWColors.getColorIndex (track.getColor ());
+                final String colorIndex = DAWColor.getColorIndex (track.getColor ());
                 color = this.model.getColorManager ().getColorIndex (colorIndex);
             }
             else

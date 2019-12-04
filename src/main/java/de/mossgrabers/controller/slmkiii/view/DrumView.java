@@ -8,7 +8,7 @@ import de.mossgrabers.controller.slmkiii.SLMkIIIConfiguration;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.INoteClip;
@@ -146,7 +146,7 @@ public class DrumView extends AbstractDrumView<SLMkIIIControlSurface, SLMkIIICon
         if (!drumPad.doesExist () || !drumPad.isActivated ())
             return SLMkIIIColorManager.SLMKIII_BLACK;
 
-        return this.model.getColorManager ().getColorIndex (DAWColors.getColorIndex (drumPad.getColor ()));
+        return this.model.getColorManager ().getColorIndex (DAWColor.getColorIndex (drumPad.getColor ()));
     }
 
 

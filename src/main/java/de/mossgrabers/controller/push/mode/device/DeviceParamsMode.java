@@ -13,7 +13,7 @@ import de.mossgrabers.framework.controller.IValueChanger;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IBank;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IDeviceBank;
@@ -410,7 +410,7 @@ public class DeviceParamsMode extends BaseMode
             return;
 
         final String color = this.model.getCurrentTrackBank ().getSelectedChannelColorEntry ();
-        final ColorEx bottomMenuColor = DAWColors.getColorEntry (color);
+        final ColorEx bottomMenuColor = DAWColor.getColorEntry (color);
 
         final IDeviceBank deviceBank = cd.getDeviceBank ();
         final IParameterBank parameterBank = cd.getParameterBank ();

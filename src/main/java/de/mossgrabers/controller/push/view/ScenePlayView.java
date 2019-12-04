@@ -9,7 +9,7 @@ import de.mossgrabers.controller.push.controller.PushColorManager;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.daw.data.IScene;
@@ -57,7 +57,7 @@ public class ScenePlayView extends AbstractView<PushControlSurface, PushConfigur
                 padGrid.light (36 + i, isPush2 ? PushColorManager.PUSH2_COLOR2_WHITE : PushColorManager.PUSH1_COLOR2_WHITE);
             else
             {
-                final String color = scene.doesExist () ? DAWColors.getColorIndex (scene.getColor ()) : PadGrid.GRID_OFF;
+                final String color = scene.doesExist () ? DAWColor.getColorIndex (scene.getColor ()) : PadGrid.GRID_OFF;
                 padGrid.light (36 + i, color);
             }
         }

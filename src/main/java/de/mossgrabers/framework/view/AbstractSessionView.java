@@ -9,7 +9,7 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IControlSurface;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
-import de.mossgrabers.framework.daw.DAWColors;
+import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.daw.ISlotBank;
@@ -310,7 +310,7 @@ public abstract class AbstractSessionView<S extends IControlSurface<C>, C extend
 
     protected SessionColor getPadColor (final ISlot slot, final boolean isArmed)
     {
-        final String colorIndex = DAWColors.getColorIndex (slot.getColor ());
+        final String colorIndex = DAWColor.getColorIndex (slot.getColor ());
         final ColorManager cm = this.model.getColorManager ();
 
         if (slot.isRecordingQueued ())
