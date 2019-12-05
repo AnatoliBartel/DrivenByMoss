@@ -267,6 +267,16 @@ public class APCColorManager extends ColorManager
             case ROW6_7:
             case ROW6_8:
             case MASTERTRACK:
+            case METRONOME:
+            case BANK_LEFT:
+            case BANK_RIGHT:
+            case DEVICE_LEFT:
+            case DEVICE_RIGHT:
+            case LAYOUT:
+            case DEVICE_ON_OFF:
+            case TOGGLE_DEVICES_PANE:
+            case BROWSE:
+            case QUANTIZE:
                 return colorIndex > 0 ? ColorEx.ORANGE : ColorEx.BLACK;
 
             case ROW2_1:
@@ -293,7 +303,7 @@ public class APCColorManager extends ColorManager
                 return colorIndex > 0 ? ColorEx.GREEN : ColorEx.BLACK;
 
             case RECORD:
-            case SESSION:
+            case CLIP:
                 return colorIndex > 0 ? ColorEx.RED : ColorEx.BLACK;
 
             default:

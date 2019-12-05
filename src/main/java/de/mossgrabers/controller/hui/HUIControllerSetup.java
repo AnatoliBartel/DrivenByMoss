@@ -18,6 +18,7 @@ import de.mossgrabers.controller.hui.mode.track.VolumeMode;
 import de.mossgrabers.framework.command.core.NopCommand;
 import de.mossgrabers.framework.command.trigger.AutomationCommand;
 import de.mossgrabers.framework.command.trigger.application.PaneCommand;
+import de.mossgrabers.framework.command.trigger.application.PanelLayoutCommand;
 import de.mossgrabers.framework.command.trigger.application.SaveCommand;
 import de.mossgrabers.framework.command.trigger.application.UndoCommand;
 import de.mossgrabers.framework.command.trigger.mode.ButtonRowModeCommand;
@@ -227,7 +228,7 @@ public class HUIControllerSetup extends AbstractControllerSetup<HUIControlSurfac
         this.addButton (ButtonID.NOTE_EDITOR, "Note", new PaneCommand<> (PaneCommand.Panels.NOTE, this.model, surface), HUIControlSurface.HUI_WINDOW_EDIT);
         this.addButton (ButtonID.AUTOMATION_EDITOR, "Automation", new PaneCommand<> (PaneCommand.Panels.AUTOMATION, this.model, surface), HUIControlSurface.HUI_WINDOW_TRANSPRT);
         // HUI_WINDOW_MEM_LOC, not supported
-        this.addButton (ButtonID.TOGGLE_DEVICE, "Device", new PaneCommand<> (PaneCommand.Panels.DEVICE, this.model, surface), HUIControlSurface.HUI_WINDOW_STATUS);
+        this.addButton (ButtonID.TOGGLE_DEVICE, "Device", new PanelLayoutCommand<> (this.model, surface), HUIControlSurface.HUI_WINDOW_STATUS);
         // HUI_WINDOW_ALT, not supported
 
         // Bank navigation

@@ -200,10 +200,10 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
         this.addButton (ButtonID.PLAY, "PLAY", new PlayCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_PLAY, t::isPlaying, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         this.addButton (ButtonID.RECORD, "RECORD", new APCRecordCommand (this.model, surface), APCControlSurface.APC_BUTTON_RECORD, t::isRecording, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         this.addButton (ButtonID.TAP_TEMPO, "Tempo", new TapTempoCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_TAP_TEMPO);
-        this.addButton (ButtonID.QUANTIZE, "DEV.LOCK", new APCQuantizeCommand (this.model, surface), APCControlSurface.APC_BUTTON_REC_QUANT);
+        this.addButton (ButtonID.QUANTIZE, "DEV.LOCK", new APCQuantizeCommand (this.model, surface), APCControlSurface.APC_BUTTON_REC_QUANT, () -> surface.isPressed (ButtonID.QUANTIZE) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         this.addButton (ButtonID.PAN_SEND, "PAN", new ModeSelectCommand<> (this.model, surface, Modes.PAN), APCControlSurface.APC_BUTTON_PAN);
         this.addButton (ButtonID.MASTERTRACK, "Master", new MasterCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_MASTER, this.model.getMasterTrack ()::isSelected, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
-        this.addButton (ButtonID.STOP_ALL_CLIPS, "Stop Clips", new StopAllClipsOrBrowseCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_STOP_ALL_CLIPS);
+        this.addButton (ButtonID.STOP_ALL_CLIPS, "STOP CLIPS", new StopAllClipsOrBrowseCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_STOP_ALL_CLIPS, () -> surface.isPressed (ButtonID.STOP_ALL_CLIPS) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         this.addButton (ButtonID.SEND1, "Send A", new SendModeCommand (0, this.model, surface), APCControlSurface.APC_BUTTON_SEND_A);
         this.addButton (ButtonID.SEND2, "Send B", new SendModeCommand (1, this.model, surface), APCControlSurface.APC_BUTTON_SEND_B);
 
@@ -221,8 +221,8 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
 
         if (this.isMkII)
         {
-            this.addButton (ButtonID.DEVICE_LEFT, "<- DEVICE", new DeviceLayerLeftCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_CLIP_TRACK);
-            this.addButton (ButtonID.BROWSE, "BANK", new APCBrowserCommand (this.model, surface), APCControlSurface.APC_BUTTON_BANK, this.model.getBrowser ()::isActive);
+            this.addButton (ButtonID.DEVICE_LEFT, "<- DEVICE", new DeviceLayerLeftCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_CLIP_TRACK, () -> surface.isPressed (ButtonID.DEVICE_LEFT) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+            this.addButton (ButtonID.BROWSE, "BANK", new APCBrowserCommand (this.model, surface), APCControlSurface.APC_BUTTON_BANK, this.model.getBrowser ()::isActive, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         }
         else
         {
@@ -231,17 +231,18 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
             this.addButton (ButtonID.NEW, "Footswitch", new NewCommand<> (this.model, surface), APCControlSurface.APC_FOOTSWITCH_2);
         }
 
-        this.addButton (ButtonID.DEVICE_RIGHT, "DEVICE ->", new DeviceLayerRightCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_DEVICE_ON_OFF);
+        this.addButton (ButtonID.DEVICE_RIGHT, "DEVICE ->", new DeviceLayerRightCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_DEVICE_ON_OFF, () -> surface.isPressed (ButtonID.DEVICE_RIGHT) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         this.addButton (ButtonID.CLIP, "SESSION", new SessionRecordCommand (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_SESSION : APCControlSurface.APC_BUTTON_MIDI_OVERDUB, t::isLauncherOverdub, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
-        this.addButton (ButtonID.METRONOME, "METRONOME", new MetronomeCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_SEND_C : APCControlSurface.APC_BUTTON_METRONOME, t::isMetronomeOn);
-        this.addButton (ButtonID.NUDGE_MINUS, "NUDGE-", new RedoCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_NUDGE_MINUS : APCControlSurface.APC_BUTTON_NUDGE_PLUS);
-        this.addButton (ButtonID.NUDGE_PLUS, "NUDGE+", new UndoCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_NUDGE_PLUS : APCControlSurface.APC_BUTTON_NUDGE_MINUS);
-        this.addButton (ButtonID.LAYOUT, "DETAIL VIEW", new PanelLayoutCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_METRONOME : APCControlSurface.APC_BUTTON_DETAIL_VIEW);
-        this.addButton (ButtonID.DEVICE_ON_OFF, "DEV. ON/OFF", new DeviceOnOffCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_DETAIL_VIEW : APCControlSurface.APC_BUTTON_DEVICE_ON_OFF, this.model.getCursorDevice ()::isEnabled);
-        this.addButton (ButtonID.TOGGLE_DEVICES_PANE, "CLIP/DEV.VIEW", new PaneCommand<> (Panels.DEVICE, this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_MIDI_OVERDUB : APCControlSurface.APC_BUTTON_CLIP_TRACK);
+        this.addButton (ButtonID.METRONOME, "METRONOME", new MetronomeCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_SEND_C : APCControlSurface.APC_BUTTON_METRONOME, t::isMetronomeOn, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        this.addButton (ButtonID.NUDGE_MINUS, this.isMkII ? "NUDGE+" : "NUDGE-", new RedoCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_NUDGE_MINUS : APCControlSurface.APC_BUTTON_NUDGE_PLUS);
+        this.addButton (ButtonID.NUDGE_PLUS, this.isMkII ? "NUDGE-" : "NUDGE+", new UndoCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_NUDGE_PLUS : APCControlSurface.APC_BUTTON_NUDGE_MINUS);
+        this.addButton (ButtonID.DEVICE_ON_OFF, "DEV. ON/OFF", new DeviceOnOffCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_DETAIL_VIEW : APCControlSurface.APC_BUTTON_DEVICE_ON_OFF, this.model.getCursorDevice ()::isEnabled, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        this.addButton (ButtonID.TOGGLE_DEVICES_PANE, "CLIP/DEV.VIEW", new PaneCommand<> (Panels.DEVICE, this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_MIDI_OVERDUB : APCControlSurface.APC_BUTTON_CLIP_TRACK, () -> surface.isPressed (ButtonID.TOGGLE_DEVICES_PANE) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        this.addButton (ButtonID.LAYOUT, "DETAIL VIEW", new PanelLayoutCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_METRONOME : APCControlSurface.APC_BUTTON_DETAIL_VIEW, () -> !surface.isShiftPressed () && this.model.getCursorDevice ().isWindowOpen () ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
 
-        this.addButton (ButtonID.BANK_LEFT, "Device Left", new SelectPreviousDeviceOrParamPageCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_DEVICE_LEFT);
-        this.addButton (ButtonID.BANK_RIGHT, "Device Right", new SelectNextDeviceOrParamPageCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_DEVICE_RIGHT);
+        this.addButton (ButtonID.BANK_LEFT, "<- BANK", new SelectPreviousDeviceOrParamPageCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_DEVICE_LEFT, () -> surface.isPressed (ButtonID.BANK_LEFT) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        this.addButton (ButtonID.BANK_RIGHT, "BANK ->", new SelectNextDeviceOrParamPageCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_DEVICE_RIGHT, () -> surface.isPressed (ButtonID.BANK_RIGHT) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+
         this.addButton (ButtonID.ARROW_DOWN, "Arrow Down", new CursorCommand<> (Direction.DOWN, this.model, surface), APCControlSurface.APC_BUTTON_DOWN);
         this.addButton (ButtonID.ARROW_UP, "Arrow Up", new CursorCommand<> (Direction.UP, this.model, surface), APCControlSurface.APC_BUTTON_UP);
         this.addButton (ButtonID.ARROW_LEFT, "Arrow Left", new CursorCommand<> (Direction.LEFT, this.model, surface), APCControlSurface.APC_BUTTON_LEFT);
@@ -297,6 +298,16 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
     {
         final APCControlSurface surface = this.getSurface ();
 
+        surface.getButton (this.isMkII ? ButtonID.NUDGE_PLUS : ButtonID.NUDGE_MINUS).setBounds (624.0, 132.0, 33.25, 15.25);
+        surface.getButton (this.isMkII ? ButtonID.NUDGE_MINUS : ButtonID.NUDGE_PLUS).setBounds (686.0, 132.0, 33.25, 15.25);
+
+        surface.getButton (ButtonID.METRONOME).setBounds (624.0, 96.0, 33.25, 15.25);
+        surface.getButton (ButtonID.CLIP).setBounds (747.75, 59.25, 32.5, 20.0);
+        surface.getButton (ButtonID.LAYOUT).setBounds (747.75, 319.75, 33.25, 15.25);
+        surface.getButton (ButtonID.TOGGLE_DEVICES_PANE).setBounds (686.0, 319.75, 33.25, 15.25);
+
+        surface.getButton (ButtonID.DEVICE_ON_OFF).setBounds (562.25, 319.75, 33.25, 15.25);
+
         surface.getButton (ButtonID.PAD1).setBounds (13.0, 194.5, 52.25, 18.5);
         surface.getButton (ButtonID.PAD2).setBounds (74.25, 194.5, 52.25, 18.5);
         surface.getButton (ButtonID.PAD3).setBounds (135.25, 194.5, 52.25, 18.5);
@@ -337,17 +348,17 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
         surface.getButton (ButtonID.PAD38).setBounds (318.0, 78.0, 52.25, 18.5);
         surface.getButton (ButtonID.PAD39).setBounds (379.5, 78.0, 52.25, 18.5);
         surface.getButton (ButtonID.PAD40).setBounds (441.0, 78.0, 52.25, 18.5);
-        surface.getButton (ButtonID.SHIFT).setBounds (688.25, 360.5, 33.25, 15.25);
-        surface.getButton (ButtonID.PLAY).setBounds (626.75, 57.0, 23.5, 20.0);
-        surface.getButton (ButtonID.RECORD).setBounds (688.25, 57.0, 23.5, 20.0);
-        surface.getButton (ButtonID.TAP_TEMPO).setBounds (688.25, 99.0, 33.25, 15.25);
-        surface.getButton (ButtonID.QUANTIZE).setBounds (627.0, 327.25, 33.25, 15.25);
+
+        surface.getButton (ButtonID.SHIFT).setBounds (686.0, 360.5, 33.25, 15.25);
+        surface.getButton (ButtonID.PLAY).setBounds (624.0, 59.25, 32.5, 20.0);
+        surface.getButton (ButtonID.RECORD).setBounds (686.0, 59.25, 32.5, 20.0);
+        surface.getButton (ButtonID.TAP_TEMPO).setBounds (686.0, 96.0, 33.25, 15.25);
+
+        surface.getButton (ButtonID.QUANTIZE).setBounds (624.0, 319.75, 33.25, 15.25);
         surface.getButton (ButtonID.PAN_SEND).setBounds (562.25, 64.0, 33.25, 15.25);
         surface.getButton (ButtonID.SEND1).setBounds (562.25, 96.0, 33.25, 15.25);
         surface.getButton (ButtonID.SEND2).setBounds (562.25, 132.0, 33.25, 15.25);
-        surface.getButton (ButtonID.BROWSE).setBounds (746.5, 360.5, 33.25, 15.25);
-        surface.getButton (ButtonID.BANK_LEFT).setBounds (562.25, 289.75, 33.25, 15.25);
-        surface.getButton (ButtonID.BANK_RIGHT).setBounds (627.0, 289.75, 33.25, 15.25);
+
         surface.getButton (ButtonID.ARROW_DOWN).setBounds (581.25, 361.75, 33.25, 25.0);
         surface.getButton (ButtonID.ARROW_UP).setBounds (581.5, 386.25, 33.25, 25.0);
         surface.getButton (ButtonID.ARROW_LEFT).setBounds (562.5, 361.75, 17.0, 49.25);
@@ -438,8 +449,17 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
         surface.getContinuous (ContinuousID.KNOB8).setBounds (448.75, 19.0, 40.25, 37.75);
         surface.getContinuous (ContinuousID.DEVICE_KNOB8).setBounds (744.25, 235.75, 40.25, 37.75);
 
+        surface.getButton (ButtonID.BANK_LEFT).setBounds (686.0, 289.75, 33.25, 15.25);
+        surface.getButton (ButtonID.BANK_RIGHT).setBounds (747.75, 289.75, 33.25, 15.25);
+
         if (this.isMkII)
+        {
+            surface.getButton (ButtonID.DEVICE_LEFT).setBounds (562.25, 289.75, 33.25, 15.25);
+            surface.getButton (ButtonID.DEVICE_RIGHT).setBounds (624.0, 289.75, 33.25, 15.25);
+            surface.getButton (ButtonID.BROWSE).setBounds (747.75, 359.75, 33.25, 15.25);
+
             surface.getContinuous (ContinuousID.TEMPO).setBounds (743.25, 106.75, 40.25, 37.75);
+        }
     }
 
 
