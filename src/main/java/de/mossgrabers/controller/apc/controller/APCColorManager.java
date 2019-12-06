@@ -277,6 +277,10 @@ public class APCColorManager extends ColorManager
             case TOGGLE_DEVICES_PANE:
             case BROWSE:
             case QUANTIZE:
+            case PAN_SEND:
+            case SEND1:
+            case SEND2:
+            case SEND3:
                 return colorIndex > 0 ? ColorEx.ORANGE : ColorEx.BLACK;
 
             case ROW2_1:

@@ -159,42 +159,4 @@ public class APCControlSurface extends AbstractControlSurface<APCConfiguration>
     {
         this.output.sendCC (knob, value);
     }
-
-
-    /** {@inheritDoc} */
-    @Override
-    protected void handleMidi (final int status, final int data1, final int data2)
-    {
-        final int code = status & 0xF0;
-        final int channel = status & 0xF;
-        // TODO
-        //
-        // switch (code)
-        // {
-        // // Note on/off
-        // case 0x80:
-        // case 0x90:
-        // int note = data1;
-        // if (!this.isMkII && data1 >= 53 && data1 <= 57)
-        // note = (4 - (data1 - APC_BUTTON_CLIP_LAUNCH_1)) * 8 + channel;
-        // break;
-        //
-        // // CC
-        // case 0xB0:
-        // final View view = this.viewManager.getActiveView ();
-        // if (view == null)
-        // return;
-        // final ContinuousCommandID commandID = this.getContinuousCommand (channel, data1);
-        // if (commandID != null)
-        // view.executeContinuousCommand (commandID, data2);
-        // if (data1 == APCControlSurface.APC_FOOTSWITCH_2)
-        // this.getButton (ButtonID.NEW).getCommand ().execute (data2 > 0 ? ButtonEvent.DOWN :
-        // ButtonEvent.UP);
-        // break;
-        //
-        // default:
-        // this.host.println ("Unhandled midi status: " + status);
-        // break;
-        // }
-    }
 }
