@@ -132,9 +132,9 @@ public interface PadGrid
      * Plug for grids not sending notes in the range of 36-100.
      *
      * @param note The outgoing note
-     * @return The note scaled to the controller
+     * @return The midi channel (index 0) and note (index 1) scaled to the controller
      */
-    int translateToController (int note);
+    int [] translateToController (int note);
 
 
     /**
@@ -159,15 +159,6 @@ public interface PadGrid
      * @return The start note of the grid
      */
     int getStartNote ();
-
-
-    /**
-     * Check if a given note belongs to the grid.
-     *
-     * @param note The note to check
-     * @return True if the note belongs to the grid
-     */
-    boolean isGridNote (int note);
 
 
     /**

@@ -448,11 +448,4 @@ public class HUIControlSurface extends AbstractControlSurface<HUIConfiguration>
         return (HUIMainDisplay) this.getTextDisplay (1);
     }
 
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean isGridNote (final int note)
-    {
-        return false;
-    }
 }

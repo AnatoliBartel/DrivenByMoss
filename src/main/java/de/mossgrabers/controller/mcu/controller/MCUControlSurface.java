@@ -363,14 +363,6 @@ public class MCUControlSurface extends AbstractControlSurface<MCUConfiguration>
 
     /** {@inheritDoc} */
     @Override
-    public boolean isGridNote (final int note)
-    {
-        return false;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public boolean isPressed (final ButtonID buttonID)
     {
         // Check on all MCU surfaces for state button presses

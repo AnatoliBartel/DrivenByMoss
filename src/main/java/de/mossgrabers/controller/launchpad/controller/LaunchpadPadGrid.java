@@ -73,10 +73,14 @@ public class LaunchpadPadGrid extends PadGridImpl
 
     /** {@inheritDoc} */
     @Override
-    public int translateToController (final int note)
+    public int [] translateToController (final int note)
     {
         // Translates note range 36-100 to launchpad grid (11-18, 21-28, ...)
-        return TRANSLATE_MATRIX[note - 36];
+        return new int []
+        {
+            0,
+            TRANSLATE_MATRIX[note - 36]
+        };
     }
 
     // TODO Remove
@@ -98,7 +102,7 @@ public class LaunchpadPadGrid extends PadGridImpl
 
     /** {@inheritDoc} */
     @Override
-    protected void sendNoteState (final int note, final int color)
+    protected void sendNoteState (final int channel, final int note, final int color)
     {
         synchronized (this.padInfos)
         {
@@ -109,7 +113,7 @@ public class LaunchpadPadGrid extends PadGridImpl
 
     /** {@inheritDoc} */
     @Override
-    protected void sendBlinkState (final int note, final int blinkColor, final boolean fast)
+    protected void sendBlinkState (final int channel, final int note, final int blinkColor, final boolean fast)
     {
         synchronized (this.padInfos)
         {

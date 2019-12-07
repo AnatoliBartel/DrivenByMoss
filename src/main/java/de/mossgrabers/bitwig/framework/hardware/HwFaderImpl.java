@@ -35,14 +35,16 @@ public class HwFaderImpl extends AbstractHwContinuousControl implements IHwFader
      * @param host The controller host
      * @param hardwareFader The Bitwig hardware fader
      * @param label The label of the fader
+     * @param isVertical True if the fader is vertical, otherwise horizontal
      */
-    public HwFaderImpl (final HostImpl host, final HardwareSlider hardwareFader, final String label)
+    public HwFaderImpl (final HostImpl host, final HardwareSlider hardwareFader, final String label, final boolean isVertical)
     {
         super (host, label);
 
         this.controllerHost = host.getControllerHost ();
         this.hardwareFader = hardwareFader;
         this.hardwareFader.setLabel (label);
+        this.hardwareFader.setIsHorizontal (!isVertical);
     }
 
 

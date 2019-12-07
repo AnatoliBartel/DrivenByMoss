@@ -140,7 +140,7 @@ public class ShiftView extends AbstractView<APCminiControlSurface, APCminiConfig
             return;
 
         final ICursorDevice cursorDevice = this.model.getCursorDevice ();
-        final int n = this.surface.getPadGrid ().translateToController (note);
+        final int n = this.surface.getPadGrid ().translateToController (note)[1];
         switch (n)
         {
             // Flip views

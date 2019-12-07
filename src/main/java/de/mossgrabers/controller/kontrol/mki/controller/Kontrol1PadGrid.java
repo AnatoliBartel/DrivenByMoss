@@ -35,7 +35,7 @@ public class Kontrol1PadGrid extends PadGridImpl
 
     /** {@inheritDoc} */
     @Override
-    protected void sendNoteState (final int note, final int color)
+    protected void sendNoteState (final int channel, final int note, final int color)
     {
         final ColorEx colorEx = this.colorManager.getColor (color, null);
         final int [] rgb = colorEx.toIntRGB ();
@@ -46,7 +46,7 @@ public class Kontrol1PadGrid extends PadGridImpl
 
     /** {@inheritDoc} */
     @Override
-    protected void sendBlinkState (final int note, final int blinkColor, final boolean fast)
+    protected void sendBlinkState (final int channel, final int note, final int blinkColor, final boolean fast)
     {
         // No blinky blink
     }

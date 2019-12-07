@@ -39,31 +39,12 @@ public class APCPadGrid extends PadGridImpl
 
     /** {@inheritDoc} */
     @Override
-    protected void sendNoteState (final int note, final int color)
-    {
-        if (this.isMkII)
-            this.output.sendNote (note, color);
-        else
-        {
-            final int x = note % 8;
-            final int y = 4 - note / 8;
-            this.output.sendNoteEx (x, APCControlSurface.APC_BUTTON_CLIP_LAUNCH_1 + y, color);
-        }
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    protected void sendBlinkState (final int note, final int blinkColor, final boolean fast)
+    protected void sendBlinkState (final int channel, final int note, final int blinkColor, final boolean fast)
     {
         if (this.isMkII)
             this.output.sendNoteEx (fast ? 12 : 10, note, blinkColor);
         else
-        {
-            final int x = note % 8;
-            final int y = 4 - note / 8;
-            this.output.sendNoteEx (x, APCControlSurface.APC_BUTTON_CLIP_LAUNCH_1 + y, blinkColor);
-        }
+            this.output.sendNoteEx (channel, note, blinkColor);
     }
 
 
@@ -77,8 +58,21 @@ public class APCPadGrid extends PadGridImpl
 
     /** {@inheritDoc} */
     @Override
-    public int translateToController (final int note)
+    public int [] translateToController (final int note)
     {
-        return note - 36;
+        int n = note - 36;
+
+        if (this.isMkII)
+            return new int []
+            {
+                0,
+                n
+            };
+
+        return new int []
+        {
+            n % 8,
+            0x39 - n / 8
+        };
     }
 }

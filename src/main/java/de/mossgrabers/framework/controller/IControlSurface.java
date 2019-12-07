@@ -151,15 +151,6 @@ public interface IControlSurface<C extends Configuration>
 
 
     /**
-     * Check if a given note belongs to the grid.
-     *
-     * @param note The note to check
-     * @return True if the note belongs to the grid
-     */
-    boolean isGridNote (int note);
-
-
-    /**
      * Set the mapping of midi notes to the midi notes sent to the DAW.
      *
      * @param table The table has 128 items. The index is the incoming note, the value at the index
@@ -366,9 +357,10 @@ public interface IControlSurface<C extends Configuration>
      *
      * @param faderID The fader ID
      * @param label The label of the fader
+     * @param isVertical True if the fader is vertical, otherwise horizontal
      * @return The created fader
      */
-    IHwFader createFader (ContinuousID faderID, String label);
+    IHwFader createFader (ContinuousID faderID, String label, boolean isVertical);
 
 
     /**

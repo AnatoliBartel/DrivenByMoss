@@ -66,7 +66,17 @@ public class LaunchkeyPadGrid extends PadGridImpl
 
     /** {@inheritDoc} */
     @Override
-    public int translateToController (final int note)
+    public int [] translateToController (final int note)
+    {
+        return new int []
+        {
+            0,
+            this.translateNote (note)
+        };
+    }
+
+
+    private int translateNote (final int note)
     {
         if (this.activeView == null)
             return note;
@@ -96,7 +106,7 @@ public class LaunchkeyPadGrid extends PadGridImpl
 
     /** {@inheritDoc} */
     @Override
-    protected void sendNoteState (final int note, final int color)
+    protected void sendNoteState (final int channel, final int note, final int color)
     {
         if (this.activeView == null)
             return;
@@ -117,7 +127,7 @@ public class LaunchkeyPadGrid extends PadGridImpl
 
     /** {@inheritDoc} */
     @Override
-    protected void sendBlinkState (final int note, final int blinkColor, final boolean fast)
+    protected void sendBlinkState (final int channel, final int note, final int blinkColor, final boolean fast)
     {
         if (this.activeView == null)
             return;

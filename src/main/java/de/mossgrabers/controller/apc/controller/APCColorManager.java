@@ -113,6 +113,8 @@ public class APCColorManager extends ColorManager
     public static final String COLOR_KEY_SELECTED              = "COLOR_KEY_SELECTED";
     public static final String BUTTON_STATE_BLINK              = "BUTTON_STATE_BLINK";
 
+    private boolean            isMkII;
+
 
     /**
      * Constructor.
@@ -121,6 +123,8 @@ public class APCColorManager extends ColorManager
      */
     public APCColorManager (final boolean isMkII)
     {
+        this.isMkII = isMkII;
+
         this.registerColorIndex (Scales.SCALE_COLOR_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
         this.registerColorIndex (Scales.SCALE_COLOR_OCTAVE, isMkII ? APC_MKII_COLOR_OCEAN_HI : APC_COLOR_YELLOW);
         this.registerColorIndex (Scales.SCALE_COLOR_NOTE, isMkII ? APC_MKII_COLOR_WHITE : APC_COLOR_BLACK);
@@ -281,7 +285,10 @@ public class APCColorManager extends ColorManager
             case SEND1:
             case SEND2:
             case SEND3:
-                return colorIndex > 0 ? ColorEx.ORANGE : ColorEx.BLACK;
+            case STOP_ALL_CLIPS:
+                if (this.isMkII)
+                    return colorIndex > 0 ? ColorEx.ORANGE : ColorEx.BLACK;
+                return colorIndex > 0 ? ColorEx.GREEN : ColorEx.BLACK;
 
             case ROW2_1:
             case ROW2_2:
@@ -304,11 +311,16 @@ public class APCColorManager extends ColorManager
                 return colorIndex > 0 ? ColorEx.RED : ColorEx.BLACK;
 
             case PLAY:
+            case STOP:
                 return colorIndex > 0 ? ColorEx.GREEN : ColorEx.BLACK;
 
             case RECORD:
-            case CLIP:
                 return colorIndex > 0 ? ColorEx.RED : ColorEx.BLACK;
+
+            case CLIP:
+                if (this.isMkII)
+                    return colorIndex > 0 ? ColorEx.RED : ColorEx.BLACK;
+                return colorIndex > 0 ? ColorEx.GREEN : ColorEx.BLACK;
 
             default:
                 return super.getColor (colorIndex, buttonID);

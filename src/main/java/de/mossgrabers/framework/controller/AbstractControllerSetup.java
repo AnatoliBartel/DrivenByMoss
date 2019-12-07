@@ -626,7 +626,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * Create a hardware fader proxy on controller device 1, bind a continuous command to it and
      * bind it to a MIDI pitchbend.
      *
-     * @param surface
+     * @param surface The control surface
      * @param continuousID The ID of the control (for later access)
      * @param label The label of the fader
      * @param command The command to bind
@@ -635,7 +635,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      */
     protected IHwFader addFader (final S surface, final ContinuousID continuousID, final String label, final PitchbendCommand command, final int midiChannel)
     {
-        final IHwFader fader = surface.createFader (continuousID, label);
+        final IHwFader fader = surface.createFader (continuousID, label, true);
         fader.bind (command);
         fader.bind (surface.getMidiInput (), BindType.PITCHBEND, midiChannel, 0);
         return fader;
@@ -654,7 +654,24 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      */
     protected void addFader (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiControl)
     {
-        this.addFader (continuousID, label, command, bindType, 0, midiControl);
+        this.addFader (continuousID, label, command, bindType, 0, midiControl, true);
+    }
+
+
+    /**
+     * Create a hardware fader proxy on controller device 1, bind a continuous command to it and
+     * bind it to a MIDI CC on MIDI channel 1.
+     *
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param command The command to bind
+     * @param bindType The MIDI bind type
+     * @param midiControl The MIDI CC or note
+     * @param isVertical True if the fader is vertical, otherwise horizontal
+     */
+    protected void addFader (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiControl, final boolean isVertical)
+    {
+        this.addFader (continuousID, label, command, bindType, 0, midiControl, isVertical);
     }
 
 
@@ -671,7 +688,25 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      */
     protected void addFader (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl)
     {
-        this.addFader (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiControl);
+        this.addFader (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiControl, true);
+    }
+
+
+    /**
+     * Create a hardware fader proxy on a controller, bind a continuous command to it and bind it to
+     * a MIDI CC on MIDI channel 1.
+     *
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param command The command to bind
+     * @param bindType The MIDI bind type
+     * @param midiChannel The MIDI channel
+     * @param midiControl The MIDI CC or note
+     * @param isVertical True if the fader is vertical, otherwise horizontal
+     */
+    protected void addFader (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl, final boolean isVertical)
+    {
+        this.addFader (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiControl, isVertical);
     }
 
 
@@ -689,7 +724,26 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      */
     protected void addFader (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl)
     {
-        final IHwFader fader = surface.createFader (continuousID, label);
+        this.addFader (surface, continuousID, label, command, bindType, midiChannel, midiControl, true);
+    }
+
+
+    /**
+     * Create a hardware fader proxy on a controller, bind a continuous command to it and bind it to
+     * a MIDI CC.
+     *
+     * @param surface The control surface
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param command The command to bind
+     * @param bindType The MIDI bind type
+     * @param midiChannel The MIDI channel
+     * @param midiControl The MIDI CC or note
+     * @param isVertical True if the fader is vertical, otherwise horizontal
+     */
+    protected void addFader (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl, final boolean isVertical)
+    {
+        final IHwFader fader = surface.createFader (continuousID, label, isVertical);
         fader.bind (command);
         fader.bind (surface.getMidiInput (), bindType, midiChannel, midiControl);
     }

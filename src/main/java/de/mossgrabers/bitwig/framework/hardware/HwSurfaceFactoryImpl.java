@@ -121,10 +121,10 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
 
     /** {@inheritDoc} */
     @Override
-    public IHwFader createFader (final int surfaceID, final ContinuousID faderID, final String label)
+    public IHwFader createFader (final int surfaceID, final ContinuousID faderID, final String label, final boolean isVertical)
     {
         final String id = createID (surfaceID, faderID.name ());
-        return new HwFaderImpl (this.host, this.hardwareSurface.createHardwareSlider (id), label);
+        return new HwFaderImpl (this.host, this.hardwareSurface.createHardwareSlider (id), label, isVertical);
     }
 
 

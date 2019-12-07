@@ -175,35 +175,37 @@ public class PadGridImpl implements PadGrid
     public void sendPadState (final int note)
     {
         final PadInfo state = this.padStates[note];
-        final int translated = this.translateToController (note);
+        final int [] translated = this.translateToController (note);
         final int color = state.getColor ();
-        this.sendNoteState (translated, color < 0 ? 0 : color);
+        this.sendNoteState (translated[0], translated[1], color < 0 ? 0 : color);
         final int blinkColor = state.getBlinkColor ();
         if (blinkColor > 0 && blinkColor < 128)
-            this.sendBlinkState (translated, blinkColor, state.isFast ());
+            this.sendBlinkState (translated[0], translated[1], blinkColor, state.isFast ());
     }
 
 
     /**
      * Send the note/pad update to the controller.
      *
+     * @param channel The channel
      * @param note The note
      * @param color The color
      */
-    protected void sendNoteState (final int note, final int color)
+    protected void sendNoteState (final int channel, final int note, final int color)
     {
-        this.output.sendNote (note, color);
+        this.output.sendNoteEx (channel, note, color);
     }
 
 
     /**
      * Set the given pad/note to blink.
      *
+     * @param channel The channel
      * @param note The note
      * @param blinkColor The color to use for blinking
      * @param fast Blink fast or slow
      */
-    protected void sendBlinkState (final int note, final int blinkColor, final boolean fast)
+    protected void sendBlinkState (final int channel, final int note, final int blinkColor, final boolean fast)
     {
         this.output.sendNoteEx (fast ? 14 : 10, note, blinkColor);
     }
@@ -232,9 +234,13 @@ public class PadGridImpl implements PadGrid
 
     /** {@inheritDoc} */
     @Override
-    public int translateToController (final int note)
+    public int [] translateToController (final int note)
     {
-        return note;
+        return new int []
+        {
+            0,
+            note
+        };
     }
 
 
@@ -259,14 +265,5 @@ public class PadGridImpl implements PadGrid
     public int getStartNote ()
     {
         return this.startNote;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean isGridNote (final int note)
-    {
-        final int gridNote = this.translateToGrid (note);
-        return gridNote >= this.startNote && gridNote <= this.endNote;
     }
 }

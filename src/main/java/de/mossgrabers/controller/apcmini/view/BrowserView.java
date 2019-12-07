@@ -92,7 +92,7 @@ public class BrowserView extends AbstractView<APCminiControlSurface, APCminiConf
             return;
         }
 
-        int n = this.surface.getPadGrid ().translateToController (note);
+        int n = this.surface.getPadGrid ().translateToController (note)[1];
         switch (n)
         {
             // Cancel

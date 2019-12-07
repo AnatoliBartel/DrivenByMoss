@@ -54,9 +54,10 @@ public interface IHwSurfaceFactory
      * @param surfaceID The ID of the surface
      * @param faderID The fader ID to use
      * @param label The label of the button
+     * @param isVertical True if the fader is vertical, otherwise horizontal
      * @return The created fader
      */
-    IHwFader createFader (int surfaceID, ContinuousID faderID, String label);
+    IHwFader createFader (int surfaceID, ContinuousID faderID, String label, boolean isVertical);
 
 
     /**

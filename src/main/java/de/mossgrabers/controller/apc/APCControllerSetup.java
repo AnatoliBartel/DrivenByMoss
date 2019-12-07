@@ -202,8 +202,9 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
         this.addButton (ButtonID.PLAY, "PLAY", new PlayCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_PLAY, t::isPlaying, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         this.addButton (ButtonID.RECORD, "RECORD", new APCRecordCommand (this.model, surface), APCControlSurface.APC_BUTTON_RECORD, t::isRecording, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         this.addButton (ButtonID.TAP_TEMPO, "Tempo", new TapTempoCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_TAP_TEMPO);
-        this.addButton (ButtonID.QUANTIZE, "DEV.LOCK", new APCQuantizeCommand (this.model, surface), APCControlSurface.APC_BUTTON_REC_QUANT, () -> surface.isPressed (ButtonID.QUANTIZE) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        this.addButton (ButtonID.QUANTIZE, this.isMkII ? "DEV.LOCK" : "REC QUANTIZATION", new APCQuantizeCommand (this.model, surface), APCControlSurface.APC_BUTTON_REC_QUANT, () -> surface.isPressed (ButtonID.QUANTIZE) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         this.addButton (ButtonID.MASTERTRACK, "Master", new MasterCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_MASTER, this.model.getMasterTrack ()::isSelected, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        // Note: the stop-all-clips button has no LED
         this.addButton (ButtonID.STOP_ALL_CLIPS, "STOP CLIPS", new StopAllClipsOrBrowseCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_STOP_ALL_CLIPS, () -> surface.isPressed (ButtonID.STOP_ALL_CLIPS) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         this.addButton (ButtonID.PAN_SEND, "PAN", new ModeSelectCommand<> (this.model, surface, Modes.PAN), APCControlSurface.APC_BUTTON_PAN, () -> modeManager.isActiveOrTempMode (Modes.PAN), ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         this.addButton (ButtonID.SEND1, "Send A", new SendModeCommand (0, this.model, surface), APCControlSurface.APC_BUTTON_SEND_A, () -> surface.isMkII () ? modeManager.isActiveOrTempMode (Modes.SEND1, Modes.SEND3, Modes.SEND5, Modes.SEND7) : modeManager.isActiveOrTempMode (Modes.SEND1, Modes.SEND4, Modes.SEND7), ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
@@ -216,9 +217,15 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
             final int index = i;
             this.addButton (ButtonID.get (ButtonID.ROW1_1, i), "Select " + (i + 1), new SelectTrackSendOrClipLengthCommand (i, this.model, surface), i, APCControlSurface.APC_BUTTON_TRACK_SELECTION, () -> getButtonState (index, APCControlSurface.APC_BUTTON_TRACK_SELECTION) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
             this.addButton (ButtonID.get (ButtonID.ROW2_1, i), "Solo " + (i + 1), new SoloCommand<> (i, this.model, surface), i, APCControlSurface.APC_BUTTON_SOLO, () -> getButtonState (index, APCControlSurface.APC_BUTTON_SOLO) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
-            this.addButton (ButtonID.get (ButtonID.ROW3_1, i), "Mute " + (i + 1), new MuteCommand<> (i, this.model, surface), i, APCControlSurface.APC_BUTTON_ACTIVATOR, () -> getButtonState (index, APCControlSurface.APC_BUTTON_ACTIVATOR) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+            this.addButton (ButtonID.get (ButtonID.ROW3_1, i), (this.isMkII ? "Mute " : "Activator ") + (i + 1), new MuteCommand<> (i, this.model, surface), i, APCControlSurface.APC_BUTTON_ACTIVATOR, () -> getButtonState (index, APCControlSurface.APC_BUTTON_ACTIVATOR) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
             this.addButton (ButtonID.get (ButtonID.ROW4_1, i), "Arm " + (i + 1), new RecArmCommand<> (i, this.model, surface), i, APCControlSurface.APC_BUTTON_RECORD_ARM, () -> getButtonState (index, APCControlSurface.APC_BUTTON_RECORD_ARM) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
-            this.addButton (ButtonID.get (ButtonID.ROW5_1, i), "X-fade " + (i + 1), new CrossfadeModeCommand<> (i, this.model, surface), i, APCControlSurface.APC_BUTTON_A_B, () -> getButtonState (index, APCControlSurface.APC_BUTTON_A_B) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+            if (this.isMkII)
+                this.addButton (ButtonID.get (ButtonID.ROW5_1, i), "X-fade " + (i + 1), new CrossfadeModeCommand<> (i, this.model, surface), i, APCControlSurface.APC_BUTTON_A_B, () -> {
+                    final ITrackBank tb = this.model.getCurrentTrackBank ();
+                    final ITrack track = tb.getItem (index);
+                    final boolean trackExists = track.doesExist ();
+                    return getCrossfadeButtonColor (track, trackExists);
+                }, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON, APCColorManager.BUTTON_STATE_BLINK);
             final ButtonID stopButtonID = ButtonID.get (ButtonID.ROW6_1, i);
             this.addButton (stopButtonID, "Stop " + (i + 1), new StopClipCommand<> (i, this.model, surface), i, APCControlSurface.APC_BUTTON_CLIP_STOP, () -> surface.isPressed (stopButtonID) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         }
@@ -226,21 +233,21 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
         if (this.isMkII)
         {
             this.addButton (ButtonID.DEVICE_LEFT, "<- DEVICE", new DeviceLayerLeftCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_CLIP_TRACK, () -> surface.isPressed (ButtonID.DEVICE_LEFT) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+            this.addButton (ButtonID.DEVICE_RIGHT, "DEVICE ->", new DeviceLayerRightCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_DEVICE_ON_OFF, () -> surface.isPressed (ButtonID.DEVICE_RIGHT) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
             this.addButton (ButtonID.BROWSE, "BANK", new APCBrowserCommand (this.model, surface), APCControlSurface.APC_BUTTON_BANK, this.model.getBrowser ()::isActive, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         }
         else
         {
-            this.addButton (ButtonID.STOP, "STOP", new StopCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_STOP);
+            this.addButton (ButtonID.STOP, "STOP", new StopCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_STOP, () -> !t.isPlaying (), ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
             this.addButton (ButtonID.NEW, "Footswitch", new NewCommand<> (this.model, surface), APCControlSurface.APC_FOOTSWITCH_2);
         }
 
-        this.addButton (ButtonID.DEVICE_RIGHT, "DEVICE ->", new DeviceLayerRightCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_DEVICE_ON_OFF, () -> surface.isPressed (ButtonID.DEVICE_RIGHT) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
-        this.addButton (ButtonID.CLIP, "SESSION", new SessionRecordCommand (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_SESSION : APCControlSurface.APC_BUTTON_MIDI_OVERDUB, t::isLauncherOverdub, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        this.addButton (ButtonID.CLIP, this.isMkII ? "SESSION" : "MIDI OVERDUB", new SessionRecordCommand (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_SESSION : APCControlSurface.APC_BUTTON_MIDI_OVERDUB, t::isLauncherOverdub, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         this.addButton (ButtonID.METRONOME, "METRONOME", new MetronomeCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_SEND_C : APCControlSurface.APC_BUTTON_METRONOME, t::isMetronomeOn, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
-        this.addButton (ButtonID.NUDGE_MINUS, this.isMkII ? "NUDGE+" : "NUDGE-", new RedoCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_NUDGE_MINUS : APCControlSurface.APC_BUTTON_NUDGE_PLUS);
-        this.addButton (ButtonID.NUDGE_PLUS, this.isMkII ? "NUDGE-" : "NUDGE+", new UndoCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_NUDGE_PLUS : APCControlSurface.APC_BUTTON_NUDGE_MINUS);
+        this.addButton (ButtonID.NUDGE_PLUS, "NUDGE+", new RedoCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_NUDGE_MINUS : APCControlSurface.APC_BUTTON_NUDGE_PLUS);
+        this.addButton (ButtonID.NUDGE_MINUS, "NUDGE-", new UndoCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_NUDGE_PLUS : APCControlSurface.APC_BUTTON_NUDGE_MINUS);
         this.addButton (ButtonID.DEVICE_ON_OFF, "DEV. ON/OFF", new DeviceOnOffCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_DETAIL_VIEW : APCControlSurface.APC_BUTTON_DEVICE_ON_OFF, this.model.getCursorDevice ()::isEnabled, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
-        this.addButton (ButtonID.TOGGLE_DEVICES_PANE, "CLIP/DEV.VIEW", new PaneCommand<> (Panels.DEVICE, this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_MIDI_OVERDUB : APCControlSurface.APC_BUTTON_CLIP_TRACK, () -> surface.isPressed (ButtonID.TOGGLE_DEVICES_PANE) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
+        this.addButton (ButtonID.TOGGLE_DEVICES_PANE, this.isMkII ? "CLIP/DEV.VIEW" : "CLIP/TRACK", new PaneCommand<> (Panels.DEVICE, this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_MIDI_OVERDUB : APCControlSurface.APC_BUTTON_CLIP_TRACK, () -> surface.isPressed (ButtonID.TOGGLE_DEVICES_PANE) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
         this.addButton (ButtonID.LAYOUT, "DETAIL VIEW", new PanelLayoutCommand<> (this.model, surface), this.isMkII ? APCControlSurface.APC_BUTTON_METRONOME : APCControlSurface.APC_BUTTON_DETAIL_VIEW, () -> !surface.isShiftPressed () && this.model.getCursorDevice ().isWindowOpen () ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
 
         this.addButton (ButtonID.BANK_LEFT, "<- BANK", new SelectPreviousDeviceOrParamPageCommand<> (this.model, surface), APCControlSurface.APC_BUTTON_DEVICE_LEFT, () -> surface.isPressed (ButtonID.BANK_LEFT) ? 1 : 0, ColorManager.BUTTON_STATE_OFF, ColorManager.BUTTON_STATE_ON);
@@ -259,13 +266,6 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
                 return activeView != null ? activeView.getButtonColor (sceneButtonID) : 0;
             });
         }
-
-        // TODO MK 1:
-        // case APCControlSurface.APC_BUTTON_A_B:
-        // return getCrossfadeButtonColor (track, trackExists));
-        // if (isShift)
-        // surface.updateTrigger (i, APCControlSurface.APC_BUTTON_RECORD_ARM,
-        // getCrossfadeButtonColor (track, trackExists));
     }
 
 
@@ -277,7 +277,7 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
 
         this.addFader (ContinuousID.MASTER_KNOB, "Master", new MasterFaderAbsoluteCommand<> (this.model, surface), BindType.CC, APCControlSurface.APC_KNOB_MASTER_LEVEL);
         this.addRelativeKnob (ContinuousID.PLAY_POSITION, "Play Position", new PlayPositionCommand<> (this.model, surface), APCControlSurface.APC_KNOB_CUE_LEVEL);
-        this.addFader (ContinuousID.CROSSFADER, "Crossfader", new CrossfaderCommand<> (this.model, surface), BindType.CC, APCControlSurface.APC_KNOB_CROSSFADER);
+        this.addFader (ContinuousID.CROSSFADER, "Crossfader", new CrossfaderCommand<> (this.model, surface), BindType.CC, APCControlSurface.APC_KNOB_CROSSFADER, false);
 
         for (int i = 0; i < 8; i++)
         {
@@ -297,167 +297,313 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
     {
         final APCControlSurface surface = this.getSurface ();
 
-        surface.getButton (this.isMkII ? ButtonID.NUDGE_PLUS : ButtonID.NUDGE_MINUS).setBounds (624.0, 132.0, 33.25, 15.25);
-        surface.getButton (this.isMkII ? ButtonID.NUDGE_MINUS : ButtonID.NUDGE_PLUS).setBounds (686.0, 132.0, 33.25, 15.25);
-
-        surface.getButton (ButtonID.METRONOME).setBounds (624.0, 96.0, 33.25, 15.25);
-        surface.getButton (ButtonID.CLIP).setBounds (747.75, 59.25, 32.5, 20.0);
-        surface.getButton (ButtonID.LAYOUT).setBounds (747.75, 319.75, 33.25, 15.25);
-        surface.getButton (ButtonID.TOGGLE_DEVICES_PANE).setBounds (686.0, 319.75, 33.25, 15.25);
-
-        surface.getButton (ButtonID.DEVICE_ON_OFF).setBounds (562.25, 319.75, 33.25, 15.25);
-
-        surface.getButton (ButtonID.PAD1).setBounds (13.0, 194.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD2).setBounds (74.25, 194.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD3).setBounds (135.25, 194.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD4).setBounds (196.5, 194.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD5).setBounds (257.75, 194.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD6).setBounds (318.75, 194.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD7).setBounds (380.0, 194.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD8).setBounds (441.0, 194.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD9).setBounds (12.0, 165.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD10).setBounds (73.25, 165.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD11).setBounds (134.5, 165.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD12).setBounds (196.0, 165.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD13).setBounds (257.25, 165.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD14).setBounds (318.5, 165.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD15).setBounds (379.75, 165.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD16).setBounds (441.0, 165.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD17).setBounds (11.75, 135.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD18).setBounds (73.25, 135.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD19).setBounds (135.0, 135.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD20).setBounds (196.5, 135.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD21).setBounds (258.0, 135.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD22).setBounds (319.5, 135.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD23).setBounds (381.25, 135.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD24).setBounds (441.0, 137.5, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD25).setBounds (12.5, 108.75, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD26).setBounds (73.75, 108.75, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD27).setBounds (135.25, 108.75, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD28).setBounds (196.5, 108.75, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD29).setBounds (257.75, 108.75, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD30).setBounds (319.25, 108.75, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD31).setBounds (380.5, 108.75, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD32).setBounds (441.0, 108.75, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD33).setBounds (12.75, 78.0, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD34).setBounds (74.25, 78.0, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD35).setBounds (135.5, 78.0, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD36).setBounds (196.75, 78.0, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD37).setBounds (256.5, 78.0, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD38).setBounds (318.0, 78.0, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD39).setBounds (379.5, 78.0, 52.25, 18.5);
-        surface.getButton (ButtonID.PAD40).setBounds (441.0, 78.0, 52.25, 18.5);
-
-        surface.getButton (ButtonID.SHIFT).setBounds (686.0, 360.5, 33.25, 15.25);
-        surface.getButton (ButtonID.PLAY).setBounds (624.0, 59.25, 32.5, 20.0);
-        surface.getButton (ButtonID.RECORD).setBounds (686.0, 59.25, 32.5, 20.0);
-        surface.getButton (ButtonID.TAP_TEMPO).setBounds (686.0, 96.0, 33.25, 15.25);
-
-        surface.getButton (ButtonID.QUANTIZE).setBounds (624.0, 319.75, 33.25, 15.25);
-        surface.getButton (ButtonID.PAN_SEND).setBounds (562.25, 64.0, 33.25, 15.25);
-        surface.getButton (ButtonID.SEND1).setBounds (562.25, 96.0, 33.25, 15.25);
-        surface.getButton (ButtonID.SEND2).setBounds (562.25, 132.0, 33.25, 15.25);
-
-        surface.getButton (ButtonID.ARROW_DOWN).setBounds (581.25, 361.75, 33.25, 25.0);
-        surface.getButton (ButtonID.ARROW_UP).setBounds (581.5, 386.25, 33.25, 25.0);
-        surface.getButton (ButtonID.ARROW_LEFT).setBounds (562.5, 361.75, 17.0, 49.25);
-        surface.getButton (ButtonID.ARROW_RIGHT).setBounds (616.0, 361.75, 17.0, 49.25);
-
-        surface.getButton (ButtonID.SCENE1).setBounds (500.75, 78.0, 36.0, 18.5);
-        surface.getButton (ButtonID.SCENE2).setBounds (500.75, 108.75, 36.0, 18.5);
-        surface.getButton (ButtonID.SCENE3).setBounds (500.75, 137.5, 36.0, 18.5);
-        surface.getButton (ButtonID.SCENE4).setBounds (500.75, 165.5, 36.0, 18.5);
-        surface.getButton (ButtonID.SCENE5).setBounds (500.75, 194.5, 36.0, 18.5);
-        surface.getButton (ButtonID.STOP_ALL_CLIPS).setBounds (502.25, 227.25, 33.25, 18.75);
-        surface.getButton (ButtonID.MASTERTRACK).setBounds (500.75, 263.0, 36.0, 15.75);
-
-        surface.getButton (ButtonID.ROW1_1).setBounds (12.5, 262.5, 50.5, 15.75);
-        surface.getButton (ButtonID.ROW1_2).setBounds (74.0, 262.5, 50.5, 15.75);
-        surface.getButton (ButtonID.ROW1_3).setBounds (135.25, 262.5, 50.5, 15.75);
-        surface.getButton (ButtonID.ROW1_4).setBounds (196.75, 262.5, 50.5, 15.75);
-        surface.getButton (ButtonID.ROW1_5).setBounds (258.25, 262.5, 50.5, 15.75);
-        surface.getButton (ButtonID.ROW1_6).setBounds (319.5, 262.5, 50.5, 15.75);
-        surface.getButton (ButtonID.ROW1_7).setBounds (381.0, 262.5, 50.5, 15.75);
-        surface.getButton (ButtonID.ROW1_8).setBounds (442.5, 262.5, 50.5, 15.75);
-        surface.getButton (ButtonID.ROW2_1).setBounds (14.0, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW2_2).setBounds (75.25, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW2_3).setBounds (136.5, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW2_4).setBounds (197.5, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW2_5).setBounds (258.75, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW2_6).setBounds (320.0, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW2_7).setBounds (381.25, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW2_8).setBounds (442.5, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW3_1).setBounds (14.25, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW3_2).setBounds (75.5, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW3_3).setBounds (136.5, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW3_4).setBounds (197.75, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW3_5).setBounds (259.0, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW3_6).setBounds (320.0, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW3_7).setBounds (381.25, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW3_8).setBounds (442.5, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW4_1).setBounds (44.5, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW4_2).setBounds (105.75, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW4_3).setBounds (167.0, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW4_4).setBounds (228.25, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW4_5).setBounds (289.5, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW4_6).setBounds (350.75, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW4_7).setBounds (411.75, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW4_8).setBounds (473.0, 317.75, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW5_1).setBounds (44.75, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW5_2).setBounds (106.0, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW5_3).setBounds (167.25, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW5_4).setBounds (228.25, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW5_5).setBounds (289.5, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW5_6).setBounds (350.75, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW5_7).setBounds (411.75, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW5_8).setBounds (473.0, 291.5, 19.5, 18.0);
-        surface.getButton (ButtonID.ROW6_1).setBounds (21.25, 227.25, 31.5, 18.75);
-        surface.getButton (ButtonID.ROW6_2).setBounds (82.75, 227.25, 31.5, 18.75);
-        surface.getButton (ButtonID.ROW6_3).setBounds (144.25, 227.25, 31.5, 18.75);
-        surface.getButton (ButtonID.ROW6_4).setBounds (205.75, 227.25, 31.5, 18.75);
-        surface.getButton (ButtonID.ROW6_5).setBounds (267.0, 227.25, 31.5, 18.75);
-        surface.getButton (ButtonID.ROW6_6).setBounds (328.5, 227.25, 31.5, 18.75);
-        surface.getButton (ButtonID.ROW6_7).setBounds (390.0, 227.25, 31.5, 18.75);
-        surface.getButton (ButtonID.ROW6_8).setBounds (451.5, 227.25, 31.5, 18.75);
-
-        surface.getContinuous (ContinuousID.MASTER_KNOB).setBounds (500.25, 348.5, 40.5, 115.0);
-        surface.getContinuous (ContinuousID.PLAY_POSITION).setBounds (497.75, 293.75, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.CROSSFADER).setBounds (651.25, 419.5, 104.0, 50.0);
-        surface.getContinuous (ContinuousID.FADER1).setBounds (19.75, 348.5, 40.5, 115.0);
-        surface.getContinuous (ContinuousID.KNOB1).setBounds (16.75, 19.0, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.DEVICE_KNOB1).setBounds (560.25, 173.75, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.FADER2).setBounds (80.75, 348.5, 40.5, 115.0);
-        surface.getContinuous (ContinuousID.KNOB2).setBounds (78.5, 19.0, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.DEVICE_KNOB2).setBounds (620.75, 173.75, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.FADER3).setBounds (141.5, 348.5, 40.5, 115.0);
-        surface.getContinuous (ContinuousID.KNOB3).setBounds (140.25, 19.0, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.DEVICE_KNOB3).setBounds (682.5, 173.75, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.FADER4).setBounds (202.5, 348.5, 40.5, 115.0);
-        surface.getContinuous (ContinuousID.KNOB4).setBounds (202.0, 19.0, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.DEVICE_KNOB4).setBounds (744.25, 173.75, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.FADER5).setBounds (263.5, 348.5, 40.5, 115.0);
-        surface.getContinuous (ContinuousID.KNOB5).setBounds (263.5, 19.0, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.DEVICE_KNOB5).setBounds (560.25, 235.75, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.FADER6).setBounds (324.25, 348.5, 40.5, 115.0);
-        surface.getContinuous (ContinuousID.KNOB6).setBounds (325.25, 19.0, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.DEVICE_KNOB6).setBounds (620.75, 235.75, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.FADER7).setBounds (385.25, 348.5, 40.5, 115.0);
-        surface.getContinuous (ContinuousID.KNOB7).setBounds (387.0, 19.0, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.DEVICE_KNOB7).setBounds (682.5, 235.75, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.FADER8).setBounds (446.25, 348.5, 40.5, 115.0);
-        surface.getContinuous (ContinuousID.KNOB8).setBounds (448.75, 19.0, 40.25, 37.75);
-        surface.getContinuous (ContinuousID.DEVICE_KNOB8).setBounds (744.25, 235.75, 40.25, 37.75);
-
-        surface.getButton (ButtonID.BANK_LEFT).setBounds (686.0, 289.75, 33.25, 15.25);
-        surface.getButton (ButtonID.BANK_RIGHT).setBounds (747.75, 289.75, 33.25, 15.25);
-
         if (this.isMkII)
         {
+            surface.getButton (ButtonID.NUDGE_MINUS).setBounds (624.0, 132.0, 33.25, 15.25);
+            surface.getButton (ButtonID.NUDGE_PLUS).setBounds (686.0, 132.0, 33.25, 15.25);
+
+            surface.getButton (ButtonID.METRONOME).setBounds (624.0, 96.0, 33.25, 15.25);
+            surface.getButton (ButtonID.CLIP).setBounds (747.75, 59.25, 32.5, 20.0);
+            surface.getButton (ButtonID.LAYOUT).setBounds (747.75, 319.75, 33.25, 15.25);
+            surface.getButton (ButtonID.TOGGLE_DEVICES_PANE).setBounds (686.0, 319.75, 33.25, 15.25);
+
+            surface.getButton (ButtonID.DEVICE_ON_OFF).setBounds (562.25, 319.75, 33.25, 15.25);
+
+            surface.getButton (ButtonID.PAD1).setBounds (13.0, 194.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD2).setBounds (74.25, 194.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD3).setBounds (135.25, 194.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD4).setBounds (196.5, 194.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD5).setBounds (257.75, 194.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD6).setBounds (318.75, 194.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD7).setBounds (380.0, 194.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD8).setBounds (441.0, 194.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD9).setBounds (12.0, 165.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD10).setBounds (73.25, 165.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD11).setBounds (134.5, 165.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD12).setBounds (196.0, 165.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD13).setBounds (257.25, 165.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD14).setBounds (318.5, 165.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD15).setBounds (379.75, 165.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD16).setBounds (441.0, 165.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD17).setBounds (11.75, 135.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD18).setBounds (73.25, 135.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD19).setBounds (135.0, 135.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD20).setBounds (196.5, 135.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD21).setBounds (258.0, 135.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD22).setBounds (319.5, 135.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD23).setBounds (381.25, 135.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD24).setBounds (441.0, 137.5, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD25).setBounds (12.5, 108.75, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD26).setBounds (73.75, 108.75, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD27).setBounds (135.25, 108.75, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD28).setBounds (196.5, 108.75, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD29).setBounds (257.75, 108.75, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD30).setBounds (319.25, 108.75, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD31).setBounds (380.5, 108.75, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD32).setBounds (441.0, 108.75, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD33).setBounds (12.75, 78.0, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD34).setBounds (74.25, 78.0, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD35).setBounds (135.5, 78.0, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD36).setBounds (196.75, 78.0, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD37).setBounds (256.5, 78.0, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD38).setBounds (318.0, 78.0, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD39).setBounds (379.5, 78.0, 52.25, 18.5);
+            surface.getButton (ButtonID.PAD40).setBounds (441.0, 78.0, 52.25, 18.5);
+
+            surface.getButton (ButtonID.SHIFT).setBounds (686.0, 360.5, 33.25, 15.25);
+            surface.getButton (ButtonID.PLAY).setBounds (624.0, 59.25, 32.5, 20.0);
+            surface.getButton (ButtonID.RECORD).setBounds (686.0, 59.25, 32.5, 20.0);
+            surface.getButton (ButtonID.TAP_TEMPO).setBounds (686.0, 96.0, 33.25, 15.25);
+
+            surface.getButton (ButtonID.QUANTIZE).setBounds (624.0, 319.75, 33.25, 15.25);
+            surface.getButton (ButtonID.PAN_SEND).setBounds (562.25, 64.0, 33.25, 15.25);
+            surface.getButton (ButtonID.SEND1).setBounds (562.25, 96.0, 33.25, 15.25);
+            surface.getButton (ButtonID.SEND2).setBounds (562.25, 132.0, 33.25, 15.25);
+
+            surface.getButton (ButtonID.ARROW_DOWN).setBounds (581.25, 361.75, 33.25, 25.0);
+            surface.getButton (ButtonID.ARROW_UP).setBounds (581.5, 386.25, 33.25, 25.0);
+            surface.getButton (ButtonID.ARROW_LEFT).setBounds (562.5, 361.75, 17.0, 49.25);
+            surface.getButton (ButtonID.ARROW_RIGHT).setBounds (616.0, 361.75, 17.0, 49.25);
+
+            surface.getButton (ButtonID.SCENE1).setBounds (500.75, 78.0, 36.0, 18.5);
+            surface.getButton (ButtonID.SCENE2).setBounds (500.75, 108.75, 36.0, 18.5);
+            surface.getButton (ButtonID.SCENE3).setBounds (500.75, 137.5, 36.0, 18.5);
+            surface.getButton (ButtonID.SCENE4).setBounds (500.75, 165.5, 36.0, 18.5);
+            surface.getButton (ButtonID.SCENE5).setBounds (500.75, 194.5, 36.0, 18.5);
+            surface.getButton (ButtonID.STOP_ALL_CLIPS).setBounds (502.25, 227.25, 33.25, 18.75);
+            surface.getButton (ButtonID.MASTERTRACK).setBounds (500.75, 263.0, 36.0, 15.75);
+
+            surface.getButton (ButtonID.ROW1_1).setBounds (12.5, 262.5, 50.5, 15.75);
+            surface.getButton (ButtonID.ROW1_2).setBounds (74.0, 262.5, 50.5, 15.75);
+            surface.getButton (ButtonID.ROW1_3).setBounds (135.25, 262.5, 50.5, 15.75);
+            surface.getButton (ButtonID.ROW1_4).setBounds (196.75, 262.5, 50.5, 15.75);
+            surface.getButton (ButtonID.ROW1_5).setBounds (258.25, 262.5, 50.5, 15.75);
+            surface.getButton (ButtonID.ROW1_6).setBounds (319.5, 262.5, 50.5, 15.75);
+            surface.getButton (ButtonID.ROW1_7).setBounds (381.0, 262.5, 50.5, 15.75);
+            surface.getButton (ButtonID.ROW1_8).setBounds (442.5, 262.5, 50.5, 15.75);
+            surface.getButton (ButtonID.ROW2_1).setBounds (14.0, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW2_2).setBounds (75.25, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW2_3).setBounds (136.5, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW2_4).setBounds (197.5, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW2_5).setBounds (258.75, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW2_6).setBounds (320.0, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW2_7).setBounds (381.25, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW2_8).setBounds (442.5, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW3_1).setBounds (14.25, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW3_2).setBounds (75.5, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW3_3).setBounds (136.5, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW3_4).setBounds (197.75, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW3_5).setBounds (259.0, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW3_6).setBounds (320.0, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW3_7).setBounds (381.25, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW3_8).setBounds (442.5, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW4_1).setBounds (44.5, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW4_2).setBounds (105.75, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW4_3).setBounds (167.0, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW4_4).setBounds (228.25, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW4_5).setBounds (289.5, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW4_6).setBounds (350.75, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW4_7).setBounds (411.75, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW4_8).setBounds (473.0, 317.75, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW5_1).setBounds (44.75, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW5_2).setBounds (106.0, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW5_3).setBounds (167.25, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW5_4).setBounds (228.25, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW5_5).setBounds (289.5, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW5_6).setBounds (350.75, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW5_7).setBounds (411.75, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW5_8).setBounds (473.0, 291.5, 19.5, 18.0);
+            surface.getButton (ButtonID.ROW6_1).setBounds (21.25, 227.25, 31.5, 18.75);
+            surface.getButton (ButtonID.ROW6_2).setBounds (82.75, 227.25, 31.5, 18.75);
+            surface.getButton (ButtonID.ROW6_3).setBounds (144.25, 227.25, 31.5, 18.75);
+            surface.getButton (ButtonID.ROW6_4).setBounds (205.75, 227.25, 31.5, 18.75);
+            surface.getButton (ButtonID.ROW6_5).setBounds (267.0, 227.25, 31.5, 18.75);
+            surface.getButton (ButtonID.ROW6_6).setBounds (328.5, 227.25, 31.5, 18.75);
+            surface.getButton (ButtonID.ROW6_7).setBounds (390.0, 227.25, 31.5, 18.75);
+            surface.getButton (ButtonID.ROW6_8).setBounds (451.5, 227.25, 31.5, 18.75);
+
+            surface.getButton (ButtonID.BANK_LEFT).setBounds (686.0, 289.75, 33.25, 15.25);
+            surface.getButton (ButtonID.BANK_RIGHT).setBounds (747.75, 289.75, 33.25, 15.25);
+
             surface.getButton (ButtonID.DEVICE_LEFT).setBounds (562.25, 289.75, 33.25, 15.25);
             surface.getButton (ButtonID.DEVICE_RIGHT).setBounds (624.0, 289.75, 33.25, 15.25);
             surface.getButton (ButtonID.BROWSE).setBounds (747.75, 359.75, 33.25, 15.25);
 
+            surface.getContinuous (ContinuousID.MASTER_KNOB).setBounds (500.25, 348.5, 40.5, 115.0);
+            surface.getContinuous (ContinuousID.PLAY_POSITION).setBounds (497.75, 293.75, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.CROSSFADER).setBounds (651.25, 419.5, 104.0, 50.0);
+            surface.getContinuous (ContinuousID.FADER1).setBounds (19.75, 348.5, 40.5, 115.0);
+            surface.getContinuous (ContinuousID.KNOB1).setBounds (16.75, 19.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB1).setBounds (560.25, 173.75, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER2).setBounds (80.75, 348.5, 40.5, 115.0);
+            surface.getContinuous (ContinuousID.KNOB2).setBounds (78.5, 19.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB2).setBounds (620.75, 173.75, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER3).setBounds (141.5, 348.5, 40.5, 115.0);
+            surface.getContinuous (ContinuousID.KNOB3).setBounds (140.25, 19.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB3).setBounds (682.5, 173.75, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER4).setBounds (202.5, 348.5, 40.5, 115.0);
+            surface.getContinuous (ContinuousID.KNOB4).setBounds (202.0, 19.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB4).setBounds (744.25, 173.75, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER5).setBounds (263.5, 348.5, 40.5, 115.0);
+            surface.getContinuous (ContinuousID.KNOB5).setBounds (263.5, 19.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB5).setBounds (560.25, 235.75, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER6).setBounds (324.25, 348.5, 40.5, 115.0);
+            surface.getContinuous (ContinuousID.KNOB6).setBounds (325.25, 19.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB6).setBounds (620.75, 235.75, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER7).setBounds (385.25, 348.5, 40.5, 115.0);
+            surface.getContinuous (ContinuousID.KNOB7).setBounds (387.0, 19.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB7).setBounds (682.5, 235.75, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER8).setBounds (446.25, 348.5, 40.5, 115.0);
+            surface.getContinuous (ContinuousID.KNOB8).setBounds (448.75, 19.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB8).setBounds (744.25, 235.75, 40.25, 37.75);
+
             surface.getContinuous (ContinuousID.TEMPO).setBounds (743.25, 106.75, 40.25, 37.75);
+        }
+        else
+        {
+            surface.getButton (ButtonID.PAD1).setBounds (33.5, 228.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD2).setBounds (83.75, 228.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD3).setBounds (132.75, 228.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD4).setBounds (180.25, 228.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD5).setBounds (229.0, 228.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD6).setBounds (278.25, 228.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD7).setBounds (327.25, 228.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD8).setBounds (376.25, 228.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD9).setBounds (33.5, 184.75, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD10).setBounds (83.75, 184.75, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD11).setBounds (132.75, 184.75, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD12).setBounds (180.25, 184.75, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD13).setBounds (229.0, 184.75, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD14).setBounds (278.25, 184.75, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD15).setBounds (327.25, 184.75, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD16).setBounds (376.25, 184.75, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD17).setBounds (33.5, 138.5, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD18).setBounds (83.75, 138.5, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD19).setBounds (132.75, 138.5, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD20).setBounds (180.25, 138.5, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD21).setBounds (229.0, 138.5, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD22).setBounds (278.25, 138.5, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD23).setBounds (327.25, 138.5, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD24).setBounds (376.25, 138.5, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD25).setBounds (33.5, 94.25, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD26).setBounds (83.75, 94.25, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD27).setBounds (132.75, 94.25, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD28).setBounds (180.25, 94.25, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD29).setBounds (229.0, 94.25, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD30).setBounds (278.25, 94.25, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD31).setBounds (327.25, 94.25, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD32).setBounds (376.25, 94.25, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD33).setBounds (33.5, 51.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD34).setBounds (83.75, 51.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD35).setBounds (132.75, 51.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD36).setBounds (180.25, 51.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD37).setBounds (229.0, 51.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD38).setBounds (278.25, 51.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD39).setBounds (327.25, 51.0, 33.0, 32.0);
+            surface.getButton (ButtonID.PAD40).setBounds (376.25, 51.0, 33.0, 32.0);
+
+            surface.getButton (ButtonID.ROW1_1).setBounds (33.5, 338.5, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW2_1).setBounds (33.5, 421.5, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW3_1).setBounds (33.5, 393.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW4_1).setBounds (33.5, 449.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW6_1).setBounds (33.5, 279.75, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW1_2).setBounds (83.75, 338.5, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW2_2).setBounds (83.75, 421.5, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW3_2).setBounds (83.75, 393.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW4_2).setBounds (83.75, 449.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW6_2).setBounds (83.75, 279.75, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW1_3).setBounds (132.75, 338.5, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW2_3).setBounds (132.75, 421.5, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW3_3).setBounds (132.75, 393.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW4_3).setBounds (132.75, 449.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW6_3).setBounds (132.75, 279.75, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW1_4).setBounds (180.25, 338.5, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW2_4).setBounds (180.25, 421.5, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW3_4).setBounds (180.25, 393.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW4_4).setBounds (180.25, 449.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW6_4).setBounds (180.25, 279.75, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW1_5).setBounds (229.0, 338.5, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW2_5).setBounds (229.0, 421.5, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW3_5).setBounds (229.0, 393.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW4_5).setBounds (229.0, 449.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW6_5).setBounds (229.0, 279.75, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW1_6).setBounds (278.25, 338.5, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW2_6).setBounds (278.25, 421.5, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW3_6).setBounds (278.25, 393.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW4_6).setBounds (278.25, 449.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW6_6).setBounds (278.25, 279.75, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW1_7).setBounds (327.25, 338.5, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW2_7).setBounds (327.25, 421.5, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW3_7).setBounds (327.25, 393.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW4_7).setBounds (327.25, 449.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW6_7).setBounds (327.25, 279.75, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW1_8).setBounds (376.25, 338.5, 33.0, 32.0);
+            surface.getButton (ButtonID.ROW2_8).setBounds (376.25, 421.5, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW3_8).setBounds (376.25, 393.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW4_8).setBounds (376.25, 449.25, 34.0, 18.0);
+            surface.getButton (ButtonID.ROW6_8).setBounds (376.25, 279.75, 33.0, 32.0);
+
+            surface.getButton (ButtonID.CLIP).setBounds (651.75, 489.25, 33.25, 15.25);
+            surface.getButton (ButtonID.METRONOME).setBounds (723.5, 489.25, 33.25, 15.25);
+            surface.getButton (ButtonID.NUDGE_MINUS).setBounds (660.0, 270.75, 33.25, 15.0);
+            surface.getButton (ButtonID.NUDGE_PLUS).setBounds (716.0, 270.75, 33.25, 15.0);
+            surface.getButton (ButtonID.DEVICE_ON_OFF).setBounds (579.75, 448.75, 33.25, 15.25);
+            surface.getButton (ButtonID.TOGGLE_DEVICES_PANE).setBounds (508.25, 448.75, 33.25, 15.25);
+            surface.getButton (ButtonID.LAYOUT).setBounds (508.25, 489.25, 33.25, 15.25);
+            surface.getButton (ButtonID.BANK_LEFT).setBounds (651.75, 448.75, 33.25, 15.25);
+            surface.getButton (ButtonID.BANK_RIGHT).setBounds (723.5, 448.75, 33.25, 15.25);
+            surface.getButton (ButtonID.ARROW_DOWN).setBounds (582.0, 233.5, 33.25, 25.0);
+            surface.getButton (ButtonID.ARROW_UP).setBounds (582.25, 256.75, 33.25, 25.0);
+            surface.getButton (ButtonID.ARROW_LEFT).setBounds (565.0, 233.5, 15.75, 48.25);
+            surface.getButton (ButtonID.ARROW_RIGHT).setBounds (616.75, 233.5, 15.75, 48.25);
+            surface.getButton (ButtonID.SCENE1).setBounds (428.25, 51.0, 33.0, 32.0);
+            surface.getButton (ButtonID.SCENE2).setBounds (428.25, 94.25, 33.0, 32.0);
+            surface.getButton (ButtonID.SCENE3).setBounds (428.25, 138.5, 33.0, 32.0);
+            surface.getButton (ButtonID.SCENE4).setBounds (428.25, 184.75, 33.0, 32.0);
+            surface.getButton (ButtonID.SCENE5).setBounds (428.25, 228.0, 33.0, 32.0);
+
+            surface.getButton (ButtonID.NEW).setBounds (715.5, 1.25, 37.5, 21.0);
+
+            surface.getButton (ButtonID.SHIFT).setBounds (508.25, 270.75, 33.25, 15.0);
+            surface.getButton (ButtonID.PLAY).setBounds (551.0, 536.75, 32.5, 20.0);
+            surface.getButton (ButtonID.STOP).setBounds (611.0, 537.5, 32.5, 20.0);
+            surface.getButton (ButtonID.RECORD).setBounds (671.0, 536.75, 32.5, 20.0);
+            surface.getButton (ButtonID.TAP_TEMPO).setBounds (687.5, 229.75, 33.25, 20.5);
+            surface.getButton (ButtonID.QUANTIZE).setBounds (579.75, 489.25, 33.25, 15.25);
+            surface.getButton (ButtonID.MASTERTRACK).setBounds (428.25, 338.5, 33.0, 32.0);
+            surface.getButton (ButtonID.STOP_ALL_CLIPS).setBounds (428.25, 279.75, 33.0, 32.0);
+            surface.getButton (ButtonID.PAN_SEND).setBounds (508.25, 183.25, 33.25, 15.25);
+            surface.getButton (ButtonID.SEND1).setBounds (579.75, 183.25, 33.25, 15.25);
+            surface.getButton (ButtonID.SEND2).setBounds (651.75, 183.25, 33.25, 15.25);
+            surface.getButton (ButtonID.SEND3).setBounds (723.5, 183.25, 33.25, 15.25);
+
+            surface.getContinuous (ContinuousID.MASTER_KNOB).setBounds (428.25, 497.25, 38.25, 124.0);
+            surface.getContinuous (ContinuousID.PLAY_POSITION).setBounds (428.25, 412.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.CROSSFADER).setBounds (564.5, 572.75, 135.25, 50.0);
+            surface.getContinuous (ContinuousID.FADER1).setBounds (33.5, 497.25, 38.25, 124.0);
+            surface.getContinuous (ContinuousID.KNOB1).setBounds (508.25, 44.5, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB1).setBounds (508.25, 315.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER2).setBounds (83.75, 497.25, 38.25, 124.0);
+            surface.getContinuous (ContinuousID.KNOB2).setBounds (579.75, 44.5, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB2).setBounds (579.75, 315.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER3).setBounds (132.75, 497.25, 38.25, 124.0);
+            surface.getContinuous (ContinuousID.KNOB3).setBounds (651.75, 44.5, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB3).setBounds (651.75, 315.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER4).setBounds (180.25, 497.25, 38.25, 124.0);
+            surface.getContinuous (ContinuousID.KNOB4).setBounds (723.5, 44.5, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB4).setBounds (723.5, 315.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER5).setBounds (229.0, 497.25, 38.25, 124.0);
+            surface.getContinuous (ContinuousID.KNOB5).setBounds (508.25, 120.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB5).setBounds (508.25, 389.5, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER6).setBounds (278.25, 497.25, 38.25, 124.0);
+            surface.getContinuous (ContinuousID.KNOB6).setBounds (579.75, 120.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB6).setBounds (579.75, 389.5, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER7).setBounds (327.25, 497.25, 38.25, 124.0);
+            surface.getContinuous (ContinuousID.KNOB7).setBounds (651.75, 120.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB7).setBounds (651.75, 389.5, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.FADER8).setBounds (376.25, 497.25, 38.25, 124.0);
+            surface.getContinuous (ContinuousID.KNOB8).setBounds (723.5, 120.0, 40.25, 37.75);
+            surface.getContinuous (ContinuousID.DEVICE_KNOB8).setBounds (723.5, 389.5, 40.25, 37.75);
         }
     }
 
@@ -472,16 +618,16 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
     }
 
 
-    private static String getCrossfadeButtonColor (final ITrack track, final boolean trackExists)
+    private static int getCrossfadeButtonColor (final ITrack track, final boolean trackExists)
     {
         if (!trackExists)
-            return ColorManager.BUTTON_STATE_OFF;
+            return 0;
 
         final String crossfadeMode = track.getCrossfadeMode ();
         if ("AB".equals (crossfadeMode))
-            return ColorManager.BUTTON_STATE_OFF;
+            return 0;
 
-        return "A".equals (crossfadeMode) ? ColorManager.BUTTON_STATE_ON : APCColorManager.BUTTON_STATE_BLINK;
+        return "A".equals (crossfadeMode) ? 1 : 2;
     }
 
 
@@ -636,6 +782,8 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
                 return trackExists && getMuteButtonState (isShift, track);
 
             case APCControlSurface.APC_BUTTON_RECORD_ARM:
+                if (isShift)
+                    return getCrossfadeButtonColor (track, trackExists) > 0;
                 return trackExists && track.isRecArm ();
 
             default:

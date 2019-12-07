@@ -146,7 +146,8 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
                 final ButtonID buttonID = ButtonID.get (ButtonID.PAD1, i);
                 final IHwButton pad = this.createButton (buttonID, "P " + (i + 1));
                 pad.addLight (this.surfaceFactory.createLight (this.surfaceID, null, () -> this.pads.getPadInfo (note).getEncoded (), state -> this.pads.sendPadState (note), colorIndex -> this.colorManager.getColor (colorIndex, buttonID), null));
-                pad.bind (input, BindType.NOTE, this.pads.translateToController (note));
+                final int [] translated = this.pads.translateToController (note);
+                pad.bind (input, BindType.NOTE, translated[0], translated[1]);
                 pad.bindDynamic ( (event, velocity) -> this.handleGridNote (event, note, velocity));
             }
         }
@@ -285,14 +286,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     public IMidiInput getMidiInput ()
     {
         return this.input;
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean isGridNote (final int note)
-    {
-        return this.pads != null && this.pads.isGridNote (note);
     }
 
 
@@ -441,9 +434,9 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public IHwFader createFader (final ContinuousID faderID, final String label)
+    public IHwFader createFader (final ContinuousID faderID, final String label, final boolean isVertical)
     {
-        final IHwFader fader = this.surfaceFactory.createFader (this.surfaceID, faderID, label);
+        final IHwFader fader = this.surfaceFactory.createFader (this.surfaceID, faderID, label, isVertical);
         this.continuous.put (faderID, fader);
         return fader;
     }
