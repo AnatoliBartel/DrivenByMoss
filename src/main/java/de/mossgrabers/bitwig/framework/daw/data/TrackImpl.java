@@ -6,7 +6,7 @@ package de.mossgrabers.bitwig.framework.daw.data;
 
 import de.mossgrabers.bitwig.framework.daw.ApplicationImpl;
 import de.mossgrabers.bitwig.framework.daw.SlotBankImpl;
-import de.mossgrabers.framework.controller.IValueChanger;
+import de.mossgrabers.framework.controller.valuechanger.IValueChanger;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.ISlotBank;
 import de.mossgrabers.framework.daw.constants.RecordQuantization;

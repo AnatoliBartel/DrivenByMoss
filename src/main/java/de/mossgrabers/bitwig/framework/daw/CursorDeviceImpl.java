@@ -6,7 +6,7 @@ package de.mossgrabers.bitwig.framework.daw;
 
 import de.mossgrabers.bitwig.framework.daw.data.DeviceImpl;
 import de.mossgrabers.bitwig.framework.daw.data.Util;
-import de.mossgrabers.framework.controller.IValueChanger;
+import de.mossgrabers.framework.controller.valuechanger.IValueChanger;
 import de.mossgrabers.framework.daw.IChannelBank;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IDeviceBank;

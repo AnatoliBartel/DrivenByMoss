@@ -2,10 +2,13 @@
 // (c) 2017-2019
 // Licensed under LGPLv3 - http://www.gnu.org/licenses/lgpl-3.0.txt
 
-package de.mossgrabers.framework.controller;
+package de.mossgrabers.framework.controller.valuechanger;
 
 /**
- * Default implementation for changing values.
+ * Default implementation for changing values. The relative knob implementation is Two's Complement
+ * 
+ * @see <a href=
+ *      "https://en.wikipedia.org/wiki/Two%27s_complement">https://en.wikipedia.org/wiki/Two%27s_complement</a>
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */

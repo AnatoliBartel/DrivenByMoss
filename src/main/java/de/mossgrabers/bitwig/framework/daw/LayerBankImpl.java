@@ -6,7 +6,7 @@ package de.mossgrabers.bitwig.framework.daw;
 
 import de.mossgrabers.bitwig.framework.daw.data.LayerImpl;
 import de.mossgrabers.bitwig.framework.daw.data.Util;
-import de.mossgrabers.framework.controller.IValueChanger;
+import de.mossgrabers.framework.controller.valuechanger.IValueChanger;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.ILayerBank;

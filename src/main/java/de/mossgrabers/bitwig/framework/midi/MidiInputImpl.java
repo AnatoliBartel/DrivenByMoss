@@ -14,6 +14,7 @@ import de.mossgrabers.framework.controller.hardware.IHwAbsoluteKnob;
 import de.mossgrabers.framework.controller.hardware.IHwButton;
 import de.mossgrabers.framework.controller.hardware.IHwFader;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
+import de.mossgrabers.framework.controller.valuechanger.RelativeEncoding;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.INoteInput;
 import de.mossgrabers.framework.daw.midi.MidiShortCallback;
@@ -28,6 +29,7 @@ import com.bitwig.extension.controller.api.HardwareButton;
 import com.bitwig.extension.controller.api.HardwareSlider;
 import com.bitwig.extension.controller.api.MidiIn;
 import com.bitwig.extension.controller.api.RelativeHardwareKnob;
+import com.bitwig.extension.controller.api.RelativeHardwareValueMatcher;
 
 
 /**
@@ -162,19 +164,37 @@ public class MidiInputImpl implements IMidiInput
 
     /** {@inheritDoc} */
     @Override
-    public void bind (final IHwRelativeKnob knob, final BindType type, final int channel, final int control)
+    public void bind (final IHwRelativeKnob knob, final BindType type, final int channel, final int control, final RelativeEncoding encoding)
     {
-        final RelativeHardwareKnob hardwareKnob = ((HwRelativeKnobImpl) knob).getHardwareKnob ();
+        if (type != BindType.CC)
+            throw new BindException (type);
 
-        // TODO Support different relative mappings, understand what these names really mean...
-        switch (type)
+        final RelativeHardwareValueMatcher valueMatcher;
+
+        switch (encoding)
         {
-            case CC:
-                hardwareKnob.setAdjustValueMatcher (this.port.createRelative2sComplementCCValueMatcher (channel, control, 127));
+            case TWOS_COMPLEMENT:
+                valueMatcher = this.port.createRelative2sComplementCCValueMatcher (channel, control, 127);
                 break;
+
+            case OFFSET_BINARY:
+                valueMatcher = this.port.createRelativeBinOffsetCCValueMatcher (channel, control, 127);
+                break;
+
+            case SIGNED_BIT:
+                valueMatcher = this.port.createRelativeSignedBitCCValueMatcher (channel, control, 127);
+                break;
+
+            case SIGNED_BIT2:
+                valueMatcher = this.port.createRelativeSignedBit2CCValueMatcher (channel, control, 127);
+                break;
+
             default:
+                // Can never been reached
                 throw new BindException (type);
         }
+
+        ((HwRelativeKnobImpl) knob).getHardwareKnob ().setAdjustValueMatcher (valueMatcher);
     }
 
 

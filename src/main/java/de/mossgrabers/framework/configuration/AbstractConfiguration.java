@@ -4,8 +4,8 @@
 
 package de.mossgrabers.framework.configuration;
 
-import de.mossgrabers.framework.controller.IValueChanger;
 import de.mossgrabers.framework.controller.color.ColorEx;
+import de.mossgrabers.framework.controller.valuechanger.IValueChanger;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.constants.Resolution;
 import de.mossgrabers.framework.observer.SettingObserver;

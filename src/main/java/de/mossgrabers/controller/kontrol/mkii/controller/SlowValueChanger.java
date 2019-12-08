@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.kontrol.mkii.controller;
 
-import de.mossgrabers.framework.controller.DefaultValueChanger;
+import de.mossgrabers.framework.controller.valuechanger.DefaultValueChanger;
 
 
 /**

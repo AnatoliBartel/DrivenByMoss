@@ -7,7 +7,7 @@ package de.mossgrabers.controller.kontrol.mkii.mode;
 import de.mossgrabers.controller.kontrol.mkii.KontrolProtocolConfiguration;
 import de.mossgrabers.controller.kontrol.mkii.TrackType;
 import de.mossgrabers.controller.kontrol.mkii.controller.KontrolProtocolControlSurface;
-import de.mossgrabers.framework.controller.IValueChanger;
+import de.mossgrabers.framework.controller.valuechanger.IValueChanger;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IDeviceBank;
 import de.mossgrabers.framework.daw.IModel;

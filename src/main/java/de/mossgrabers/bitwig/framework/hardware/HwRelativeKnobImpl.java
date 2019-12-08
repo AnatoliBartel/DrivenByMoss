@@ -10,6 +10,7 @@ import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.controller.hardware.AbstractHwContinuousControl;
 import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
+import de.mossgrabers.framework.controller.valuechanger.RelativeEncoding;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.utils.ButtonEvent;
 
@@ -26,6 +27,20 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
 {
     private final RelativeHardwareKnob hardwareKnob;
     private final ControllerHost       controllerHost;
+    private final RelativeEncoding     encoding;
+
+
+    /**
+     * Constructor. Uses Two's complement as the default relative encoding.
+     *
+     * @param host The controller host
+     * @param hardwareKnob The Bitwig hardware knob
+     * @param label The label of the knob
+     */
+    public HwRelativeKnobImpl (final HostImpl host, final RelativeHardwareKnob hardwareKnob, final String label)
+    {
+        this (host, hardwareKnob, label, RelativeEncoding.TWOS_COMPLEMENT);
+    }
 
 
     /**
@@ -34,10 +49,13 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
      * @param host The controller host
      * @param hardwareKnob The Bitwig hardware knob
      * @param label The label of the knob
+     * @param encoding The encoding of the relative value
      */
-    public HwRelativeKnobImpl (final HostImpl host, final RelativeHardwareKnob hardwareKnob, final String label)
+    public HwRelativeKnobImpl (final HostImpl host, final RelativeHardwareKnob hardwareKnob, final String label, RelativeEncoding encoding)
     {
         super (host, label);
+
+        this.encoding = encoding;
 
         this.controllerHost = host.getControllerHost ();
         this.hardwareKnob = hardwareKnob;
@@ -58,7 +76,7 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
     @Override
     public void bind (final IMidiInput input, final BindType type, final int channel, final int value)
     {
-        input.bind (this, type, channel, value);
+        input.bind (this, type, channel, value, this.encoding);
     }
 
 
@@ -79,6 +97,8 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
     @Override
     public void handleValue (final double value)
     {
+        host.println ("V: " + value);
+
         // Convert the value back from the 2s relative matcher, because we do the conversion our own
         // way
         final int v = (int) Math.round (value * 127.0);

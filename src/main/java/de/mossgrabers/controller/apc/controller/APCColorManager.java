@@ -201,7 +201,7 @@ public class APCColorManager extends ColorManager
         this.registerColorIndex (COLOR_VIEW_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
         this.registerColorIndex (COLOR_KEY_WHITE, isMkII ? APC_MKII_COLOR_AMBER_LO : APC_COLOR_GREEN);
         this.registerColorIndex (COLOR_KEY_BLACK, isMkII ? APC_MKII_COLOR_RED_HI : APC_COLOR_RED);
-        this.registerColorIndex (COLOR_KEY_SELECTED, isMkII ? APC_MKII_COLOR_GREEN_HI : APC_COLOR_GREEN);
+        this.registerColorIndex (COLOR_KEY_SELECTED, isMkII ? APC_MKII_COLOR_GREEN_HI : APC_COLOR_YELLOW);
 
         if (isMkII)
         {

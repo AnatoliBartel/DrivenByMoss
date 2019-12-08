@@ -12,9 +12,11 @@ import de.mossgrabers.framework.configuration.Configuration;
 import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.hardware.BindType;
+import de.mossgrabers.framework.controller.hardware.IHwAbsoluteKnob;
 import de.mossgrabers.framework.controller.hardware.IHwButton;
 import de.mossgrabers.framework.controller.hardware.IHwFader;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
+import de.mossgrabers.framework.controller.valuechanger.IValueChanger;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.mode.Modes;
@@ -746,6 +748,62 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
         final IHwFader fader = surface.createFader (continuousID, label, isVertical);
         fader.bind (command);
         fader.bind (surface.getMidiInput (), bindType, midiChannel, midiControl);
+    }
+
+
+    /**
+     * Create a hardware knob proxy on a controller, which sends absolute values, bind a continuous
+     * command to it and bind it to a MIDI CC on MIDI channel 1.
+     *
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param midiControl The MIDI CC or note
+     * @param command The command to bind
+     * @return The created knob
+     */
+    protected IHwAbsoluteKnob addAbsoluteKnob (final ContinuousID continuousID, final String label, final ContinuousCommand command, final int midiControl)
+    {
+        return this.addAbsoluteKnob (continuousID, label, command, BindType.CC, 0, midiControl);
+    }
+
+
+    /**
+     * Create a hardware knob proxy on a controller, which sends absolute values, bind a continuous
+     * command to it and bind it to a MIDI CC on MIDI channel 1.
+     *
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param command The command to bind
+     * @param bindType The MIDI bind type
+     * @param midiChannel The MIDI channel
+     * @param midiControl The MIDI CC or note
+     * @return The created knob
+     */
+    protected IHwAbsoluteKnob addAbsoluteKnob (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl)
+    {
+        return this.addAbsoluteKnob (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiControl);
+    }
+
+
+    /**
+     * Create a hardware knob proxy on a controller, which sends absolute values, bind a continuous
+     * command to it and bind it to a MIDI CC.
+     *
+     * @param surface The control surface
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param command The command to bind
+     * @param bindType The MIDI bind type
+     * @param midiChannel The MIDI channel
+     * @param midiControl The MIDI CC or note
+     * @return The created knob
+     */
+    protected IHwAbsoluteKnob addAbsoluteKnob (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl)
+    {
+        final IHwAbsoluteKnob knob = surface.createAbsoluteKnob (continuousID, label);
+        knob.bind (command);
+        knob.bind (surface.getMidiInput (), bindType, midiChannel, midiControl);
+        return knob;
     }
 
 

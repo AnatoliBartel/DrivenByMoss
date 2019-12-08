@@ -9,6 +9,7 @@ import de.mossgrabers.framework.controller.hardware.IHwAbsoluteKnob;
 import de.mossgrabers.framework.controller.hardware.IHwButton;
 import de.mossgrabers.framework.controller.hardware.IHwFader;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
+import de.mossgrabers.framework.controller.valuechanger.RelativeEncoding;
 
 
 /**
@@ -105,8 +106,9 @@ public interface IMidiInput
      * @param type The MIDI binding type
      * @param channel The MIDI channel
      * @param control The MIDI command (CC, Note, ...)
+     * @param encoding The encoding of the relative value
      */
-    void bind (IHwRelativeKnob relativeKnob, BindType type, int channel, int control);
+    void bind (IHwRelativeKnob relativeKnob, BindType type, int channel, int control, RelativeEncoding encoding);
 
 
     /**

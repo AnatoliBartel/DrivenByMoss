@@ -59,11 +59,11 @@ import de.mossgrabers.framework.configuration.ISettingsUI;
 import de.mossgrabers.framework.controller.AbstractControllerSetup;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.ContinuousID;
-import de.mossgrabers.framework.controller.DefaultValueChanger;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.controller.hardware.IHwContinuousControl;
+import de.mossgrabers.framework.controller.valuechanger.DefaultValueChanger;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.IParameterBank;
@@ -282,8 +282,8 @@ public class APCControllerSetup extends AbstractControllerSetup<APCControlSurfac
         for (int i = 0; i < 8; i++)
         {
             this.addFader (ContinuousID.get (ContinuousID.FADER1, i), "Fader" + (i + 1), new FaderAbsoluteCommand<> (i, this.model, surface), BindType.CC, i, APCControlSurface.APC_KNOB_TRACK_LEVEL);
-            this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), new KnobRowModeCommand<> (i, this.model, surface), APCControlSurface.APC_KNOB_TRACK_KNOB_1 + i);
-            this.addRelativeKnob (ContinuousID.get (ContinuousID.DEVICE_KNOB1, i), "Device Knob " + (i + 1), new DeviceParamsKnobRowCommand<> (i, this.model, surface), APCControlSurface.APC_KNOB_DEVICE_KNOB_1 + i);
+            this.addAbsoluteKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), new KnobRowModeCommand<> (i, this.model, surface), APCControlSurface.APC_KNOB_TRACK_KNOB_1 + i);
+            this.addAbsoluteKnob (ContinuousID.get (ContinuousID.DEVICE_KNOB1, i), "Device Knob " + (i + 1), new DeviceParamsKnobRowCommand<> (i, this.model, surface), APCControlSurface.APC_KNOB_DEVICE_KNOB_1 + i);
         }
 
         if (this.isMkII)

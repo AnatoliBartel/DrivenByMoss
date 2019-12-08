@@ -4,7 +4,7 @@
 
 package de.mossgrabers.bitwig.framework.daw.data;
 
-import de.mossgrabers.framework.controller.IValueChanger;
+import de.mossgrabers.framework.controller.valuechanger.IValueChanger;
 import de.mossgrabers.framework.daw.data.AbstractItemImpl;
 import de.mossgrabers.framework.daw.data.IParameter;
 import de.mossgrabers.framework.observer.IValueObserver;
