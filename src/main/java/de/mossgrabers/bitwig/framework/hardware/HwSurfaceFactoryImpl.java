@@ -19,6 +19,7 @@ import de.mossgrabers.framework.controller.hardware.IHwPianoKeyboard;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
 import de.mossgrabers.framework.controller.hardware.IHwSurfaceFactory;
 import de.mossgrabers.framework.controller.hardware.IHwTextDisplay;
+import de.mossgrabers.framework.controller.valuechanger.RelativeEncoding;
 import de.mossgrabers.framework.graphics.IBitmap;
 
 import com.bitwig.extension.api.Color;
@@ -143,6 +144,15 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
     {
         final String id = createID (surfaceID, knobID.name ());
         return new HwRelativeKnobImpl (this.host, this.hardwareSurface.createRelativeHardwareKnob (id), label);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public IHwRelativeKnob createRelativeKnob (final int surfaceID, final ContinuousID knobID, final String label, final RelativeEncoding encoding)
+    {
+        final String id = createID (surfaceID, knobID.name ());
+        return new HwRelativeKnobImpl (this.host, this.hardwareSurface.createRelativeHardwareKnob (id), label, encoding);
     }
 
 

@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.beatstep.view;
 
 import de.mossgrabers.controller.beatstep.BeatstepConfiguration;
-import de.mossgrabers.controller.beatstep.controller.BeatstepColors;
+import de.mossgrabers.controller.beatstep.controller.BeatstepColorManager;
 import de.mossgrabers.controller.beatstep.controller.BeatstepControlSurface;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGrid;
@@ -103,9 +103,9 @@ public class PlayView extends AbstractPlayView<BeatstepControlSurface, BeatstepC
     protected int getPadColor (final boolean isKeyboardEnabled, final int pad)
     {
         if (!isKeyboardEnabled)
-            return BeatstepColors.BEATSTEP_BUTTON_STATE_OFF;
+            return BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF;
         if (this.keyManager.isKeyPressed (pad))
-            return BeatstepColors.BEATSTEP_BUTTON_STATE_PINK;
+            return BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK;
         final ColorManager colorManager = this.model.getColorManager ();
         return colorManager.getColorIndex (this.keyManager.getColor (pad));
     }

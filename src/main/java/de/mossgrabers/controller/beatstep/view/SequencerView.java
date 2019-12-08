@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.beatstep.view;
 
-import de.mossgrabers.controller.beatstep.controller.BeatstepColors;
+import de.mossgrabers.controller.beatstep.controller.BeatstepColorManager;
 import de.mossgrabers.controller.beatstep.controller.BeatstepControlSurface;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.IModel;
@@ -145,7 +145,7 @@ public class SequencerView extends BaseSequencerView
         {
             for (int i = 36; i < 52; i++)
             {
-                padGrid.light (i, this.keyManager.isKeyPressed (i) || this.selectedPad == i - 36 ? BeatstepColors.BEATSTEP_BUTTON_STATE_PINK : this.model.getColorManager ().getColorIndex (this.keyManager.getColor (i)));
+                padGrid.light (i, this.keyManager.isKeyPressed (i) || this.selectedPad == i - 36 ? BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK : this.model.getColorManager ().getColorIndex (this.keyManager.getColor (i)));
             }
         }
         else
@@ -167,8 +167,8 @@ public class SequencerView extends BaseSequencerView
     private static int getSequencerColor (final int isSet, final boolean hilite)
     {
         if (isSet > 0)
-            return hilite ? BeatstepColors.BEATSTEP_BUTTON_STATE_PINK : BeatstepColors.BEATSTEP_BUTTON_STATE_BLUE;
-        return hilite ? BeatstepColors.BEATSTEP_BUTTON_STATE_PINK : BeatstepColors.BEATSTEP_BUTTON_STATE_OFF;
+            return hilite ? BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK : BeatstepColorManager.BEATSTEP_BUTTON_STATE_BLUE;
+        return hilite ? BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK : BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF;
     }
 
 

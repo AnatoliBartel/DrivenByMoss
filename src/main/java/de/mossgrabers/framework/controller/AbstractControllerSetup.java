@@ -17,6 +17,7 @@ import de.mossgrabers.framework.controller.hardware.IHwButton;
 import de.mossgrabers.framework.controller.hardware.IHwFader;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
 import de.mossgrabers.framework.controller.valuechanger.IValueChanger;
+import de.mossgrabers.framework.controller.valuechanger.RelativeEncoding;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.mode.Modes;
@@ -819,7 +820,24 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      */
     protected IHwRelativeKnob addRelativeKnob (final ContinuousID continuousID, final String label, final ContinuousCommand command, final int midiControl)
     {
-        return this.addRelativeKnob (continuousID, label, command, BindType.CC, 0, midiControl);
+        return this.addRelativeKnob (continuousID, label, command, BindType.CC, 0, midiControl, RelativeEncoding.TWOS_COMPLEMENT);
+    }
+
+
+    /**
+     * Create a hardware knob proxy on a controller, which sends relative values, bind a continuous
+     * command to it and bind it to a MIDI CC on MIDI channel 1.
+     *
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param midiControl The MIDI CC or note
+     * @param command The command to bind
+     * @param encoding The relative value encoding
+     * @return The created knob
+     */
+    protected IHwRelativeKnob addRelativeKnob (final ContinuousID continuousID, final String label, final ContinuousCommand command, final int midiControl, final RelativeEncoding encoding)
+    {
+        return this.addRelativeKnob (continuousID, label, command, BindType.CC, 0, midiControl, encoding);
     }
 
 
@@ -836,7 +854,25 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      */
     protected IHwRelativeKnob addRelativeKnob (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final int midiControl)
     {
-        return this.addRelativeKnob (surface, continuousID, label, command, BindType.CC, 0, midiControl);
+        return this.addRelativeKnob (surface, continuousID, label, command, BindType.CC, 0, midiControl, RelativeEncoding.TWOS_COMPLEMENT);
+    }
+
+
+    /**
+     * Create a hardware knob proxy on a controller, which sends relative values, bind a continuous
+     * command to it and bind it to a MIDI CC on MIDI channel 1.
+     *
+     * @param surface The control surface
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param midiControl The MIDI CC or note
+     * @param command The command to bind
+     * @param encoding The relative value encoding
+     * @return The created knob
+     */
+    protected IHwRelativeKnob addRelativeKnob (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final int midiControl, final RelativeEncoding encoding)
+    {
+        return this.addRelativeKnob (surface, continuousID, label, command, BindType.CC, 0, midiControl, encoding);
     }
 
 
@@ -854,7 +890,26 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      */
     protected IHwRelativeKnob addRelativeKnob (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl)
     {
-        return this.addRelativeKnob (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiControl);
+        return this.addRelativeKnob (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiControl, RelativeEncoding.TWOS_COMPLEMENT);
+    }
+
+
+    /**
+     * Create a hardware knob proxy on a controller, which sends relative values, bind a continuous
+     * command to it and bind it to a MIDI CC on MIDI channel 1.
+     *
+     * @param continuousID The ID of the control (for later access)
+     * @param label The label of the fader
+     * @param command The command to bind
+     * @param bindType The MIDI bind type
+     * @param midiChannel The MIDI channel
+     * @param midiControl The MIDI CC or note
+     * @param encoding The relative value encoding
+     * @return The created knob
+     */
+    protected IHwRelativeKnob addRelativeKnob (final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl, final RelativeEncoding encoding)
+    {
+        return this.addRelativeKnob (this.getSurface (), continuousID, label, command, bindType, midiChannel, midiControl, encoding);
     }
 
 
@@ -869,11 +924,12 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
      * @param bindType The MIDI bind type
      * @param midiChannel The MIDI channel
      * @param midiControl The MIDI CC or note
+     * @param encoding The relative value encoding
      * @return The created knob
      */
-    protected IHwRelativeKnob addRelativeKnob (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl)
+    protected IHwRelativeKnob addRelativeKnob (final S surface, final ContinuousID continuousID, final String label, final ContinuousCommand command, final BindType bindType, final int midiChannel, final int midiControl, final RelativeEncoding encoding)
     {
-        final IHwRelativeKnob knob = surface.createRelativeKnob (continuousID, label);
+        final IHwRelativeKnob knob = surface.createRelativeKnob (continuousID, label, encoding);
         knob.bind (command);
         knob.bind (surface.getMidiInput (), bindType, midiChannel, midiControl);
         return knob;

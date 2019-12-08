@@ -149,7 +149,7 @@ public class PadGridImpl implements PadGrid
     @Override
     public void forceFlush (final int note)
     {
-        this.padStates[note].setColors (-1, -1, false);
+        this.padStates[note].setColors (0, 0, false);
     }
 
 

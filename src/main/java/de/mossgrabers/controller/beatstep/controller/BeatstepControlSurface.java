@@ -10,7 +10,6 @@ import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
-import de.mossgrabers.framework.utils.ButtonEvent;
 
 
 /**
@@ -21,6 +20,8 @@ import de.mossgrabers.framework.utils.ButtonEvent;
 @SuppressWarnings("javadoc")
 public class BeatstepControlSurface extends AbstractControlSurface<BeatstepConfiguration>
 {
+    public static final int BEATSTEP_SHIFT      = 7;
+
     public static final int BEATSTEP_KNOB_1     = 20;
     public static final int BEATSTEP_KNOB_2     = 21;
     public static final int BEATSTEP_KNOB_3     = 22;
@@ -88,14 +89,10 @@ public class BeatstepControlSurface extends AbstractControlSurface<BeatstepConfi
      * @param configuration The configuration
      * @param output The midi output
      * @param input The midi input
-     * @param isPro Is Pro or MkII?
      */
-    public BeatstepControlSurface (final IHost host, final ColorManager colorManager, final BeatstepConfiguration configuration, final IMidiOutput output, final IMidiInput input, final boolean isPro)
+    public BeatstepControlSurface (final IHost host, final ColorManager colorManager, final BeatstepConfiguration configuration, final IMidiOutput output, final IMidiInput input)
     {
-        // TODO size
-        super (host, configuration, colorManager, output, input, new BeatstepPadGrid (colorManager, output), 100, 50);
-
-        this.isPro = isPro;
+        super (host, configuration, colorManager, output, input, new BeatstepPadGrid (colorManager, output), 800, 314);
     }
 
 
@@ -130,44 +127,6 @@ public class BeatstepControlSurface extends AbstractControlSurface<BeatstepConfi
 
         super.handleMidi (code, data1, data2);
     }
-
-
-    /** {@inheritDoc} */
-    @Override
-    protected void handleGridNote (final ButtonEvent event, final int note, final int velocity)
-    {
-        super.handleGridNote (event, note, velocity);
-
-        if (note < 36 || note > 51)
-            return;
-
-        // Force a redraw on button up because the light was also modified on the controller
-        this.scheduleTask ( () -> this.pads.forceFlush (note), 100);
-    }
-
-    // TODO REmove
-    // /** {@inheritDoc} */
-    // @Override
-    // protected void handleNoteEvent (final int note, final int velocity)
-    // {
-    // // Shift button pressed?
-    // if (note != 7)
-    // {
-    // this.errorln ("Pad is outside of note range, make sure that you did not accidently transpose
-    // the pads (Shift+Wheel)");
-    // return;
-    // }
-    //
-    // this.isShift = velocity == 127;
-    // if (this.isShift)
-    // this.getViewManager ().setActiveView (Views.SHIFT);
-    // else
-    // {
-    // if (this.getViewManager ().isActiveView (Views.SHIFT))
-    // this.getViewManager ().restoreView ();
-    // this.getPadGrid ().forceFlush ();
-    // }
-    // }
 
 
     /** {@inheritDoc} */

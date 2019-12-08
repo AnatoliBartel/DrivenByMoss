@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.beatstep.view;
 
 import de.mossgrabers.controller.beatstep.BeatstepConfiguration;
-import de.mossgrabers.controller.beatstep.controller.BeatstepColors;
+import de.mossgrabers.controller.beatstep.controller.BeatstepColorManager;
 import de.mossgrabers.controller.beatstep.controller.BeatstepControlSurface;
 import de.mossgrabers.framework.command.trigger.transport.PlayCommand;
 import de.mossgrabers.framework.controller.grid.PadGrid;
@@ -58,22 +58,22 @@ public class ShiftView extends AbstractView<BeatstepControlSurface, BeatstepConf
     {
         final ITransport t = this.model.getTransport ();
         final PadGrid padGrid = this.surface.getPadGrid ();
-        padGrid.light (36, t.isPlaying () ? BeatstepColors.BEATSTEP_BUTTON_STATE_PINK : BeatstepColors.BEATSTEP_BUTTON_STATE_BLUE);
-        padGrid.light (37, t.isRecording () ? BeatstepColors.BEATSTEP_BUTTON_STATE_PINK : BeatstepColors.BEATSTEP_BUTTON_STATE_RED);
-        padGrid.light (38, t.isLoop () ? BeatstepColors.BEATSTEP_BUTTON_STATE_PINK : BeatstepColors.BEATSTEP_BUTTON_STATE_OFF);
-        padGrid.light (39, t.isMetronomeOn () ? BeatstepColors.BEATSTEP_BUTTON_STATE_PINK : BeatstepColors.BEATSTEP_BUTTON_STATE_OFF);
-        padGrid.light (40, BeatstepColors.BEATSTEP_BUTTON_STATE_OFF);
-        padGrid.light (41, BeatstepColors.BEATSTEP_BUTTON_STATE_RED);
-        padGrid.light (42, BeatstepColors.BEATSTEP_BUTTON_STATE_RED);
-        padGrid.light (43, BeatstepColors.BEATSTEP_BUTTON_STATE_RED);
-        padGrid.light (44, BeatstepColors.BEATSTEP_BUTTON_STATE_RED);
-        padGrid.light (45, BeatstepColors.BEATSTEP_BUTTON_STATE_RED);
-        padGrid.light (46, BeatstepColors.BEATSTEP_BUTTON_STATE_PINK);
-        padGrid.light (47, BeatstepColors.BEATSTEP_BUTTON_STATE_PINK);
-        padGrid.light (48, BeatstepColors.BEATSTEP_BUTTON_STATE_PINK);
-        padGrid.light (49, BeatstepColors.BEATSTEP_BUTTON_STATE_BLUE);
-        padGrid.light (50, BeatstepColors.BEATSTEP_BUTTON_STATE_OFF);
-        padGrid.light (51, BeatstepColors.BEATSTEP_BUTTON_STATE_PINK);
+        padGrid.light (36, t.isPlaying () ? BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK : BeatstepColorManager.BEATSTEP_BUTTON_STATE_BLUE);
+        padGrid.light (37, t.isRecording () ? BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK : BeatstepColorManager.BEATSTEP_BUTTON_STATE_RED);
+        padGrid.light (38, t.isLoop () ? BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK : BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
+        padGrid.light (39, t.isMetronomeOn () ? BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK : BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
+        padGrid.light (40, BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
+        padGrid.light (41, BeatstepColorManager.BEATSTEP_BUTTON_STATE_RED);
+        padGrid.light (42, BeatstepColorManager.BEATSTEP_BUTTON_STATE_RED);
+        padGrid.light (43, BeatstepColorManager.BEATSTEP_BUTTON_STATE_RED);
+        padGrid.light (44, BeatstepColorManager.BEATSTEP_BUTTON_STATE_RED);
+        padGrid.light (45, BeatstepColorManager.BEATSTEP_BUTTON_STATE_RED);
+        padGrid.light (46, BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK);
+        padGrid.light (47, BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK);
+        padGrid.light (48, BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK);
+        padGrid.light (49, BeatstepColorManager.BEATSTEP_BUTTON_STATE_BLUE);
+        padGrid.light (50, BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
+        padGrid.light (51, BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK);
     }
 
 

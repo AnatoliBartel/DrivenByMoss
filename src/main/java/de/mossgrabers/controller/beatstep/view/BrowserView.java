@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.beatstep.view;
 
 import de.mossgrabers.controller.beatstep.BeatstepConfiguration;
-import de.mossgrabers.controller.beatstep.controller.BeatstepColors;
+import de.mossgrabers.controller.beatstep.controller.BeatstepColorManager;
 import de.mossgrabers.controller.beatstep.controller.BeatstepControlSurface;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.IBrowser;
@@ -152,17 +152,17 @@ public class BrowserView extends AbstractView<BeatstepControlSurface, BeatstepCo
     public void drawGrid ()
     {
         final PadGrid padGrid = this.surface.getPadGrid ();
-        padGrid.light (36, BeatstepColors.BEATSTEP_BUTTON_STATE_RED);
-        padGrid.light (37, BeatstepColors.BEATSTEP_BUTTON_STATE_OFF);
+        padGrid.light (36, BeatstepColorManager.BEATSTEP_BUTTON_STATE_RED);
+        padGrid.light (37, BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
         for (int i = 2; i < 6; i++)
-            padGrid.light (36 + i, BeatstepColors.BEATSTEP_BUTTON_STATE_PINK);
-        padGrid.light (42, BeatstepColors.BEATSTEP_BUTTON_STATE_OFF);
-        padGrid.light (43, BeatstepColors.BEATSTEP_BUTTON_STATE_BLUE);
-        padGrid.light (44, BeatstepColors.BEATSTEP_BUTTON_STATE_OFF);
-        padGrid.light (45, BeatstepColors.BEATSTEP_BUTTON_STATE_OFF);
+            padGrid.light (36 + i, BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK);
+        padGrid.light (42, BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
+        padGrid.light (43, BeatstepColorManager.BEATSTEP_BUTTON_STATE_BLUE);
+        padGrid.light (44, BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
+        padGrid.light (45, BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
         for (int i = 10; i < 14; i++)
-            padGrid.light (36 + i, BeatstepColors.BEATSTEP_BUTTON_STATE_PINK);
-        padGrid.light (50, BeatstepColors.BEATSTEP_BUTTON_STATE_OFF);
-        padGrid.light (51, BeatstepColors.BEATSTEP_BUTTON_STATE_OFF);
+            padGrid.light (36 + i, BeatstepColorManager.BEATSTEP_BUTTON_STATE_PINK);
+        padGrid.light (50, BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
+        padGrid.light (51, BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
     }
 }

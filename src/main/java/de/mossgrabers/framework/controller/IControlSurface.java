@@ -17,6 +17,7 @@ import de.mossgrabers.framework.controller.hardware.IHwFader;
 import de.mossgrabers.framework.controller.hardware.IHwLight;
 import de.mossgrabers.framework.controller.hardware.IHwPianoKeyboard;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
+import de.mossgrabers.framework.controller.valuechanger.RelativeEncoding;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
 import de.mossgrabers.framework.mode.ModeManager;
@@ -381,6 +382,17 @@ public interface IControlSurface<C extends Configuration>
      * @return The created knob
      */
     IHwRelativeKnob createRelativeKnob (ContinuousID knobID, String label);
+
+
+    /**
+     * Create a relative knob for the surface.
+     *
+     * @param knobID The knob ID
+     * @param label The label of the knob
+     * @param encoding The encoding of the relative value
+     * @return The created knob
+     */
+    IHwRelativeKnob createRelativeKnob (ContinuousID knobID, String label, RelativeEncoding encoding);
 
 
     /**

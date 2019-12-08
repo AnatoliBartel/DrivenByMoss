@@ -21,6 +21,7 @@ import de.mossgrabers.framework.controller.hardware.IHwLight;
 import de.mossgrabers.framework.controller.hardware.IHwPianoKeyboard;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
 import de.mossgrabers.framework.controller.hardware.IHwSurfaceFactory;
+import de.mossgrabers.framework.controller.valuechanger.RelativeEncoding;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
@@ -457,6 +458,16 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     public IHwRelativeKnob createRelativeKnob (final ContinuousID knobID, final String label)
     {
         final IHwRelativeKnob knob = this.surfaceFactory.createRelativeKnob (this.surfaceID, knobID, label);
+        this.continuous.put (knobID, knob);
+        return knob;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public IHwRelativeKnob createRelativeKnob (final ContinuousID knobID, final String label, final RelativeEncoding encoding)
+    {
+        final IHwRelativeKnob knob = this.surfaceFactory.createRelativeKnob (this.surfaceID, knobID, label, encoding);
         this.continuous.put (knobID, knob);
         return knob;
     }

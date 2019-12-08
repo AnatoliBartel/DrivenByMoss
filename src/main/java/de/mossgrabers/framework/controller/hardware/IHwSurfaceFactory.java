@@ -8,6 +8,7 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.OutputID;
 import de.mossgrabers.framework.controller.color.ColorEx;
+import de.mossgrabers.framework.controller.valuechanger.RelativeEncoding;
 import de.mossgrabers.framework.graphics.IBitmap;
 
 import java.util.function.IntConsumer;
@@ -80,6 +81,18 @@ public interface IHwSurfaceFactory
      * @return The created knob
      */
     IHwRelativeKnob createRelativeKnob (int surfaceID, ContinuousID knobID, String label);
+
+
+    /**
+     * Create a proxy to a hardware relative knob.
+     *
+     * @param surfaceID The ID of the surface
+     * @param knobID The knob ID to use
+     * @param label The label of the knob
+     * @param encoding The encoding of the relative value
+     * @return The created knob
+     */
+    IHwRelativeKnob createRelativeKnob (int surfaceID, ContinuousID knobID, String label, RelativeEncoding encoding);
 
 
     /**
