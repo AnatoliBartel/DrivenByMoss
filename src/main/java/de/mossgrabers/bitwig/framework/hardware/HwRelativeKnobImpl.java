@@ -97,10 +97,8 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
     @Override
     public void handleValue (final double value)
     {
-        host.println ("V: " + value);
-
-        // Convert the value back from the 2s relative matcher, because we do the conversion our own
-        // way
+        // Convert the value back from the default 2s relative matcher, because we do the conversion
+        // our own way
         final int v = (int) Math.round (value * 127.0);
         this.command.execute (v < 0 ? v + 128 : v);
     }

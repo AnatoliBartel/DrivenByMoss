@@ -230,7 +230,7 @@ public class MCUControlSurface extends AbstractControlSurface<MCUConfiguration>
 
     /** {@inheritDoc} */
     @Override
-    public void shutdown ()
+    protected void internalShutdown ()
     {
         final IMidiOutput output = this.getMidiOutput ();
         for (int i = 0; i < 8; i++)
@@ -242,7 +242,7 @@ public class MCUControlSurface extends AbstractControlSurface<MCUConfiguration>
         output.sendChannelAftertouch (1, 0x10, 0);
         output.sendPitchbend (8, 0, 0);
 
-        super.shutdown ();
+        super.internalShutdown ();
     }
 
 

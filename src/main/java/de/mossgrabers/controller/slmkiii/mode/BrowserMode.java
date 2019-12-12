@@ -85,6 +85,14 @@ public class BrowserMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
+    public int getKnobValue (int index)
+    {
+        return 0;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void onButton (final int row, final int index, final ButtonEvent event)
     {
         if (event != ButtonEvent.UP)
@@ -131,25 +139,27 @@ public class BrowserMode extends BaseMode
     @Override
     public int getButtonColor (final ButtonID buttonID)
     {
-        // TODO
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1,
-        // SLMkIIIColors.SLMKIII_GREEN);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_2,
-        // SLMkIIIColors.SLMKIII_GREEN);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_3,
-        // SLMkIIIColors.SLMKIII_DARK_GREEN_HALF);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_4,
-        // SLMkIIIColors.SLMKIII_DARK_GREEN_HALF);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_5,
-        // SLMkIIIColors.SLMKIII_GREEN_LIGHT);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_6,
-        // SLMkIIIColors.SLMKIII_GREEN_LIGHT);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_7,
-        // SLMkIIIColors.SLMKIII_GREEN_GRASS);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_8,
-        // SLMkIIIColors.SLMKIII_GREEN_GRASS);
+        switch (buttonID)
+        {
+            case ROW1_1:
+            case ROW1_2:
+                return SLMkIIIColorManager.SLMKIII_GREEN;
 
-        return 0;
+            case ROW1_3:
+            case ROW1_4:
+                return SLMkIIIColorManager.SLMKIII_DARK_GREEN_HALF;
+
+            case ROW1_5:
+            case ROW1_6:
+                return SLMkIIIColorManager.SLMKIII_GREEN_LIGHT;
+
+            case ROW1_7:
+            case ROW1_8:
+                return SLMkIIIColorManager.SLMKIII_GREEN_GRASS;
+
+            default:
+                return 0;
+        }
     }
 
 
@@ -218,9 +228,16 @@ public class BrowserMode extends BaseMode
         d.setPropertyValue (7, 1, 0);
 
         d.setCell (0, 8, "Browser");
-        d.setPropertyColor (8, 0, SLMkIIIColorManager.SLMKIII_GREEN_GRASS);
 
         this.setButtonInfo (d);
         d.allDone ();
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public int getModeColor ()
+    {
+        return SLMkIIIColorManager.SLMKIII_GREEN_GRASS;
     }
 }

@@ -7,6 +7,7 @@ package de.mossgrabers.controller.slmkiii.view;
 import de.mossgrabers.controller.slmkiii.SLMkIIIConfiguration;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.grid.PadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.ICursorDevice;
@@ -157,23 +158,6 @@ public class DrumView extends AbstractDrumView<SLMkIIIControlSurface, SLMkIIICon
         return hilite ? SLMkIIIColorManager.SLMKIII_GREEN : SLMkIIIColorManager.SLMKIII_BLACK;
     }
 
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // TODO
-    // if (scene == 0)
-    // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_1, this.isPlayMode ?
-    // SLMkIIIColors.SLMKIII_GREEN : SLMkIIIColors.SLMKIII_BLUE);
-    // else
-    // {
-    // final int value = this.surface.getModeManager ().isActiveOrTempMode (Modes.GROOVE) ?
-    // SLMkIIIColors.SLMKIII_PINK : SLMkIIIColors.SLMKIII_DARK_GREY;
-    // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_SCENE_2, this.isActive () ? value
-    // : SLMkIIIColors.SLMKIII_BLACK);
-    // }
-    // }
-
 
     /** {@inheritDoc} */
     @Override
@@ -208,5 +192,23 @@ public class DrumView extends AbstractDrumView<SLMkIIIControlSurface, SLMkIIICon
     public boolean isPlayMode ()
     {
         return this.isPlayMode;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public int getButtonColor (final ButtonID buttonID)
+    {
+        if (buttonID == ButtonID.SCENE1)
+            return this.isPlayMode ? SLMkIIIColorManager.SLMKIII_GREEN : SLMkIIIColorManager.SLMKIII_BLUE;
+
+        if (buttonID == ButtonID.SCENE2)
+        {
+            if (!this.isActive ())
+                return SLMkIIIColorManager.SLMKIII_BLACK;
+            return this.surface.getModeManager ().isActiveOrTempMode (Modes.GROOVE) ? SLMkIIIColorManager.SLMKIII_PINK : SLMkIIIColorManager.SLMKIII_DARK_GREY;
+        }
+
+        return super.getButtonColor (buttonID);
     }
 }

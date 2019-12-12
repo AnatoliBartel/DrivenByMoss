@@ -167,8 +167,8 @@ public class SLMkIIIColorManager extends ColorManager
 
         this.registerColorIndex (BUTTON_STATE_WIND_ON, SLMKIII_YELLOW_HALF);
         this.registerColorIndex (BUTTON_STATE_WIND_HI, SLMKIII_YELLOW);
-        this.registerColorIndex (BUTTON_STATE_STOP_ON, SLMKIII_DARK_GREY);
-        this.registerColorIndex (BUTTON_STATE_STOP_HI, SLMKIII_GREY);
+        this.registerColorIndex (BUTTON_STATE_STOP_ON, SLMKIII_GREY);
+        this.registerColorIndex (BUTTON_STATE_STOP_HI, SLMKIII_WHITE);
         this.registerColorIndex (BUTTON_STATE_PLAY_ON, SLMKIII_GREEN_HALF);
         this.registerColorIndex (BUTTON_STATE_PLAY_HI, SLMKIII_GREEN);
         this.registerColorIndex (BUTTON_STATE_LOOP_ON, SLMKIII_BLUE_HALF);
@@ -178,6 +178,9 @@ public class SLMkIIIColorManager extends ColorManager
         this.registerColorIndex (BUTTON_STATE_OVR_ON, SLMKIII_AMBER_HALF);
         this.registerColorIndex (BUTTON_STATE_OVR_HI, SLMKIII_AMBER);
 
+        for (int i = 0; i < 128; i++)
+            this.registerColor (i, ColorEx.BLACK);
+
         this.registerColor (SLMKIII_BLACK, ColorEx.BLACK);
         this.registerColor (SLMKIII_DARK_GREY, ColorEx.DARK_GRAY);
         this.registerColor (SLMKIII_GREY, ColorEx.GRAY);
@@ -185,44 +188,44 @@ public class SLMkIIIColorManager extends ColorManager
         this.registerColor (SLMKIII_WHITE_HALF, ColorEx.DARK_GRAY);
         this.registerColor (SLMKIII_RED, ColorEx.RED);
         this.registerColor (SLMKIII_DARK_RED, ColorEx.DARK_RED);
-        this.registerColor (SLMKIII_RED_HALF, ColorEx.DARK_RED); // TODO
-        this.registerColor (SLMKIII_SKIN, ColorEx.BLACK); // TODO
-        this.registerColor (SLMKIII_ORANGE, ColorEx.BLACK); // TODO
-        this.registerColor (SLMKIII_DARK_BROWN, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_ORANGE_HALF, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_AMBER, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_AMBER_HALF, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_YELLOW_LIGHT, ColorEx.BLACK);// TODO
+        this.registerColor (SLMKIII_RED_HALF, ColorEx.evenDarker (ColorEx.RED));
+        this.registerColor (SLMKIII_SKIN, ColorEx.SKIN);
+        this.registerColor (SLMKIII_ORANGE, ColorEx.ORANGE);
+        this.registerColor (SLMKIII_DARK_BROWN, ColorEx.DARK_BROWN);
+        this.registerColor (SLMKIII_ORANGE_HALF, ColorEx.evenDarker (ColorEx.ORANGE));
+        this.registerColor (SLMKIII_AMBER, ColorEx.ORANGE);
+        this.registerColor (SLMKIII_AMBER_HALF, ColorEx.darker (ColorEx.ORANGE));
+        this.registerColor (SLMKIII_YELLOW_LIGHT, ColorEx.brighter (ColorEx.YELLOW));
         this.registerColor (SLMKIII_YELLOW, ColorEx.YELLOW);
-        this.registerColor (SLMKIII_YELLOW_HALF, ColorEx.BLACK); // TODO
-        this.registerColor (SLMKIII_GREEN_LIGHT, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_DARK_YELLOW, ColorEx.BLACK);// TODO
+        this.registerColor (SLMKIII_YELLOW_HALF, ColorEx.evenDarker (ColorEx.YELLOW));
+        this.registerColor (SLMKIII_GREEN_LIGHT, ColorEx.brighter (ColorEx.GREEN));
+        this.registerColor (SLMKIII_DARK_YELLOW, ColorEx.darker (ColorEx.YELLOW));
         this.registerColor (SLMKIII_DARK_GREEN, ColorEx.DARK_GREEN);
-        this.registerColor (SLMKIII_DARK_YELLOW_HALF, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_GREEN_GRASS, ColorEx.BLACK);// TODO
+        this.registerColor (SLMKIII_DARK_YELLOW_HALF, ColorEx.evenDarker (ColorEx.YELLOW));
+        this.registerColor (SLMKIII_GREEN_GRASS, ColorEx.brighter (ColorEx.GREEN));
         this.registerColor (SLMKIII_GREEN, ColorEx.GREEN);
-        this.registerColor (SLMKIII_DARK_GREEN_HALF, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_GREEN_HALF, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_MINT, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_MINT_HALF, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_OLIVE, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_SKY_BLUE, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_LIGHT_BLUE, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_BLUE_METAL, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_LIGHT_BLUE_HALF, ColorEx.BLACK);// TODO
+        this.registerColor (SLMKIII_DARK_GREEN_HALF, ColorEx.darker (ColorEx.DARK_GREEN));
+        this.registerColor (SLMKIII_GREEN_HALF, ColorEx.darker (ColorEx.GREEN));
+        this.registerColor (SLMKIII_MINT, ColorEx.MINT);
+        this.registerColor (SLMKIII_MINT_HALF, ColorEx.evenDarker (ColorEx.MINT));
+        this.registerColor (SLMKIII_OLIVE, ColorEx.OLIVE);
+        this.registerColor (SLMKIII_SKY_BLUE, ColorEx.SKY_BLUE);
+        this.registerColor (SLMKIII_LIGHT_BLUE, ColorEx.brighter (ColorEx.BLUE));
+        this.registerColor (SLMKIII_BLUE_METAL, ColorEx.fromRGB (97, 199, 221));
+        this.registerColor (SLMKIII_LIGHT_BLUE_HALF, ColorEx.darker (ColorEx.BLUE));
         this.registerColor (SLMKIII_BLUE, ColorEx.BLUE);
-        this.registerColor (SLMKIII_BLUE_HALF, ColorEx.BLACK);// TODO
+        this.registerColor (SLMKIII_BLUE_HALF, ColorEx.darker (ColorEx.BLUE));
         this.registerColor (SLMKIII_DARK_BLUE, ColorEx.DARK_BLUE);
-        this.registerColor (SLMKIII_DARK_BLUE_HALF, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_PURPLE, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_PURPLE_HALF, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_PINK_LIGHT, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_PINK, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_RED_WINE, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_BROWN, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_BLUE_PURPLISH, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_PINK_DARK, ColorEx.BLACK);// TODO
-        this.registerColor (SLMKIII_DARK_ORANGE, ColorEx.BLACK);// TODO
+        this.registerColor (SLMKIII_DARK_BLUE_HALF, ColorEx.darker (ColorEx.DARK_BLUE));
+        this.registerColor (SLMKIII_PURPLE, ColorEx.PURPLE);
+        this.registerColor (SLMKIII_PURPLE_HALF, ColorEx.darker (ColorEx.PURPLE));
+        this.registerColor (SLMKIII_PINK_LIGHT, ColorEx.brighter (ColorEx.PINK));
+        this.registerColor (SLMKIII_PINK, ColorEx.PINK);
+        this.registerColor (SLMKIII_RED_WINE, ColorEx.RED_WINE);
+        this.registerColor (SLMKIII_BROWN, ColorEx.BROWN);
+        this.registerColor (SLMKIII_BLUE_PURPLISH, ColorEx.fromRGB (161, 140, 255));
+        this.registerColor (SLMKIII_PINK_DARK, ColorEx.darker (ColorEx.PINK));
+        this.registerColor (SLMKIII_DARK_ORANGE, ColorEx.evenDarker (ColorEx.ORANGE));
     }
 
 

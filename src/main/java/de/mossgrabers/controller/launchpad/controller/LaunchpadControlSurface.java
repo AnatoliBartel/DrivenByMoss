@@ -223,7 +223,7 @@ public class LaunchpadControlSurface extends AbstractControlSurface<LaunchpadCon
 
     /** {@inheritDoc} */
     @Override
-    public void shutdown ()
+    protected void internalShutdown ()
     {
         if (this.definition.isPro ())
         {
@@ -242,7 +242,7 @@ public class LaunchpadControlSurface extends AbstractControlSurface<LaunchpadCon
         this.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
         this.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
 
-        super.shutdown ();
+        super.internalShutdown ();
     }
 
 

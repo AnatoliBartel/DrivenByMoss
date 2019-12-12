@@ -496,12 +496,12 @@ public class PushControlSurface extends AbstractControlSurface<PushConfiguration
 
     /** {@inheritDoc} */
     @Override
-    public void shutdown ()
+    protected void internalShutdown ()
     {
         this.setRibbonMode (PUSH_RIBBON_PITCHBEND);
         this.setRibbonValue (0);
 
-        super.shutdown ();
+        super.internalShutdown ();
     }
 
 

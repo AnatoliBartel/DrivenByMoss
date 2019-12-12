@@ -59,16 +59,20 @@ public class SequencerResolutionMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
+    public int getKnobValue (int index)
+    {
+        return 0;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public int getButtonColor (final ButtonID buttonID)
     {
         final DrumView drumView = (DrumView) this.surface.getViewManager ().getView (Views.DRUM);
         final int match = Resolution.getMatch (drumView.getClip ().getStepLength ());
-        // TODO
-        // for (int i = 0; i < 8; i++)
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i, match == i
-        // ? SLMkIIIColors.SLMKIII_PINK : SLMkIIIColors.SLMKIII_DARK_GREY);
-
-        return 0;
+        int index = buttonID.ordinal () - ButtonID.ROW1_1.ordinal ();
+        return match == index ? SLMkIIIColorManager.SLMKIII_PINK : SLMkIIIColorManager.SLMKIII_DARK_GREY;
     }
 
 
@@ -91,11 +95,17 @@ public class SequencerResolutionMode extends BaseMode
         }
 
         d.setCell (0, 8, "Sequencer");
-        d.setCell (1, 8, "Resoltion");
-        d.setPropertyColor (8, 0, SLMkIIIColorManager.SLMKIII_PINK);
+        d.setCell (1, 8, "Resolutin");
 
         this.setButtonInfo (d);
-
         d.allDone ();
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public int getModeColor ()
+    {
+        return SLMkIIIColorManager.SLMKIII_PINK;
     }
 }

@@ -176,66 +176,49 @@ public abstract class AbstractTrackMode extends BaseMode
 
         if (this.surface.isShiftPressed ())
         {
-            // TODO Update button LEDs
-            // if (selectedTrack == null)
-            // {
-            // for (int i = 0; i < 5; i++)
-            // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i,
-            // SLMkIIIColors.SLMKIII_BLACK);
-            // }
-            // else
-            // {
-            // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1,
-            // selectedTrack.isActivated () ? SLMkIIIColors.SLMKIII_RED :
-            // SLMkIIIColors.SLMKIII_RED_HALF);
-            // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_2,
-            // this.model.isCursorTrackPinned () ? SLMkIIIColors.SLMKIII_RED :
-            // SLMkIIIColors.SLMKIII_RED_HALF);
-            // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_3,
-            // SLMkIIIColors.SLMKIII_RED_HALF);
-            // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_4,
-            // SLMkIIIColors.SLMKIII_BLACK);
-            // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_5,
-            // SLMkIIIColors.SLMKIII_BLACK);
-            // }
-            // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_6,
-            // SLMkIIIColors.SLMKIII_RED_HALF);
-            // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_7,
-            // SLMkIIIColors.SLMKIII_RED_HALF);
-            // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_8,
-            // SLMkIIIColors.SLMKIII_RED_HALF);
-            return 0;
+            switch (buttonID)
+            {
+                case ROW1_1:
+                    if (selectedTrack == null)
+                        return SLMkIIIColorManager.SLMKIII_BLACK;
+                    return selectedTrack.isActivated () ? SLMkIIIColorManager.SLMKIII_RED : SLMkIIIColorManager.SLMKIII_RED_HALF;
+                case ROW1_2:
+                    if (selectedTrack == null)
+                        return SLMkIIIColorManager.SLMKIII_BLACK;
+                    return this.model.isCursorTrackPinned () ? SLMkIIIColorManager.SLMKIII_RED : SLMkIIIColorManager.SLMKIII_RED_HALF;
+                case ROW1_3:
+                    if (selectedTrack == null)
+                        return SLMkIIIColorManager.SLMKIII_BLACK;
+                    return SLMkIIIColorManager.SLMKIII_RED_HALF;
+                case ROW1_4:
+                case ROW1_5:
+                    return SLMkIIIColorManager.SLMKIII_BLACK;
+
+                default:
+                    return SLMkIIIColorManager.SLMKIII_RED_HALF;
+            }
         }
 
-        // if (this.surface.isLongPressed (ButtonID.ARROW_DOWN))
-        // {
-        // final ModeManager modeManager = this.surface.getModeManager ();
-        // for (int i = 0; i < 8; i++)
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i,
-        // modeManager.isActiveMode (MODES[i]) ? SLMkIIIColors.SLMKIII_GREEN :
-        // SLMkIIIColors.SLMKIII_GREEN_HALF);
-        // return;
-        // }
-        //
-        // for (int i = 0; i < 8; i++)
-        // {
-        // final ITrack t = tb.getItem (i);
-        //
-        // int color = SLMkIIIColors.SLMKIII_BLACK;
-        // if (t.doesExist ())
-        // {
-        // if (t.isSelected ())
-        // {
-        // final String colorIndex = DAWColors.getColorIndex (t.getColor ());
-        // color = this.model.getColorManager ().getColor (colorIndex);
-        // }
-        // else
-        // color = SLMkIIIColors.SLMKIII_WHITE_HALF;
-        // }
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i, color);
-        // }
+        final int index = buttonID.ordinal () - ButtonID.ROW1_1.ordinal ();
 
-        return 0;
+        if (this.surface.isLongPressed (ButtonID.ARROW_DOWN))
+        {
+            final ModeManager modeManager = this.surface.getModeManager ();
+            return modeManager.isActiveMode (MODES[index]) ? SLMkIIIColorManager.SLMKIII_GREEN : SLMkIIIColorManager.SLMKIII_GREEN_HALF;
+        }
+
+        final ITrack t = tb.getItem (index);
+
+        if (t.doesExist ())
+        {
+            if (t.isSelected ())
+            {
+                final String colorIndex = DAWColor.getColorIndex (t.getColor ());
+                return this.model.getColorManager ().getColorIndex (colorIndex);
+            }
+            return SLMkIIIColorManager.SLMKIII_WHITE_HALF;
+        }
+        return SLMkIIIColorManager.SLMKIII_BLACK;
     }
 
 

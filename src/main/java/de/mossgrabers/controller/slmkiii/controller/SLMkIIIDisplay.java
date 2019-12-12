@@ -4,6 +4,7 @@
 
 package de.mossgrabers.controller.slmkiii.controller;
 
+import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.display.AbstractTextDisplay;
 import de.mossgrabers.framework.controller.display.Format;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
@@ -36,8 +37,6 @@ public class SLMkIIIDisplay extends AbstractTextDisplay
     private static final Integer PROPERTY_TEXT                    = Integer.valueOf (1);
     private static final Integer PROPERTY_COLOR                   = Integer.valueOf (2);
     private static final Integer PROPERTY_VALUE                   = Integer.valueOf (3);
-
-    private static final String  LED_CACHE_STR                    = "%02X%02X%02X";
 
     private final String []      ledCache                         = new String [8];
     private final int [] []      displayColorCache                = new int [9] [4];
@@ -159,22 +158,12 @@ public class SLMkIIIDisplay extends AbstractTextDisplay
      * Set one of the colors of the LED faders.
      *
      * @param led The LED index (0-7)
-     * @param hue The brightness intensity (0-1)
      * @param color The color to set
      */
-    public void setFaderLEDColor (final int led, final double hue, final double [] color)
+    public void setFaderLEDColor (final int led, final ColorEx color)
     {
-        final Integer redHue = Integer.valueOf ((int) Math.round (hue * color[0] * 127.0));
-        final Integer greenHue = Integer.valueOf ((int) Math.round (hue * color[1] * 127.0));
-        final Integer blueHue = Integer.valueOf ((int) Math.round (hue * color[2] * 127.0));
-
-        final String cacheStr = String.format (LED_CACHE_STR, redHue, greenHue, blueHue);
-        if (this.ledCache[led - SLMkIIIControlSurface.MKIII_FADER_LED_1].compareTo (cacheStr) == 0)
-            return;
-        this.ledCache[led - SLMkIIIControlSurface.MKIII_FADER_LED_1] = cacheStr;
-
-        final String msg = String.format (MKIII_SYSEX_LED_COMMAND, Integer.valueOf (led), redHue, greenHue, blueHue);
-        this.output.sendSysex (msg);
+        final int [] rgb = color.toIntRGB ();
+        this.output.sendSysex (String.format (MKIII_SYSEX_LED_COMMAND, Integer.valueOf (led), Integer.valueOf (rgb[0]), Integer.valueOf (rgb[1]), Integer.valueOf (rgb[2])));
     }
 
 

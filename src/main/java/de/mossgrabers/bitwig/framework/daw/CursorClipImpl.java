@@ -581,7 +581,7 @@ public class CursorClipImpl implements INoteClip
         final StepInfoImpl stepInfo = this.getUpdateableStep (channel, step, row);
         stepInfo.setGain (gain);
         if (!stepInfo.isEditing ())
-            this.getClip ().getStep (channel, step, row).setVolume (gain);
+            this.getClip ().getStep (channel, step, row).setGain (gain);
     }
 
 
@@ -796,7 +796,7 @@ public class CursorClipImpl implements INoteClip
         noteInfo.setTimbre (stepInfo.getTimbre ());
         noteInfo.setPan (stepInfo.getPan ());
         noteInfo.setTranspose (stepInfo.getTranspose ());
-        noteInfo.setVolume (stepInfo.getGain ());
+        noteInfo.setGain (stepInfo.getGain ());
     }
 
 

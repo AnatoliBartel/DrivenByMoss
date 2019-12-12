@@ -8,7 +8,6 @@ import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.framework.controller.ButtonID;
-import de.mossgrabers.framework.controller.valuechanger.IValueChanger;
 import de.mossgrabers.framework.daw.IClip;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ITransport;
@@ -65,6 +64,32 @@ public class OptionsMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
+    public int getKnobValue (int index)
+    {
+        final ITransport transport = this.model.getTransport ();
+        final IMasterTrack master = this.model.getMasterTrack ();
+        switch (index)
+        {
+            case 0:
+                return master.getVolume ();
+
+            case 1:
+                return master.getPan ();
+
+            case 4:
+                return (int) transport.rescaleTempo (transport.getTempo (), this.model.getValueChanger ().getUpperBound ());
+
+            case 5:
+                return transport.getMetronomeVolume ();
+
+            default:
+                return 0;
+        }
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void onButton (final int row, final int index, final ButtonEvent event)
     {
         if (event != ButtonEvent.UP)
@@ -109,27 +134,17 @@ public class OptionsMode extends BaseMode
     @Override
     public int getButtonColor (final ButtonID buttonID)
     {
-        // TODO
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1,
-        // SLMkIIIColors.SLMKIII_BROWN_DARK);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_2,
-        // SLMkIIIColors.SLMKIII_BROWN_DARK);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_3,
-        // SLMkIIIColors.SLMKIII_BROWN_DARK);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_4,
-        // SLMkIIIColors.SLMKIII_BROWN_DARK);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_5,
-        // SLMkIIIColors.SLMKIII_BROWN_DARK);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_6,
-        // this.model.getTransport ().isMetronomeOn () ? SLMkIIIColors.SLMKIII_BROWN :
-        // SLMkIIIColors.SLMKIII_BROWN_DARK);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_7,
-        // this.model.getApplication ().isEngineActive () ? SLMkIIIColors.SLMKIII_BROWN :
-        // SLMkIIIColors.SLMKIII_BROWN_DARK);
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_8,
-        // SLMkIIIColors.SLMKIII_BROWN_DARK);
+        switch (buttonID)
+        {
+            case ROW1_6:
+                return this.model.getTransport ().isMetronomeOn () ? SLMkIIIColorManager.SLMKIII_BROWN : SLMkIIIColorManager.SLMKIII_DARK_BROWN;
 
-        return 0;
+            case ROW1_7:
+                return this.model.getApplication ().isEngineActive () ? SLMkIIIColorManager.SLMKIII_BROWN : SLMkIIIColorManager.SLMKIII_DARK_BROWN;
+
+            default:
+                return SLMkIIIColorManager.SLMKIII_DARK_BROWN;
+        }
     }
 
 
@@ -138,7 +153,6 @@ public class OptionsMode extends BaseMode
     public void updateDisplay ()
     {
         final ITransport transport = this.model.getTransport ();
-        final IValueChanger valueChanger = this.model.getValueChanger ();
 
         final SLMkIIIDisplay d = this.surface.getDisplay ();
         d.clear ();
@@ -177,30 +191,32 @@ public class OptionsMode extends BaseMode
 
         final IMasterTrack master = this.model.getMasterTrack ();
         d.setCell (0, 0, StringUtils.fixASCII ("Mstr Vol")).setCell (1, 0, master.getVolumeStr (9));
-        this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_1, valueChanger.toMidiValue (master.getVolume ()));
         d.setPropertyColor (0, 0, SLMkIIIColorManager.SLMKIII_BROWN);
         d.setPropertyColor (0, 1, SLMkIIIColorManager.SLMKIII_BROWN);
 
         d.setCell (0, 1, StringUtils.fixASCII ("Mstr Pan")).setCell (1, 1, master.getPanStr (9));
-        this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_2, valueChanger.toMidiValue (master.getPan ()));
         d.setPropertyColor (1, 0, SLMkIIIColorManager.SLMKIII_BROWN);
         d.setPropertyColor (1, 1, SLMkIIIColorManager.SLMKIII_BROWN);
 
         d.setCell (0, 4, StringUtils.fixASCII ("Tempo")).setCell (1, 4, transport.formatTempo (transport.getTempo ()));
-        this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_5, valueChanger.toMidiValue ((int) transport.rescaleTempo (transport.getTempo (), valueChanger.getUpperBound ())));
         d.setPropertyColor (4, 0, SLMkIIIColorManager.SLMKIII_BROWN);
         d.setPropertyColor (4, 1, SLMkIIIColorManager.SLMKIII_BROWN);
 
         d.setCell (0, 5, StringUtils.fixASCII ("Metronome")).setCell (1, 5, transport.getMetronomeVolumeStr ());
-        this.surface.updateContinuous (SLMkIIIControlSurface.MKIII_KNOB_6, valueChanger.toMidiValue (transport.getMetronomeVolume ()));
         d.setPropertyColor (5, 0, SLMkIIIColorManager.SLMKIII_BROWN);
         d.setPropertyColor (5, 1, SLMkIIIColorManager.SLMKIII_BROWN);
 
         d.setCell (0, 8, "Master");
-        d.setPropertyColor (8, 0, SLMkIIIColorManager.SLMKIII_BROWN);
 
         this.setButtonInfo (d);
-
         d.allDone ();
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public int getModeColor ()
+    {
+        return SLMkIIIColorManager.SLMKIII_BROWN;
     }
 }

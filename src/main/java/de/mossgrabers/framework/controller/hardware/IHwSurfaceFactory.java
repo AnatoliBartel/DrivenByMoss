@@ -11,9 +11,11 @@ import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.valuechanger.RelativeEncoding;
 import de.mossgrabers.framework.graphics.IBitmap;
 
+import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 
 /**
@@ -32,6 +34,18 @@ public interface IHwSurfaceFactory
      * @return The created button
      */
     IHwButton createButton (int surfaceID, ButtonID buttonID, String label);
+
+
+    /**
+     * Create a proxy to a hardware light.
+     *
+     * @param surfaceID The ID of the surface
+     * @param outputID The ID of the light, may be null
+     * @param supplier Callback for getting the color of the light
+     * @param sendValueConsumer Callback for sending the state to the controller device
+     * @return The created light
+     */
+    IHwLight createLight (int surfaceID, OutputID outputID, Supplier<ColorEx> supplier, Consumer<ColorEx> sendValueConsumer);
 
 
     /**

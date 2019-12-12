@@ -100,11 +100,11 @@ public class LaunchkeyMiniMk3ControlSurface extends AbstractControlSurface<Launc
 
     /** {@inheritDoc} */
     @Override
-    public void shutdown ()
+    protected void internalShutdown ()
     {
         this.setLaunchpadToDAW (false);
 
-        super.shutdown ();
+        super.internalShutdown ();
     }
 
 

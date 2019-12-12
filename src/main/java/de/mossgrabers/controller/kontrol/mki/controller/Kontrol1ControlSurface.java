@@ -175,7 +175,7 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
 
     /** {@inheritDoc} */
     @Override
-    public void shutdown ()
+    protected void internalShutdown ()
     {
         this.usbDevice.turnOffButtonLEDs ();
 
@@ -185,7 +185,7 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
 
         this.getTextDisplay ().clear ().notify ("START " + this.host.getName ().toUpperCase () + " TO PLAY");
 
-        super.shutdown ();
+        super.internalShutdown ();
     }
 
 

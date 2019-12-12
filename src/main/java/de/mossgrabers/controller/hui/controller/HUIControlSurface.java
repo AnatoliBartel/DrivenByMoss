@@ -291,8 +291,7 @@ public class HUIControlSurface extends AbstractControlSurface<HUIConfiguration>
      */
     public HUIControlSurface (final IHost host, final ColorManager colorManager, final HUIConfiguration configuration, final IMidiOutput output, final IMidiInput input, final IModel model)
     {
-        // TODO size
-        super (host, configuration, colorManager, output, input, null, 100, 100);
+        super (host, configuration, colorManager, output, input, null, 1000, 1000);
 
         Arrays.fill (this.knobValues, -1);
 

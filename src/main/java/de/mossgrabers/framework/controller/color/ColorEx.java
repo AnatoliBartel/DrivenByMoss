@@ -39,6 +39,22 @@ public class ColorEx
     public static final ColorEx ORANGE     = ColorEx.fromRGB (255, 130, 0);
     /** Color pink. */
     public static final ColorEx PINK       = ColorEx.fromRGB (255, 0, 220);
+    /** Color skin. */
+    public static final ColorEx SKIN       = ColorEx.fromRGB (255, 127, 127);
+    /** Color brown. */
+    public static final ColorEx BROWN      = ColorEx.fromRGB (183, 73, 0);
+    /** Color dark brown. */
+    public static final ColorEx DARK_BROWN = ColorEx.fromRGB (127, 0, 0);
+    /** Color mint. */
+    public static final ColorEx MINT       = ColorEx.fromRGB (170, 240, 209);
+    /** Color olive. */
+    public static final ColorEx OLIVE      = ColorEx.fromRGB (128, 128, 0);
+    /** Color sky blue. */
+    public static final ColorEx SKY_BLUE   = ColorEx.fromRGB (97, 238, 255);
+    /** Color purple. */
+    public static final ColorEx PURPLE     = ColorEx.fromRGB (116, 80, 164);
+    /** Color red wine. */
+    public static final ColorEx RED_WINE   = ColorEx.fromRGB (123, 42, 57);
 
     private static final double FACTOR     = 0.7;
     private static final double FACTOR2    = 0.4;
@@ -180,7 +196,19 @@ public class ColorEx
 
 
     /**
-     * Dim the color (evenDarker) and convert it to a gray scale color.
+     * Dim the color.
+     *
+     * @param hue The brightness intensity (0-1), 0 is black, 1 is no change
+     * @return The dimmed color
+     */
+    public ColorEx dim (final double hue)
+    {
+        return new ColorEx (this.redValue * hue, this.greenValue * hue, this.blueValue * hue);
+    }
+
+
+    /**
+     * Dim the color (calls evenDarker) and convert it to a gray scale color.
      *
      * @param color The color to dim
      * @return The dimmed color
@@ -242,6 +270,35 @@ public class ColorEx
         // The formula is based on the W3C Accessibility Guidelines - https://www.w3.org/TR/WCAG20/
         final double l = 0.2126 * c.getRed () + 0.7152 * c.getGreen () + 0.0722 * c.getBlue ();
         return l > 0.179 ? ColorEx.BLACK : ColorEx.WHITE;
+    }
+
+
+    /**
+     * Encodes the red, green and blue values as 3 byte values into an integer. Red is the least
+     * significant byte.
+     *
+     * @return The encoded color
+     */
+    public int encode ()
+    {
+        final int [] c = this.toIntRGB ();
+        return c[0] + (c[1] << 8) + (c[2] << 16);
+    }
+
+
+    /**
+     * Decodes the red, green and blue values as 3 byte values from an integer. Red is the least
+     * significant byte.
+     * 
+     * @param encodedColor The encoded color
+     * @return The decoded color
+     */
+    public static ColorEx decode (final int encodedColor)
+    {
+        final int red = encodedColor & 0xFF;
+        final int green = encodedColor >> 8 & 0xFF;
+        final int blue = encodedColor >> 16 & 0xFF;
+        return fromRGB (red, green, blue);
     }
 
 

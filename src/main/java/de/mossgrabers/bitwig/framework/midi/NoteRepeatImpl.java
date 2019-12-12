@@ -31,7 +31,7 @@ public class NoteRepeatImpl implements INoteRepeat
         this.noteRepeat = arpeggiator;
 
         this.noteRepeat.isEnabled ().markInterested ();
-        this.noteRepeat.period ().markInterested ();
+        this.noteRepeat.rate ().markInterested ();
         this.noteRepeat.gateLength ().markInterested ();
         this.noteRepeat.shuffle ().markInterested ();
         this.noteRepeat.usePressureToVelocity ().markInterested ();
@@ -46,7 +46,7 @@ public class NoteRepeatImpl implements INoteRepeat
     public void enableObservers (final boolean enable)
     {
         Util.setIsSubscribed (this.noteRepeat.isEnabled (), enable);
-        Util.setIsSubscribed (this.noteRepeat.period (), enable);
+        Util.setIsSubscribed (this.noteRepeat.rate (), enable);
         Util.setIsSubscribed (this.noteRepeat.gateLength (), enable);
         Util.setIsSubscribed (this.noteRepeat.shuffle (), enable);
         Util.setIsSubscribed (this.noteRepeat.usePressureToVelocity (), enable);
@@ -84,7 +84,7 @@ public class NoteRepeatImpl implements INoteRepeat
     @Override
     public void setPeriod (final double length)
     {
-        this.noteRepeat.period ().set (length);
+        this.noteRepeat.rate ().set (length);
     }
 
 
@@ -92,7 +92,7 @@ public class NoteRepeatImpl implements INoteRepeat
     @Override
     public double getPeriod ()
     {
-        return this.noteRepeat.period ().get ();
+        return this.noteRepeat.rate ().get ();
     }
 
 

@@ -9,7 +9,6 @@ import de.mossgrabers.controller.slmkiii.controller.SLMkIIIColorManager;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIDisplay;
 import de.mossgrabers.framework.controller.ButtonID;
-import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.utils.ButtonEvent;
@@ -51,6 +50,11 @@ public abstract class BaseMode extends AbstractMode<SLMkIIIControlSurface, SLMkI
 
     /** {@inheritDoc} */
     @Override
+    public abstract int getKnobValue (final int index);
+
+
+    /** {@inheritDoc} */
+    @Override
     public void onButton (final int row, final int index, final ButtonEvent event)
     {
         if (event == ButtonEvent.UP)
@@ -62,23 +66,16 @@ public abstract class BaseMode extends AbstractMode<SLMkIIIControlSurface, SLMkI
     @Override
     public int getButtonColor (final ButtonID buttonID)
     {
-        // TODO
-        // this.disableFirstRow ();
-        return 0;
+        return SLMkIIIColorManager.SLMKIII_BLACK;
     }
 
 
     /**
-     * Turn off all buttons of the first row.
+     * Get the color (index) which represents this mode,
+     *
+     * @return The color index
      */
-    protected void disableFirstRow ()
-    {
-        final ColorManager colorManager = this.model.getColorManager ();
-        // TODO
-        // for (int i = 0; i < 8; i++)
-        // this.surface.updateTrigger (SLMkIIIControlSurface.MKIII_DISPLAY_BUTTON_1 + i,
-        // colorManager.getColor (AbstractMode.BUTTON_COLOR_OFF));
-    }
+    public abstract int getModeColor ();
 
 
     /**
@@ -98,6 +95,8 @@ public abstract class BaseMode extends AbstractMode<SLMkIIIControlSurface, SLMkI
 
     protected void setButtonInfo (final SLMkIIIDisplay display)
     {
+        display.setPropertyColor (8, 0, this.getModeColor ());
+
         if (this.surface.isMuteSolo ())
         {
             display.setCell (2, 8, "Mute").setCell (3, 8, "Solo");

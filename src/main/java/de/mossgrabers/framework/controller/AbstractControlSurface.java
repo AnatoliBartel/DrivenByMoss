@@ -38,9 +38,11 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 
 /**
@@ -57,11 +59,12 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     protected static final int                      NUM_INFOS             = 256;
 
     protected final IHost                           host;
+    protected final IHwSurfaceFactory               surfaceFactory;
     protected final C                               configuration;
     protected final ColorManager                    colorManager;
     protected final IMidiOutput                     output;
     protected final IMidiInput                      input;
-    protected final IHwSurfaceFactory               surfaceFactory;
+    protected boolean                               isShutdown            = false;
 
     protected final int                             surfaceID;
 
@@ -423,9 +426,19 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
+    public IHwLight createLight (final OutputID outputID, final Supplier<ColorEx> supplier, final Consumer<ColorEx> sendConsumer)
+    {
+        final IHwLight light = this.surfaceFactory.createLight (this.surfaceID, outputID, supplier, sendConsumer);
+        if (outputID != null)
+            this.lights.put (outputID, light);
+        return light;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public IHwLight createLight (final OutputID outputID, final IntSupplier supplier, final IntConsumer sendConsumer, final IntFunction<ColorEx> stateToColorFunction, final IHwButton button)
     {
-
         final IHwLight light = this.surfaceFactory.createLight (this.surfaceID, outputID, supplier, sendConsumer, stateToColorFunction, button);
         if (outputID != null)
             this.lights.put (outputID, light);
@@ -547,6 +560,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
+    @Deprecated
     public void updateContinuous (final int cc, final int value)
     {
         this.updateContinuous (this.defaultMidiChannel, cc, value);
@@ -555,6 +569,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
+    @Deprecated
     public void updateContinuous (final int channel, final int cc, final int value)
     {
         final ContinuousInfo info = this.getContinuousInfo (channel, cc);
@@ -599,7 +614,8 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
             try
             {
                 this.scheduledFlush ();
-                this.redrawGrid ();
+                if (!this.isShutdown)
+                    this.redrawGrid ();
             }
             catch (final RuntimeException ex)
             {
@@ -611,7 +627,15 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public void shutdown ()
+    public final void shutdown ()
+    {
+        this.isShutdown = true;
+
+        this.internalShutdown ();
+    }
+
+
+    protected void internalShutdown ()
     {
         this.flushExecutor.shutdown ();
 
@@ -788,7 +812,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     protected void scheduledFlush ()
     {
         final View view = this.viewManager.getActiveView ();
-        if (view != null)
+        if (view != null && !this.isShutdown)
             view.updateControlSurface ();
         this.textDisplays.forEach (ITextDisplay::flush);
 

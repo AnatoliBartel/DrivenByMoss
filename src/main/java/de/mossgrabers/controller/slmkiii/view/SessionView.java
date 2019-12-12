@@ -12,6 +12,7 @@ import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.daw.ITrackBank;
+import de.mossgrabers.framework.daw.data.IScene;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.view.AbstractSessionView;
 import de.mossgrabers.framework.view.SessionColor;
@@ -93,19 +94,13 @@ public class SessionView extends AbstractSessionView<SLMkIIIControlSurface, SLMk
     @Override
     public int getButtonColor (final ButtonID buttonID)
     {
+        if (!ButtonID.isSceneButton (buttonID))
+            return super.getButtonColor (buttonID);
+
         final ColorManager colorManager = this.model.getColorManager ();
-        final int colorScene = colorManager.getColorIndex (AbstractSessionView.COLOR_SCENE);
-        final int colorSceneSelected = colorManager.getColorIndex (AbstractSessionView.COLOR_SELECTED_SCENE);
-        final int colorSceneOff = colorManager.getColorIndex (AbstractSessionView.COLOR_SCENE_OFF);
-
-        final ISceneBank sceneBank = this.model.getSceneBank ();
-
-        // TODO
-        // final IScene s = sceneBank.getItem (scene);
-        // final int color = s.doesExist () ? s.isSelected () ? colorSceneSelected : colorScene :
-        // colorSceneOff;
-        // this.surface.updateTrigger (ButtonID.SCENE_1 + scene, color);
-
-        return 0;
+        final IScene s = this.model.getSceneBank ().getItem (buttonID.ordinal () - ButtonID.SCENE1.ordinal ());
+        if (!s.doesExist ())
+            return colorManager.getColorIndex (AbstractSessionView.COLOR_SCENE_OFF);
+        return colorManager.getColorIndex (s.isSelected () ? AbstractSessionView.COLOR_SELECTED_SCENE : AbstractSessionView.COLOR_SCENE);
     }
 }

@@ -375,6 +375,124 @@ public class HUIControllerSetup extends AbstractControllerSetup<HUIControlSurfac
 
     /** {@inheritDoc} */
     @Override
+    protected void layoutControls ()
+    {
+        final HUIControlSurface surface = this.getSurface ();
+
+        surface.getButton (ButtonID.FOOTSWITCH1).setBounds (12.5, 942.0, 77.75, 39.75);
+        surface.getButton (ButtonID.FOOTSWITCH2).setBounds (102.5, 942.0, 77.75, 39.75);
+
+        surface.getButton (ButtonID.REWIND).setBounds (556.0, 942.0, 65.0, 39.75);
+        surface.getButton (ButtonID.FORWARD).setBounds (630.0, 942.0, 65.0, 39.75);
+        surface.getButton (ButtonID.LOOP).setBounds (706.25, 942.0, 65.0, 39.75);
+        surface.getButton (ButtonID.STOP).setBounds (779.0, 942.0, 65.0, 39.75);
+        surface.getButton (ButtonID.PLAY).setBounds (850.25, 942.0, 65.0, 39.75);
+        surface.getButton (ButtonID.RECORD).setBounds (923.5, 942.0, 65.0, 39.75);
+
+        surface.getButton (ButtonID.ARROW_LEFT).setBounds (705.0, 750.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ARROW_RIGHT).setBounds (849.0, 750.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ARROW_UP).setBounds (777.75, 702.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ARROW_DOWN).setBounds (777.75, 797.0, 65.0, 39.75);
+        surface.getButton (ButtonID.ZOOM).setBounds (777.75, 750.25, 65.0, 39.75);
+
+        surface.getButton (ButtonID.SHIFT).setBounds (776.5, 637.5, 65.0, 39.75);
+        surface.getButton (ButtonID.SELECT).setBounds (703.75, 637.5, 65.0, 39.75);
+
+        surface.getButton (ButtonID.F1).setBounds (632.5, 178.25, 65.0, 39.75);
+        surface.getButton (ButtonID.F2).setBounds (705.0, 178.25, 65.0, 39.75);
+        surface.getButton (ButtonID.F3).setBounds (777.75, 178.25, 65.0, 39.75);
+        surface.getButton (ButtonID.F4).setBounds (849.25, 178.25, 65.0, 39.75);
+        surface.getButton (ButtonID.F5).setBounds (921.5, 178.25, 65.0, 39.75);
+
+        surface.getButton (ButtonID.PAN_SEND).setBounds (777.75, 225.25, 65.0, 39.75);
+
+        surface.getButton (ButtonID.MOVE_TRACK_LEFT).setBounds (847.75, 542.0, 65.0, 39.75);
+        surface.getButton (ButtonID.MOVE_TRACK_RIGHT).setBounds (921.0, 542.0, 65.0, 39.75);
+        surface.getButton (ButtonID.MOVE_BANK_LEFT).setBounds (703.75, 542.0, 65.0, 39.75);
+        surface.getButton (ButtonID.MOVE_BANK_RIGHT).setBounds (776.5, 542.0, 65.0, 39.75);
+
+        surface.getButton (ButtonID.AUTOMATION_READ).setBounds (632.5, 272.25, 65.0, 39.75);
+        surface.getButton (ButtonID.AUTOMATION_WRITE).setBounds (705.0, 272.25, 30.0, 39.75);
+        surface.getButton (ButtonID.AUTOMATION_GROUP).setBounds (740.0, 272.25, 30.0, 39.75);
+        surface.getButton (ButtonID.AUTOMATION_TRIM).setBounds (777.75, 272.25, 65.0, 39.75);
+        surface.getButton (ButtonID.AUTOMATION_TOUCH).setBounds (849.25, 272.25, 65.0, 39.75);
+        surface.getButton (ButtonID.AUTOMATION_LATCH).setBounds (921.5, 272.25, 65.0, 39.75);
+
+        surface.getButton (ButtonID.UNDO).setBounds (849.25, 320.25, 65.0, 39.75);
+        surface.getButton (ButtonID.NOTE_EDITOR).setBounds (705.0, 366.75, 65.0, 39.75);
+        surface.getButton (ButtonID.AUTOMATION_EDITOR).setBounds (777.75, 366.75, 65.0, 39.75);
+        surface.getButton (ButtonID.TOGGLE_DEVICE).setBounds (849.25, 366.75, 65.0, 39.75);
+        surface.getButton (ButtonID.MIXER).setBounds (921.5, 366.75, 65.0, 39.75);
+
+        surface.getButton (ButtonID.METRONOME).setBounds (777.75, 416.75, 65.0, 39.75);
+        surface.getButton (ButtonID.TAP_TEMPO).setBounds (481.25, 942.0, 65.0, 39.75);
+        surface.getButton (ButtonID.CONTROL).setBounds (921.0, 637.5, 65.0, 39.75);
+        surface.getButton (ButtonID.ALT).setBounds (847.75, 637.5, 65.0, 39.75);
+        surface.getButton (ButtonID.SAVE).setBounds (921.5, 320.25, 65.0, 39.75);
+
+        surface.getButton (ButtonID.ROW2_1).setBounds (12.75, 178.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW3_1).setBounds (12.75, 225.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW4_1).setBounds (12.75, 272.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW_SELECT_1).setBounds (12.75, 366.75, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW2_2).setBounds (87.25, 178.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW3_2).setBounds (87.25, 225.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW4_2).setBounds (87.25, 272.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW_SELECT_2).setBounds (87.25, 366.75, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW2_3).setBounds (163.75, 178.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW3_3).setBounds (163.75, 225.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW4_3).setBounds (163.75, 272.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW_SELECT_3).setBounds (163.75, 366.75, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW2_4).setBounds (237.0, 178.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW3_4).setBounds (237.0, 225.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW4_4).setBounds (237.0, 272.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW_SELECT_4).setBounds (237.0, 366.75, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW2_5).setBounds (311.25, 178.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW3_5).setBounds (311.25, 225.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW4_5).setBounds (311.25, 272.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW_SELECT_5).setBounds (311.25, 366.75, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW2_6).setBounds (386.5, 178.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW3_6).setBounds (386.5, 225.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW4_6).setBounds (386.5, 272.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW_SELECT_6).setBounds (386.5, 366.75, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW2_7).setBounds (459.0, 178.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW3_7).setBounds (459.0, 225.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW4_7).setBounds (459.0, 272.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW_SELECT_7).setBounds (459.0, 366.75, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW2_8).setBounds (532.25, 178.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW3_8).setBounds (532.25, 225.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW4_8).setBounds (532.25, 272.25, 65.0, 39.75);
+        surface.getButton (ButtonID.ROW_SELECT_8).setBounds (532.25, 366.75, 65.0, 39.75);
+
+        // TODO
+        // surface.getContinuous (ContinuousID.PLAY_POSITION).setBounds (859.5, 806.5, 115.25,
+        // 115.75);
+        // surface.getContinuous (ContinuousID.FADER_MASTER).setBounds (613.5, 501.5, 65.0, 419.0);
+
+        // surface.getContinuous (ContinuousID.KNOB1).setBounds (12.25, 93.5, 72.0, 74.75);
+        // surface.getContinuous (ContinuousID.KNOB2).setBounds (86.25, 93.5, 72.0, 74.75);
+        // surface.getContinuous (ContinuousID.KNOB3).setBounds (160.0, 93.5, 72.0, 74.75);
+        // surface.getContinuous (ContinuousID.KNOB4).setBounds (234.0, 93.5, 72.0, 74.75);
+        // surface.getContinuous (ContinuousID.KNOB5).setBounds (308.0, 93.5, 72.0, 74.75);
+        // surface.getContinuous (ContinuousID.KNOB6).setBounds (381.75, 93.5, 72.0, 74.75);
+        // surface.getContinuous (ContinuousID.KNOB7).setBounds (455.75, 93.5, 72.0, 74.75);
+        // surface.getContinuous (ContinuousID.KNOB8).setBounds (529.5, 93.5, 72.0, 74.75);
+        // surface.getContinuous (ContinuousID.FADER1).setBounds (12.5, 501.5, 65.0, 419.0);
+        // surface.getContinuous (ContinuousID.FADER2).setBounds (87.25, 501.5, 65.0, 419.0);
+        // surface.getContinuous (ContinuousID.FADER3).setBounds (163.75, 501.5, 65.0, 419.0);
+        // surface.getContinuous (ContinuousID.FADER4).setBounds (237.0, 501.5, 65.0, 419.0);
+        // surface.getContinuous (ContinuousID.FADER5).setBounds (311.25, 501.5, 65.0, 419.0);
+        // surface.getContinuous (ContinuousID.FADER6).setBounds (386.5, 499.5, 65.0, 419.0);
+        // surface.getContinuous (ContinuousID.FADER7).setBounds (459.0, 501.5, 65.0, 419.0);
+        // surface.getContinuous (ContinuousID.FADER8).setBounds (532.25, 501.5, 65.0, 419.0);
+
+        surface.getTextDisplay (0).getHardwareDisplay ().setBounds (11.75, 11.75, 601.0, 73.25);
+        surface.getTextDisplay (1).getHardwareDisplay ().setBounds (699.0, 27.0, 263.25, 44.25);
+        surface.getTextDisplay (2).getHardwareDisplay ().setBounds (633.5, 92.5, 49.5, 39.75);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void startup ()
     {
         final HUIControlSurface surface = this.getSurface ();

@@ -23,9 +23,11 @@ import de.mossgrabers.framework.daw.midi.IMidiOutput;
 import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.view.ViewManager;
 
+import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 
 /**
@@ -340,6 +342,17 @@ public interface IControlSurface<C extends Configuration>
 
 
     /**
+     * Create a proxy to a hardware light.
+     *
+     * @param outputID The ID of the light, may be null
+     * @param supplier Callback for getting the color of the light
+     * @param sendValueConsumer Callback for sending the state to the controller device
+     * @return The created light
+     */
+    IHwLight createLight (OutputID outputID, Supplier<ColorEx> supplier, Consumer<ColorEx> sendValueConsumer);
+
+
+    /**
      * Creates a light (e.g. LED) for the surface.
      *
      * @param outputID The outputID, can be null
@@ -435,6 +448,7 @@ public interface IControlSurface<C extends Configuration>
      * @param cc The trigger
      * @param value The position depending on the controller
      */
+    @Deprecated
     void updateContinuous (int cc, int value);
 
 
@@ -447,6 +461,7 @@ public interface IControlSurface<C extends Configuration>
      * @param cc The trigger
      * @param value The position depending on the controller
      */
+    @Deprecated
     void updateContinuous (int channel, int cc, int value);
 
 

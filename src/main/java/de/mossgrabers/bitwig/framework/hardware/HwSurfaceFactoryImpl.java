@@ -28,9 +28,11 @@ import com.bitwig.extension.controller.api.HardwareLightVisualState;
 import com.bitwig.extension.controller.api.HardwareSurface;
 import com.bitwig.extension.controller.api.MultiStateHardwareLight;
 
+import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 
 /**
@@ -73,40 +75,32 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
 
     /** {@inheritDoc} */
     @Override
+    public IHwLight createLight (final int surfaceID, final OutputID outputID, final Supplier<ColorEx> supplier, final Consumer<ColorEx> sendValueConsumer)
+    {
+        this.lightCounter++;
+        final String id = createID (surfaceID, outputID == null ? "LIGHT" + this.lightCounter : outputID.name ());
+
+        final MultiStateHardwareLight hardwareLight = this.hardwareSurface.createMultiStateHardwareLight (id);
+        hardwareLight.state ().setValueSupplier ( () -> new RawColorLightState (supplier.get ()));
+        hardwareLight.state ().onUpdateHardware (state -> {
+            final HardwareLightVisualState visualState = state.getVisualState ();
+            final Color c = visualState.getColor ();
+            sendValueConsumer.accept (new ColorEx (c.getRed (), c.getGreen (), c.getBlue ()));
+        });
+
+        return new HwLightImpl (hardwareLight);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public IHwLight createLight (final int surfaceID, final OutputID outputID, final IntSupplier supplier, final IntConsumer sendValueConsumer, final IntFunction<ColorEx> stateToColorFunction, final IHwButton button)
     {
         this.lightCounter++;
         final String id = createID (surfaceID, outputID == null ? "LIGHT" + this.lightCounter : outputID.name ());
 
         final MultiStateHardwareLight hardwareLight = this.hardwareSurface.createMultiStateHardwareLight (id);
-
-        hardwareLight.state ().setValueSupplier ( () -> new DefaultInternalHardwareLightState ( () -> {
-            final int encodedColorState = supplier.getAsInt ();
-
-            if (encodedColorState == -1)
-                return HardwareLightVisualState.createForColor (Color.blackColor (), Color.whiteColor ());
-
-            final int colorIndex = encodedColorState & 0xFF;
-            final int blinkColorIndex = encodedColorState >> 8 & 0xFF;
-            final boolean blinkFast = (encodedColorState >> 16 & 1) > 0;
-
-            final ColorEx colorEx = stateToColorFunction.apply (colorIndex);
-            final Color color = Color.fromRGB (colorEx.getRed (), colorEx.getGreen (), colorEx.getBlue ());
-            final ColorEx contrastColorEx = ColorEx.calcContrastColor (colorEx);
-            final Color contrastColor = Color.fromRGB (contrastColorEx.getRed (), contrastColorEx.getGreen (), contrastColorEx.getBlue ());
-
-            if (blinkColorIndex <= 0 || blinkColorIndex >= 128)
-                return HardwareLightVisualState.createForColor (color, contrastColor);
-
-            final ColorEx blinkColorEx = stateToColorFunction.apply (blinkColorIndex);
-            final Color blinkColor = Color.fromRGB (blinkColorEx.getRed (), blinkColorEx.getGreen (), blinkColorEx.getBlue ());
-            final ColorEx contrastBlinkColorEx = ColorEx.calcContrastColor (blinkColorEx);
-            final Color contrastBlinkColor = Color.fromRGB (contrastBlinkColorEx.getRed (), contrastBlinkColorEx.getGreen (), contrastBlinkColorEx.getBlue ());
-
-            final double blinkTimeInSec = blinkFast ? 0.5 : 1;
-            return HardwareLightVisualState.createBlinking (blinkColor, color, contrastBlinkColor, contrastColor, blinkTimeInSec, blinkTimeInSec);
-        }));
-
+        hardwareLight.state ().setValueSupplier ( () -> new EncodedColorLightState (supplier.getAsInt (), stateToColorFunction));
         hardwareLight.state ().onUpdateHardware (state -> {
             final HardwareLightVisualState visualState = state.getVisualState ();
             final int encodedColorState = visualState == null ? 0 : supplier.getAsInt ();
@@ -179,7 +173,7 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
     public IHwPianoKeyboard createPianoKeyboard (final int surfaceID, final int numKeys)
     {
         final int octave = 0;
-        final int startKeyInOctave = 36;
+        final int startKeyInOctave = 0;
 
         final String id = createID (surfaceID, "KEYBOARD");
         return new HwPianoKeyboardImpl (this.hardwareSurface.createPianoKeyboard (id, numKeys, octave, startKeyInOctave));

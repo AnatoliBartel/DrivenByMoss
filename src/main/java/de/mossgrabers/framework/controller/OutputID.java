@@ -23,7 +23,36 @@ public enum OutputID
     /** The first LED. */
     LED1,
     /** The second LED. */
-    LED2;
+    LED2,
+    /** The 3rd LED. */
+    LED3,
+    /** The 4th LED. */
+    LED4,
+    /** The 5th LED. */
+    LED5,
+    /** The 6th LED. */
+    LED6,
+    /** The 7th LED. */
+    LED7,
+    /** The 8th LED. */
+    LED8,
+
+    /** The first LED ring. */
+    LED_RING1,
+    /** The second LED ring. */
+    LED_RING2,
+    /** The 3rd LED ring. */
+    LED_RING3,
+    /** The 4th LED ring. */
+    LED_RING4,
+    /** The 5th LED ring. */
+    LED_RING5,
+    /** The 6th LED ring. */
+    LED_RING6,
+    /** The 7th LED ring. */
+    LED_RING7,
+    /** The 8th LED ring. */
+    LED_RING8;
 
 
     /**

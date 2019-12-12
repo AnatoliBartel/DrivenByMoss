@@ -151,9 +151,9 @@ public class KontrolProtocolControlSurface extends AbstractControlSurface<Kontro
 
     /** {@inheritDoc} */
     @Override
-    public void shutdown ()
+    protected void internalShutdown ()
     {
-        super.shutdown ();
+        super.internalShutdown ();
 
         synchronized (this.handshakeLock)
         {

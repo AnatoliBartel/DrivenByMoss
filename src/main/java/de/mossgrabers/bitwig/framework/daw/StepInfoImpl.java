@@ -168,7 +168,7 @@ public class StepInfoImpl implements IStepInfo
         this.timbre = stepInfo.timbre ();
         this.pan = stepInfo.pan ();
         this.transpose = stepInfo.transpose ();
-        this.gain = stepInfo.volume ();
+        this.gain = stepInfo.gain ();
     }
 
 
