@@ -83,8 +83,8 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
         final MultiStateHardwareLight hardwareLight = this.hardwareSurface.createMultiStateHardwareLight (id);
         hardwareLight.state ().setValueSupplier ( () -> new RawColorLightState (supplier.get ()));
         hardwareLight.state ().onUpdateHardware (state -> {
-            final HardwareLightVisualState visualState = state.getVisualState ();
-            final Color c = visualState.getColor ();
+            final HardwareLightVisualState visualState = state == null ? null : state.getVisualState ();
+            final Color c = visualState == null ? Color.blackColor () : visualState.getColor ();
             sendValueConsumer.accept (new ColorEx (c.getRed (), c.getGreen (), c.getBlue ()));
         });
 
@@ -102,7 +102,7 @@ public class HwSurfaceFactoryImpl implements IHwSurfaceFactory
         final MultiStateHardwareLight hardwareLight = this.hardwareSurface.createMultiStateHardwareLight (id);
         hardwareLight.state ().setValueSupplier ( () -> new EncodedColorLightState (supplier.getAsInt (), stateToColorFunction));
         hardwareLight.state ().onUpdateHardware (state -> {
-            final HardwareLightVisualState visualState = state.getVisualState ();
+            final HardwareLightVisualState visualState = state == null ? null : state.getVisualState ();
             final int encodedColorState = visualState == null ? 0 : supplier.getAsInt ();
             sendValueConsumer.accept (encodedColorState);
         });

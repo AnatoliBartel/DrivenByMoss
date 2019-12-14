@@ -542,7 +542,7 @@ public class PushColorManager extends ColorManager
     public static int [] getPaletteColorRGB (final int index)
     {
         if (index >= 70 && index <= 96)
-            return DAWColor.getColorEntry (index - 69).toIntRGB ();
+            return DAWColor.getColorEntry (index - 69).toIntRGB255 ();
         return DEFAULT_PALETTE[index];
     }
 

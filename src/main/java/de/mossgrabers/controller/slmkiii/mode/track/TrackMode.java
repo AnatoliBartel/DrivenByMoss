@@ -86,7 +86,7 @@ public class TrackMode extends AbstractTrackMode
                 final ISendBank sendBank = t.getSendBank ();
                 if (sendBank.getItemCount () == 0)
                     return 0;
-                final ISend send = sendBank.getItem (index);
+                final ISend send = sendBank.getItem (index - 2);
                 return send.doesExist () ? send.getValue () : 0;
         }
     }

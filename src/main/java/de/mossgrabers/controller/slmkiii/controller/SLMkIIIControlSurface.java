@@ -163,28 +163,13 @@ public class SLMkIIIControlSurface extends AbstractControlSurface<SLMkIIIConfigu
 
     /** {@inheritDoc} */
     @Override
-    public void setContinuous (final int channel, final int cc, final int value)
-    {
-        this.output.sendCCEx (channel, cc, value);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     protected void internalShutdown ()
     {
+        super.internalShutdown ();
+
         final SLMkIIIDisplay d = this.getDisplay ();
         for (int i = 0; i < 8; i++)
             d.setFaderLEDColor (MKIII_FADER_LED_1 + i, ColorEx.BLACK);
-
-        super.internalShutdown ();
-    }
-
-
-    public void clearKnobCache ()
-    {
-        for (int i = 0; i < 8; i++)
-            this.clearContinuousCache (MKIII_KNOB_1 + i);
     }
 
 

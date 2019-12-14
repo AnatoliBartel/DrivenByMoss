@@ -109,13 +109,29 @@ public class ColorEx
      *
      * @return The 3 int (0-255) values
      */
-    public int [] toIntRGB ()
+    public int [] toIntRGB255 ()
     {
         return new int []
         {
             (int) Math.round (this.redValue * 255.0),
             (int) Math.round (this.greenValue * 255.0),
             (int) Math.round (this.blueValue * 255.0)
+        };
+    }
+
+
+    /**
+     * Convert the internal color state to 3 integer RGB values.
+     *
+     * @return The 3 int (0-127) values
+     */
+    public int [] toIntRGB127 ()
+    {
+        return new int []
+        {
+            (int) Math.round (this.redValue * 127.0),
+            (int) Math.round (this.greenValue * 127.0),
+            (int) Math.round (this.blueValue * 127.0)
         };
     }
 
@@ -281,7 +297,7 @@ public class ColorEx
      */
     public int encode ()
     {
-        final int [] c = this.toIntRGB ();
+        final int [] c = this.toIntRGB255 ();
         return c[0] + (c[1] << 8) + (c[2] << 16);
     }
 

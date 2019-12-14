@@ -48,12 +48,12 @@ public class SLMkIIIPadGrid extends PadGridImpl
         if (note > 43)
             return new int []
             {
-                0,
+                15,
                 note + 52
             };
         return new int []
         {
-            0,
+            15,
             note + 76
         };
     }

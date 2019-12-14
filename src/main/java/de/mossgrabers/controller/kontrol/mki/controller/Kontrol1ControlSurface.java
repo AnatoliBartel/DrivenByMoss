@@ -154,8 +154,7 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
      */
     public Kontrol1ControlSurface (final IHost host, final ColorManager colorManager, final Kontrol1Configuration configuration, final IMidiInput input, final Kontrol1UsbDevice usbDevice)
     {
-        // TODO size
-        super (host, configuration, colorManager, null, input, new Kontrol1PadGrid (colorManager, usbDevice), 600, 200);
+        super (host, configuration, colorManager, null, input, null, 800, 300);
 
         this.usbDevice = usbDevice;
     }
@@ -191,9 +190,9 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
 
     /** {@inheritDoc} */
     @Override
-    protected void redrawGrid ()
+    protected void updateGrid ()
     {
-        super.redrawGrid ();
+        super.updateGrid ();
         this.updateKeyLEDs ();
     }
 
@@ -201,14 +200,6 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
     /** {@inheritDoc} */
     @Override
     public void setTrigger (final int channel, final int cc, final int value)
-    {
-        this.usbDevice.setButtonLED (cc, value);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void setContinuous (final int channel, final int cc, final int value)
     {
         this.usbDevice.setButtonLED (cc, value);
     }

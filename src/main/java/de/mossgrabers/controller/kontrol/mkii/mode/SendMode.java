@@ -74,8 +74,11 @@ public class SendMode extends AbstractTrackMode<KontrolProtocolControlSurface, K
             vuData[j] = valueChanger.toMidiValue (send.getModulatedValue ());
             vuData[j + 1] = valueChanger.toMidiValue (send.getModulatedValue ());
 
-            this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME + i, valueChanger.toMidiValue (send.getValue ()));
-            this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_TRACK_PAN + i, valueChanger.toMidiValue (send.getValue ()));
+            // TODO Move to button
+            // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME +
+            // i, valueChanger.toMidiValue (send.getValue ()));
+            // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_TRACK_PAN + i,
+            // valueChanger.toMidiValue (send.getValue ()));
         }
         this.surface.sendKontrolTrackSysEx (KontrolProtocolControlSurface.KONTROL_TRACK_VU, 2, 0, vuData);
 
@@ -83,10 +86,15 @@ public class SendMode extends AbstractTrackMode<KontrolProtocolControlSurface, K
         final int scrollScenesState = 0;
 
         final KontrolProtocolConfiguration configuration = this.surface.getConfiguration ();
-        this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS, scrollTracksState);
-        this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS, configuration.isFlipTrackClipNavigation () ? scrollScenesState : scrollTracksState);
-        this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS, configuration.isFlipTrackClipNavigation () ? scrollTracksState : scrollScenesState);
-        this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES, configuration.isFlipTrackClipNavigation () ? scrollTracksState : scrollScenesState);
+        // TODO Move to button
+        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS,
+        // scrollTracksState);
+        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS,
+        // configuration.isFlipTrackClipNavigation () ? scrollScenesState : scrollTracksState);
+        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS,
+        // configuration.isFlipTrackClipNavigation () ? scrollTracksState : scrollScenesState);
+        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES,
+        // configuration.isFlipTrackClipNavigation () ? scrollTracksState : scrollScenesState);
     }
 
 

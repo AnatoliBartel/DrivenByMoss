@@ -29,7 +29,6 @@ import de.mossgrabers.framework.daw.midi.INoteInput;
 import de.mossgrabers.framework.graphics.IBitmap;
 import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.utils.ButtonEvent;
-import de.mossgrabers.framework.utils.ContinuousInfo;
 import de.mossgrabers.framework.utils.LatestTaskExecutor;
 import de.mossgrabers.framework.view.View;
 import de.mossgrabers.framework.view.ViewManager;
@@ -38,6 +37,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
@@ -64,7 +64,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     protected final ColorManager                    colorManager;
     protected final IMidiOutput                     output;
     protected final IMidiInput                      input;
-    protected boolean                               isShutdown            = false;
 
     protected final int                             surfaceID;
 
@@ -76,7 +75,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     private Map<ButtonID, IHwButton>                buttons               = new EnumMap<> (ButtonID.class);
     private Map<OutputID, IHwLight>                 lights                = new EnumMap<> (OutputID.class);
     private Map<ContinuousID, IHwContinuousControl> continuous            = new EnumMap<> (ContinuousID.class);
-    private final ContinuousInfo [] []              continuousInfos       = new ContinuousInfo [16] [NUM_INFOS];
 
     protected List<ITextDisplay>                    textDisplays          = new ArrayList<> (1);
     protected List<IGraphicDisplay>                 graphicsDisplays      = new ArrayList<> (1);
@@ -520,14 +518,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public void setContinuous (final int channel, final int cc, final int value)
-    {
-        // Overwrite to support continuous LEDs/motors
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public void setTriggerConsumed (final ButtonID buttonID)
     {
         final IHwButton button = this.buttons.get (buttonID);
@@ -560,62 +550,14 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    @Deprecated
-    public void updateContinuous (final int cc, final int value)
-    {
-        this.updateContinuous (this.defaultMidiChannel, cc, value);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    @Deprecated
-    public void updateContinuous (final int channel, final int cc, final int value)
-    {
-        final ContinuousInfo info = this.getContinuousInfo (channel, cc);
-        if (info == null || info.getValue () == value)
-            return;
-        this.setContinuous (channel, cc, value);
-        info.setValue (value);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void setContinuous (final int cc, final int state)
-    {
-        this.setContinuous (this.defaultMidiChannel, cc, state);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void clearContinuousCache (final int cc)
-    {
-        this.clearContinuousCache (this.defaultMidiChannel, cc);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void clearContinuousCache (final int channel, final int cc)
-    {
-        final ContinuousInfo info = this.getContinuousInfo (channel, cc);
-        if (info != null)
-            info.setValue (-1);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public void flush ()
     {
         this.flushExecutor.execute ( () -> {
             try
             {
-                this.scheduledFlush ();
-                if (!this.isShutdown)
-                    this.redrawGrid ();
+                this.updateViewControls ();
+                this.updateGrid ();
+                this.flushHardware ();
             }
             catch (final RuntimeException ex)
             {
@@ -627,18 +569,30 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public final void shutdown ()
-    {
-        this.isShutdown = true;
-
-        this.internalShutdown ();
-    }
-
-
-    protected void internalShutdown ()
+    public final synchronized void shutdown ()
     {
         this.flushExecutor.shutdown ();
 
+        try
+        {
+            this.flushExecutor.awaitTermination (5, TimeUnit.SECONDS);
+        }
+        catch (final InterruptedException ex)
+        {
+            this.host.error ("Executor shutdown interrupted.", ex);
+            Thread.currentThread ().interrupt ();
+        }
+
+        this.internalShutdown ();
+        this.flushHardware ();
+    }
+
+
+    /**
+     * Turn off LEDs, clear the display, etc.
+     */
+    protected void internalShutdown ()
+    {
         this.turnOffTriggers ();
 
         if (this.pads != null)
@@ -809,21 +763,18 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     /**
      * Delayed flush.
      */
-    protected void scheduledFlush ()
+    protected void updateViewControls ()
     {
         final View view = this.viewManager.getActiveView ();
-        if (view != null && !this.isShutdown)
+        if (view != null)
             view.updateControlSurface ();
-        this.textDisplays.forEach (ITextDisplay::flush);
-
-        this.surfaceFactory.flush ();
     }
 
 
     /**
      * Redraws the grid for the active view.
      */
-    protected void redrawGrid ()
+    protected void updateGrid ()
     {
         final View view = this.viewManager.getActiveView ();
         if (view != null)
@@ -831,16 +782,12 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     }
 
 
-    private ContinuousInfo getContinuousInfo (final int channel, final int cc)
+    /**
+     * Flush all changes to the hardware.
+     */
+    protected void flushHardware ()
     {
-        if (channel < 0 || cc < 0)
-            return null;
-
-        if (this.continuousInfos[channel][cc] == null)
-        {
-            this.errorln ("Unregistered CC continuous: " + cc);
-            return null;
-        }
-        return this.continuousInfos[channel][cc];
+        this.textDisplays.forEach (ITextDisplay::flush);
+        this.surfaceFactory.flush ();
     }
 }

@@ -258,8 +258,20 @@ public abstract class AbstractTextDisplay implements ITextDisplay
      */
     protected void updateLine (final int row, final String text)
     {
-        this.hwDisplay.setLine (row, text);
+        this.hwDisplay.setLine (row, convertCharacterset (text));
         this.writeLine (row, text);
+    }
+
+
+    /**
+     * Overwrite if the device display uses a non-standard characterset.
+     *
+     * @param text The text
+     * @return The text adapted to the simulator GUI character set
+     */
+    protected String convertCharacterset (final String text)
+    {
+        return text;
     }
 
 

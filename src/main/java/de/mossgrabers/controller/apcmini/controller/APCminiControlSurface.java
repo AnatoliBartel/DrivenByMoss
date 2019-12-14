@@ -90,14 +90,6 @@ public class APCminiControlSurface extends AbstractControlSurface<APCminiConfigu
     }
 
 
-    /** {@inheritDoc} */
-    @Override
-    public void setContinuous (final int channel, final int cc, final int state)
-    {
-        this.output.sendNoteEx (channel, cc, state);
-    }
-
-
     /**
      * Get the mode of the track button (Select, Rec Arm, Solo, Mute, ...)
      *

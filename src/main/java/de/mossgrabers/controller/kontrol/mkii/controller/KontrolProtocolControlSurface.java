@@ -219,14 +219,6 @@ public class KontrolProtocolControlSurface extends AbstractControlSurface<Kontro
     }
 
 
-    /** {@inheritDoc} */
-    @Override
-    public void setContinuous (final int channel, final int cc, final int value)
-    {
-        this.sendCommand (cc, value);
-    }
-
-
     /**
      * Send a command to the Komplete Kontrol.
      *

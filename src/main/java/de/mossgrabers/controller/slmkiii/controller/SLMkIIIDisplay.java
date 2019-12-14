@@ -162,7 +162,7 @@ public class SLMkIIIDisplay extends AbstractTextDisplay
      */
     public void setFaderLEDColor (final int led, final ColorEx color)
     {
-        final int [] rgb = color.toIntRGB ();
+        final int [] rgb = color.toIntRGB127 ();
         this.output.sendSysex (String.format (MKIII_SYSEX_LED_COMMAND, Integer.valueOf (led), Integer.valueOf (rgb[0]), Integer.valueOf (rgb[1]), Integer.valueOf (rgb[2])));
     }
 

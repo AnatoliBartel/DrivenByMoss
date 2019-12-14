@@ -11,7 +11,7 @@ import de.mossgrabers.controller.kontrol.mki.command.trigger.Kontrol1CursorComma
 import de.mossgrabers.controller.kontrol.mki.command.trigger.Kontrol1PlayCommand;
 import de.mossgrabers.controller.kontrol.mki.command.trigger.MainEncoderButtonCommand;
 import de.mossgrabers.controller.kontrol.mki.command.trigger.ScaleButtonCommand;
-import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1Colors;
+import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1ColorManager;
 import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1ControlSurface;
 import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1Display;
 import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1UsbDevice;
@@ -82,7 +82,7 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
         super (factory, host, globalSettings, documentSettings);
         this.modelIndex = modelIndex;
         this.valueChanger = new DefaultValueChanger (1024, 10, 1);
-        this.colorManager = new Kontrol1Colors ();
+        this.colorManager = new Kontrol1ColorManager ();
         this.configuration = new Kontrol1Configuration (host, this.valueChanger);
     }
 
@@ -204,32 +204,7 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
         this.addButton (ButtonID.SOLO, "Enter", new EnterButtonCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_ENTER);
 
         this.addButton (ButtonID.BROWSE, "Browse", new BrowserCommand<> (Modes.BROWSER, this.model, surface), Kontrol1ControlSurface.BUTTON_BROWSE);
-
-        // Block unused buttons and touches
-        // this.addButton (ButtonID.ROW1_1, "", NopCommand.INSTANCE,
-        // Kontrol1ControlSurface.TOUCH_ENCODER_MAIN);
-        // this.addButton (ButtonID.ROW1_2, "", NopCommand.INSTANCE,
-        // Kontrol1ControlSurface.BUTTON_INSTANCE);
-        // this.addButton (ButtonID.ROW1_3, "", NopCommand.INSTANCE,
-        // Kontrol1ControlSurface.BUTTON_PRESET_UP);
-        // this.addButton (ButtonID.ROW1_4, "", NopCommand.INSTANCE,
-        // Kontrol1ControlSurface.BUTTON_PRESET_DOWN);
-        // this.addButton (ButtonID.ROW1_5, "", NopCommand.INSTANCE,
-        // Kontrol1ControlSurface.BUTTON_OCTAVE_DOWN);
-        // this.addButton (ButtonID.ROW1_6, "", NopCommand.INSTANCE,
-        // Kontrol1ControlSurface.BUTTON_OCTAVE_UP);
-        this.addButton (ButtonID.SHIFT, "", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_SHIFT);
-
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_SHIFT,
-        // this.surface.isShiftPressed () ? Kontrol1Colors.BUTTON_STATE_HI :
-        // Kontrol1Colors.BUTTON_STATE_ON);
-
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_PAGE_LEFT,
-        // this.surface.isPressed (Kontrol1ControlSurface.BUTTON_PAGE_LEFT) ?
-        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_PAGE_RIGHT,
-        // this.surface.isPressed (Kontrol1ControlSurface.BUTTON_PAGE_RIGHT) ?
-        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
+        this.addButton (ButtonID.SHIFT, "Shift", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_SHIFT);
     }
 
 
@@ -244,7 +219,7 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
         {
             final IHwRelativeKnob knob = this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), new KnobRowModeCommand<> (i, this.model, surface), Kontrol1ControlSurface.ENCODER_1 + i);
 
-            // TODO are these notes of CC?
+            // TODO are these notes or CC? Wohl eher CC...
             knob.bindTouch (new KnobRowTouchModeCommand<> (i, this.model, surface), input, BindType.NOTE, Kontrol1ControlSurface.TOUCH_ENCODER_1 + i);
         }
 
@@ -341,11 +316,37 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
     {
         final Kontrol1ControlSurface surface = this.getSurface ();
 
-        surface.getButton (ButtonID.PLAY).setBounds (190.25, 94.25, 42.25, 23.5);
-        surface.getButton (ButtonID.STOP).setBounds (298.0, 94.25, 42.25, 23.5);
-        surface.getButton (ButtonID.RECORD).setBounds (244.25, 94.25, 42.25, 23.5);
-        surface.getButton (ButtonID.LOOP).setBounds (190.25, 60.75, 42.25, 23.5);
-        surface.getButton (ButtonID.REWIND).setBounds (244.25, 60.75, 42.25, 23.5);
-        surface.getButton (ButtonID.FORWARD).setBounds (298.0, 60.75, 42.25, 23.5);
+        surface.getButton (ButtonID.PLAY).setBounds (7.25, 135.25, 42.25, 23.5);
+        surface.getButton (ButtonID.RECORD).setBounds (68.0, 135.25, 42.25, 23.5);
+        surface.getButton (ButtonID.STOP).setBounds (128.75, 135.25, 42.25, 23.5);
+        surface.getButton (ButtonID.REWIND).setBounds (68.0, 100.75, 42.25, 23.5);
+        surface.getButton (ButtonID.FORWARD).setBounds (128.75, 100.75, 42.25, 23.5);
+        surface.getButton (ButtonID.LOOP).setBounds (7.25, 100.75, 42.25, 23.5);
+        surface.getButton (ButtonID.METRONOME).setBounds (128.75, 31.5, 42.25, 23.5);
+        surface.getButton (ButtonID.SHIFT).setBounds (7.25, 31.5, 42.25, 23.5);
+        surface.getButton (ButtonID.SCALES).setBounds (68.0, 31.5, 42.25, 23.5);
+        surface.getButton (ButtonID.PAGE_LEFT).setBounds (182.25, 65.5, 19.25, 23.5);
+        surface.getButton (ButtonID.PAGE_RIGHT).setBounds (209.5, 65.5, 19.25, 23.5);
+        surface.getButton (ButtonID.MUTE).setBounds (639.0, 105.25, 42.25, 23.5);
+        surface.getButton (ButtonID.SOLO).setBounds (747.5, 105.25, 42.25, 23.5);
+        surface.getButton (ButtonID.ARROW_UP).setBounds (693.25, 105.25, 42.25, 23.5);
+        surface.getButton (ButtonID.ARROW_DOWN).setBounds (693.25, 133.25, 42.25, 23.5);
+        surface.getButton (ButtonID.ARROW_LEFT).setBounds (639.0, 133.25, 42.25, 23.5);
+        surface.getButton (ButtonID.ARROW_RIGHT).setBounds (747.5, 133.25, 42.25, 23.5);
+        surface.getButton (ButtonID.BROWSE).setBounds (639.0, 46.75, 42.25, 23.5);
+        surface.getButton (ButtonID.MASTERTRACK).setBounds (686.25, 24.75, 49.5, 21.5);
+
+        surface.getContinuous (ContinuousID.MASTER_KNOB).setBounds (693.25, 44.75, 43.0, 53.75);
+        surface.getContinuous (ContinuousID.KNOB1).setBounds (241.0, 59.5, 35.0, 30.0);
+        surface.getContinuous (ContinuousID.KNOB2).setBounds (288.25, 59.5, 35.0, 30.0);
+        surface.getContinuous (ContinuousID.KNOB3).setBounds (335.5, 59.5, 35.0, 30.0);
+        surface.getContinuous (ContinuousID.KNOB4).setBounds (382.75, 59.5, 35.0, 30.0);
+        surface.getContinuous (ContinuousID.KNOB5).setBounds (430.0, 59.5, 35.0, 30.0);
+        surface.getContinuous (ContinuousID.KNOB6).setBounds (477.25, 59.5, 35.0, 30.0);
+        surface.getContinuous (ContinuousID.KNOB7).setBounds (524.5, 59.5, 35.0, 30.0);
+        surface.getContinuous (ContinuousID.KNOB8).setBounds (571.75, 59.5, 35.0, 30.0);
+
+        surface.getTextDisplay ().getHardwareDisplay ().setBounds (190.75, 100.25, 422.75, 33.5);
+        surface.getPianoKeyboard ().setBounds (196.5, 211.0, 558.75, 88.75);
     }
 }

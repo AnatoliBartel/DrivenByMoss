@@ -17,7 +17,7 @@ import de.mossgrabers.framework.scale.Scales;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class Kontrol1Colors extends ColorManager
+public class Kontrol1ColorManager extends ColorManager
 {
     private static final int DAW_COLOR_START          = 100;
 
@@ -31,7 +31,7 @@ public class Kontrol1Colors extends ColorManager
     /**
      * Constructor.
      */
-    public Kontrol1Colors ()
+    public Kontrol1ColorManager ()
     {
         this.registerColorIndex (ColorManager.BUTTON_STATE_OFF, 0);
         this.registerColorIndex (ColorManager.BUTTON_STATE_ON, 6);
@@ -44,7 +44,6 @@ public class Kontrol1Colors extends ColorManager
 
         this.registerColorIndex (PadGrid.GRID_OFF, 0);
 
-        this.registerColorIndex (DAWColor.COLOR_OFF, 0);
         final DAWColor [] values = DAWColor.values ();
         for (int i = 0; i < values.length; i++)
             this.registerColorIndex (values[i], DAW_COLOR_START + i);

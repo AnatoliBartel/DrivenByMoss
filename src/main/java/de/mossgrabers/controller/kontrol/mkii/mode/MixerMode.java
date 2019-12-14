@@ -60,8 +60,11 @@ public class MixerMode extends VolumeMode<KontrolProtocolControlSurface, Kontrol
             vuData[j] = valueChanger.toMidiValue (track.getVuLeft ());
             vuData[j + 1] = valueChanger.toMidiValue (track.getVuRight ());
 
-            this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME + i, valueChanger.toMidiValue (track.getVolume ()));
-            this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_TRACK_PAN + i, valueChanger.toMidiValue (track.getPan ()));
+            // TODO Move to button
+            // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME +
+            // i, valueChanger.toMidiValue (track.getVolume ()));
+            // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_TRACK_PAN + i,
+            // valueChanger.toMidiValue (track.getPan ()));
         }
         this.surface.sendKontrolTrackSysEx (KontrolProtocolControlSurface.KONTROL_TRACK_VU, 2, 0, vuData);
 
@@ -77,10 +80,18 @@ public class MixerMode extends VolumeMode<KontrolProtocolControlSurface, Kontrol
         final int scrollScenesState = (sceneBank.canScrollBackwards () ? 1 : 0) + (sceneBank.canScrollForwards () ? 2 : 0);
 
         final KontrolProtocolConfiguration configuration = this.surface.getConfiguration ();
-        this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS, (bank.canScrollPageBackwards () ? 1 : 0) + (bank.canScrollPageForwards () ? 2 : 0));
-        this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS, configuration.isFlipTrackClipNavigation () ? configuration.isFlipClipSceneNavigation () ? scrollScenesState : scrollClipsState : scrollTracksState);
-        this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS, configuration.isFlipTrackClipNavigation () ? scrollTracksState : configuration.isFlipClipSceneNavigation () ? scrollScenesState : scrollClipsState);
-        this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES, configuration.isFlipTrackClipNavigation () ? scrollTracksState : configuration.isFlipClipSceneNavigation () ? scrollClipsState : scrollScenesState);
+        // TODO Move to button
+        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS,
+        // (bank.canScrollPageBackwards () ? 1 : 0) + (bank.canScrollPageForwards () ? 2 : 0));
+        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS,
+        // configuration.isFlipTrackClipNavigation () ? configuration.isFlipClipSceneNavigation () ?
+        // scrollScenesState : scrollClipsState : scrollTracksState);
+        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS,
+        // configuration.isFlipTrackClipNavigation () ? scrollTracksState :
+        // configuration.isFlipClipSceneNavigation () ? scrollScenesState : scrollClipsState);
+        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES,
+        // configuration.isFlipTrackClipNavigation () ? scrollTracksState :
+        // configuration.isFlipClipSceneNavigation () ? scrollClipsState : scrollScenesState);
     }
 
 

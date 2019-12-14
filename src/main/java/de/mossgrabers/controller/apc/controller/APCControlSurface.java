@@ -147,14 +147,6 @@ public class APCControlSurface extends AbstractControlSurface<APCConfiguration>
     }
 
 
-    /** {@inheritDoc} */
-    @Override
-    public void setContinuous (final int channel, final int cc, final int state)
-    {
-        this.output.sendNoteEx (channel, cc, state);
-    }
-
-
     public void setLED (final int knob, final int value)
     {
         this.output.sendCC (knob, value);

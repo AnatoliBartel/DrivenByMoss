@@ -135,12 +135,4 @@ public class BeatstepControlSurface extends AbstractControlSurface<BeatstepConfi
     {
         this.output.sendCCEx (channel, cc, state);
     }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void setContinuous (final int channel, final int cc, final int state)
-    {
-        this.output.sendCCEx (channel, cc, state);
-    }
 }

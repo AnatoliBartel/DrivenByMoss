@@ -418,71 +418,9 @@ public interface IControlSurface<C extends Configuration>
 
 
     /**
-     * Clear the cached state of a continuous of the default MIDI channel.
-     *
-     * @param cc The trigger
-     */
-    void clearContinuousCache (int cc);
-
-
-    /**
-     * Clear the cached state of a continuous of the given MIDI channel.
-     *
-     * @param channel The midi channel
-     * @param cc The trigger
-     */
-    void clearContinuousCache (int channel, int cc);
-
-
-    /**
      * Turn off all triggers.
      */
     void turnOffTriggers ();
-
-
-    /**
-     * Update the position of a continuous (if the knob/fader e.g. has motors), sending on midi
-     * channel 1. This method caches the state of the continuous and sends only updates to the
-     * controller if the state has changed, in contrast to setContinuous.
-     *
-     * @param cc The trigger
-     * @param value The position depending on the controller
-     */
-    @Deprecated
-    void updateContinuous (int cc, int value);
-
-
-    /**
-     * Update the position of a continuous (if the knob/fader e.g. has motors). This method caches
-     * the state of the continuous and sends only updates to the controller if the state has
-     * changed, in contrast to setContinuous.
-     *
-     * @param channel The midi channel to use
-     * @param cc The trigger
-     * @param value The position depending on the controller
-     */
-    @Deprecated
-    void updateContinuous (int channel, int cc, int value);
-
-
-    /**
-     * Update the position of a continuous (if the knob/fader e.g. has motors), sending on midi
-     * channel 1.
-     *
-     * @param cc The continuous
-     * @param value The position depending on the controller
-     */
-    void setContinuous (int cc, int value);
-
-
-    /**
-     * Update the position of a continuous (if the knob/fader e.g. has motors).
-     *
-     * @param channel The midi channel to use
-     * @param cc The continuous
-     * @param value The position depending on the controller
-     */
-    void setContinuous (int channel, int cc, int value);
 
 
     /**
