@@ -253,9 +253,10 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public void addPianoKeyboard (final int numKeys)
+    public void addPianoKeyboard (final int numKeys, final IMidiInput keyboardInput)
     {
         this.pianoKeyboard = this.surfaceFactory.createPianoKeyboard (this.surfaceID, numKeys);
+        this.pianoKeyboard.bind (keyboardInput);
     }
 
 

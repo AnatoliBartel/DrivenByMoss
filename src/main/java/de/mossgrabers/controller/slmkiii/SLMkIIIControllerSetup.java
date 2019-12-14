@@ -142,8 +142,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
         final SLMkIIIControlSurface surface = new SLMkIIIControlSurface (hostProxy, this.colorManager, this.configuration, output, input);
         this.surfaces.add (surface);
 
-        surface.addPianoKeyboard (49);
-        surface.getPianoKeyboard ().bind (keyboardInput);
+        surface.addPianoKeyboard (49, keyboardInput);
     }
 
 
@@ -353,7 +352,7 @@ public class SLMkIIIControllerSetup extends AbstractControllerSetup<SLMkIIIContr
 
                 // On the device, the send value is displayed on the display as a knob
                 // On the simulation GUI represent it as a dimmed color of the mode
-                final BaseMode mode = ((BaseMode) modeManager.getActiveOrTempMode ());
+                final BaseMode mode = (BaseMode) modeManager.getActiveOrTempMode ();
                 if (mode == null)
                     return ColorEx.BLACK;
                 final ColorEx c = this.colorManager.getColor (mode.getModeColor (), null);

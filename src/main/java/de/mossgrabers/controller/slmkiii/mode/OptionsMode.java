@@ -64,7 +64,7 @@ public class OptionsMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public int getKnobValue (int index)
+    public int getKnobValue (final int index)
     {
         final ITransport transport = this.model.getTransport ();
         final IMasterTrack master = this.model.getMasterTrack ();

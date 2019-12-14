@@ -54,7 +54,7 @@ public class BeatstepPadGrid extends PadGridImpl
 
     /** {@inheritDoc} */
     @Override
-    public int [] translateToController (int note)
+    public int [] translateToController (final int note)
     {
         final int [] translate = super.translateToController (note);
         translate[0] = 2;

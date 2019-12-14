@@ -157,7 +157,7 @@ public class BeatstepControllerSetup extends AbstractControllerSetup<BeatstepCon
 
     /** {@inheritDoc} */
     @Override
-    protected BindType getTriggerBindType (ButtonID buttonID)
+    protected BindType getTriggerBindType (final ButtonID buttonID)
     {
         return BindType.NOTE;
     }

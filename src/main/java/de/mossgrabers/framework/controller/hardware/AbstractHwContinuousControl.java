@@ -8,6 +8,7 @@ import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.command.core.PitchbendCommand;
 import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.daw.IHost;
+import de.mossgrabers.framework.utils.ButtonEvent;
 
 
 /**
@@ -20,6 +21,7 @@ public abstract class AbstractHwContinuousControl extends AbstractHwInputControl
     protected ContinuousCommand command;
     protected TriggerCommand    touchCommand;
     protected PitchbendCommand  pitchbendCommand;
+    protected boolean           isTouched;
 
 
     /**
@@ -71,5 +73,24 @@ public abstract class AbstractHwContinuousControl extends AbstractHwInputControl
     public PitchbendCommand getPitchbendCommand ()
     {
         return this.pitchbendCommand;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void triggerTouch (final boolean isDown)
+    {
+        if (this.touchCommand == null)
+            return;
+        this.touchCommand.execute (isDown ? ButtonEvent.DOWN : ButtonEvent.UP, isDown ? 127 : 0);
+        this.isTouched = isDown;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isTouched ()
+    {
+        return this.isTouched;
     }
 }

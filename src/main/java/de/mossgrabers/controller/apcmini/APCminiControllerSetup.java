@@ -246,7 +246,7 @@ public class APCminiControllerSetup extends AbstractControllerSetup<APCminiContr
 
     /** {@inheritDoc} */
     @Override
-    protected BindType getTriggerBindType (ButtonID buttonID)
+    protected BindType getTriggerBindType (final ButtonID buttonID)
     {
         return BindType.NOTE;
     }

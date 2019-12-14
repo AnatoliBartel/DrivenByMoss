@@ -12,7 +12,6 @@ import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
 import de.mossgrabers.framework.controller.valuechanger.RelativeEncoding;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
-import de.mossgrabers.framework.utils.ButtonEvent;
 
 import com.bitwig.extension.controller.api.ControllerHost;
 import com.bitwig.extension.controller.api.RelativeHardwareKnob;
@@ -51,7 +50,7 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
      * @param label The label of the knob
      * @param encoding The encoding of the relative value
      */
-    public HwRelativeKnobImpl (final HostImpl host, final RelativeHardwareKnob hardwareKnob, final String label, RelativeEncoding encoding)
+    public HwRelativeKnobImpl (final HostImpl host, final RelativeHardwareKnob hardwareKnob, final String label, final RelativeEncoding encoding)
     {
         super (host, label);
 
@@ -86,8 +85,8 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
     {
         this.touchCommand = command;
 
-        this.hardwareKnob.beginTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.DOWN, 127), () -> ""));
-        this.hardwareKnob.endTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.touchCommand.execute (ButtonEvent.UP, 0), () -> ""));
+        this.hardwareKnob.beginTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.triggerTouch (true), () -> ""));
+        this.hardwareKnob.endTouchAction ().addBinding (this.controllerHost.createAction ( () -> this.triggerTouch (false), () -> ""));
 
         input.bindTouch (this, type, 0, control);
     }

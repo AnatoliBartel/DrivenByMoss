@@ -20,6 +20,7 @@ import de.mossgrabers.framework.controller.valuechanger.IValueChanger;
 import de.mossgrabers.framework.controller.valuechanger.RelativeEncoding;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.IModel;
+import de.mossgrabers.framework.mode.Mode;
 import de.mossgrabers.framework.mode.Modes;
 import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.view.View;
@@ -584,7 +585,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
 
     /**
      * Get the default bind type for triggering buttons.
-     * 
+     *
      * @param buttonID The button ID
      * @return The default, returns CC as default
      */
@@ -997,5 +998,18 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
         final boolean isShift = surface.isShiftPressed ();
         final boolean isFlipRecord = this.configuration.isFlipRecord ();
         return isShift && !isFlipRecord || !isShift && isFlipRecord;
+    }
+
+
+    /**
+     * Get the color for a button, which is controlled by the mode.
+     *
+     * @param buttonID The ID of the button
+     * @return A color index
+     */
+    protected int getModeColor (final ButtonID buttonID)
+    {
+        final Mode mode = this.getSurface ().getModeManager ().getActiveOrTempMode ();
+        return mode == null ? 0 : mode.getButtonColor (buttonID);
     }
 }

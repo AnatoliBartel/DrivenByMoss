@@ -301,8 +301,9 @@ public interface IControlSurface<C extends Configuration>
      * Add a piano keyboard.
      *
      * @param numKeys The number of the keys, e.g. 25 or 88
+     * @param input The midi input to bind to
      */
-    void addPianoKeyboard (int numKeys);
+    void addPianoKeyboard (int numKeys, IMidiInput input);
 
 
     /**

@@ -59,7 +59,7 @@ public class SequencerResolutionMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public int getKnobValue (int index)
+    public int getKnobValue (final int index)
     {
         return 0;
     }
@@ -71,7 +71,7 @@ public class SequencerResolutionMode extends BaseMode
     {
         final DrumView drumView = (DrumView) this.surface.getViewManager ().getView (Views.DRUM);
         final int match = Resolution.getMatch (drumView.getClip ().getStepLength ());
-        int index = buttonID.ordinal () - ButtonID.ROW1_1.ordinal ();
+        final int index = buttonID.ordinal () - ButtonID.ROW1_1.ordinal ();
         return match == index ? SLMkIIIColorManager.SLMKIII_PINK : SLMkIIIColorManager.SLMKIII_DARK_GREY;
     }
 

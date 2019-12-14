@@ -6,6 +6,7 @@ package de.mossgrabers.framework.daw.data;
 
 import de.mossgrabers.framework.controller.color.ColorEx;
 
+
 /**
  * The interface to a marker (on a timeline).
  *

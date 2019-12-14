@@ -258,7 +258,7 @@ public abstract class AbstractTextDisplay implements ITextDisplay
      */
     protected void updateLine (final int row, final String text)
     {
-        this.hwDisplay.setLine (row, convertCharacterset (text));
+        this.hwDisplay.setLine (row, this.convertCharacterset (text));
         this.writeLine (row, text);
     }
 

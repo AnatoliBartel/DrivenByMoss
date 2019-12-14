@@ -8,6 +8,7 @@ import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1ControlSurface;
 import de.mossgrabers.controller.kontrol.mki.mode.AbstractKontrol1Mode;
 import de.mossgrabers.framework.command.trigger.BrowserCommand;
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
 import de.mossgrabers.framework.daw.IBrowser;
 import de.mossgrabers.framework.daw.IModel;
@@ -253,31 +254,18 @@ public class BrowseMode extends AbstractKontrol1Mode
 
     /** {@inheritDoc} */
     @Override
-    public int getButtonColor (final ButtonID buttonID)
+    public String getButtonColorID (final ButtonID buttonID)
     {
-        final IBrowser browser = this.model.getBrowser ();
-        final boolean canScrollLeft = browser.hasPreviousContentType ();
-        final boolean canScrollRight = browser.hasNextContentType ();
-
-        // TODO
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_LEFT, canScrollLeft ?
-        // Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_RIGHT, canScrollRight
-        // ? Kontrol1Colors.BUTTON_STATE_HI : Kontrol1Colors.BUTTON_STATE_ON);
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_UP,
-        // Kontrol1Colors.BUTTON_STATE_OFF);
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_NAVIGATE_DOWN,
-        // Kontrol1Colors.BUTTON_STATE_OFF);
-        //
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BACK,
-        // Kontrol1Colors.BUTTON_STATE_ON);
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_ENTER,
-        // Kontrol1Colors.BUTTON_STATE_ON);
-        //
-        // this.surface.updateTrigger (Kontrol1ControlSurface.BUTTON_BROWSE,
-        // Kontrol1Colors.BUTTON_STATE_HI);
-
-        return 0;
+        switch (buttonID)
+        {
+            case MUTE:
+            case SOLO:
+                return ColorManager.BUTTON_STATE_ON;
+            case BROWSE:
+                return ColorManager.BUTTON_STATE_HI;
+            default:
+                return ColorManager.BUTTON_STATE_OFF;
+        }
     }
 
 

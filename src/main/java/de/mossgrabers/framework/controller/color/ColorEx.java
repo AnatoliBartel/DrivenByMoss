@@ -305,7 +305,7 @@ public class ColorEx
     /**
      * Decodes the red, green and blue values as 3 byte values from an integer. Red is the least
      * significant byte.
-     * 
+     *
      * @param encodedColor The encoded color
      * @return The decoded color
      */

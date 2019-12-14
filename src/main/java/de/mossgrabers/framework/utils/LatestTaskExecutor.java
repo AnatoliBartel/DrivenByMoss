@@ -75,7 +75,7 @@ public class LatestTaskExecutor implements Executor
      *         before termination
      * @throws InterruptedException if interrupted while waiting
      */
-    public boolean awaitTermination (long timeout, TimeUnit unit) throws InterruptedException
+    public boolean awaitTermination (final long timeout, final TimeUnit unit) throws InterruptedException
     {
         return this.executor.awaitTermination (timeout, unit);
     }

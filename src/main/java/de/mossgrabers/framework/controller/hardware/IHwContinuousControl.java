@@ -45,6 +45,22 @@ public interface IHwContinuousControl extends IHwInputControl
 
 
     /**
+     * Trigger touching the knob.
+     *
+     * @param isDown True if down otherwise up
+     */
+    void triggerTouch (final boolean isDown);
+
+
+    /**
+     * Test if the control is touched.
+     *
+     * @return True if touched
+     */
+    boolean isTouched ();
+
+
+    /**
      * Get the touch trigger command, if any.
      *
      * @return The command or null if not bound

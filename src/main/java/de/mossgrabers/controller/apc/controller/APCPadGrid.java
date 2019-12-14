@@ -60,7 +60,7 @@ public class APCPadGrid extends PadGridImpl
     @Override
     public int [] translateToController (final int note)
     {
-        int n = note - 36;
+        final int n = note - 36;
 
         if (this.isMkII)
             return new int []

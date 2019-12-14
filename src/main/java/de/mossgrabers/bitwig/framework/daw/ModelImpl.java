@@ -146,7 +146,7 @@ public class ModelImpl extends AbstractModel
     private void flushWorkaround ()
     {
         // There are enough flushs happening if playback is active
-        if (!getTransport ().isPlaying ())
+        if (!this.getTransport ().isPlaying ())
             this.controllerHost.requestFlush ();
         this.controllerHost.scheduleTask (this::flushWorkaround, 100);
     }

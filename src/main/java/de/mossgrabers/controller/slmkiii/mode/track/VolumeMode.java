@@ -46,7 +46,7 @@ public class VolumeMode extends AbstractTrackMode
 
     /** {@inheritDoc} */
     @Override
-    public int getKnobValue (int index)
+    public int getKnobValue (final int index)
     {
         return this.model.getCurrentTrackBank ().getItem (index).getVolume ();
     }

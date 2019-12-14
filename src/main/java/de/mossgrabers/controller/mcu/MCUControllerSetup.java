@@ -872,7 +872,7 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
 
     /** {@inheritDoc} */
     @Override
-    protected BindType getTriggerBindType (ButtonID buttonID)
+    protected BindType getTriggerBindType (final ButtonID buttonID)
     {
         return BindType.NOTE;
     }

@@ -195,15 +195,19 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
 
         this.addButton (ButtonID.MASTERTRACK, "Encoder", new MainEncoderButtonCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_MAIN_ENCODER);
 
-        this.addButton (ButtonID.ARROW_DOWN, "Down", new Kontrol1CursorCommand (Direction.DOWN, this.model, surface), Kontrol1ControlSurface.BUTTON_NAVIGATE_DOWN);
-        this.addButton (ButtonID.ARROW_UP, "Up", new Kontrol1CursorCommand (Direction.UP, this.model, surface), Kontrol1ControlSurface.BUTTON_NAVIGATE_UP);
-        this.addButton (ButtonID.ARROW_LEFT, "Left", new Kontrol1CursorCommand (Direction.LEFT, this.model, surface), Kontrol1ControlSurface.BUTTON_NAVIGATE_LEFT);
-        this.addButton (ButtonID.ARROW_RIGHT, "Right", new Kontrol1CursorCommand (Direction.RIGHT, this.model, surface), Kontrol1ControlSurface.BUTTON_NAVIGATE_RIGHT);
+        final Kontrol1CursorCommand commandDown = new Kontrol1CursorCommand (Direction.DOWN, this.model, surface);
+        this.addButton (ButtonID.ARROW_DOWN, "Down", commandDown, Kontrol1ControlSurface.BUTTON_NAVIGATE_DOWN, commandDown::canScroll);
+        final Kontrol1CursorCommand commandUp = new Kontrol1CursorCommand (Direction.UP, this.model, surface);
+        this.addButton (ButtonID.ARROW_UP, "Up", commandUp, Kontrol1ControlSurface.BUTTON_NAVIGATE_UP, commandUp::canScroll);
+        final Kontrol1CursorCommand commandLeft = new Kontrol1CursorCommand (Direction.LEFT, this.model, surface);
+        this.addButton (ButtonID.ARROW_LEFT, "Left", commandLeft, Kontrol1ControlSurface.BUTTON_NAVIGATE_LEFT, commandLeft::canScroll);
+        final Kontrol1CursorCommand commandRight = new Kontrol1CursorCommand (Direction.RIGHT, this.model, surface);
+        this.addButton (ButtonID.ARROW_RIGHT, "Right", commandRight, Kontrol1ControlSurface.BUTTON_NAVIGATE_RIGHT, commandRight::canScroll);
 
-        this.addButton (ButtonID.MUTE, "Back", new BackButtonCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_BACK);
-        this.addButton (ButtonID.SOLO, "Enter", new EnterButtonCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_ENTER);
+        this.addButton (ButtonID.MUTE, "Back", new BackButtonCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_BACK, () -> this.getModeColor (ButtonID.MUTE));
+        this.addButton (ButtonID.SOLO, "Enter", new EnterButtonCommand (this.model, surface), Kontrol1ControlSurface.BUTTON_ENTER, () -> this.getModeColor (ButtonID.SOLO));
 
-        this.addButton (ButtonID.BROWSE, "Browse", new BrowserCommand<> (Modes.BROWSER, this.model, surface), Kontrol1ControlSurface.BUTTON_BROWSE);
+        this.addButton (ButtonID.BROWSE, "Browse", new BrowserCommand<> (Modes.BROWSER, this.model, surface), Kontrol1ControlSurface.BUTTON_BROWSE, () -> this.getModeColor (ButtonID.BROWSE));
         this.addButton (ButtonID.SHIFT, "Shift", NopCommand.INSTANCE, Kontrol1ControlSurface.BUTTON_SHIFT);
     }
 
@@ -218,14 +222,12 @@ public class Kontrol1ControllerSetup extends AbstractControllerSetup<Kontrol1Con
         for (int i = 0; i < 8; i++)
         {
             final IHwRelativeKnob knob = this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), new KnobRowModeCommand<> (i, this.model, surface), Kontrol1ControlSurface.ENCODER_1 + i);
-
-            // TODO are these notes or CC? Wohl eher CC...
-            knob.bindTouch (new KnobRowTouchModeCommand<> (i, this.model, surface), input, BindType.NOTE, Kontrol1ControlSurface.TOUCH_ENCODER_1 + i);
+            knob.bindTouch (new KnobRowTouchModeCommand<> (i, this.model, surface), input, BindType.CC, Kontrol1ControlSurface.TOUCH_ENCODER_1 + i);
         }
 
         this.addRelativeKnob (ContinuousID.MASTER_KNOB, "Master", new MainEncoderCommand (this.model, surface), Kontrol1ControlSurface.MAIN_ENCODER);
 
-        surface.addPianoKeyboard (25);
+        surface.addPianoKeyboard (25, input);
     }
 
 

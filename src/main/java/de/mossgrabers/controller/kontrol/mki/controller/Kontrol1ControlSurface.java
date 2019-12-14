@@ -7,12 +7,13 @@ package de.mossgrabers.controller.kontrol.mki.controller;
 import de.mossgrabers.controller.kontrol.mki.Kontrol1Configuration;
 import de.mossgrabers.framework.controller.AbstractControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
+import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.color.ColorManager;
+import de.mossgrabers.framework.controller.hardware.IHwContinuousControl;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.utils.ButtonEvent;
-import de.mossgrabers.framework.view.View;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -120,6 +121,7 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
     private static final Map<Integer, ButtonID> BUTTON_MAP            = new HashMap<> ();
     static
     {
+        BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_SHIFT), ButtonID.SHIFT);
         BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_SCALE), ButtonID.SCALES);
         BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_ARP), ButtonID.METRONOME);
         BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_PLAY), ButtonID.PLAY);
@@ -140,6 +142,14 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
         BUTTON_MAP.put (Integer.valueOf (Kontrol1ControlSurface.BUTTON_BROWSE), ButtonID.BROWSE);
     }
 
+    private static final Map<Integer, ContinuousID> CONTINUOUS_MAP = new HashMap<> ();
+    static
+    {
+        for (int i = 0; i < 8; i++)
+            CONTINUOUS_MAP.put (Integer.valueOf (Kontrol1ControlSurface.TOUCH_ENCODER_1 + i), ContinuousID.get (ContinuousID.KNOB1, i));
+        CONTINUOUS_MAP.put (Integer.valueOf (Kontrol1ControlSurface.TOUCH_ENCODER_MAIN), ContinuousID.MASTER_KNOB);
+    }
+
     private Kontrol1UsbDevice usbDevice;
 
 
@@ -157,18 +167,6 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
         super (host, configuration, colorManager, null, input, null, 800, 300);
 
         this.usbDevice = usbDevice;
-    }
-
-
-    /**
-     * Get the button which is mapped to an USB control number.
-     *
-     * @param usbControlNumber The control number
-     * @return The mapped button
-     */
-    public static ButtonID getMappedButton (final int usbControlNumber)
-    {
-        return BUTTON_MAP.get (Integer.valueOf (usbControlNumber));
     }
 
 
@@ -193,6 +191,7 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
     protected void updateGrid ()
     {
         super.updateGrid ();
+
         this.updateKeyLEDs ();
     }
 
@@ -209,10 +208,25 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
     @Override
     public void buttonChange (final int usbControlNumber, final boolean isPressed)
     {
-        final ButtonID buttonID = getMappedButton (usbControlNumber);
+        final ButtonID buttonID = BUTTON_MAP.get (Integer.valueOf (usbControlNumber));
         if (buttonID == null)
+        {
+            // Simulate knob touch via CC
+            final ContinuousID continuousID = CONTINUOUS_MAP.get (Integer.valueOf (usbControlNumber));
+            if (continuousID == null)
+                return;
+            final IHwContinuousControl continuous = this.getContinuous (continuousID);
+            if (isPressed)
+            {
+                if (!continuous.isTouched ())
+                    continuous.triggerTouch (true);
+            }
+            else if (continuous.isTouched ())
+                continuous.triggerTouch (false);
             return;
+        }
 
+        // Simulate button press via CC
         if (isPressed)
         {
             if (!this.isPressed (buttonID))
@@ -227,7 +241,7 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
     @Override
     public void mainEncoderChanged (final boolean valueIncreased)
     {
-        // TODO this.handleCC (0, MAIN_ENCODER, valueIncreased ? 1 : 127);
+        this.getContinuous (ContinuousID.MASTER_KNOB).getCommand ().execute (valueIncreased ? 3 : 125);
     }
 
 
@@ -235,7 +249,13 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
     @Override
     public void encoderChanged (final int encIndex, final boolean valueIncreased)
     {
-        // TODO this.handleCC (0, ENCODER_1 + encIndex, valueIncreased ? 1 : 127);
+        final int v;
+        if (this.isShiftPressed ())
+            v = valueIncreased ? 1 : 127;
+        else
+            v = valueIncreased ? 3 : 125;
+
+        this.getContinuous (ContinuousID.get (ContinuousID.KNOB1, encIndex)).getCommand ().execute (v);
     }
 
 
@@ -245,60 +265,6 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
     {
         final int endNote = firstNote + this.usbDevice.getNumKeys () - 1;
         this.getDisplay ().notify (Scales.formatDrumNote (firstNote) + " to " + Scales.formatDrumNote (endNote));
-
-        this.host.scheduleTask ( () -> this.getPadGrid ().forceFlush (), 100);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    protected void handleMidi (final int status, final int data1, final int data2)
-    {
-        final int code = status & 0xF0;
-        final int channel = status & 0xF;
-
-        View view;
-        switch (code)
-        {
-            // Note on/off
-            case 0x80:
-            case 0x90:
-                // TODO
-                // if (this.isGridNote (data1))
-                // this.handleGridNote (data1, data2);
-                break;
-
-            // Polyphonic Aftertouch
-            case 0xA0:
-                view = this.viewManager.getActiveView ();
-                if (view != null)
-                    view.executeAftertouchCommand (data1, data2);
-                break;
-
-            // CC
-            case 0xB0:
-                // Not used
-                break;
-
-            // Channel Aftertouch
-            case 0xD0:
-                view = this.viewManager.getActiveView ();
-                if (view != null)
-                    view.executeAftertouchCommand (-1, data1);
-                break;
-
-            // Pitch Bend
-            case 0xE0:
-                // TODO
-                // view = this.viewManager.getActiveView ();
-                // if (view != null)
-                // view.executePitchbendCommand (channel, data1, data2);
-                break;
-
-            default:
-                this.host.println ("Unhandled midi status: " + status);
-                break;
-        }
     }
 
 
@@ -322,10 +288,9 @@ public class Kontrol1ControlSurface extends AbstractControlSurface<Kontrol1Confi
 
     /** {@inheritDoc} */
     @Override
-    public void flush ()
+    protected void updateViewControls ()
     {
-        super.flush ();
-
+        super.updateViewControls ();
         this.updateButtonLEDs ();
     }
 }

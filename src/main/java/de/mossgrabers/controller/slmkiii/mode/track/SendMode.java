@@ -53,7 +53,7 @@ public class SendMode extends AbstractTrackMode
 
     /** {@inheritDoc} */
     @Override
-    public int getKnobValue (int index)
+    public int getKnobValue (final int index)
     {
         final ITrack t = this.model.getCurrentTrackBank ().getItem (index);
         if (!t.doesExist ())

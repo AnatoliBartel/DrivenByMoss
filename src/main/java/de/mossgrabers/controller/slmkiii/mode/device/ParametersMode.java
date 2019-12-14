@@ -88,7 +88,7 @@ public class ParametersMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public int getKnobValue (int index)
+    public int getKnobValue (final int index)
     {
         final ICursorDevice cd = this.model.getCursorDevice ();
         return cd.doesExist () ? cd.getParameterBank ().getItem (index).getValue () : 0;

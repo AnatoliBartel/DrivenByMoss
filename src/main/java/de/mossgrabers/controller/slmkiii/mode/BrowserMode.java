@@ -85,7 +85,7 @@ public class BrowserMode extends BaseMode
 
     /** {@inheritDoc} */
     @Override
-    public int getKnobValue (int index)
+    public int getKnobValue (final int index)
     {
         return 0;
     }

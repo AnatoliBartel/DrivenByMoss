@@ -137,7 +137,6 @@ import de.mossgrabers.framework.daw.midi.DeviceInquiry;
 import de.mossgrabers.framework.daw.midi.IMidiAccess;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
-import de.mossgrabers.framework.mode.Mode;
 import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.mode.Modes;
 import de.mossgrabers.framework.view.AbstractSequencerView;
@@ -465,16 +464,9 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
         for (int i = 0; i < 8; i++)
         {
             final ButtonID row1ButtonID = ButtonID.get (ButtonID.ROW1_1, i);
-            this.addButton (row1ButtonID, "Row 1: " + (i + 1), new ButtonRowModeCommand<> (0, i, this.model, surface), PushControlSurface.PUSH_BUTTON_ROW1_1 + i, () -> {
-                final Mode mode = modeManager.getActiveOrTempMode ();
-                return mode == null ? 0 : mode.getButtonColor (row1ButtonID);
-
-            });
+            this.addButton (row1ButtonID, "Row 1: " + (i + 1), new ButtonRowModeCommand<> (0, i, this.model, surface), PushControlSurface.PUSH_BUTTON_ROW1_1 + i, () -> this.getModeColor (row1ButtonID));
             final ButtonID row2ButtonID = ButtonID.get (ButtonID.ROW2_1, i);
-            this.addButton (row2ButtonID, "Row 2: " + (i + 1), new ButtonRowModeCommand<> (1, i, this.model, surface), PushControlSurface.PUSH_BUTTON_ROW2_1 + i, () -> {
-                final Mode mode = modeManager.getActiveOrTempMode ();
-                return mode == null ? 0 : mode.getButtonColor (row2ButtonID);
-            });
+            this.addButton (row2ButtonID, "Row 2: " + (i + 1), new ButtonRowModeCommand<> (1, i, this.model, surface), PushControlSurface.PUSH_BUTTON_ROW2_1 + i, () -> this.getModeColor (row2ButtonID));
             final ButtonID sceneButtonID = ButtonID.get (ButtonID.SCENE1, i);
             this.addButton (sceneButtonID, "Scene " + (i + 1), new SceneCommand<> (i, this.model, surface), PushControlSurface.PUSH_BUTTON_SCENE1 + 7 - i, () -> {
                 final View activeView = viewManager.getActiveView ();

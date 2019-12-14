@@ -14,7 +14,7 @@ import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.IChannel;
 import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.view.AbstractDrumView;
-import de.mossgrabers.framework.view.AbstractPlayView;
+import de.mossgrabers.framework.view.AbstractView;
 
 
 /**
@@ -22,7 +22,7 @@ import de.mossgrabers.framework.view.AbstractPlayView;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class ControlView extends AbstractPlayView<Kontrol1ControlSurface, Kontrol1Configuration>
+public class ControlView extends AbstractView<Kontrol1ControlSurface, Kontrol1Configuration>
 {
     /**
      * Constructor.
@@ -32,7 +32,7 @@ public class ControlView extends AbstractPlayView<Kontrol1ControlSurface, Kontro
      */
     public ControlView (final Kontrol1ControlSurface surface, final IModel model)
     {
-        super (surface, model, true);
+        super ("Control", surface, model);
     }
 
 
@@ -77,7 +77,7 @@ public class ControlView extends AbstractPlayView<Kontrol1ControlSurface, Kontro
             }
         }
 
-        super.drawGrid ();
+        // TODO super.drawGrid ();
     }
 
 
@@ -94,5 +94,13 @@ public class ControlView extends AbstractPlayView<Kontrol1ControlSurface, Kontro
         if (drumPad.isMute () || isSoloed && !drumPad.isSolo ())
             return AbstractDrumView.COLOR_PAD_MUTED;
         return DAWColor.getColorIndex (drumPad.getColor ());
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void onGridNote (final int note, final int velocity)
+    {
+        // Intentionally empty
     }
 }

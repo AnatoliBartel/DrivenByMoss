@@ -118,7 +118,7 @@ public class APCColorManager extends ColorManager
 
     /**
      * Constructor.
-     * 
+     *
      * @param isMkII True if it is the Mk II
      */
     public APCColorManager (final boolean isMkII)
@@ -208,7 +208,7 @@ public class APCColorManager extends ColorManager
             for (int i = 0; i < 128; i++)
                 this.registerColor (i, ColorEx.BLACK);
 
-            for (DAWColor dc: DAWColor.values ())
+            for (final DAWColor dc: DAWColor.values ())
             {
                 final String name = dc.name ();
                 this.registerColor (this.getColorIndex (name), DAWColor.getColorEntry (name));

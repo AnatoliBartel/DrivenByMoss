@@ -68,7 +68,7 @@ public class TrackMode extends AbstractTrackMode
 
     /** {@inheritDoc} */
     @Override
-    public int getKnobValue (int index)
+    public int getKnobValue (final int index)
     {
         final ITrack t = this.model.getSelectedTrack ();
         if (t == null)

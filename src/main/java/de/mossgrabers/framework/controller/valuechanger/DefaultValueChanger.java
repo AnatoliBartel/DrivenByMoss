@@ -6,7 +6,7 @@ package de.mossgrabers.framework.controller.valuechanger;
 
 /**
  * Default implementation for changing values. The relative knob implementation is Two's Complement
- * 
+ *
  * @see <a href=
  *      "https://en.wikipedia.org/wiki/Two%27s_complement">https://en.wikipedia.org/wiki/Two%27s_complement</a>
  *

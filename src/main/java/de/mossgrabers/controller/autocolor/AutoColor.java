@@ -26,8 +26,8 @@ import java.util.regex.Pattern;
 public class AutoColor
 {
     private final EnumMap<DAWColor, List<Pattern>> colorRegex = new EnumMap<> (DAWColor.class);
-    private final AutoColorConfiguration            configuration;
-    private ITrackBank                              trackBank;
+    private final AutoColorConfiguration           configuration;
+    private ITrackBank                             trackBank;
 
 
     /**
