@@ -173,7 +173,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
                 pad.addLight (this.surfaceFactory.createLight (this.surfaceID, null, () -> this.pads.getLightInfo (note).getEncoded (), state -> this.pads.sendState (note), colorIndex -> this.colorManager.getColor (colorIndex, buttonID), null));
                 final int [] translated = this.pads.translateToController (note);
                 pad.bind (input, BindType.NOTE, translated[0], translated[1]);
-                pad.bindDynamic ( (event, velocity) -> this.handleGridNote (event, note, velocity));
+                pad.bind ( (event, velocity) -> this.handleGridNote (event, note, velocity));
             }
         }
 

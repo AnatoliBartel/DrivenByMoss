@@ -40,13 +40,19 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
 
     /**
      * Handle a button press.
+     *
+     * @param value The pressure value
      */
-    protected void handleButtonPressed ()
+    protected void handleButtonPressed (final double value)
     {
+        if (value == 0)
+            return;
+
         this.state = ButtonEvent.DOWN;
         this.isConsumed = false;
         this.host.scheduleTask (this::checkButtonState, BUTTON_STATE_INTERVAL);
-        this.command.execute (ButtonEvent.DOWN, 127);
+        this.pressedVelocity = (int) (value * 127.0);
+        this.command.execute (ButtonEvent.DOWN, this.pressedVelocity);
     }
 
 
@@ -58,36 +64,6 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
         this.state = ButtonEvent.UP;
         if (!this.isConsumed)
             this.command.execute (ButtonEvent.UP, 0);
-    }
-
-
-    /**
-     * Handle a button press with pressure information.
-     *
-     * @param value The dynamic pressure value
-     */
-    protected void handleDynamicButtonPressed (final double value)
-    {
-        this.state = ButtonEvent.DOWN;
-        this.isConsumed = false;
-        this.host.scheduleTask (this::checkButtonState, BUTTON_STATE_INTERVAL);
-        this.pressedVelocity = (int) (value * 127.0);
-        this.command.execute (ButtonEvent.DOWN, this.pressedVelocity);
-    }
-
-
-    /**
-     * Handle a button release with release information.
-     *
-     * @param value The dynamic release value
-     */
-    protected void handleDynamicButtonRelease (final double value)
-    {
-        this.state = ButtonEvent.UP;
-        if (this.isConsumed)
-            return;
-        // value == 1.0 which does creates problems...
-        this.command.execute (ButtonEvent.UP, 0);
     }
 
 
@@ -144,7 +120,7 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
     public void trigger (final ButtonEvent event)
     {
         if (event == ButtonEvent.DOWN)
-            this.handleButtonPressed ();
+            this.handleButtonPressed (1.0); // TODO
         else if (event == ButtonEvent.UP)
             this.handleButtonRelease ();
     }

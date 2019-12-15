@@ -111,45 +111,17 @@ public class MidiInputImpl implements IMidiInput
     {
         final HardwareButton hardwareButton = ((HwButtonImpl) button).getHardwareButton ();
 
-        if (button.getCommand () == null)
-        {
-            // Dynamic mapping
-            final AbsoluteHardwareValueMatcher pressedMatcher;
-            final HardwareActionMatcher releasedMatcher;
-            switch (type)
-            {
-                case CC:
-                    pressedMatcher = this.port.createAbsoluteCCValueMatcher (channel, control);
-                    releasedMatcher = this.port.createCCActionMatcher (channel, control, 0);
-                    break;
-
-                case NOTE:
-                    pressedMatcher = this.port.createNoteOnVelocityValueMatcher (channel, control);
-                    releasedMatcher = this.port.createNoteOffActionMatcher (channel, control);
-                    break;
-
-                default:
-                    throw new BindException (type);
-            }
-
-            hardwareButton.pressedAction ().setPressureActionMatcher (pressedMatcher);
-            hardwareButton.releasedAction ().setActionMatcher (releasedMatcher);
-            return;
-        }
-
-        // Static mapping
-
-        final HardwareActionMatcher pressedMatcher;
+        final AbsoluteHardwareValueMatcher pressedMatcher;
         final HardwareActionMatcher releasedMatcher;
         switch (type)
         {
             case CC:
-                pressedMatcher = this.port.createCCActionMatcher (channel, control, 127);
+                pressedMatcher = this.port.createAbsoluteCCValueMatcher (channel, control);
                 releasedMatcher = this.port.createCCActionMatcher (channel, control, 0);
                 break;
 
             case NOTE:
-                pressedMatcher = this.port.createNoteOnActionMatcher (channel, control);
+                pressedMatcher = this.port.createNoteOnVelocityValueMatcher (channel, control);
                 releasedMatcher = this.port.createNoteOffActionMatcher (channel, control);
                 break;
 
@@ -157,7 +129,7 @@ public class MidiInputImpl implements IMidiInput
                 throw new BindException (type);
         }
 
-        hardwareButton.pressedAction ().setActionMatcher (pressedMatcher);
+        hardwareButton.pressedAction ().setPressureActionMatcher (pressedMatcher);
         hardwareButton.releasedAction ().setActionMatcher (releasedMatcher);
     }
 

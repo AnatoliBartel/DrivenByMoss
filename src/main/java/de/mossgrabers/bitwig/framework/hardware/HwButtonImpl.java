@@ -63,18 +63,6 @@ public class HwButtonImpl extends AbstractHwButton
 
     /** {@inheritDoc} */
     @Override
-    public void bindDynamic (final TriggerCommand command)
-    {
-        this.command = command;
-
-        final ControllerHost controllerHost = ((HostImpl) this.host).getControllerHost ();
-        this.hardwareButton.pressedAction ().addBinding (controllerHost.createAction (this::handleDynamicButtonPressed, () -> ""));
-        this.hardwareButton.releasedAction ().addBinding (controllerHost.createAction (this::handleDynamicButtonRelease, () -> ""));
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
     public void addLight (final IHwLight light)
     {
         super.addLight (light);

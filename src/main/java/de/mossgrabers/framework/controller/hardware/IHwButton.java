@@ -24,14 +24,6 @@ public interface IHwButton extends IHwInputControl
 
 
     /**
-     * Assign a dynamic command to a button, which is triggered by the button.
-     *
-     * @param command The command to assign
-     */
-    void bindDynamic (TriggerCommand command);
-
-
-    /**
      * Get the trigger command,
      *
      * @return The command or null if not bound

@@ -12,52 +12,54 @@ package de.mossgrabers.framework.controller.color;
 public class ColorEx
 {
     /** Color black. */
-    public static final ColorEx BLACK      = ColorEx.fromRGB (0, 0, 0);
+    public static final ColorEx BLACK       = ColorEx.fromRGB (0, 0, 0);
     /** Color white. */
-    public static final ColorEx WHITE      = ColorEx.fromRGB (255, 255, 255);
+    public static final ColorEx WHITE       = ColorEx.fromRGB (255, 255, 255);
     /** Color light gray. */
-    public static final ColorEx LIGHT_GRAY = ColorEx.fromRGB (182, 182, 182);
+    public static final ColorEx LIGHT_GRAY  = ColorEx.fromRGB (182, 182, 182);
     /** Color gray. */
-    public static final ColorEx GRAY       = ColorEx.fromRGB (128, 128, 128);
+    public static final ColorEx GRAY        = ColorEx.fromRGB (128, 128, 128);
     /** Color dark gray. */
-    public static final ColorEx DARK_GRAY  = ColorEx.fromRGB (89, 89, 89);
+    public static final ColorEx DARK_GRAY   = ColorEx.fromRGB (89, 89, 89);
     /** Color red. */
-    public static final ColorEx RED        = ColorEx.fromRGB (255, 0, 0);
+    public static final ColorEx RED         = ColorEx.fromRGB (255, 0, 0);
     /** Color dark red. */
-    public static final ColorEx DARK_RED   = ColorEx.fromRGB (128, 0, 0);
+    public static final ColorEx DARK_RED    = ColorEx.fromRGB (128, 0, 0);
     /** Color green. */
-    public static final ColorEx GREEN      = ColorEx.fromRGB (0, 255, 0);
+    public static final ColorEx GREEN       = ColorEx.fromRGB (0, 255, 0);
     /** Color dark green. */
-    public static final ColorEx DARK_GREEN = ColorEx.fromRGB (0, 128, 0);
+    public static final ColorEx DARK_GREEN  = ColorEx.fromRGB (0, 128, 0);
     /** Color blue. */
-    public static final ColorEx BLUE       = ColorEx.fromRGB (0, 0, 255);
+    public static final ColorEx BLUE        = ColorEx.fromRGB (0, 0, 255);
     /** Color dark blue. */
-    public static final ColorEx DARK_BLUE  = ColorEx.fromRGB (0, 0, 128);
+    public static final ColorEx DARK_BLUE   = ColorEx.fromRGB (0, 0, 128);
     /** Color yellow. */
-    public static final ColorEx YELLOW     = ColorEx.fromRGB (255, 255, 0);
+    public static final ColorEx YELLOW      = ColorEx.fromRGB (255, 255, 0);
     /** Color orange. */
-    public static final ColorEx ORANGE     = ColorEx.fromRGB (255, 130, 0);
+    public static final ColorEx ORANGE      = ColorEx.fromRGB (255, 130, 0);
+    /** Color dark orange. */
+    public static final ColorEx DARK_ORANGE = ColorEx.fromRGB (128, 65, 0);
     /** Color pink. */
-    public static final ColorEx PINK       = ColorEx.fromRGB (255, 0, 220);
+    public static final ColorEx PINK        = ColorEx.fromRGB (255, 0, 220);
     /** Color skin. */
-    public static final ColorEx SKIN       = ColorEx.fromRGB (255, 127, 127);
+    public static final ColorEx SKIN        = ColorEx.fromRGB (255, 127, 127);
     /** Color brown. */
-    public static final ColorEx BROWN      = ColorEx.fromRGB (183, 73, 0);
+    public static final ColorEx BROWN       = ColorEx.fromRGB (183, 73, 0);
     /** Color dark brown. */
-    public static final ColorEx DARK_BROWN = ColorEx.fromRGB (127, 0, 0);
+    public static final ColorEx DARK_BROWN  = ColorEx.fromRGB (127, 0, 0);
     /** Color mint. */
-    public static final ColorEx MINT       = ColorEx.fromRGB (170, 240, 209);
+    public static final ColorEx MINT        = ColorEx.fromRGB (170, 240, 209);
     /** Color olive. */
-    public static final ColorEx OLIVE      = ColorEx.fromRGB (128, 128, 0);
+    public static final ColorEx OLIVE       = ColorEx.fromRGB (128, 128, 0);
     /** Color sky blue. */
-    public static final ColorEx SKY_BLUE   = ColorEx.fromRGB (97, 238, 255);
+    public static final ColorEx SKY_BLUE    = ColorEx.fromRGB (97, 238, 255);
     /** Color purple. */
-    public static final ColorEx PURPLE     = ColorEx.fromRGB (116, 80, 164);
+    public static final ColorEx PURPLE      = ColorEx.fromRGB (116, 80, 164);
     /** Color red wine. */
-    public static final ColorEx RED_WINE   = ColorEx.fromRGB (123, 42, 57);
+    public static final ColorEx RED_WINE    = ColorEx.fromRGB (123, 42, 57);
 
-    private static final double FACTOR     = 0.7;
-    private static final double FACTOR2    = 0.4;
+    private static final double FACTOR      = 0.7;
+    private static final double FACTOR2     = 0.4;
 
     private final double        redValue;
     private final double        greenValue;
