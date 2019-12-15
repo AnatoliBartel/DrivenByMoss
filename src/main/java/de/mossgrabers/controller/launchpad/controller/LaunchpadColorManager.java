@@ -6,7 +6,7 @@ package de.mossgrabers.controller.launchpad.controller;
 
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.view.AbstractDrumView;
@@ -128,7 +128,7 @@ public class LaunchpadColorManager extends ColorManager
         this.registerColorIndex (AbstractPlayView.COLOR_RECORD, LAUNCHPAD_COLOR_RED_HI);
         this.registerColorIndex (AbstractPlayView.COLOR_OFF, LAUNCHPAD_COLOR_BLACK);
 
-        this.registerColorIndex (PadGrid.GRID_OFF, LAUNCHPAD_COLOR_BLACK);
+        this.registerColorIndex (IPadGrid.GRID_OFF, LAUNCHPAD_COLOR_BLACK);
 
         this.registerColorIndex (DAWColor.COLOR_OFF, LAUNCHPAD_COLOR_BLACK);
         this.registerColorIndex (DAWColor.DAW_COLOR_GRAY_HALF, LAUNCHPAD_COLOR_GREY_MD);

@@ -6,7 +6,7 @@ package de.mossgrabers.controller.push.view;
 
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.scale.Scales;
@@ -38,7 +38,7 @@ public class PianoView extends PlayView
     @Override
     public void drawGrid ()
     {
-        final PadGrid gridPad = this.surface.getPadGrid ();
+        final IPadGrid gridPad = this.surface.getPadGrid ();
         if (!this.model.canSelectedTrackHoldNotes ())
         {
             gridPad.turnOff ();

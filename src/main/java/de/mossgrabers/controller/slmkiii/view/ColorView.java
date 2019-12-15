@@ -8,7 +8,7 @@ import de.mossgrabers.controller.slmkiii.SLMkIIIConfiguration;
 import de.mossgrabers.controller.slmkiii.controller.SLMkIIIControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorEx;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.IMasterTrack;
@@ -45,12 +45,12 @@ public class ColorView extends AbstractView<SLMkIIIControlSurface, SLMkIIIConfig
     @Override
     public void drawGrid ()
     {
-        final PadGrid padGrid = this.surface.getPadGrid ();
+        final IPadGrid padGrid = this.surface.getPadGrid ();
         final DAWColor [] dawColors = DAWColor.values ();
         for (int i = 0; i < 16; i++)
         {
             final int pos = (this.flip ? 16 : 0) + i;
-            padGrid.light (36 + i, pos < dawColors.length ? dawColors[pos].name () : PadGrid.GRID_OFF);
+            padGrid.light (36 + i, pos < dawColors.length ? dawColors[pos].name () : IPadGrid.GRID_OFF);
         }
     }
 

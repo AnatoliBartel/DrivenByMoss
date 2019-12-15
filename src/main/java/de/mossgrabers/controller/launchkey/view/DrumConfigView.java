@@ -8,7 +8,7 @@ import de.mossgrabers.controller.launchkey.LaunchkeyMiniMk3Configuration;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3Colors;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.INoteClip;
 import de.mossgrabers.framework.utils.ButtonEvent;
@@ -87,7 +87,7 @@ public class DrumConfigView extends AbstractView<LaunchkeyMiniMk3ControlSurface,
         final DrumView view = (DrumView) this.surface.getViewManager ().getView (Views.DRUM);
         final INoteClip clip = view.getClip ();
 
-        final PadGrid padGrid = this.surface.getPadGrid ();
+        final IPadGrid padGrid = this.surface.getPadGrid ();
         for (int x = 0; x < 8; x++)
             padGrid.lightEx (x, 0, view.getResolutionIndex () == x ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLUE_HI : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLUE_LO);
 

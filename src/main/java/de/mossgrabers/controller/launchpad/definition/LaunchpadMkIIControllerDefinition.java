@@ -7,7 +7,7 @@ package de.mossgrabers.controller.launchpad.definition;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.DefaultControllerDefinition;
-import de.mossgrabers.framework.controller.grid.PadInfo;
+import de.mossgrabers.framework.controller.grid.LightInfo;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
 import de.mossgrabers.framework.utils.OperatingSystem;
 import de.mossgrabers.framework.utils.Pair;
@@ -161,16 +161,16 @@ public class LaunchpadMkIIControllerDefinition extends DefaultControllerDefiniti
 
     /** {@inheritDoc} */
     @Override
-    public List<String> buildLEDUpdate (final Map<Integer, PadInfo> padInfos)
+    public List<String> buildLEDUpdate (final Map<Integer, LightInfo> padInfos)
     {
         final StringBuilder sbNormal = new StringBuilder ();
         final StringBuilder sbFlash = new StringBuilder ();
         final StringBuilder sbPulse = new StringBuilder ();
 
-        for (final Entry<Integer, PadInfo> e: padInfos.entrySet ())
+        for (final Entry<Integer, LightInfo> e: padInfos.entrySet ())
         {
             final int note = e.getKey ().intValue ();
-            final PadInfo info = e.getValue ();
+            final LightInfo info = e.getValue ();
 
             sbNormal.append (StringUtils.toHexStr (note)).append (' ').append (StringUtils.toHexStr (info.getColor ())).append (' ');
 

@@ -6,7 +6,7 @@ package de.mossgrabers.controller.beatstep.controller;
 
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.scale.Scales;
 
 
@@ -35,7 +35,7 @@ public class BeatstepColorManager extends ColorManager
         this.registerColorIndex (Scales.SCALE_COLOR_NOTE, BEATSTEP_BUTTON_STATE_BLUE);
         this.registerColorIndex (Scales.SCALE_COLOR_OUT_OF_SCALE, BEATSTEP_BUTTON_STATE_OFF);
 
-        this.registerColorIndex (PadGrid.GRID_OFF, BEATSTEP_BUTTON_STATE_OFF);
+        this.registerColorIndex (IPadGrid.GRID_OFF, BEATSTEP_BUTTON_STATE_OFF);
         this.registerColorIndex (ColorManager.BUTTON_STATE_OFF, BEATSTEP_BUTTON_STATE_OFF);
         this.registerColorIndex (ColorManager.BUTTON_STATE_ON, BEATSTEP_BUTTON_STATE_OFF);
         this.registerColorIndex (ColorManager.BUTTON_STATE_HI, BEATSTEP_BUTTON_STATE_BLUE);

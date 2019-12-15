@@ -8,7 +8,7 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorIndexException;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.scale.Scales;
@@ -480,7 +480,7 @@ public class PushColorManager extends ColorManager
         this.registerColorIndex (AbstractSessionView.COLOR_SELECTED_SCENE, isPush2 ? PushColorManager.PUSH2_COLOR_SCENE_GREEN_HI : PushColorManager.PUSH1_COLOR_SCENE_GREEN_HI);
         this.registerColorIndex (AbstractSessionView.COLOR_SCENE_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
 
-        this.registerColorIndex (PadGrid.GRID_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
+        this.registerColorIndex (IPadGrid.GRID_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);
 
         // Push 2 DAW colors are set in the color palette from indices 70 to 96
         this.registerColorIndex (DAWColor.COLOR_OFF, isPush2 ? PUSH2_COLOR2_BLACK : PUSH1_COLOR2_BLACK);

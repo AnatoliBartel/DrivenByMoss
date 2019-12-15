@@ -11,7 +11,8 @@ import de.mossgrabers.framework.controller.display.DummyDisplay;
 import de.mossgrabers.framework.controller.display.IDisplay;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.ILightGuide;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.controller.hardware.IHwAbsoluteKnob;
 import de.mossgrabers.framework.controller.hardware.IHwButton;
@@ -79,7 +80,8 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     protected List<ITextDisplay>                    textDisplays          = new ArrayList<> (1);
     protected List<IGraphicDisplay>                 graphicsDisplays      = new ArrayList<> (1);
 
-    protected final PadGrid                         pads;
+    protected final IPadGrid                        pads;
+    protected final ILightGuide                     lightGuide;
 
     private int []                                  keyTranslationTable;
 
@@ -100,7 +102,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
      * @param width The physical width of the controller device in mm
      * @param height The physical height of the controller device in mm
      */
-    public AbstractControlSurface (final IHost host, final C configuration, final ColorManager colorManager, final IMidiOutput output, final IMidiInput input, final PadGrid padGrid, final double width, final double height)
+    public AbstractControlSurface (final IHost host, final C configuration, final ColorManager colorManager, final IMidiOutput output, final IMidiInput input, final IPadGrid padGrid, final double width, final double height)
     {
         this (0, host, configuration, colorManager, output, input, padGrid, width, height);
     }
@@ -119,7 +121,27 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
      * @param width The physical width of the controller device in mm
      * @param height The physical height of the controller device in mm
      */
-    public AbstractControlSurface (final int surfaceID, final IHost host, final C configuration, final ColorManager colorManager, final IMidiOutput output, final IMidiInput input, final PadGrid padGrid, final double width, final double height)
+    public AbstractControlSurface (final int surfaceID, final IHost host, final C configuration, final ColorManager colorManager, final IMidiOutput output, final IMidiInput input, final IPadGrid padGrid, final double width, final double height)
+    {
+        this (surfaceID, host, configuration, colorManager, output, input, padGrid, null, width, height);
+    }
+
+
+    /**
+     * Constructor.
+     *
+     * @param surfaceID The ID of the surface
+     * @param host The host
+     * @param configuration The configuration
+     * @param colorManager
+     * @param output The midi output
+     * @param input The midi input
+     * @param padGrid The pads if any, may be null
+     * @param lightGuide The light guide
+     * @param width The physical width of the controller device in mm
+     * @param height The physical height of the controller device in mm
+     */
+    public AbstractControlSurface (final int surfaceID, final IHost host, final C configuration, final ColorManager colorManager, final IMidiOutput output, final IMidiInput input, final IPadGrid padGrid, final ILightGuide lightGuide, final double width, final double height)
     {
         this.surfaceID = surfaceID;
 
@@ -127,6 +149,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
         this.configuration = configuration;
         this.colorManager = colorManager;
         this.pads = padGrid;
+        this.lightGuide = lightGuide;
 
         this.surfaceFactory = host.createSurfaceFactory (width, height);
 
@@ -147,10 +170,21 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
                 final ButtonID buttonID = ButtonID.get (ButtonID.PAD1, i);
                 final IHwButton pad = this.createButton (buttonID, "P " + (i + 1));
-                pad.addLight (this.surfaceFactory.createLight (this.surfaceID, null, () -> this.pads.getPadInfo (note).getEncoded (), state -> this.pads.sendPadState (note), colorIndex -> this.colorManager.getColor (colorIndex, buttonID), null));
+                pad.addLight (this.surfaceFactory.createLight (this.surfaceID, null, () -> this.pads.getLightInfo (note).getEncoded (), state -> this.pads.sendState (note), colorIndex -> this.colorManager.getColor (colorIndex, buttonID), null));
                 final int [] translated = this.pads.translateToController (note);
                 pad.bind (input, BindType.NOTE, translated[0], translated[1]);
                 pad.bindDynamic ( (event, velocity) -> this.handleGridNote (event, note, velocity));
+            }
+        }
+
+        // Light guide
+        if (this.lightGuide != null)
+        {
+            final int size = this.lightGuide.getCols ();
+            for (int i = 0; i < size; i++)
+            {
+                final int note = this.lightGuide.getStartNote () + i;
+                this.createLight (OutputID.get (OutputID.LIGHT_GUIDE1, i), () -> this.lightGuide.getLightInfo (note).getEncoded (), state -> this.lightGuide.sendState (note), colorIndex -> this.colorManager.getColor (colorIndex, null), null);
             }
         }
     }
@@ -270,9 +304,17 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
     /** {@inheritDoc} */
     @Override
-    public PadGrid getPadGrid ()
+    public IPadGrid getPadGrid ()
     {
         return this.pads;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public ILightGuide getLightGuide ()
+    {
+        return this.lightGuide;
     }
 
 

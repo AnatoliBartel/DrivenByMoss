@@ -47,7 +47,7 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.controller.valuechanger.DefaultValueChanger;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IHost;
@@ -143,7 +143,7 @@ public class MaschineMikroMk3ControllerSetup extends AbstractControllerSetup<Mas
         final IMidiAccess midiAccess = this.factory.createMidiAccess ();
         final IMidiOutput output = midiAccess.createOutput ();
         final IMidiInput input = midiAccess.createInput ("Maschine Mikro Mk3", "80????", "90????");
-        this.colorManager.registerColorIndex (PadGrid.GRID_OFF, 0);
+        this.colorManager.registerColorIndex (IPadGrid.GRID_OFF, 0);
         final MaschineMikroMk3ControlSurface surface = new MaschineMikroMk3ControlSurface (this.host, this.colorManager, this.configuration, output, input);
         this.surfaces.add (surface);
     }

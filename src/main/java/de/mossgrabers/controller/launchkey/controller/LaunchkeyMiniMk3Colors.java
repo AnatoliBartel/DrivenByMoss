@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.launchkey.controller;
 
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.view.AbstractDrumView;
@@ -143,7 +143,7 @@ public class LaunchkeyMiniMk3Colors
         colorManager.registerColorIndex (AbstractSessionView.COLOR_SELECTED_SCENE, LAUNCHKEY_COLOR_GREEN_HI);
         colorManager.registerColorIndex (AbstractSessionView.COLOR_SCENE_OFF, LAUNCHKEY_COLOR_BLACK);
 
-        colorManager.registerColorIndex (PadGrid.GRID_OFF, LAUNCHKEY_COLOR_BLACK);
+        colorManager.registerColorIndex (IPadGrid.GRID_OFF, LAUNCHKEY_COLOR_BLACK);
 
         colorManager.registerColorIndex (DAWColor.COLOR_OFF, LAUNCHKEY_COLOR_BLACK);
         colorManager.registerColorIndex (DAWColor.DAW_COLOR_GRAY_HALF, LAUNCHKEY_COLOR_GREY_MD);

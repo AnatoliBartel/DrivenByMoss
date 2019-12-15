@@ -7,7 +7,7 @@ package de.mossgrabers.controller.beatstep.view;
 import de.mossgrabers.controller.beatstep.BeatstepConfiguration;
 import de.mossgrabers.controller.beatstep.controller.BeatstepColorManager;
 import de.mossgrabers.controller.beatstep.controller.BeatstepControlSurface;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.view.AbstractView;
@@ -97,7 +97,7 @@ public class SessionView extends AbstractView<BeatstepControlSurface, BeatstepCo
     @Override
     public void drawGrid ()
     {
-        final PadGrid padGrid = this.surface.getPadGrid ();
+        final IPadGrid padGrid = this.surface.getPadGrid ();
         for (int i = 0; i < 6; i++)
             padGrid.light (36 + i, BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
         for (int i = 6; i < 8; i++)

@@ -8,7 +8,7 @@ import de.mossgrabers.controller.launchkey.LaunchkeyMiniMk3Configuration;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3Colors;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.daw.data.IScene;
@@ -55,7 +55,7 @@ public class PadModeSelectView extends AbstractView<LaunchkeyMiniMk3ControlSurfa
     @Override
     public void drawGrid ()
     {
-        final PadGrid pads = this.surface.getPadGrid ();
+        final IPadGrid pads = this.surface.getPadGrid ();
         for (int x = 0; x < 8; x++)
             pads.lightEx (x, 0, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
 

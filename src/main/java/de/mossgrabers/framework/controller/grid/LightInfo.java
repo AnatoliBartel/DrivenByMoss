@@ -9,7 +9,7 @@ package de.mossgrabers.framework.controller.grid;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class PadInfo
+public class LightInfo
 {
     private int     color      = 0;
     private int     blinkColor = 0;

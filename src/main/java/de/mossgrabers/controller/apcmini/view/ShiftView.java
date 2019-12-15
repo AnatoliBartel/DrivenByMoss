@@ -11,7 +11,7 @@ import de.mossgrabers.framework.command.trigger.clip.NewCommand;
 import de.mossgrabers.framework.command.trigger.transport.PlayCommand;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IClip;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IModel;
@@ -82,7 +82,7 @@ public class ShiftView extends AbstractView<APCminiControlSurface, APCminiConfig
         // Draw the keyboard
         final int scaleOffset = this.scales.getScaleOffset ();
         // 0'C', 1'G', 2'D', 3'A', 4'E', 5'B', 6'F', 7'Bb', 8'Eb', 9'Ab', 10'Db', 11'Gb'
-        final PadGrid padGrid = this.surface.getPadGrid ();
+        final IPadGrid padGrid = this.surface.getPadGrid ();
         for (int i = 7; i < 64; i++)
             padGrid.light (36 + i, APCminiColorManager.APC_COLOR_BLACK);
         padGrid.light (36 + 0, scaleOffset == 0 ? APCminiColorManager.APC_COLOR_GREEN : APCminiColorManager.APC_COLOR_YELLOW);

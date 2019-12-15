@@ -13,14 +13,14 @@ import de.mossgrabers.framework.daw.midi.IMidiOutput;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class PadGridImpl implements PadGrid
+public class PadGridImpl implements IPadGrid
 {
     protected static final int   NUM_NOTES = 128;
 
     protected final IMidiOutput  output;
     protected final ColorManager colorManager;
 
-    protected PadInfo []         padStates;
+    protected LightInfo []         padStates;
 
     protected final int          rows;
     protected final int          cols;
@@ -58,11 +58,11 @@ public class PadGridImpl implements PadGrid
         this.startNote = startNote;
         this.endNote = this.startNote + this.rows * this.cols - 1;
 
-        // Note: The grid contains only 64 pads but is more efficient to use
+        // Note: Even if the grid contains less than 128 pads it is more efficient to use
         // the 128 note values the pads understand
-        this.padStates = new PadInfo [NUM_NOTES];
+        this.padStates = new LightInfo [NUM_NOTES];
         for (int i = 0; i < NUM_NOTES; i++)
-            this.padStates[i] = new PadInfo ();
+            this.padStates[i] = new LightInfo ();
     }
 
 
@@ -164,7 +164,7 @@ public class PadGridImpl implements PadGrid
 
     /** {@inheritDoc} */
     @Override
-    public PadInfo getPadInfo (final int note)
+    public LightInfo getLightInfo (final int note)
     {
         return this.padStates[note];
     }
@@ -172,9 +172,9 @@ public class PadGridImpl implements PadGrid
 
     /** {@inheritDoc} */
     @Override
-    public void sendPadState (final int note)
+    public void sendState (final int note)
     {
-        final PadInfo state = this.padStates[note];
+        final LightInfo state = this.padStates[note];
         final int [] translated = this.translateToController (note);
         final int color = state.getColor ();
         this.sendNoteState (translated[0], translated[1], color < 0 ? 0 : color);
@@ -219,7 +219,7 @@ public class PadGridImpl implements PadGrid
         for (int i = this.startNote; i <= this.endNote; i++)
         {
             this.light (i, color, -1, false);
-            this.sendPadState (i);
+            this.sendState (i);
         }
     }
 

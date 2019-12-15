@@ -7,7 +7,7 @@ package de.mossgrabers.controller.launchpad.definition;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.DefaultControllerDefinition;
-import de.mossgrabers.framework.controller.grid.PadInfo;
+import de.mossgrabers.framework.controller.grid.LightInfo;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
 import de.mossgrabers.framework.utils.OperatingSystem;
 import de.mossgrabers.framework.utils.Pair;
@@ -181,13 +181,13 @@ public class LaunchpadMiniMkIIIControllerDefinition extends DefaultControllerDef
 
     /** {@inheritDoc} */
     @Override
-    public List<String> buildLEDUpdate (final Map<Integer, PadInfo> padInfos)
+    public List<String> buildLEDUpdate (final Map<Integer, LightInfo> padInfos)
     {
         final StringBuilder sb = new StringBuilder (this.getSysExHeader ()).append ("03 ");
-        for (final Entry<Integer, PadInfo> e: padInfos.entrySet ())
+        for (final Entry<Integer, LightInfo> e: padInfos.entrySet ())
         {
             final int note = e.getKey ().intValue ();
-            final PadInfo info = e.getValue ();
+            final LightInfo info = e.getValue ();
 
             if (info.getBlinkColor () <= 0)
             {

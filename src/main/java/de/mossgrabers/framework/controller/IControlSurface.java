@@ -9,7 +9,8 @@ import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.display.IDisplay;
 import de.mossgrabers.framework.controller.display.IGraphicDisplay;
 import de.mossgrabers.framework.controller.display.ITextDisplay;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.ILightGuide;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.controller.hardware.IHwAbsoluteKnob;
 import de.mossgrabers.framework.controller.hardware.IHwButton;
 import de.mossgrabers.framework.controller.hardware.IHwContinuousControl;
@@ -134,7 +135,15 @@ public interface IControlSurface<C extends Configuration>
      *
      * @return The interface to pads
      */
-    PadGrid getPadGrid ();
+    IPadGrid getPadGrid ();
+
+
+    /**
+     * Get the light guide.
+     *
+     * @return The light guide
+     */
+    ILightGuide getLightGuide ();
 
 
     /**

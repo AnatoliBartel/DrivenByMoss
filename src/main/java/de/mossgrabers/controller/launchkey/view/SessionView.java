@@ -9,7 +9,7 @@ import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3Colors;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
 import de.mossgrabers.framework.daw.ITrackBank;
@@ -118,7 +118,7 @@ public class SessionView extends AbstractSessionView<LaunchkeyMiniMk3ControlSurf
             return;
 
         final ITrackBank tb = this.model.getCurrentTrackBank ();
-        final PadGrid pads = this.surface.getPadGrid ();
+        final IPadGrid pads = this.surface.getPadGrid ();
         for (int x = 0; x < this.columns; x++)
         {
             final ITrack track = tb.getItem (x);

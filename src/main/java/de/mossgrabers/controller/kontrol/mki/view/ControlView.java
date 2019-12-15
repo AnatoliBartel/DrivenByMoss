@@ -6,7 +6,7 @@ package de.mossgrabers.controller.kontrol.mki.view;
 
 import de.mossgrabers.controller.kontrol.mki.Kontrol1Configuration;
 import de.mossgrabers.controller.kontrol.mki.controller.Kontrol1ControlSurface;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.ILightGuide;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IDrumPadBank;
@@ -14,7 +14,7 @@ import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.data.IChannel;
 import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.view.AbstractDrumView;
-import de.mossgrabers.framework.view.AbstractView;
+import de.mossgrabers.framework.view.AbstractPlayView;
 
 
 /**
@@ -22,7 +22,7 @@ import de.mossgrabers.framework.view.AbstractView;
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */
-public class ControlView extends AbstractView<Kontrol1ControlSurface, Kontrol1Configuration>
+public class ControlView extends AbstractPlayView<Kontrol1ControlSurface, Kontrol1Configuration>
 {
     /**
      * Constructor.
@@ -32,7 +32,7 @@ public class ControlView extends AbstractView<Kontrol1ControlSurface, Kontrol1Co
      */
     public ControlView (final Kontrol1ControlSurface surface, final IModel model)
     {
-        super ("Control", surface, model);
+        super (surface, model, true);
     }
 
 
@@ -52,6 +52,8 @@ public class ControlView extends AbstractView<Kontrol1ControlSurface, Kontrol1Co
     @Override
     public void drawGrid ()
     {
+        final ILightGuide lightGuide = this.surface.getLightGuide ();
+
         if (this.model.canSelectedTrackHoldNotes ())
         {
             final ICursorDevice primary = this.model.getInstrumentDevice ();
@@ -69,15 +71,14 @@ public class ControlView extends AbstractView<Kontrol1ControlSurface, Kontrol1Co
                 }
 
                 final boolean isRecording = this.model.hasRecordingState ();
-                final PadGrid gridPad = this.surface.getPadGrid ();
                 for (int i = this.scales.getStartNote (); i < this.scales.getEndNote (); i++)
-                    gridPad.light (i, this.getDrumPadColor (i, primary, isSoloed, isRecording));
+                    lightGuide.light (i, this.getDrumPadColor (i, primary, isSoloed, isRecording));
 
                 return;
             }
         }
 
-        // TODO super.drawGrid ();
+        this.drawLightGuide (lightGuide);
     }
 
 

@@ -6,7 +6,7 @@ package de.mossgrabers.controller.apcmini.controller;
 
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.view.AbstractDrumView;
 import de.mossgrabers.framework.view.AbstractPlayView;
@@ -71,7 +71,7 @@ public class APCminiColorManager extends ColorManager
         this.registerColorIndex (AbstractPlayView.COLOR_RECORD, APC_COLOR_RED);
         this.registerColorIndex (AbstractPlayView.COLOR_OFF, APC_COLOR_BLACK);
 
-        this.registerColorIndex (PadGrid.GRID_OFF, APC_COLOR_BLACK);
+        this.registerColorIndex (IPadGrid.GRID_OFF, APC_COLOR_BLACK);
 
         this.registerColor (APC_COLOR_BLACK, ColorEx.BLACK);
         this.registerColor (APC_COLOR_GREEN, ColorEx.GREEN);

@@ -7,9 +7,10 @@ package de.mossgrabers.controller.kontrol.mki.controller;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.scale.Scales;
+import de.mossgrabers.framework.view.AbstractDrumView;
 
 
 /**
@@ -42,7 +43,10 @@ public class Kontrol1ColorManager extends ColorManager
         this.registerColorIndex (Scales.SCALE_COLOR_NOTE, SCALE_COLOR_NOTE);
         this.registerColorIndex (Scales.SCALE_COLOR_OUT_OF_SCALE, SCALE_COLOR_OUT_OF_SCALE);
 
-        this.registerColorIndex (PadGrid.GRID_OFF, 0);
+        this.registerColorIndex (AbstractDrumView.COLOR_PAD_PLAY, COLOR_PLAY);
+        this.registerColorIndex (AbstractDrumView.COLOR_PAD_RECORD, COLOR_RECORD);
+
+        this.registerColorIndex (IPadGrid.GRID_OFF, 0);
 
         final DAWColor [] values = DAWColor.values ();
         for (int i = 0; i < values.length; i++)
@@ -58,11 +62,7 @@ public class Kontrol1ColorManager extends ColorManager
         {
             if (colorIndex >= DAW_COLOR_START)
                 return DAWColor.getColorEntry (colorIndex - DAW_COLOR_START);
-            return ColorEx.BLACK;
-        }
 
-        if (buttonID.ordinal () >= ButtonID.PAD1.ordinal () && buttonID.ordinal () <= ButtonID.PAD88.ordinal ())
-        {
             switch (colorIndex)
             {
                 case SCALE_COLOR_OCTAVE:

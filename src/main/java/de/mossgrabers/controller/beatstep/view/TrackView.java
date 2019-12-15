@@ -7,7 +7,7 @@ package de.mossgrabers.controller.beatstep.view;
 import de.mossgrabers.controller.beatstep.BeatstepConfiguration;
 import de.mossgrabers.controller.beatstep.controller.BeatstepColorManager;
 import de.mossgrabers.controller.beatstep.controller.BeatstepControlSurface;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ITrackBank;
 import de.mossgrabers.framework.daw.data.ITrack;
@@ -154,7 +154,7 @@ public class TrackView extends AbstractView<BeatstepControlSurface, BeatstepConf
     public void drawGrid ()
     {
         final ITrackBank tb = this.model.getCurrentTrackBank ();
-        final PadGrid padGrid = this.surface.getPadGrid ();
+        final IPadGrid padGrid = this.surface.getPadGrid ();
         for (int i = 0; i < 8; i++)
             padGrid.light (44 + i, tb.getItem (i).isSelected () ? BeatstepColorManager.BEATSTEP_BUTTON_STATE_BLUE : BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
 

@@ -7,7 +7,7 @@ package de.mossgrabers.controller.apc.controller;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.scale.Scales;
@@ -157,7 +157,7 @@ public class APCColorManager extends ColorManager
         this.registerColorIndex (AbstractPlayView.COLOR_RECORD, isMkII ? APC_MKII_COLOR_RED : APC_COLOR_RED);
         this.registerColorIndex (AbstractPlayView.COLOR_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
 
-        this.registerColorIndex (PadGrid.GRID_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
+        this.registerColorIndex (IPadGrid.GRID_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
 
         this.registerColorIndex (DAWColor.COLOR_OFF, isMkII ? APC_MKII_COLOR_BLACK : APC_COLOR_BLACK);
         if (isMkII)

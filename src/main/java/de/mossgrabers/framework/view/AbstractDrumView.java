@@ -7,7 +7,7 @@ package de.mossgrabers.framework.view;
 import de.mossgrabers.framework.configuration.Configuration;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IControlSurface;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IDrumPadBank;
@@ -190,7 +190,7 @@ public abstract class AbstractDrumView<S extends IControlSurface<C>, C extends C
     @Override
     public void drawGrid ()
     {
-        final PadGrid padGrid = this.surface.getPadGrid ();
+        final IPadGrid padGrid = this.surface.getPadGrid ();
         if (!this.model.canSelectedTrackHoldNotes ())
         {
             padGrid.turnOff ();
@@ -449,7 +449,7 @@ public abstract class AbstractDrumView<S extends IControlSurface<C>, C extends C
         final int currentPage = step / this.sequencerSteps;
 
         final int numOfPages = this.halfColumns * this.playLines;
-        final PadGrid padGrid = this.surface.getPadGrid ();
+        final IPadGrid padGrid = this.surface.getPadGrid ();
         for (int pad = 0; pad < numOfPages; pad++)
         {
             final int x = this.halfColumns + pad % this.halfColumns;

@@ -7,7 +7,7 @@ package de.mossgrabers.controller.slmkiii.controller;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorEx;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.mode.AbstractMode;
 import de.mossgrabers.framework.scale.Scales;
@@ -126,7 +126,7 @@ public class SLMkIIIColorManager extends ColorManager
         this.registerColorIndex (AbstractSessionView.COLOR_SELECTED_SCENE, SLMKIII_GREEN);
         this.registerColorIndex (AbstractSessionView.COLOR_SCENE_OFF, SLMKIII_BLACK);
 
-        this.registerColorIndex (PadGrid.GRID_OFF, SLMKIII_BLACK);
+        this.registerColorIndex (IPadGrid.GRID_OFF, SLMKIII_BLACK);
 
         this.registerColorIndex (DAWColor.COLOR_OFF, SLMKIII_BLACK);
         this.registerColorIndex (DAWColor.DAW_COLOR_GRAY_HALF, SLMKIII_BLACK);

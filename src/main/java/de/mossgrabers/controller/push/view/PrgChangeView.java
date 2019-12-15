@@ -8,7 +8,7 @@ import de.mossgrabers.controller.push.PushConfiguration;
 import de.mossgrabers.controller.push.controller.PushColorManager;
 import de.mossgrabers.controller.push.controller.PushControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.view.AbstractView;
@@ -121,7 +121,7 @@ public class PrgChangeView extends AbstractView<PushControlSurface, PushConfigur
     {
         final int [] colors = this.isToggled ? this.yellows : this.greens;
         final int selPad = this.isToggled ? this.programNumber >= 64 ? this.programNumber - 64 : -1 : this.programNumber < 64 ? this.programNumber : -1;
-        final PadGrid gridPad = this.surface.getPadGrid ();
+        final IPadGrid gridPad = this.surface.getPadGrid ();
         final boolean isPush2 = this.surface.getConfiguration ().isPush2 ();
         final int red = isPush2 ? PushColorManager.PUSH2_COLOR2_RED : PushColorManager.PUSH1_COLOR2_RED;
         for (int i = 36; i < 100; i++)

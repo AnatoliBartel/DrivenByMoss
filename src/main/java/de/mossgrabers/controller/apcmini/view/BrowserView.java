@@ -9,7 +9,7 @@ import de.mossgrabers.controller.apcmini.controller.APCminiColorManager;
 import de.mossgrabers.controller.apcmini.controller.APCminiControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IBrowser;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.utils.ButtonEvent;
@@ -55,7 +55,7 @@ public class BrowserView extends AbstractView<APCminiControlSurface, APCminiConf
     @Override
     public void drawGrid ()
     {
-        final PadGrid padGrid = this.surface.getPadGrid ();
+        final IPadGrid padGrid = this.surface.getPadGrid ();
         padGrid.light (36, APCminiColorManager.APC_COLOR_RED_BLINK);
         padGrid.light (37, APCminiColorManager.APC_COLOR_BLACK);
         for (int i = 38; i < 42; i++)

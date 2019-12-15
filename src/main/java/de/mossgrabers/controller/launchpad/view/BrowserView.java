@@ -10,7 +10,7 @@ import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IBrowser;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.utils.ButtonEvent;
@@ -92,7 +92,7 @@ public class BrowserView extends AbstractView<LaunchpadControlSurface, Launchpad
     @Override
     public void drawGrid ()
     {
-        final PadGrid padGrid = this.surface.getPadGrid ();
+        final IPadGrid padGrid = this.surface.getPadGrid ();
         padGrid.light (36, LaunchpadColorManager.LAUNCHPAD_COLOR_RED);
         padGrid.light (37, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
         for (int i = 38; i < 42; i++)

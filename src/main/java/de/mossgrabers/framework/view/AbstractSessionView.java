@@ -8,7 +8,7 @@ import de.mossgrabers.framework.configuration.Configuration;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.IControlSurface;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
@@ -255,7 +255,7 @@ public abstract class AbstractSessionView<S extends IControlSurface<C>, C extend
         selX -= offsetX;
         selY -= offsetY;
 
-        final PadGrid padGrid = this.surface.getPadGrid ();
+        final IPadGrid padGrid = this.surface.getPadGrid ();
         for (int x = 0; x < this.columns; x++)
         {
             final SessionColor rowColor = x < maxX ? this.birdColorHasContent : this.clipColorHasNoContent;

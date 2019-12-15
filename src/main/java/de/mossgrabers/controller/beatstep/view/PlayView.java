@@ -8,7 +8,7 @@ import de.mossgrabers.controller.beatstep.BeatstepConfiguration;
 import de.mossgrabers.controller.beatstep.controller.BeatstepColorManager;
 import de.mossgrabers.controller.beatstep.controller.BeatstepControlSurface;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.scale.Scales;
 import de.mossgrabers.framework.view.AbstractPlayView;
@@ -94,7 +94,7 @@ public class PlayView extends AbstractPlayView<BeatstepControlSurface, BeatstepC
     public void drawGrid ()
     {
         final boolean isKeyboardEnabled = this.model.canSelectedTrackHoldNotes ();
-        final PadGrid padGrid = this.surface.getPadGrid ();
+        final IPadGrid padGrid = this.surface.getPadGrid ();
         for (int i = 36; i < 52; i++)
             padGrid.light (i, this.getPadColor (isKeyboardEnabled, i));
     }

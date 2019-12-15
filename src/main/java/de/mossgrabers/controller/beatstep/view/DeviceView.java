@@ -7,7 +7,7 @@ package de.mossgrabers.controller.beatstep.view;
 import de.mossgrabers.controller.beatstep.BeatstepConfiguration;
 import de.mossgrabers.controller.beatstep.controller.BeatstepColorManager;
 import de.mossgrabers.controller.beatstep.controller.BeatstepControlSurface;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IChannelBank;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IModel;
@@ -158,7 +158,7 @@ public class DeviceView extends AbstractView<BeatstepControlSurface, BeatstepCon
         final ICursorDevice cd = this.model.getCursorDevice ();
         final IParameterPageBank parameterPageBank = cd.getParameterPageBank ();
         final int selectedItemIndex = parameterPageBank.getSelectedItemIndex ();
-        final PadGrid padGrid = this.surface.getPadGrid ();
+        final IPadGrid padGrid = this.surface.getPadGrid ();
         for (int i = 0; i < parameterPageBank.getPageSize (); i++)
             padGrid.light (44 + i, i == selectedItemIndex ? BeatstepColorManager.BEATSTEP_BUTTON_STATE_BLUE : BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);
         padGrid.light (36, cd.isEnabled () ? BeatstepColorManager.BEATSTEP_BUTTON_STATE_RED : BeatstepColorManager.BEATSTEP_BUTTON_STATE_OFF);

@@ -34,7 +34,7 @@ import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.controller.valuechanger.DefaultValueChanger;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IHost;
@@ -146,7 +146,7 @@ public class SLControllerSetup extends AbstractControllerSetup<SLControlSurface,
         super (factory, host, globalSettings, documentSettings);
         this.isMkII = isMkII;
         this.colorManager = new ColorManager ();
-        this.colorManager.registerColorIndex (PadGrid.GRID_OFF, 0);
+        this.colorManager.registerColorIndex (IPadGrid.GRID_OFF, 0);
         this.valueChanger = new DefaultValueChanger (128, 1, 0.5);
         this.configuration = new SLConfiguration (host, this.valueChanger, isMkII);
     }

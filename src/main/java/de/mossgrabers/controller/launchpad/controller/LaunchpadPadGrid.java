@@ -7,7 +7,7 @@ package de.mossgrabers.controller.launchpad.controller;
 import de.mossgrabers.controller.launchpad.definition.ILaunchpadControllerDefinition;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.PadGridImpl;
-import de.mossgrabers.framework.controller.grid.PadInfo;
+import de.mossgrabers.framework.controller.grid.LightInfo;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
 
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class LaunchpadPadGrid extends PadGridImpl
     }
 
     private final ILaunchpadControllerDefinition definition;
-    private final Map<Integer, PadInfo>          padInfos = new TreeMap<> ();
+    private final Map<Integer, LightInfo>          padInfos = new TreeMap<> ();
 
 
     /**
@@ -106,7 +106,7 @@ public class LaunchpadPadGrid extends PadGridImpl
     {
         synchronized (this.padInfos)
         {
-            this.padInfos.computeIfAbsent (Integer.valueOf (note), key -> new PadInfo ()).setColor (color);
+            this.padInfos.computeIfAbsent (Integer.valueOf (note), key -> new LightInfo ()).setColor (color);
         }
     }
 
@@ -117,7 +117,7 @@ public class LaunchpadPadGrid extends PadGridImpl
     {
         synchronized (this.padInfos)
         {
-            final PadInfo info = this.padInfos.computeIfAbsent (Integer.valueOf (note), key -> new PadInfo ());
+            final LightInfo info = this.padInfos.computeIfAbsent (Integer.valueOf (note), key -> new LightInfo ());
             info.setBlinkColor (blinkColor);
             info.setFast (fast);
         }

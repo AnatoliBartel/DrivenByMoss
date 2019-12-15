@@ -9,7 +9,7 @@ import de.mossgrabers.controller.launchpad.controller.LaunchpadColorManager;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
 import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
 import de.mossgrabers.framework.controller.ButtonID;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ISceneBank;
@@ -145,7 +145,7 @@ public class SessionView extends AbstractSessionView<LaunchpadControlSurface, La
             return;
 
         final ITrackBank tb = this.model.getCurrentTrackBank ();
-        final PadGrid pads = this.surface.getPadGrid ();
+        final IPadGrid pads = this.surface.getPadGrid ();
         final ModeManager modeManager = this.surface.getModeManager ();
         for (int x = 0; x < this.columns; x++)
         {

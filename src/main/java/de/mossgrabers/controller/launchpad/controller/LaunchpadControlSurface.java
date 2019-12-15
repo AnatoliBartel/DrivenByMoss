@@ -9,7 +9,7 @@ import de.mossgrabers.controller.launchpad.definition.ILaunchpadControllerDefini
 import de.mossgrabers.framework.controller.AbstractControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGrid;
+import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.DeviceInquiry;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
@@ -168,7 +168,7 @@ public class LaunchpadControlSurface extends AbstractControlSurface<LaunchpadCon
             this.output.sendCC (LAUNCHPAD_FADER_1 + index, value);
         else
         {
-            final PadGrid padGrid = this.getPadGrid ();
+            final IPadGrid padGrid = this.getPadGrid ();
 
             if (this.faderPanCache[index])
             {
