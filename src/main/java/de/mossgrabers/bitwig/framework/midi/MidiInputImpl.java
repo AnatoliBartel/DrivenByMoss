@@ -136,6 +136,27 @@ public class MidiInputImpl implements IMidiInput
 
     /** {@inheritDoc} */
     @Override
+    public void bind (final IHwButton button, final BindType type, final int channel, final int control, final int value)
+    {
+        final HardwareButton hardwareButton = ((HwButtonImpl) button).getHardwareButton ();
+
+        final HardwareActionMatcher pressedMatcher;
+        switch (type)
+        {
+            case CC:
+                pressedMatcher = this.port.createCCActionMatcher (channel, control, value);
+                break;
+
+            default:
+                throw new BindException (type);
+        }
+
+        hardwareButton.pressedAction ().setActionMatcher (pressedMatcher);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void bind (final IHwRelativeKnob knob, final BindType type, final int channel, final int control, final RelativeEncoding encoding)
     {
         if (type != BindType.CC)

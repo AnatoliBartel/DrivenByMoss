@@ -5,6 +5,7 @@
 package de.mossgrabers.framework.controller.hardware;
 
 import de.mossgrabers.framework.command.core.TriggerCommand;
+import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.utils.ButtonEvent;
 
 
@@ -21,6 +22,18 @@ public interface IHwButton extends IHwInputControl
      * @param command The command to assign
      */
     void bind (TriggerCommand command);
+
+
+    /**
+     * Bind a midi command coming from a MIDI input to the button.
+     *
+     * @param input The MIDI input
+     * @param type How to bind
+     * @param channel The MIDI channel
+     * @param control The MIDI CC or note to bind
+     * @param value The specific value of the control to bind to
+     */
+    void bind (IMidiInput input, BindType type, int channel, int control, int value);
 
 
     /**

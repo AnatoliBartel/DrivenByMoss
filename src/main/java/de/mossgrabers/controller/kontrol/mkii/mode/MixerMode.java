@@ -38,6 +38,31 @@ public class MixerMode extends VolumeMode<KontrolProtocolControlSurface, Kontrol
 
     /** {@inheritDoc} */
     @Override
+    public int getKnobValue (final int index)
+    {
+        // Note: Since we need multiple value (more than 8), index is the MIDI CC of the knob
+
+        final IValueChanger valueChanger = this.model.getValueChanger ();
+        final ITrackBank bank = this.getBank ();
+
+        if (index >= KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME && index < KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME + 8)
+        {
+            final ITrack track = bank.getItem (index - KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME);
+            return valueChanger.toMidiValue (track.getVolume ());
+        }
+
+        if (index >= KontrolProtocolControlSurface.KONTROL_TRACK_PAN && index < KontrolProtocolControlSurface.KONTROL_TRACK_PAN + 8)
+        {
+            final ITrack track = bank.getItem (index - KontrolProtocolControlSurface.KONTROL_TRACK_PAN);
+            return valueChanger.toMidiValue (track.getPan ());
+        }
+
+        return 0;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void updateDisplay ()
     {
         final IValueChanger valueChanger = this.model.getValueChanger ();
@@ -59,12 +84,6 @@ public class MixerMode extends VolumeMode<KontrolProtocolControlSurface, Kontrol
             final int j = 2 * i;
             vuData[j] = valueChanger.toMidiValue (track.getVuLeft ());
             vuData[j + 1] = valueChanger.toMidiValue (track.getVuRight ());
-
-            // TODO Move to button
-            // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME +
-            // i, valueChanger.toMidiValue (track.getVolume ()));
-            // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_TRACK_PAN + i,
-            // valueChanger.toMidiValue (track.getPan ()));
         }
         this.surface.sendKontrolTrackSysEx (KontrolProtocolControlSurface.KONTROL_TRACK_VU, 2, 0, vuData);
 

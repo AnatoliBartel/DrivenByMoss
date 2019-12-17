@@ -55,9 +55,17 @@ public class HwButtonImpl extends AbstractHwButton
 
     /** {@inheritDoc} */
     @Override
-    public void bind (final IMidiInput input, final BindType type, final int channel, final int value)
+    public void bind (final IMidiInput input, final BindType type, final int channel, final int control)
     {
-        input.bind (this, type, channel, value);
+        input.bind (this, type, channel, control);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void bind (final IMidiInput input, final BindType type, final int channel, final int control, final int value)
+    {
+        input.bind (this, type, channel, control, value);
     }
 
 

@@ -52,6 +52,32 @@ public class SendMode extends AbstractTrackMode<KontrolProtocolControlSurface, K
 
     /** {@inheritDoc} */
     @Override
+    public int getKnobValue (final int index)
+    {
+        // Note: Since we need multiple value (more than 8), index is the MIDI CC of the knob
+
+        final IValueChanger valueChanger = this.model.getValueChanger ();
+        final ITrack selectedTrack = this.getBank ().getSelectedItem ();
+        final ISendBank sendBank = selectedTrack == null ? null : selectedTrack.getSendBank ();
+
+        if (index >= KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME && index < KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME + 8)
+        {
+            final ISend send = sendBank == null ? EmptySend.INSTANCE : sendBank.getItem (index - KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME);
+            return valueChanger.toMidiValue (send.getValue ());
+        }
+
+        if (index >= KontrolProtocolControlSurface.KONTROL_TRACK_PAN && index < KontrolProtocolControlSurface.KONTROL_TRACK_PAN + 8)
+        {
+            final ISend send = sendBank == null ? EmptySend.INSTANCE : sendBank.getItem (index - KontrolProtocolControlSurface.KONTROL_TRACK_PAN);
+            return valueChanger.toMidiValue (send.getValue ());
+        }
+
+        return 0;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void updateDisplay ()
     {
         final IValueChanger valueChanger = this.model.getValueChanger ();
@@ -73,12 +99,6 @@ public class SendMode extends AbstractTrackMode<KontrolProtocolControlSurface, K
             final int j = 2 * i;
             vuData[j] = valueChanger.toMidiValue (send.getModulatedValue ());
             vuData[j + 1] = valueChanger.toMidiValue (send.getModulatedValue ());
-
-            // TODO Move to button
-            // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME +
-            // i, valueChanger.toMidiValue (send.getValue ()));
-            // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_TRACK_PAN + i,
-            // valueChanger.toMidiValue (send.getValue ()));
         }
         this.surface.sendKontrolTrackSysEx (KontrolProtocolControlSurface.KONTROL_TRACK_VU, 2, 0, vuData);
 

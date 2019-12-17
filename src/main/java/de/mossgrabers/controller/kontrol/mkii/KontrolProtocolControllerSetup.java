@@ -53,6 +53,7 @@ import de.mossgrabers.framework.mode.Mode;
 import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.mode.Modes;
 import de.mossgrabers.framework.scale.Scales;
+import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.utils.FrameworkException;
 import de.mossgrabers.framework.utils.OperatingSystem;
 import de.mossgrabers.framework.view.ViewManager;
@@ -251,6 +252,27 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
             final ITrack selectedTrack = tb.getSelectedItem ();
             return selectedTrack != null && selectedTrack.isSolo () ? 1 : 0;
         });
+
+        this.addButtons (surface, 0, 8, ButtonID.ROW_SELECT_1, "Select", (event, index) -> {
+            if (event == ButtonEvent.DOWN)
+                this.model.getCurrentTrackBank ().getItem (index).select ();
+        }, 15, KontrolProtocolControlSurface.KONTROL_TRACK_SELECTED, index -> this.model.getTrackBank ().getItem (index).isSelected () ? 1 : 0);
+
+        this.addButtons (surface, 0, 8, ButtonID.ROW1_1, "Mute", (event, index) -> {
+            if (event == ButtonEvent.DOWN)
+                this.model.getTrackBank ().getItem (index).toggleMute ();
+        }, 15, KontrolProtocolControlSurface.KONTROL_TRACK_MUTE, index -> this.model.getTrackBank ().getItem (index).isMute () ? 1 : 0);
+
+        this.addButtons (surface, 0, 8, ButtonID.ROW2_1, "Solo", (event, index) -> {
+            if (event == ButtonEvent.DOWN)
+                this.model.getTrackBank ().getItem (index).toggleSolo ();
+        }, 15, KontrolProtocolControlSurface.KONTROL_TRACK_SOLO, index -> this.model.getTrackBank ().getItem (index).isSolo () ? 1 : 0);
+
+        this.addButtons (surface, 0, 8, ButtonID.ROW3_1, "Arm", (event, index) -> {
+            if (event == ButtonEvent.DOWN)
+                this.model.getTrackBank ().getItem (index).toggleRecArm ();
+        }, 15, KontrolProtocolControlSurface.KONTROL_TRACK_RECARM, index -> this.model.getTrackBank ().getItem (index).isRecArm () ? 1 : 0);
+
         this.addButton (ButtonID.F1, "", NopCommand.INSTANCE, 15, KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_AVAILABLE);
         this.addButton (ButtonID.F2, "", NopCommand.INSTANCE, 15, KontrolProtocolControlSurface.KONTROL_SELECTED_TRACK_MUTED_BY_SOLO);
     }
@@ -337,27 +359,21 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
             }
         }, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES);
 
-        this.addFader (ContinuousID.MOVE_TRANSPORT, "Move Transport", value -> this.changeTransportPosition (value, 0), BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_MOVE_TRANSPORT);
-        this.addFader (ContinuousID.MOVE_LOOP, "Move Loop", this::changeLoopPosition, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_MOVE_LOOP);
+        this.addRelativeKnob (ContinuousID.MOVE_TRANSPORT, "Move Transport", value -> this.changeTransportPosition (value, 0), BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_MOVE_TRANSPORT);
+        this.addRelativeKnob (ContinuousID.MOVE_LOOP, "Move Loop", this::changeLoopPosition, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_MOVE_LOOP);
 
         // Only on S models
         this.addFader (ContinuousID.NAVIGATE_VOLUME, "Navigate Volume", value -> this.changeTransportPosition (value, 1), BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_CHANGE_SELECTED_TRACK_VOLUME);
         this.addFader (ContinuousID.NAVIGATE_PAN, "Navigate Pan", value -> this.changeTransportPosition (value, 2), BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_CHANGE_SELECTED_TRACK_PAN);
 
-        // TODO Fix
-        this.addFader (ContinuousID.TRACK_SELECT, "Track Select", value -> this.model.getCurrentTrackBank ().getItem (value).select (), BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_TRACK_SELECTED);
-        this.addFader (ContinuousID.TRACK_MUTE, "Track Mute", value -> {
-            this.model.getTrackBank ().getItem (value).toggleMute ();
-        }, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_TRACK_MUTE);
-        this.addFader (ContinuousID.TRACK_SOLO, "Track Solo", value -> this.model.getTrackBank ().getItem (value).toggleSolo (), BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_TRACK_SOLO);
-        this.addFader (ContinuousID.TRACK_ARM, "Track Rec Arm", value -> this.model.getTrackBank ().getItem (value).toggleRecArm (), BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_TRACK_RECARM);
-
         for (int i = 0; i < 8; i++)
         {
             final int index = i;
             final KnobRowModeCommand<KontrolProtocolControlSurface, KontrolProtocolConfiguration> knobCommand = new KnobRowModeCommand<> (index, this.model, surface);
-            this.addFader (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), knobCommand, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME + i);
-            this.addFader (ContinuousID.get (ContinuousID.FADER1, i), "Fader " + (i + 1), value -> {
+
+            this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), knobCommand, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME + i);
+
+            this.addRelativeKnob (ContinuousID.get (ContinuousID.FADER1, i), "Fader " + (i + 1), value -> {
                 if (this.getSurface ().getModeManager ().isActiveMode (Modes.VOLUME))
                     this.model.getTrackBank ().getItem (index).changePan (value);
                 else
@@ -392,38 +408,71 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
         surface.getButton (ButtonID.MUTE).setBounds (194.0, 43.0, 24.25, 22.75);
         surface.getButton (ButtonID.SOLO).setBounds (226.25, 43.0, 24.25, 22.75);
 
+        surface.getButton (ButtonID.ROW_SELECT_1).setBounds (276.0, 43.0, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW_SELECT_2).setBounds (330.5, 43.0, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW_SELECT_3).setBounds (385.0, 43.0, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW_SELECT_4).setBounds (439.5, 43.0, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW_SELECT_5).setBounds (494.0, 43.0, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW_SELECT_6).setBounds (548.5, 43.0, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW_SELECT_7).setBounds (602.75, 43.0, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW_SELECT_8).setBounds (657.25, 43.0, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW1_1).setBounds (276.0, 67.5, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW1_2).setBounds (330.5, 67.5, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW1_3).setBounds (385.0, 67.5, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW1_4).setBounds (439.5, 67.5, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW1_5).setBounds (494.0, 67.5, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW1_6).setBounds (548.5, 67.5, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW1_7).setBounds (602.75, 67.5, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW1_8).setBounds (657.25, 67.5, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW2_1).setBounds (276.0, 92.25, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW2_2).setBounds (330.5, 92.25, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW2_3).setBounds (385.0, 92.25, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW2_4).setBounds (439.5, 92.25, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW2_5).setBounds (494.0, 92.25, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW2_6).setBounds (548.5, 92.25, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW2_7).setBounds (602.75, 92.25, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW2_8).setBounds (657.25, 92.25, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW3_1).setBounds (276.0, 116.75, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW3_2).setBounds (330.5, 116.75, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW3_3).setBounds (385.0, 116.75, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW3_4).setBounds (439.5, 116.75, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW3_5).setBounds (494.0, 116.75, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW3_6).setBounds (548.5, 116.75, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW3_7).setBounds (602.75, 116.75, 39.75, 16.0);
+        surface.getButton (ButtonID.ROW3_8).setBounds (657.25, 116.75, 39.75, 16.0);
+
+        surface.getButton (ButtonID.CLIP).setBounds (28.0, 258.25, 31.75, 22.75);
+        surface.getButton (ButtonID.STOP_CLIP).setBounds (65.5, 258.25, 31.75, 22.75);
+        surface.getButton (ButtonID.SCENE1).setBounds (103.25, 258.25, 31.75, 22.75);
+
         surface.getButton (ButtonID.F1).setBounds (637.5, 1.25, 31.75, 22.75);
         surface.getButton (ButtonID.F2).setBounds (675.25, 1.25, 31.75, 22.75);
 
-        surface.getContinuous (ContinuousID.MOVE_TRACK_BANK).setBounds (270.75, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.MOVE_TRACK).setBounds (289.25, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.NAVIGATE_CLIPS).setBounds (307.75, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.NAVIGATE_SCENES).setBounds (326.5, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.MOVE_TRANSPORT).setBounds (345.0, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.MOVE_LOOP).setBounds (363.5, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.NAVIGATE_VOLUME).setBounds (382.0, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.NAVIGATE_PAN).setBounds (400.5, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.TRACK_SELECT).setBounds (419.25, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.TRACK_MUTE).setBounds (437.75, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.TRACK_SOLO).setBounds (456.25, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.TRACK_ARM).setBounds (474.75, 159.0, 10.0, 112.0);
+        surface.getContinuous (ContinuousID.MOVE_TRACK_BANK).setBounds (208.5, 218.0, 10.0, 66.0);
+        surface.getContinuous (ContinuousID.MOVE_TRACK).setBounds (227.0, 218.0, 10.0, 66.0);
+        surface.getContinuous (ContinuousID.NAVIGATE_CLIPS).setBounds (245.5, 218.75, 10.0, 66.0);
+        surface.getContinuous (ContinuousID.NAVIGATE_SCENES).setBounds (264.25, 218.0, 10.0, 66.0);
+        surface.getContinuous (ContinuousID.MOVE_TRANSPORT).setBounds (282.75, 218.0, 10.0, 66.0);
+        surface.getContinuous (ContinuousID.MOVE_LOOP).setBounds (301.25, 218.0, 10.0, 66.0);
+        surface.getContinuous (ContinuousID.NAVIGATE_VOLUME).setBounds (319.75, 218.0, 10.0, 66.0);
+        surface.getContinuous (ContinuousID.NAVIGATE_PAN).setBounds (338.25, 218.0, 10.0, 66.0);
 
-        surface.getContinuous (ContinuousID.KNOB1).setBounds (493.25, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.FADER1).setBounds (512.0, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.KNOB2).setBounds (530.5, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.FADER2).setBounds (549.0, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.KNOB3).setBounds (567.5, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.FADER3).setBounds (586.0, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.KNOB4).setBounds (604.75, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.FADER4).setBounds (623.25, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.KNOB5).setBounds (641.75, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.FADER5).setBounds (660.25, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.KNOB6).setBounds (678.75, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.FADER6).setBounds (697.5, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.KNOB7).setBounds (716.0, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.FADER7).setBounds (734.5, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.KNOB8).setBounds (753.0, 159.0, 10.0, 112.0);
-        surface.getContinuous (ContinuousID.FADER8).setBounds (771.5, 159.0, 10.0, 112.0);
+        surface.getContinuous (ContinuousID.KNOB1).setBounds (284.0, 143.25, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.FADER1).setBounds (284.0, 178.5, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.KNOB2).setBounds (338.25, 143.25, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.FADER2).setBounds (338.25, 178.5, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.KNOB3).setBounds (392.5, 143.25, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.FADER3).setBounds (392.75, 178.5, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.KNOB4).setBounds (446.75, 143.25, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.FADER4).setBounds (447.0, 178.5, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.KNOB5).setBounds (501.25, 143.25, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.FADER5).setBounds (501.25, 178.5, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.KNOB6).setBounds (555.5, 143.25, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.FADER6).setBounds (555.75, 178.5, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.KNOB7).setBounds (609.75, 143.25, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.FADER7).setBounds (610.0, 178.5, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.KNOB8).setBounds (664.25, 143.25, 28.0, 29.25);
+        surface.getContinuous (ContinuousID.FADER8).setBounds (664.25, 178.5, 28.0, 29.25);
     }
 
 

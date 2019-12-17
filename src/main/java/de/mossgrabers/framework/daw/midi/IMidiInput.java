@@ -78,6 +78,18 @@ public interface IMidiInput
 
 
     /**
+     * Bind a midi command coming from a MIDI input to the button.
+     *
+     * @param button The button to bind
+     * @param type How to bind
+     * @param channel The MIDI channel
+     * @param control The MIDI CC or note to bind
+     * @param value The specific value of the control to bind to
+     */
+    void bind (IHwButton button, BindType type, int channel, int control, int value);
+
+
+    /**
      * Bind the given fader to a MIDI command received on this midi input.
      *
      * @param fader The fader to bind
