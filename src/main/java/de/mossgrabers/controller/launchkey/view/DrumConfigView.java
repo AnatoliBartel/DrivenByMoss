@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.launchkey.view;
 
 import de.mossgrabers.controller.launchkey.LaunchkeyMiniMk3Configuration;
-import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3Colors;
+import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ColorManager;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.grid.IPadGrid;
@@ -89,18 +89,18 @@ public class DrumConfigView extends AbstractView<LaunchkeyMiniMk3ControlSurface,
 
         final IPadGrid padGrid = this.surface.getPadGrid ();
         for (int x = 0; x < 8; x++)
-            padGrid.lightEx (x, 0, view.getResolutionIndex () == x ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLUE_HI : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLUE_LO);
+            padGrid.lightEx (x, 0, view.getResolutionIndex () == x ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLUE_HI : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLUE_LO);
 
-        padGrid.lightEx (0, 1, clip.canScrollStepsBackwards () ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_LIME_HI : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_LIME_LO);
-        padGrid.lightEx (1, 1, clip.canScrollStepsForwards () ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_LIME_HI : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_LIME_LO);
+        padGrid.lightEx (0, 1, clip.canScrollStepsBackwards () ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_LIME_HI : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_LIME_LO);
+        padGrid.lightEx (1, 1, clip.canScrollStepsForwards () ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_LIME_HI : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_LIME_LO);
 
-        padGrid.lightEx (2, 1, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
-        padGrid.lightEx (3, 1, this.model.getTransport ().isMetronomeOn () ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED_HI : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED_LO);
-        padGrid.lightEx (4, 1, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
-        padGrid.lightEx (5, 1, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
+        padGrid.lightEx (2, 1, LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK);
+        padGrid.lightEx (3, 1, this.model.getTransport ().isMetronomeOn () ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_RED_HI : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_RED_LO);
+        padGrid.lightEx (4, 1, LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK);
+        padGrid.lightEx (5, 1, LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK);
 
-        padGrid.lightEx (6, 1, this.scales.canScrollDrumOctaveUp () ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_CYAN_HI : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_CYAN_LO);
-        padGrid.lightEx (7, 1, this.scales.canScrollDrumOctaveDown () ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_CYAN_HI : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_CYAN_LO);
+        padGrid.lightEx (6, 1, this.scales.canScrollDrumOctaveUp () ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_CYAN_HI : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_CYAN_LO);
+        padGrid.lightEx (7, 1, this.scales.canScrollDrumOctaveDown () ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_CYAN_HI : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_CYAN_LO);
     }
 
 
@@ -109,8 +109,8 @@ public class DrumConfigView extends AbstractView<LaunchkeyMiniMk3ControlSurface,
     public int getButtonColor (final ButtonID buttonID)
     {
         if (buttonID == ButtonID.SCENE1)
-            return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK;
-        return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE;
+            return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK;
+        return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_WHITE;
     }
 
 

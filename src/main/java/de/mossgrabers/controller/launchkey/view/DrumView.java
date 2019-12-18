@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.launchkey.view;
 
 import de.mossgrabers.controller.launchkey.LaunchkeyMiniMk3Configuration;
-import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3Colors;
+import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ColorManager;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ControlSurface;
 import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
@@ -136,16 +136,16 @@ public class DrumView extends AbstractDrumView<LaunchkeyMiniMk3ControlSurface, L
     private int getStepColor (final ICursorDevice primary)
     {
         if (this.selectedPad < 0)
-            return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK;
+            return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK;
 
         // If we cannot get the color from the drum pads use a default color
         if (!primary.getName ().equals ("Drum Machine"))
-            return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLUE;
+            return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLUE;
 
         // Exists and active?
         final IChannel drumPad = primary.getDrumPadBank ().getItem (this.selectedPad);
         if (!drumPad.doesExist () || !drumPad.isActivated ())
-            return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK;
+            return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK;
 
         return this.model.getColorManager ().getColorIndex (DAWColor.getColorIndex (drumPad.getColor ()));
     }
@@ -154,8 +154,8 @@ public class DrumView extends AbstractDrumView<LaunchkeyMiniMk3ControlSurface, L
     private static int getSequencerPadColor (final int isSet, final boolean hilite, final int stepColor)
     {
         if (isSet > 0)
-            return hilite ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREEN : stepColor;
-        return hilite ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREEN : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK;
+            return hilite ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_GREEN : stepColor;
+        return hilite ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_GREEN : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK;
     }
 
     // /** {@inheritDoc} */

@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.launchkey.view;
 
 import de.mossgrabers.controller.launchkey.LaunchkeyMiniMk3Configuration;
-import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3Colors;
+import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ColorManager;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.IModel;
@@ -61,6 +61,6 @@ public class UserPadView extends AbstractView<LaunchkeyMiniMk3ControlSurface, La
     @Override
     public int getButtonColor (final ButtonID buttonID)
     {
-        return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK;
+        return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK;
     }
 }

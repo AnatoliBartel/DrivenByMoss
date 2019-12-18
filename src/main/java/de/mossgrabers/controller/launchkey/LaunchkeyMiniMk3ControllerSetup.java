@@ -4,7 +4,7 @@
 
 package de.mossgrabers.controller.launchkey;
 
-import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3Colors;
+import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ColorManager;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ControlSurface;
 import de.mossgrabers.controller.launchkey.view.DrumConfigView;
 import de.mossgrabers.controller.launchkey.view.DrumView;
@@ -23,7 +23,6 @@ import de.mossgrabers.framework.controller.AbstractControllerSetup;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.ISetupFactory;
-import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.valuechanger.DefaultValueChanger;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IHost;
@@ -100,8 +99,7 @@ public class LaunchkeyMiniMk3ControllerSetup extends AbstractControllerSetup<Lau
     {
         super (factory, host, globalSettings, documentSettings);
 
-        this.colorManager = new ColorManager ();
-        LaunchkeyMiniMk3Colors.addColors (this.colorManager);
+        this.colorManager = new LaunchkeyMiniMk3ColorManager ();
         this.valueChanger = new DefaultValueChanger (128, 1, 0.5);
         this.configuration = new LaunchkeyMiniMk3Configuration (host, this.valueChanger);
     }
@@ -145,6 +143,8 @@ public class LaunchkeyMiniMk3ControllerSetup extends AbstractControllerSetup<Lau
         this.surfaces.add (surface);
 
         surface.setLaunchpadToDAW (true);
+
+        surface.addPianoKeyboard (25, inputKeys);
     }
 
 
@@ -244,6 +244,50 @@ public class LaunchkeyMiniMk3ControllerSetup extends AbstractControllerSetup<Lau
         // surface.getDisplay ().notify (viewManager.getActiveView ().getName ());
         // surface.getPadGrid ().setView (view);
         // });
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    protected void layoutControls ()
+    {
+        final LaunchkeyMiniMk3ControlSurface surface = this.getSurface ();
+
+        surface.getButton (ButtonID.PAD1).setBounds (193.5, 127.75, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD2).setBounds (247.0, 127.75, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD3).setBounds (301.0, 127.75, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD4).setBounds (354.75, 127.75, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD5).setBounds (408.0, 127.75, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD6).setBounds (462.5, 127.75, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD7).setBounds (516.25, 127.75, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD8).setBounds (570.0, 127.75, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD9).setBounds (193.5, 75.5, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD10).setBounds (247.0, 75.5, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD11).setBounds (301.0, 75.5, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD12).setBounds (354.75, 75.5, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD13).setBounds (408.0, 75.5, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD14).setBounds (462.5, 75.5, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD15).setBounds (516.25, 75.5, 47.0, 46.5);
+        surface.getButton (ButtonID.PAD16).setBounds (570.0, 75.5, 47.0, 46.5);
+
+        surface.getButton (ButtonID.SHIFT).setBounds (138.0, 31.0, 38.5, 19.25);
+        surface.getButton (ButtonID.PLAY).setBounds (687.0, 155.0, 38.5, 19.25);
+        surface.getButton (ButtonID.RECORD).setBounds (732.25, 155.0, 38.5, 19.25);
+        surface.getButton (ButtonID.MOVE_TRACK_LEFT).setBounds (687.0, 102.75, 38.5, 19.25);
+        surface.getButton (ButtonID.MOVE_TRACK_RIGHT).setBounds (732.25, 102.75, 38.5, 19.25);
+        surface.getButton (ButtonID.SCENE1).setBounds (623.75, 75.5, 47.0, 46.5);
+        surface.getButton (ButtonID.SCENE2).setBounds (623.75, 127.75, 47.0, 46.5);
+
+        surface.getContinuous (ContinuousID.KNOB1).setBounds (203.0, 25.25, 25.5, 25.0);
+        surface.getContinuous (ContinuousID.KNOB2).setBounds (256.75, 25.25, 25.5, 25.0);
+        surface.getContinuous (ContinuousID.KNOB3).setBounds (310.75, 25.25, 25.5, 25.0);
+        surface.getContinuous (ContinuousID.KNOB4).setBounds (364.5, 25.25, 25.5, 25.0);
+        surface.getContinuous (ContinuousID.KNOB5).setBounds (418.5, 25.25, 25.5, 25.0);
+        surface.getContinuous (ContinuousID.KNOB6).setBounds (472.25, 25.25, 25.5, 25.0);
+        surface.getContinuous (ContinuousID.KNOB7).setBounds (526.25, 25.25, 25.5, 25.0);
+        surface.getContinuous (ContinuousID.KNOB8).setBounds (580.0, 25.25, 25.5, 25.0);
+
+        surface.getPianoKeyboard ().setBounds (38.25, 223.0, 726.75, 175.75);
     }
 
 

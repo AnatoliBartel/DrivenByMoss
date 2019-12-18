@@ -5,7 +5,7 @@
 package de.mossgrabers.controller.launchkey.view;
 
 import de.mossgrabers.controller.launchkey.LaunchkeyMiniMk3Configuration;
-import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3Colors;
+import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ColorManager;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
@@ -53,13 +53,13 @@ public class SessionView extends AbstractSessionView<LaunchkeyMiniMk3ControlSurf
     {
         super ("Session", surface, model, 2, 8, true);
 
-        final SessionColor isRecording = new SessionColor (LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED, false);
-        final SessionColor isRecordingQueued = new SessionColor (LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED_LO, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED_LO, true);
-        final SessionColor isPlaying = new SessionColor (LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREEN_SPRING, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREEN, false);
-        final SessionColor isPlayingQueued = new SessionColor (LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREEN_SPRING, LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREEN, true);
-        final SessionColor hasContent = new SessionColor (LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_AMBER, -1, false);
-        final SessionColor noContent = new SessionColor (LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK, -1, false);
-        final SessionColor recArmed = new SessionColor (LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED_LO, -1, false);
+        final SessionColor isRecording = new SessionColor (LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_RED, LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_RED, false);
+        final SessionColor isRecordingQueued = new SessionColor (LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_RED_LO, LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_RED_LO, true);
+        final SessionColor isPlaying = new SessionColor (LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_GREEN_SPRING, LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_GREEN, false);
+        final SessionColor isPlayingQueued = new SessionColor (LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_GREEN_SPRING, LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_GREEN, true);
+        final SessionColor hasContent = new SessionColor (LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_AMBER, -1, false);
+        final SessionColor noContent = new SessionColor (LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK, -1, false);
+        final SessionColor recArmed = new SessionColor (LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_RED_LO, -1, false);
         this.setColors (isRecording, isRecordingQueued, isPlaying, isPlayingQueued, hasContent, noContent, recArmed);
     }
 
@@ -90,17 +90,17 @@ public class SessionView extends AbstractSessionView<LaunchkeyMiniMk3ControlSurf
         switch (this.padMode)
         {
             case REC_ARM:
-                return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED_HI;
+                return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_RED_HI;
             case TRACK_SELECT:
-                return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE;
+                return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_WHITE;
             case MUTE:
-                return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_AMBER_HI;
+                return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_AMBER_HI;
             case SOLO:
-                return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_YELLOW_HI;
+                return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_YELLOW_HI;
             case STOP_CLIP:
-                return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_ROSE;
+                return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_ROSE;
             default:
-                return LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK;
+                return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK;
         }
     }
 
@@ -126,19 +126,19 @@ public class SessionView extends AbstractSessionView<LaunchkeyMiniMk3ControlSurf
             switch (this.padMode)
             {
                 case REC_ARM:
-                    pads.lightEx (x, 1, exists ? track.isRecArm () ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED_HI : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_RED_LO : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
+                    pads.lightEx (x, 1, exists ? track.isRecArm () ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_RED_HI : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_RED_LO : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK);
                     break;
                 case TRACK_SELECT:
-                    pads.lightEx (x, 1, exists ? track.isSelected () ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_WHITE : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREY_LO : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
+                    pads.lightEx (x, 1, exists ? track.isSelected () ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_WHITE : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_GREY_LO : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK);
                     break;
                 case MUTE:
-                    pads.lightEx (x, 1, exists ? track.isMute () ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_AMBER_HI : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_AMBER_LO : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
+                    pads.lightEx (x, 1, exists ? track.isMute () ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_AMBER_HI : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_AMBER_LO : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK);
                     break;
                 case SOLO:
-                    pads.lightEx (x, 1, exists ? track.isSolo () ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_YELLOW_HI : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_YELLOW_LO : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
+                    pads.lightEx (x, 1, exists ? track.isSolo () ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_YELLOW_HI : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_YELLOW_LO : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK);
                     break;
                 case STOP_CLIP:
-                    pads.lightEx (x, 1, exists ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_ROSE : LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLACK);
+                    pads.lightEx (x, 1, exists ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_ROSE : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK);
                     break;
                 default:
                     // Unused

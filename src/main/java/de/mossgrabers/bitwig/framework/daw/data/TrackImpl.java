@@ -370,7 +370,7 @@ public class TrackImpl extends ChannelImpl implements ITrack
     @Override
     public void createClip (final int slotIndex, final int lengthInBeats)
     {
-        this.track.createNewClip (slotIndex, lengthInBeats);
+        this.track.createNewLauncherClip (slotIndex, lengthInBeats);
     }
 
 

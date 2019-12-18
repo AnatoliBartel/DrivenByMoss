@@ -73,8 +73,7 @@ public class LaunchkeyMiniMk3ControlSurface extends AbstractControlSurface<Launc
      */
     public LaunchkeyMiniMk3ControlSurface (final IHost host, final ColorManager colorManager, final LaunchkeyMiniMk3Configuration configuration, final IMidiOutput output, final IMidiInput input, final IMidiInput inputKeys, final ContinuousCommand pageAdjuster)
     {
-        // TODO size
-        super (host, configuration, colorManager, output, input, new LaunchkeyPadGrid (colorManager, output), 100, 50);
+        super (host, configuration, colorManager, output, input, new LaunchkeyPadGrid (colorManager, output), 800, 400);
 
         this.pageAdjuster = pageAdjuster;
 
