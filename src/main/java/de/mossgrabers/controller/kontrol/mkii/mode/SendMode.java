@@ -72,7 +72,23 @@ public class SendMode extends AbstractTrackMode<KontrolProtocolControlSurface, K
             return valueChanger.toMidiValue (send.getValue ());
         }
 
-        return 0;
+        final int scrollTracksState = (sendBank != null && sendBank.canScrollPageBackwards () ? 1 : 0) + (sendBank != null && sendBank.canScrollPageForwards () ? 2 : 0);
+        final int scrollScenesState = 0;
+
+        final KontrolProtocolConfiguration configuration = this.surface.getConfiguration ();
+        switch (index)
+        {
+            case KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS:
+                return scrollTracksState;
+            case KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS:
+                return configuration.isFlipTrackClipNavigation () ? scrollScenesState : scrollTracksState;
+            case KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS:
+                return configuration.isFlipTrackClipNavigation () ? scrollTracksState : scrollScenesState;
+            case KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES:
+                return configuration.isFlipTrackClipNavigation () ? scrollTracksState : scrollScenesState;
+            default:
+                return 0;
+        }
     }
 
 
@@ -101,20 +117,6 @@ public class SendMode extends AbstractTrackMode<KontrolProtocolControlSurface, K
             vuData[j + 1] = valueChanger.toMidiValue (send.getModulatedValue ());
         }
         this.surface.sendKontrolTrackSysEx (KontrolProtocolControlSurface.KONTROL_TRACK_VU, 2, 0, vuData);
-
-        final int scrollTracksState = (sendBank != null && sendBank.canScrollPageBackwards () ? 1 : 0) + (sendBank != null && sendBank.canScrollPageForwards () ? 2 : 0);
-        final int scrollScenesState = 0;
-
-        final KontrolProtocolConfiguration configuration = this.surface.getConfiguration ();
-        // TODO Move to button
-        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS,
-        // scrollTracksState);
-        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS,
-        // configuration.isFlipTrackClipNavigation () ? scrollScenesState : scrollTracksState);
-        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS,
-        // configuration.isFlipTrackClipNavigation () ? scrollTracksState : scrollScenesState);
-        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES,
-        // configuration.isFlipTrackClipNavigation () ? scrollTracksState : scrollScenesState);
     }
 
 

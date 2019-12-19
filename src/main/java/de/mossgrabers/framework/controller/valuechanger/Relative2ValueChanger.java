@@ -5,7 +5,7 @@
 package de.mossgrabers.framework.controller.valuechanger;
 
 /**
- * The MCU value changer.
+ * The MCU value changer (@see RelativeEncoding.SIGNED_BIT).
  *
  * @author J&uuml;rgen Mo&szlig;graber
  */

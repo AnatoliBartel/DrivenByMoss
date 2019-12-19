@@ -37,7 +37,7 @@ public class MCUColorManager extends ColorManager
     @Override
     public ColorEx getColor (final int colorIndex, final ButtonID buttonID)
     {
-        if (colorIndex <= 1)
+        if (colorIndex <= 0)
             return ColorEx.BLACK;
 
         if (buttonID == null)

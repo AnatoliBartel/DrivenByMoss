@@ -10,6 +10,9 @@ import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.utils.ButtonEvent;
 
+import java.util.function.IntConsumer;
+import java.util.function.IntSupplier;
+
 
 /**
  * A control on a hardware controller.
@@ -22,6 +25,10 @@ public abstract class AbstractHwContinuousControl extends AbstractHwInputControl
     protected TriggerCommand    touchCommand;
     protected PitchbendCommand  pitchbendCommand;
     protected boolean           isTouched;
+
+    private IntSupplier         supplier;
+    private IntConsumer         consumer;
+    private int                 outputValue = -1;
 
 
     /**
@@ -92,5 +99,29 @@ public abstract class AbstractHwContinuousControl extends AbstractHwInputControl
     public boolean isTouched ()
     {
         return this.isTouched;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void addOutput (final IntSupplier supplier, final IntConsumer consumer)
+    {
+        this.supplier = supplier;
+        this.consumer = consumer;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void update ()
+    {
+        if (this.supplier == null)
+            return;
+
+        final int value = this.supplier.getAsInt ();
+        if (value == this.outputValue)
+            return;
+        this.outputValue = value;
+        this.consumer.accept (this.outputValue);
     }
 }

@@ -74,7 +74,8 @@ import de.mossgrabers.framework.controller.OutputID;
 import de.mossgrabers.framework.controller.hardware.BindType;
 import de.mossgrabers.framework.controller.hardware.IHwFader;
 import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
-import de.mossgrabers.framework.controller.valuechanger.Relative2ValueChanger;
+import de.mossgrabers.framework.controller.valuechanger.DefaultValueChanger;
+import de.mossgrabers.framework.controller.valuechanger.RelativeEncoding;
 import de.mossgrabers.framework.daw.IApplication;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IHost;
@@ -161,7 +162,7 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
         Arrays.fill (this.masterVuValues, -1);
 
         this.colorManager = new MCUColorManager ();
-        this.valueChanger = new Relative2ValueChanger (16241 + 1, 100, 10);
+        this.valueChanger = new DefaultValueChanger (16241 + 1, 100, 10);
         this.configuration = new MCUConfiguration (host, this.valueChanger);
     }
 
@@ -468,7 +469,7 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
         MCUControlSurface surface = this.getSurface ();
         IMidiInput input = surface.getMidiInput ();
 
-        this.addRelativeKnob (ContinuousID.PLAY_POSITION, "Jog Wheel", new PlayPositionTempoCommand (this.model, surface), MCUControlSurface.MCU_CC_JOG);
+        this.addRelativeKnob (ContinuousID.PLAY_POSITION, "Jog Wheel", new PlayPositionTempoCommand (this.model, surface), MCUControlSurface.MCU_CC_JOG, RelativeEncoding.SIGNED_BIT);
 
         final IHwFader master = this.addFader (ContinuousID.FADER_MASTER, "Master", new PitchbendVolumeCommand (8, this.model, surface), 8);
         master.bindTouch (new SelectCommand (8, this.model, surface), input, BindType.NOTE, MCUControlSurface.MCU_FADER_MASTER);
@@ -480,7 +481,7 @@ public class MCUControllerSetup extends AbstractControllerSetup<MCUControlSurfac
 
             for (int i = 0; i < 8; i++)
             {
-                final IHwRelativeKnob knob = this.addRelativeKnob (surface, ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + i, new KnobRowModeCommand<> (i, this.model, surface), MCUControlSurface.MCU_CC_VPOT1 + i);
+                final IHwRelativeKnob knob = this.addRelativeKnob (surface, ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + i, new KnobRowModeCommand<> (i, this.model, surface), MCUControlSurface.MCU_CC_VPOT1 + i, RelativeEncoding.SIGNED_BIT);
                 knob.bindTouch (new ButtonRowModeCommand<> (0, i, this.model, surface), input, BindType.NOTE, MCUControlSurface.MCU_VSELECT1 + i);
 
                 final IHwFader fader = this.addFader (surface, ContinuousID.get (ContinuousID.FADER1, i), "Fader " + (i + 1), new PitchbendVolumeCommand (i, this.model, surface), i);

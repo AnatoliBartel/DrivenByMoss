@@ -832,5 +832,6 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
     {
         this.textDisplays.forEach (ITextDisplay::flush);
         this.surfaceFactory.flush ();
+        this.continuous.values ().forEach (IHwContinuousControl::update);
     }
 }

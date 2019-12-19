@@ -9,6 +9,9 @@ import de.mossgrabers.framework.command.core.PitchbendCommand;
 import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 
+import java.util.function.IntConsumer;
+import java.util.function.IntSupplier;
+
 
 /**
  * A control on a controller surface which sends continuous values.
@@ -90,4 +93,13 @@ public interface IHwContinuousControl extends IHwInputControl
      * @param value The new value
      */
     void handleValue (double value);
+
+
+    /**
+     * Add an output which represents the value of the knob, e.g. an LED ring.
+     *
+     * @param supplier The supplier of the value
+     * @param consumer Send the value to the hardware
+     */
+    void addOutput (IntSupplier supplier, IntConsumer consumer);
 }

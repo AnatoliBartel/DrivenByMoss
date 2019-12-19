@@ -8,7 +8,6 @@ import de.mossgrabers.controller.kontrol.mkii.command.trigger.KontrolRecordComma
 import de.mossgrabers.controller.kontrol.mkii.command.trigger.StartClipOrSceneCommand;
 import de.mossgrabers.controller.kontrol.mkii.controller.KontrolProtocolColorManager;
 import de.mossgrabers.controller.kontrol.mkii.controller.KontrolProtocolControlSurface;
-import de.mossgrabers.controller.kontrol.mkii.controller.SlowValueChanger;
 import de.mossgrabers.controller.kontrol.mkii.mode.MixerMode;
 import de.mossgrabers.controller.kontrol.mkii.mode.ParamsMode;
 import de.mossgrabers.controller.kontrol.mkii.mode.SendMode;
@@ -38,6 +37,8 @@ import de.mossgrabers.framework.controller.ContinuousID;
 import de.mossgrabers.framework.controller.IControlSurface;
 import de.mossgrabers.framework.controller.ISetupFactory;
 import de.mossgrabers.framework.controller.hardware.BindType;
+import de.mossgrabers.framework.controller.hardware.IHwRelativeKnob;
+import de.mossgrabers.framework.controller.valuechanger.DefaultValueChanger;
 import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.IParameterBank;
@@ -48,6 +49,7 @@ import de.mossgrabers.framework.daw.ITransport;
 import de.mossgrabers.framework.daw.ModelSetup;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.daw.midi.IMidiAccess;
+import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
 import de.mossgrabers.framework.mode.Mode;
 import de.mossgrabers.framework.mode.ModeManager;
@@ -86,7 +88,7 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
 
         this.version = version;
         this.colorManager = new KontrolProtocolColorManager ();
-        this.valueChanger = new SlowValueChanger (1024, 5, 1);
+        this.valueChanger = new DefaultValueChanger (1024, 4, 1);
         this.configuration = new KontrolProtocolConfiguration (host, this.valueChanger);
     }
 
@@ -168,10 +170,13 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
     {
         final IMidiAccess midiAccess = this.factory.createMidiAccess ();
         final IMidiOutput output = midiAccess.createOutput ();
-        midiAccess.createInput (1, "Keyboard", "80????" /* Note off */, "90????" /* Note on */,
-                "B0????" /* Sustainpedal + Modulation + Strip */, "D0????" /* Channel Aftertouch */,
-                "E0????" /* Pitchbend */);
-        this.surfaces.add (new KontrolProtocolControlSurface (this.host, this.colorManager, this.configuration, output, midiAccess.createInput (null), this.version));
+        final IMidiInput pianoInput = midiAccess.createInput (1, "Keyboard", "80????" /* Note off */,
+                "90????" /* Note on */, "B0????" /* Sustainpedal + Modulation + Strip */,
+                "D0????" /* Channel Aftertouch */, "E0????" /* Pitchbend */);
+        final KontrolProtocolControlSurface surface = new KontrolProtocolControlSurface (this.host, this.colorManager, this.configuration, output, midiAccess.createInput (null), this.version);
+        this.surfaces.add (surface);
+
+        surface.addPianoKeyboard (49, pianoInput);
     }
 
 
@@ -286,99 +291,38 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
 
         this.addFader (ContinuousID.HELLO, "Hello", surface::handshakeSuccess, BindType.CC, 15, KontrolProtocolControlSurface.CMD_HELLO);
 
-        this.addFader (ContinuousID.MOVE_TRACK_BANK, "Move Track Bank", value -> {
-            // These are the left/right buttons
-            final Mode activeMode = this.getSurface ().getModeManager ().getActiveOrTempMode ();
-            if (activeMode == null)
-                return;
-            if (value == 1)
-                activeMode.selectNextItemPage ();
-            else
-                activeMode.selectPreviousItemPage ();
-        }, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS);
-
-        this.addFader (ContinuousID.MOVE_TRACK, "Move Track", value -> {
-            if (this.getSurface ().getModeManager ().isActiveMode (Modes.VOLUME))
-            {
-                // This is encoder left/right
-                if (this.configuration.isFlipTrackClipNavigation ())
-                {
-                    if (this.configuration.isFlipClipSceneNavigation ())
-                        this.navigateScenes (value);
-                    else
-                        this.navigateClips (value);
-                }
-                else
-                    this.navigateTracks (value);
-                return;
-            }
-
-            final Mode activeMode = this.getSurface ().getModeManager ().getActiveOrTempMode ();
-            if (activeMode == null)
-                return;
-            if (value == 1)
-                activeMode.selectNextItem ();
-            else
-                activeMode.selectPreviousItem ();
-        }, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS);
-
-        this.addFader (ContinuousID.NAVIGATE_CLIPS, "Navigate Clips", value -> {
-            if (this.getSurface ().getModeManager ().isActiveMode (Modes.VOLUME))
-            {
-                // This is encoder up/down
-                if (this.configuration.isFlipTrackClipNavigation ())
-                    this.navigateTracks (value);
-                else
-                {
-                    if (this.configuration.isFlipClipSceneNavigation ())
-                        this.navigateScenes (value);
-                    else
-                        this.navigateClips (value);
-                }
-                return;
-            }
-
-            final Mode activeMode = this.getSurface ().getModeManager ().getActiveOrTempMode ();
-            if (activeMode == null)
-                return;
-            if (value == 1)
-                activeMode.selectNextItemPage ();
-            else
-                activeMode.selectPreviousItemPage ();
-        }, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS);
-
-        this.addFader (ContinuousID.NAVIGATE_SCENES, "Navigate Scenes", value -> {
-            if (this.configuration.isFlipTrackClipNavigation ())
-                this.navigateTracks (value);
-            else
-            {
-                if (this.configuration.isFlipClipSceneNavigation ())
-                    this.navigateClips (value);
-                else
-                    this.navigateScenes (value);
-            }
-        }, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES);
+        this.addButton (surface, ButtonID.BANK_LEFT, "Left", (event, velocity) -> this.moveTrackBank (event, true), 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS, 127, () -> this.getKnobValue (KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS));
+        this.addButton (surface, ButtonID.BANK_RIGHT, "Right", (event, velocity) -> this.moveTrackBank (event, false), 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS, 1, () -> this.getKnobValue (KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS));
+        this.addButton (surface, ButtonID.MOVE_TRACK_LEFT, "Enc Left", (event, velocity) -> this.moveTrack (event, true), 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS, 127, () -> this.getKnobValue (KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS));
+        this.addButton (surface, ButtonID.MOVE_TRACK_RIGHT, "Enc Right", (event, velocity) -> this.moveTrack (event, false), 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS, 1, () -> this.getKnobValue (KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS));
+        this.addButton (surface, ButtonID.ARROW_UP, "Enc Up", (event, velocity) -> this.moveClips (event, true), 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS, 127, () -> this.getKnobValue (KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS));
+        this.addButton (surface, ButtonID.ARROW_DOWN, "Enc Down", (event, velocity) -> this.moveClips (event, false), 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS, 1, () -> this.getKnobValue (KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS));
+        this.addButton (surface, ButtonID.UP, "Scene Prev", (event, velocity) -> this.moveScenes (event, true), 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES, 127, () -> this.getKnobValue (KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES));
+        this.addButton (surface, ButtonID.DOWN, "Scene Next", (event, velocity) -> this.moveScenes (event, false), 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES, 1, () -> this.getKnobValue (KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES));
 
         this.addRelativeKnob (ContinuousID.MOVE_TRANSPORT, "Move Transport", value -> this.changeTransportPosition (value, 0), BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_MOVE_TRANSPORT);
         this.addRelativeKnob (ContinuousID.MOVE_LOOP, "Move Loop", this::changeLoopPosition, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_NAVIGATE_MOVE_LOOP);
 
         // Only on S models
-        this.addFader (ContinuousID.NAVIGATE_VOLUME, "Navigate Volume", value -> this.changeTransportPosition (value, 1), BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_CHANGE_SELECTED_TRACK_VOLUME);
-        this.addFader (ContinuousID.NAVIGATE_PAN, "Navigate Pan", value -> this.changeTransportPosition (value, 2), BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_CHANGE_SELECTED_TRACK_PAN);
+        this.addRelativeKnob (ContinuousID.NAVIGATE_VOLUME, "Navigate Volume", value -> this.changeTransportPosition (value, 1), BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_CHANGE_SELECTED_TRACK_VOLUME);
+        this.addRelativeKnob (ContinuousID.NAVIGATE_PAN, "Navigate Pan", value -> this.changeTransportPosition (value, 2), BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_CHANGE_SELECTED_TRACK_PAN);
 
         for (int i = 0; i < 8; i++)
         {
             final int index = i;
             final KnobRowModeCommand<KontrolProtocolControlSurface, KontrolProtocolConfiguration> knobCommand = new KnobRowModeCommand<> (index, this.model, surface);
+            final int knobMidi1 = KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME + i;
+            final IHwRelativeKnob knob1 = this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), knobCommand, BindType.CC, 15, knobMidi1);
+            knob1.addOutput ( () -> getKnobValue (knobMidi1), value -> surface.setTrigger (15, knobMidi1, value));
 
-            this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), knobCommand, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME + i);
-
-            this.addRelativeKnob (ContinuousID.get (ContinuousID.FADER1, i), "Fader " + (i + 1), value -> {
+            final int knobMidi2 = KontrolProtocolControlSurface.KONTROL_TRACK_PAN + i;
+            final IHwRelativeKnob knob2 = this.addRelativeKnob (ContinuousID.get (ContinuousID.FADER1, i), "Fader " + (i + 1), value -> {
                 if (this.getSurface ().getModeManager ().isActiveMode (Modes.VOLUME))
                     this.model.getTrackBank ().getItem (index).changePan (value);
                 else
                     knobCommand.execute (value);
             }, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_TRACK_PAN + i);
+            knob2.addOutput ( () -> getKnobValue (knobMidi2), value -> surface.setTrigger (15, knobMidi2, value));
         }
     }
 
@@ -441,6 +385,15 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
         surface.getButton (ButtonID.ROW3_7).setBounds (602.75, 116.75, 39.75, 16.0);
         surface.getButton (ButtonID.ROW3_8).setBounds (657.25, 116.75, 39.75, 16.0);
 
+        surface.getButton (ButtonID.BANK_LEFT).setBounds (188.5, 78.5, 29.75, 20.5);
+        surface.getButton (ButtonID.BANK_RIGHT).setBounds (225.75, 78.5, 29.75, 20.5);
+        surface.getButton (ButtonID.MOVE_TRACK_LEFT).setBounds (705.5, 188.5, 29.75, 20.5);
+        surface.getButton (ButtonID.MOVE_TRACK_RIGHT).setBounds (751.0, 188.5, 29.75, 20.5);
+        surface.getButton (ButtonID.ARROW_UP).setBounds (727.25, 163.25, 29.75, 20.5);
+        surface.getButton (ButtonID.ARROW_DOWN).setBounds (727.25, 211.5, 29.75, 20.5);
+        surface.getButton (ButtonID.UP).setBounds (705.5, 237.75, 29.75, 20.5);
+        surface.getButton (ButtonID.DOWN).setBounds (751.0, 237.75, 29.75, 20.5);
+
         surface.getButton (ButtonID.CLIP).setBounds (28.0, 258.25, 31.75, 22.75);
         surface.getButton (ButtonID.STOP_CLIP).setBounds (65.5, 258.25, 31.75, 22.75);
         surface.getButton (ButtonID.SCENE1).setBounds (103.25, 258.25, 31.75, 22.75);
@@ -448,14 +401,10 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
         surface.getButton (ButtonID.F1).setBounds (637.5, 1.25, 31.75, 22.75);
         surface.getButton (ButtonID.F2).setBounds (675.25, 1.25, 31.75, 22.75);
 
-        surface.getContinuous (ContinuousID.MOVE_TRACK_BANK).setBounds (208.5, 218.0, 10.0, 66.0);
-        surface.getContinuous (ContinuousID.MOVE_TRACK).setBounds (227.0, 218.0, 10.0, 66.0);
-        surface.getContinuous (ContinuousID.NAVIGATE_CLIPS).setBounds (245.5, 218.75, 10.0, 66.0);
-        surface.getContinuous (ContinuousID.NAVIGATE_SCENES).setBounds (264.25, 218.0, 10.0, 66.0);
-        surface.getContinuous (ContinuousID.MOVE_TRANSPORT).setBounds (282.75, 218.0, 10.0, 66.0);
-        surface.getContinuous (ContinuousID.MOVE_LOOP).setBounds (301.25, 218.0, 10.0, 66.0);
-        surface.getContinuous (ContinuousID.NAVIGATE_VOLUME).setBounds (319.75, 218.0, 10.0, 66.0);
-        surface.getContinuous (ContinuousID.NAVIGATE_PAN).setBounds (338.25, 218.0, 10.0, 66.0);
+        surface.getContinuous (ContinuousID.MOVE_TRANSPORT).setBounds (713.5, 40.75, 27.75, 29.75);
+        surface.getContinuous (ContinuousID.MOVE_LOOP).setBounds (752.25, 40.75, 27.75, 29.75);
+        surface.getContinuous (ContinuousID.NAVIGATE_VOLUME).setBounds (713.5, 80.75, 27.75, 29.75);
+        surface.getContinuous (ContinuousID.NAVIGATE_PAN).setBounds (752.25, 80.75, 27.75, 29.75);
 
         surface.getContinuous (ContinuousID.KNOB1).setBounds (284.0, 143.25, 28.0, 29.25);
         surface.getContinuous (ContinuousID.FADER1).setBounds (284.0, 178.5, 28.0, 29.25);
@@ -473,6 +422,8 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
         surface.getContinuous (ContinuousID.FADER7).setBounds (610.0, 178.5, 28.0, 29.25);
         surface.getContinuous (ContinuousID.KNOB8).setBounds (664.25, 143.25, 28.0, 29.25);
         surface.getContinuous (ContinuousID.FADER8).setBounds (664.25, 178.5, 28.0, 29.25);
+
+        surface.getPianoKeyboard ().setBounds (162.75, 218.5, 531.5, 79.75);
     }
 
 
@@ -550,48 +501,48 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
     /**
      * Navigate to the previous or next scene (if any).
      *
-     * @param value 1 to move left, 127 to move right
+     * @param isLeft Select the previous scene if true
      */
-    private void navigateScenes (final int value)
+    private void navigateScenes (final boolean isLeft)
     {
         final ISceneBank sceneBank = this.model.getSceneBank ();
         if (sceneBank == null)
             return;
-        if (value == 1)
-            sceneBank.selectNextItem ();
-        else if (value == 127)
+        if (isLeft)
             sceneBank.selectPreviousItem ();
+        else
+            sceneBank.selectNextItem ();
     }
 
 
     /**
      * Navigate to the previous or next clip of the selected track (if any).
      *
-     * @param value 1 to move left, 127 to move right
+     * @param isLeft Select the previous clip if true
      */
-    private void navigateClips (final int value)
+    private void navigateClips (final boolean isLeft)
     {
         final ITrack selectedTrack = this.model.getSelectedTrack ();
         if (selectedTrack == null)
             return;
-        if (value == 1)
-            selectedTrack.getSlotBank ().selectNextItem ();
-        else if (value == 127)
+        if (isLeft)
             selectedTrack.getSlotBank ().selectPreviousItem ();
+        else
+            selectedTrack.getSlotBank ().selectNextItem ();
     }
 
 
     /**
      * Navigate to the previous or next track (if any).
      *
-     * @param value 1 to move left else move right
+     * @param isLeft Select the previous track if true
      */
-    private void navigateTracks (final int value)
+    private void navigateTracks (final boolean isLeft)
     {
-        if (value == 1)
-            this.model.getTrackBank ().selectNextItem ();
-        else
+        if (isLeft)
             this.model.getTrackBank ().selectPreviousItem ();
+        else
+            this.model.getTrackBank ().selectNextItem ();
     }
 
 
@@ -606,5 +557,100 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
     {
         // Changing of loop position is not possible. Therefore, change position fine grained
         this.model.getTransport ().changePosition (value <= 63, true);
+    }
+
+
+    // These are the left/right buttons
+    private void moveTrackBank (final ButtonEvent event, final boolean isLeft)
+    {
+        if (event != ButtonEvent.DOWN)
+            return;
+        final Mode activeMode = this.getSurface ().getModeManager ().getActiveOrTempMode ();
+        if (activeMode == null)
+            return;
+        if (isLeft)
+            activeMode.selectPreviousItemPage ();
+        else
+            activeMode.selectNextItemPage ();
+    }
+
+
+    // This is encoder left/right
+    private void moveTrack (final ButtonEvent event, final boolean isLeft)
+    {
+        if (event != ButtonEvent.DOWN)
+            return;
+
+        if (this.getSurface ().getModeManager ().isActiveMode (Modes.VOLUME))
+        {
+            if (this.configuration.isFlipTrackClipNavigation ())
+            {
+                if (this.configuration.isFlipClipSceneNavigation ())
+                    this.navigateScenes (isLeft);
+                else
+                    this.navigateClips (isLeft);
+            }
+            else
+                this.navigateTracks (isLeft);
+            return;
+        }
+
+        final Mode activeMode = this.getSurface ().getModeManager ().getActiveOrTempMode ();
+        if (activeMode == null)
+            return;
+        if (isLeft)
+            activeMode.selectPreviousItem ();
+        else
+            activeMode.selectNextItem ();
+    }
+
+
+    // This is encoder up/down
+    private void moveClips (final ButtonEvent event, final boolean isLeft)
+    {
+        if (event != ButtonEvent.DOWN)
+            return;
+
+        if (this.getSurface ().getModeManager ().isActiveMode (Modes.VOLUME))
+        {
+            if (this.configuration.isFlipTrackClipNavigation ())
+            {
+                this.navigateTracks (isLeft);
+                return;
+            }
+
+            if (this.configuration.isFlipClipSceneNavigation ())
+                this.navigateScenes (isLeft);
+            else
+                this.navigateClips (isLeft);
+            return;
+        }
+
+        this.moveTrackBank (event, isLeft);
+    }
+
+
+    private void moveScenes (final ButtonEvent event, final boolean isLeft)
+    {
+        if (event != ButtonEvent.DOWN)
+            return;
+
+        if (this.configuration.isFlipTrackClipNavigation ())
+        {
+            this.navigateTracks (isLeft);
+            return;
+        }
+
+        if (this.configuration.isFlipClipSceneNavigation ())
+            this.navigateClips (isLeft);
+        else
+            this.navigateScenes (isLeft);
+    }
+
+
+    private int getKnobValue (final int continuousMidiControl)
+    {
+        final Mode mode = this.getSurface ().getModeManager ().getActiveOrTempMode ();
+        return mode == null ? 0 : mode.getKnobValue (continuousMidiControl);
     }
 }

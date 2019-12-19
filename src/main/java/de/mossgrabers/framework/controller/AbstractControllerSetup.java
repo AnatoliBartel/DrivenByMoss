@@ -545,6 +545,33 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
 
 
     /**
+     * Create a hardware button proxy, bind a trigger command to it and bind it to the trigger bind
+     * type retrieved from {@link #getTriggerBindType(ButtonID)}.
+     *
+     * @param surface The control surface
+     * @param buttonID The ID of the button (for later access)
+     * @param label The label of the button
+     * @param supplier Callback for retrieving the state of the light
+     * @param midiChannel The MIDI channel
+     * @param midiControl The MIDI CC or note
+     * @param value The specific value of the control to bind to
+     * @param command The command to bind
+     * @param colorIds The color IDs to map to the states
+     */
+    protected void addButton (final S surface, final ButtonID buttonID, final String label, final TriggerCommand command, final int midiChannel, final int midiControl, final int value, final IntSupplier supplier, final String... colorIds)
+    {
+        final IHwButton button = surface.createButton (buttonID, label);
+        button.bind (command);
+        if (midiControl < 0)
+            return;
+        button.bind (surface.getMidiInput (), this.getTriggerBindType (buttonID), midiChannel, midiControl, value);
+        final IntSupplier intSupplier = () -> button.isPressed () ? 1 : 0;
+        final IntSupplier supp = supplier == null ? intSupplier : supplier;
+        this.addLight (surface, null, buttonID, button, midiChannel, midiControl, supp, colorIds);
+    }
+
+
+    /**
      * Create multiple hardware button proxies. Each button is matched by a specific value. The
      * first value is startValue, which gets increased by one for the other buttons.
      *

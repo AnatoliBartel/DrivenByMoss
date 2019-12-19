@@ -57,7 +57,32 @@ public class MixerMode extends VolumeMode<KontrolProtocolControlSurface, Kontrol
             return valueChanger.toMidiValue (track.getPan ());
         }
 
-        return 0;
+        final ITrack selectedTrack = bank.getSelectedItem ();
+        final int scrollTracksState = (bank.canScrollBackwards () ? 1 : 0) + (bank.canScrollForwards () ? 2 : 0);
+        int scrollClipsState = 0;
+        if (selectedTrack != null)
+        {
+            final ISlotBank slotBank = selectedTrack.getSlotBank ();
+            scrollClipsState = (slotBank.canScrollBackwards () ? 1 : 0) + (slotBank.canScrollForwards () ? 2 : 0);
+        }
+        final ISceneBank sceneBank = bank.getSceneBank ();
+        final int scrollScenesState = (sceneBank.canScrollBackwards () ? 1 : 0) + (sceneBank.canScrollForwards () ? 2 : 0);
+
+        final KontrolProtocolConfiguration configuration = this.surface.getConfiguration ();
+
+        switch (index)
+        {
+            case KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS:
+                return (bank.canScrollPageBackwards () ? 1 : 0) + (bank.canScrollPageForwards () ? 2 : 0);
+            case KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS:
+                return configuration.isFlipTrackClipNavigation () ? configuration.isFlipClipSceneNavigation () ? scrollScenesState : scrollClipsState : scrollTracksState;
+            case KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS:
+                return configuration.isFlipTrackClipNavigation () ? scrollTracksState : configuration.isFlipClipSceneNavigation () ? scrollScenesState : scrollClipsState;
+            case KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES:
+                return configuration.isFlipTrackClipNavigation () ? scrollTracksState : configuration.isFlipClipSceneNavigation () ? scrollClipsState : scrollScenesState;
+            default:
+                return 0;
+        }
     }
 
 
@@ -86,31 +111,6 @@ public class MixerMode extends VolumeMode<KontrolProtocolControlSurface, Kontrol
             vuData[j + 1] = valueChanger.toMidiValue (track.getVuRight ());
         }
         this.surface.sendKontrolTrackSysEx (KontrolProtocolControlSurface.KONTROL_TRACK_VU, 2, 0, vuData);
-
-        final ITrack selectedTrack = bank.getSelectedItem ();
-        final int scrollTracksState = (bank.canScrollBackwards () ? 1 : 0) + (bank.canScrollForwards () ? 2 : 0);
-        int scrollClipsState = 0;
-        if (selectedTrack != null)
-        {
-            final ISlotBank slotBank = selectedTrack.getSlotBank ();
-            scrollClipsState = (slotBank.canScrollBackwards () ? 1 : 0) + (slotBank.canScrollForwards () ? 2 : 0);
-        }
-        final ISceneBank sceneBank = bank.getSceneBank ();
-        final int scrollScenesState = (sceneBank.canScrollBackwards () ? 1 : 0) + (sceneBank.canScrollForwards () ? 2 : 0);
-
-        final KontrolProtocolConfiguration configuration = this.surface.getConfiguration ();
-        // TODO Move to button
-        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS,
-        // (bank.canScrollPageBackwards () ? 1 : 0) + (bank.canScrollPageForwards () ? 2 : 0));
-        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS,
-        // configuration.isFlipTrackClipNavigation () ? configuration.isFlipClipSceneNavigation () ?
-        // scrollScenesState : scrollClipsState : scrollTracksState);
-        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS,
-        // configuration.isFlipTrackClipNavigation () ? scrollTracksState :
-        // configuration.isFlipClipSceneNavigation () ? scrollScenesState : scrollClipsState);
-        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES,
-        // configuration.isFlipTrackClipNavigation () ? scrollTracksState :
-        // configuration.isFlipClipSceneNavigation () ? scrollClipsState : scrollScenesState);
     }
 
 

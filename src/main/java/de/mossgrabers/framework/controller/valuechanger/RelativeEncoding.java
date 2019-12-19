@@ -22,6 +22,8 @@ public enum RelativeEncoding
      *      "https://en.wikipedia.org/wiki/Offset_binary">https://en.wikipedia.org/wiki/Offset_binary</a>
      */
     OFFSET_BINARY,
+    /** See Relative2ValueChanger. */
     SIGNED_BIT,
+    /** See Relative4ValueChanger. */
     SIGNED_BIT2
 }

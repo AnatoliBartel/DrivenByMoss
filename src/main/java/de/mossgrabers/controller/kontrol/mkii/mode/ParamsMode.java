@@ -8,7 +8,6 @@ import de.mossgrabers.controller.kontrol.mkii.KontrolProtocolConfiguration;
 import de.mossgrabers.controller.kontrol.mkii.TrackType;
 import de.mossgrabers.controller.kontrol.mkii.controller.KontrolProtocolControlSurface;
 import de.mossgrabers.framework.controller.valuechanger.IValueChanger;
-import de.mossgrabers.framework.daw.ICursorDevice;
 import de.mossgrabers.framework.daw.IDeviceBank;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.IParameterBank;
@@ -57,7 +56,24 @@ public class ParamsMode extends ParameterMode<KontrolProtocolControlSurface, Kon
             return valueChanger.toMidiValue (parameter.getValue ());
         }
 
-        return 0;
+        final int scrollTracksState = (bank.canScrollBackwards () ? 1 : 0) + (bank.canScrollForwards () ? 2 : 0);
+
+        final IDeviceBank deviceBank = this.cursorDevice.getDeviceBank ();
+        final int scrollScenesState = (deviceBank.canScrollBackwards () ? 1 : 0) + (deviceBank.canScrollForwards () ? 2 : 0);
+
+        final KontrolProtocolConfiguration configuration = this.surface.getConfiguration ();
+        switch (index)
+        {
+            case KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS:
+                return (this.cursorDevice.canSelectPreviousFX () ? 1 : 0) + (this.cursorDevice.canSelectNextFX () ? 2 : 0);
+            case KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS:
+                return configuration.isFlipTrackClipNavigation () ? scrollScenesState : scrollTracksState;
+            case KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS:
+                return configuration.isFlipTrackClipNavigation () ? scrollTracksState : scrollScenesState;
+            case KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES:
+            default:
+                return 0;
+        }
     }
 
 
@@ -67,10 +83,8 @@ public class ParamsMode extends ParameterMode<KontrolProtocolControlSurface, Kon
     {
         final IValueChanger valueChanger = this.model.getValueChanger ();
         final IParameterBank bank = this.getBank ();
-        final KontrolProtocolConfiguration configuration = this.surface.getConfiguration ();
 
-        final ICursorDevice cursorDevice = this.cursorDevice;
-        final IParameterPageBank parameterPageBank = cursorDevice.getParameterPageBank ();
+        final IParameterPageBank parameterPageBank = this.cursorDevice.getParameterPageBank ();
         final String selectedPage = parameterPageBank.getSelectedItem ();
 
         final int [] vuData = new int [16];
@@ -93,21 +107,6 @@ public class ParamsMode extends ParameterMode<KontrolProtocolControlSurface, Kon
             vuData[j + 1] = valueChanger.toMidiValue (parameter.getModulatedValue ());
         }
         this.surface.sendKontrolTrackSysEx (KontrolProtocolControlSurface.KONTROL_TRACK_VU, 2, 0, vuData);
-
-        final int scrollTracksState = (bank.canScrollBackwards () ? 1 : 0) + (bank.canScrollForwards () ? 2 : 0);
-
-        final IDeviceBank deviceBank = this.cursorDevice.getDeviceBank ();
-        final int scrollScenesState = (deviceBank.canScrollBackwards () ? 1 : 0) + (deviceBank.canScrollForwards () ? 2 : 0);
-
-        // TODO Move to button
-        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_BANKS,
-        // (cursorDevice.canSelectPreviousFX () ? 1 : 0) + (cursorDevice.canSelectNextFX () ? 2 :
-        // 0));
-        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_TRACKS,
-        // configuration.isFlipTrackClipNavigation () ? scrollScenesState : scrollTracksState);
-        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_CLIPS,
-        // configuration.isFlipTrackClipNavigation () ? scrollTracksState : scrollScenesState);
-        // this.surface.updateContinuous (KontrolProtocolControlSurface.KONTROL_NAVIGATE_SCENES, 0);
     }
 
 
