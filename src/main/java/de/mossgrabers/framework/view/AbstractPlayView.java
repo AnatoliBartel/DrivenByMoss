@@ -82,7 +82,7 @@ public abstract class AbstractPlayView<S extends IControlSurface<C>, C extends C
     }
 
 
-    protected void drawLightGuide (ILightGuide lightGuide)
+    protected void drawLightGuide (final ILightGuide lightGuide)
     {
         final boolean isKeyboardEnabled = this.model.canSelectedTrackHoldNotes ();
         final boolean isRecording = this.model.hasRecordingState ();

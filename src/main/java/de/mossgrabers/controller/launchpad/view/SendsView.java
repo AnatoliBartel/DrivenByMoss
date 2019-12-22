@@ -4,7 +4,9 @@
 
 package de.mossgrabers.controller.launchpad.view;
 
+import de.mossgrabers.controller.launchpad.controller.LaunchpadColorManager;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IModel;
@@ -59,8 +61,15 @@ public class SendsView extends AbstractFaderView
     @Override
     public void onScene (final int scene, final ButtonEvent event)
     {
-        if (event == ButtonEvent.DOWN)
-            this.selectedSend = scene;
+        if (event != ButtonEvent.DOWN)
+            return;
+
+        this.selectedSend = scene;
+
+        final ITrackBank tb = this.model.getTrackBank ();
+        final String sendName = tb.getEditSendName (this.selectedSend);
+        final String message = "Send " + (this.selectedSend + 1) + ": " + (sendName.isEmpty () ? "None" : sendName);
+        this.surface.getTextDisplay ().notify (message);
     }
 
 
@@ -84,14 +93,26 @@ public class SendsView extends AbstractFaderView
         }
     }
 
-    // TODO
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // this.surface.setTrigger (this.surface.getSceneTrigger (scene), this.selectedSend == scene ?
-    // LaunchpadColors.LAUNCHPAD_COLOR_ORCHID : LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-    // }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getButtonColor (final ButtonID buttonID)
+    {
+        final int ordinal = buttonID.ordinal ();
+        if (ordinal < ButtonID.SCENE1.ordinal () || ordinal > ButtonID.SCENE8.ordinal ())
+            return 0;
+
+        final int scene = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
+
+        if (this.selectedSend == scene)
+            return LaunchpadColorManager.LAUNCHPAD_COLOR_ORCHID;
+
+        final ITrackBank tb = this.model.getTrackBank ();
+        if (tb.canEditSend (scene))
+            return LaunchpadColorManager.LAUNCHPAD_COLOR_GREY_LO;
+
+        return LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK;
+    }
 
 
     /**

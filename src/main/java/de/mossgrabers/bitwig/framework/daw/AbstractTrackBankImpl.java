@@ -4,7 +4,6 @@
 
 package de.mossgrabers.bitwig.framework.daw;
 
-import de.mossgrabers.bitwig.framework.daw.data.AbstractDeviceChainImpl;
 import de.mossgrabers.bitwig.framework.daw.data.TrackImpl;
 import de.mossgrabers.framework.controller.valuechanger.IValueChanger;
 import de.mossgrabers.framework.daw.IHost;
@@ -12,7 +11,6 @@ import de.mossgrabers.framework.daw.ITrackBank;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.observer.IIndexedValueObserver;
 
-import com.bitwig.extension.controller.api.Channel;
 import com.bitwig.extension.controller.api.ClipLauncherSlotBank;
 import com.bitwig.extension.controller.api.CursorTrack;
 import com.bitwig.extension.controller.api.Track;
@@ -82,14 +80,13 @@ public abstract class AbstractTrackBankImpl extends AbstractChannelBankImpl<Trac
 
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     @Override
     public void addNameObserver (final IIndexedValueObserver<String> observer)
     {
         for (int index = 0; index < this.getPageSize (); index++)
         {
             final int i = index;
-            ((AbstractDeviceChainImpl<Channel>) this.getItem (index)).addNameObserver (name -> observer.update (i, name));
+            this.getItem (index).addNameObserver (name -> observer.update (i, name));
         }
     }
 

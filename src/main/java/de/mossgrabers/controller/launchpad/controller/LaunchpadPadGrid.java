@@ -6,8 +6,8 @@ package de.mossgrabers.controller.launchpad.controller;
 
 import de.mossgrabers.controller.launchpad.definition.ILaunchpadControllerDefinition;
 import de.mossgrabers.framework.controller.color.ColorManager;
-import de.mossgrabers.framework.controller.grid.PadGridImpl;
 import de.mossgrabers.framework.controller.grid.LightInfo;
+import de.mossgrabers.framework.controller.grid.PadGridImpl;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
 
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class LaunchpadPadGrid extends PadGridImpl
     }
 
     private final ILaunchpadControllerDefinition definition;
-    private final Map<Integer, LightInfo>          padInfos = new TreeMap<> ();
+    private final Map<Integer, LightInfo>        padInfos = new TreeMap<> ();
 
 
     /**
@@ -83,21 +83,21 @@ public class LaunchpadPadGrid extends PadGridImpl
         };
     }
 
-    // TODO Remove
-    // /** {@inheritDoc} */
-    // @Override
-    // public void flush ()
-    // {
-    // synchronized (this.padInfos)
-    // {
-    // super.flush ();
-    // if (this.padInfos.isEmpty ())
-    // return;
-    // for (final String update: this.definition.buildLEDUpdate (this.padInfos))
-    // this.output.sendSysex (update);
-    // this.padInfos.clear ();
-    // }
-    // }
+
+    /**
+     * Flush the changed pad LEDs using sysex.
+     */
+    public void flush ()
+    {
+        synchronized (this.padInfos)
+        {
+            if (this.padInfos.isEmpty ())
+                return;
+            for (final String update: this.definition.buildLEDUpdate (this.padInfos))
+                this.output.sendSysex (update);
+            this.padInfos.clear ();
+        }
+    }
 
 
     /** {@inheritDoc} */

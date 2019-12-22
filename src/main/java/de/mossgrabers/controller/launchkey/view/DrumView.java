@@ -7,6 +7,7 @@ package de.mossgrabers.controller.launchkey.view;
 import de.mossgrabers.controller.launchkey.LaunchkeyMiniMk3Configuration;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ColorManager;
 import de.mossgrabers.controller.launchkey.controller.LaunchkeyMiniMk3ControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.ICursorDevice;
@@ -158,19 +159,15 @@ public class DrumView extends AbstractDrumView<LaunchkeyMiniMk3ControlSurface, L
         return hilite ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_GREEN : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLACK;
     }
 
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // TODO
-    // if (scene == 0)
-    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE1,
-    // this.isPlayMode ? LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREEN :
-    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_BLUE);
-    // else
-    // this.surface.updateTrigger (LaunchkeyMiniMk3ControlSurface.LAUNCHKEY_SCENE2,
-    // LaunchkeyMiniMk3Colors.LAUNCHKEY_COLOR_GREY_LO);
-    // }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getButtonColor (final ButtonID buttonID)
+    {
+        if (buttonID == ButtonID.SCENE1)
+            return this.isPlayMode ? LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_GREEN : LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_BLUE;
+        return LaunchkeyMiniMk3ColorManager.LAUNCHKEY_COLOR_GREY_LO;
+    }
 
 
     /** {@inheritDoc} */

@@ -22,11 +22,11 @@ import java.util.List;
  */
 public class KeyManager implements NoteObserver
 {
-    private final int []  pressedKeys = new int [128];
-    private final IModel  model;
-    private final Scales  scales;
+    private final int []   pressedKeys = new int [128];
+    private final IModel   model;
+    private final Scales   scales;
     private final IPadGrid padGrid;
-    private int []        noteMap     = Scales.getEmptyMatrix ();
+    private int []         noteMap     = Scales.getEmptyMatrix ();
 
 
     /**

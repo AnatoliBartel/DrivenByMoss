@@ -20,7 +20,7 @@ public class PadGridImpl implements IPadGrid
     protected final IMidiOutput  output;
     protected final ColorManager colorManager;
 
-    protected LightInfo []         padStates;
+    protected LightInfo []       padStates;
 
     protected final int          rows;
     protected final int          cols;

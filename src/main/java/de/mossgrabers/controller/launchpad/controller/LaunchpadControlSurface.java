@@ -10,11 +10,14 @@ import de.mossgrabers.framework.controller.AbstractControlSurface;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.controller.grid.IPadGrid;
+import de.mossgrabers.framework.controller.hardware.IHwButton;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.DeviceInquiry;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
 import de.mossgrabers.framework.daw.midi.IMidiOutput;
 import de.mossgrabers.framework.utils.StringUtils;
+
+import java.util.Map.Entry;
 
 
 /**
@@ -107,9 +110,7 @@ public class LaunchpadControlSurface extends AbstractControlSurface<LaunchpadCon
      */
     public void setLaunchpadToPrgMode ()
     {
-        this.sendLaunchpadSysEx (this.definition.getProgramModeCommand ());
-        // Ensure that grid gets redrawn, switch modes is especially very slow on the MkII
-        this.host.scheduleTask (this.getPadGrid ()::forceFlush, 200);
+        this.setLaunchpadMode (this.definition.getProgramModeCommand ());
     }
 
 
@@ -118,9 +119,7 @@ public class LaunchpadControlSurface extends AbstractControlSurface<LaunchpadCon
      */
     public void setLaunchpadToFaderMode ()
     {
-        this.sendLaunchpadSysEx (this.definition.getFaderModeCommand ());
-        // Ensure that grid gets redrawn, switch modes is especially very slow on the MkII
-        this.host.scheduleTask (this.getPadGrid ()::forceFlush, 200);
+        this.setLaunchpadMode (this.definition.getFaderModeCommand ());
     }
 
 
@@ -129,9 +128,21 @@ public class LaunchpadControlSurface extends AbstractControlSurface<LaunchpadCon
      */
     public void setLaunchpadToPanMode ()
     {
-        this.sendLaunchpadSysEx (this.definition.getPanModeCommand ());
-        // Ensure that grid gets redrawn, switch modes is especially very slow on the MkII
-        this.host.scheduleTask (this.getPadGrid ()::forceFlush, 200);
+        this.setLaunchpadMode (this.definition.getPanModeCommand ());
+    }
+
+
+    private void setLaunchpadMode (final String data)
+    {
+        this.sendLaunchpadSysEx (data);
+
+        for (final Entry<ButtonID, IHwButton> entry: this.getButtons ().entrySet ())
+        {
+            final ButtonID key = entry.getKey ();
+            final int keyValue = key.ordinal ();
+            if (ButtonID.PAD1.ordinal () < keyValue || ButtonID.PAD64.ordinal () > keyValue)
+                entry.getValue ().getLight ().clearCache ();
+        }
     }
 
 
@@ -254,6 +265,16 @@ public class LaunchpadControlSurface extends AbstractControlSurface<LaunchpadCon
             this.output.sendNote (cc, state);
         else
             this.output.sendCC (cc, state);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    protected void flushHardware ()
+    {
+        super.flushHardware ();
+
+        ((LaunchpadPadGrid) this.pads).flush ();
     }
 
 

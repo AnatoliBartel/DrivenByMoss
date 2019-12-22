@@ -98,20 +98,15 @@ public class DrumView4 extends DrumViewBase
 
     /** {@inheritDoc} */
     @Override
-    protected void updateLowerSceneButtons ()
+    protected int updateLowerSceneButtons (final int scene)
     {
         if (this.isActive ())
         {
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8, this.soundOffset == 0 ? LaunchpadColorManager.LAUNCHPAD_COLOR_YELLOW : LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7, this.soundOffset == 4 ? LaunchpadColorManager.LAUNCHPAD_COLOR_YELLOW : LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE6, this.soundOffset == 8 ? LaunchpadColorManager.LAUNCHPAD_COLOR_YELLOW : LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN);
-            this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE5, this.soundOffset == 12 ? LaunchpadColorManager.LAUNCHPAD_COLOR_YELLOW : LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN);
-            return;
+            if (scene == 7 && this.soundOffset == 0 || scene == 6 && this.soundOffset == 4 || scene == 5 && this.soundOffset == 8 || scene == 4 && this.soundOffset == 12)
+                return LaunchpadColorManager.LAUNCHPAD_COLOR_YELLOW;
+            return LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN;
         }
-        this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE8, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
-        this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE7, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
-        this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE6, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
-        this.surface.setTrigger (LaunchpadControlSurface.LAUNCHPAD_BUTTON_SCENE5, LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
+        return LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK;
     }
 
 

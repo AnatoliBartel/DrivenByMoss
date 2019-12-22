@@ -104,4 +104,13 @@ public interface IHwButton extends IHwInputControl
      * @return The velocity
      */
     int getPressedVelocity ();
+
+
+    /**
+     * Register a button event handler.
+     *
+     * @param event The event type for which to register the handler
+     * @param eventHandler The event handler
+     */
+    void addEventHandler (ButtonEvent event, ButtonEventHandler eventHandler);
 }

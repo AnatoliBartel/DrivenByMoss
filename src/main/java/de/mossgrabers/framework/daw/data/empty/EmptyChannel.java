@@ -10,6 +10,7 @@ import de.mossgrabers.framework.daw.ISendBank;
 import de.mossgrabers.framework.daw.data.IChannel;
 import de.mossgrabers.framework.daw.data.ISend;
 import de.mossgrabers.framework.daw.resource.ChannelType;
+import de.mossgrabers.framework.observer.IValueObserver;
 
 
 /**
@@ -338,6 +339,14 @@ public class EmptyChannel extends EmptyItem implements IChannel
     /** {@inheritDoc} */
     @Override
     public void enter ()
+    {
+        // Intentionally empty
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void addColorObserver (final IValueObserver<ColorEx> observer)
     {
         // Intentionally empty
     }

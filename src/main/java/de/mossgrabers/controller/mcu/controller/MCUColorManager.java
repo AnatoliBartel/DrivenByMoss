@@ -17,7 +17,6 @@ import de.mossgrabers.framework.mode.AbstractMode;
  */
 public class MCUColorManager extends ColorManager
 {
-
     /**
      * Private due to utility class.
      */

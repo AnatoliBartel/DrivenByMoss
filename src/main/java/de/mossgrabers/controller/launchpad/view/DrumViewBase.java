@@ -5,7 +5,9 @@
 package de.mossgrabers.controller.launchpad.view;
 
 import de.mossgrabers.controller.launchpad.LaunchpadConfiguration;
+import de.mossgrabers.controller.launchpad.controller.LaunchpadColorManager;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.ITrackBank;
 import de.mossgrabers.framework.daw.data.ITrack;
@@ -68,41 +70,38 @@ public abstract class DrumViewBase extends AbstractDrumView<LaunchpadControlSurf
         // Intentionally empty
     }
 
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // TODO
-    //
-    // if (this.surface.isShiftPressed ())
-    // {
-    // for (int i = 0; i < 4; i++)
-    // this.surface.setTrigger (this.surface.getSceneTrigger (i),
-    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-    // this.updateLowerSceneButtons ();
-    // return;
-    // }
-    //
-    // final boolean isActive = this.isActive ();
-    // for (int i = 0; i < 8; i++)
-    // {
-    // final int sceneButton = this.surface.getSceneTrigger (i);
-    // final int color = i == 7 - this.selectedResolutionIndex ?
-    // LaunchpadColors.LAUNCHPAD_COLOR_YELLOW : LaunchpadColors.LAUNCHPAD_COLOR_GREEN;
-    // this.surface.setTrigger (sceneButton, isActive ? color :
-    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-    // }
-    // }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getButtonColor (final ButtonID buttonID)
+    {
+        final int ordinal = buttonID.ordinal ();
+        if (ordinal < ButtonID.SCENE1.ordinal () || ordinal > ButtonID.SCENE8.ordinal ())
+            return 0;
+
+        final int scene = ordinal - ButtonID.SCENE1.ordinal ();
+
+        if (this.surface.isShiftPressed ())
+        {
+            if (ordinal <= ButtonID.SCENE4.ordinal ())
+                return LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK;
+            return this.updateLowerSceneButtons (scene);
+        }
+
+        if (!this.isActive ())
+            return LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK;
+        return scene == 7 - this.selectedResolutionIndex ? LaunchpadColorManager.LAUNCHPAD_COLOR_YELLOW : LaunchpadColorManager.LAUNCHPAD_COLOR_GREEN;
+    }
 
 
     /**
      * Update the lower scene button LEDs.
+     *
+     * @param scene The scene
+     * @return The color
      */
-    protected void updateLowerSceneButtons ()
+    protected int updateLowerSceneButtons (final int scene)
     {
-        // TODO
-        // for (int i = 4; i < 8; i++)
-        // this.surface.setTrigger (this.surface.getSceneTrigger (i),
-        // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
+        return LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK;
     }
 }

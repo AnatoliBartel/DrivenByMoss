@@ -257,15 +257,16 @@ public class KontrolProtocolControlSurface extends AbstractControlSurface<Kontro
     }
 
 
-    /**
-     * Clear all cached values.
-     */
+    /** {@inheritDoc} */
+    @Override
     public void clearCache ()
     {
         synchronized (this.cacheLock)
         {
             this.valueCache.clearCache ();
         }
+
+        super.clearCache ();
     }
 
 

@@ -161,8 +161,6 @@ public class ShiftView extends AbstractView<LaunchpadControlSurface, LaunchpadCo
         if (velocity == 0)
             return;
 
-        final INoteRepeat noteRepeat = this.surface.getMidiInput ().getDefaultNoteInput ().getNoteRepeat ();
-
         switch (note)
         {
             case 36:
@@ -179,57 +177,59 @@ public class ShiftView extends AbstractView<LaunchpadControlSurface, LaunchpadCo
                 break;
 
             case 87:
+                final INoteRepeat noteRepeat = this.surface.getMidiInput ().getDefaultNoteInput ().getNoteRepeat ();
                 noteRepeat.toggleActive ();
+                this.model.getHost ().scheduleTask ( () -> this.surface.getDisplay ().notify ("Note Repeat: " + (noteRepeat.isActive () ? "Active" : "Off")), 100);
                 break;
 
             case 79:
-                noteRepeat.setPeriod (Resolution.getValueAt (0));
+                this.setPeriod (0);
                 break;
             case 80:
-                noteRepeat.setPeriod (Resolution.getValueAt (1));
+                this.setPeriod (1);
                 break;
             case 71:
-                noteRepeat.setPeriod (Resolution.getValueAt (2));
+                this.setPeriod (2);
                 break;
             case 72:
-                noteRepeat.setPeriod (Resolution.getValueAt (3));
+                this.setPeriod (3);
                 break;
             case 63:
-                noteRepeat.setPeriod (Resolution.getValueAt (4));
+                this.setPeriod (4);
                 break;
             case 64:
-                noteRepeat.setPeriod (Resolution.getValueAt (5));
+                this.setPeriod (5);
                 break;
             case 55:
-                noteRepeat.setPeriod (Resolution.getValueAt (6));
+                this.setPeriod (6);
                 break;
             case 56:
-                noteRepeat.setPeriod (Resolution.getValueAt (7));
+                this.setPeriod (7);
                 break;
 
             case 81:
-                noteRepeat.setNoteLength (Resolution.getValueAt (0));
+                this.setNoteLength (0);
                 break;
             case 82:
-                noteRepeat.setNoteLength (Resolution.getValueAt (1));
+                this.setNoteLength (1);
                 break;
             case 73:
-                noteRepeat.setNoteLength (Resolution.getValueAt (2));
+                this.setNoteLength (2);
                 break;
             case 74:
-                noteRepeat.setNoteLength (Resolution.getValueAt (3));
+                this.setNoteLength (3);
                 break;
             case 65:
-                noteRepeat.setNoteLength (Resolution.getValueAt (4));
+                this.setNoteLength (4);
                 break;
             case 66:
-                noteRepeat.setNoteLength (Resolution.getValueAt (5));
+                this.setNoteLength (5);
                 break;
             case 57:
-                noteRepeat.setNoteLength (Resolution.getValueAt (6));
+                this.setNoteLength (6);
                 break;
             case 58:
-                noteRepeat.setNoteLength (Resolution.getValueAt (7));
+                this.setNoteLength (7);
                 break;
 
             case 97:
@@ -270,16 +270,16 @@ public class ShiftView extends AbstractView<LaunchpadControlSurface, LaunchpadCo
                 this.executeNormal (ButtonID.QUANTIZE, ButtonEvent.DOWN);
                 break;
             case 60:
-                this.executeNormal (ButtonID.DUPLICATE, ButtonEvent.DOWN);
+                this.executeNormal (ButtonID.DUPLICATE, ButtonEvent.UP);
                 break;
             case 61:
                 this.executeShifted (ButtonID.DUPLICATE, ButtonEvent.DOWN);
                 break;
             case 52:
-                this.executeNormal (ButtonID.PLAY, ButtonEvent.DOWN);
+                this.executeNormal (ButtonID.DOUBLE, ButtonEvent.DOWN);
                 break;
             case 53:
-                this.executeNormal (ButtonID.NEW, ButtonEvent.DOWN);
+                this.executeShifted (ButtonID.DOUBLE, ButtonEvent.DOWN);
                 break;
             case 44:
                 this.executeNormal (ButtonID.RECORD, ButtonEvent.UP);
@@ -377,16 +377,32 @@ public class ShiftView extends AbstractView<LaunchpadControlSurface, LaunchpadCo
     }
 
 
+    private void setPeriod (final int index)
+    {
+        final INoteRepeat noteRepeat = this.surface.getMidiInput ().getDefaultNoteInput ().getNoteRepeat ();
+        noteRepeat.setPeriod (Resolution.getValueAt (index));
+        this.surface.getDisplay ().notify ("Period: " + Resolution.getNameAt (index));
+    }
+
+
+    private void setNoteLength (final int index)
+    {
+        final INoteRepeat noteRepeat = this.surface.getMidiInput ().getDefaultNoteInput ().getNoteRepeat ();
+        noteRepeat.setNoteLength (Resolution.getValueAt (index));
+        this.surface.getDisplay ().notify ("Note Length: " + Resolution.getNameAt (index));
+    }
+
+
     @SuppressWarnings("rawtypes")
     private void executeNormal (final ButtonID buttonID, final ButtonEvent event)
     {
-        ((AbstractTriggerCommand) this.surface.getButton (buttonID)).executeNormal (event);
+        ((AbstractTriggerCommand) this.surface.getButton (buttonID).getCommand ()).executeNormal (event);
     }
 
 
     @SuppressWarnings("rawtypes")
     private void executeShifted (final ButtonID buttonID, final ButtonEvent event)
     {
-        ((AbstractTriggerCommand) this.surface.getButton (buttonID)).executeShifted (event);
+        ((AbstractTriggerCommand) this.surface.getButton (buttonID).getCommand ()).executeShifted (event);
     }
 }

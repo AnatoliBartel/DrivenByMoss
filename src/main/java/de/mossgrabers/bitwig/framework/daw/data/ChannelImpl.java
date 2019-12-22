@@ -12,6 +12,7 @@ import de.mossgrabers.framework.daw.ISendBank;
 import de.mossgrabers.framework.daw.data.IChannel;
 import de.mossgrabers.framework.daw.data.IParameter;
 import de.mossgrabers.framework.daw.resource.ChannelType;
+import de.mossgrabers.framework.observer.IValueObserver;
 
 import com.bitwig.extension.controller.api.Channel;
 import com.bitwig.extension.controller.api.SettableColorValue;
@@ -402,6 +403,14 @@ public class ChannelImpl extends AbstractDeviceChainImpl<Channel> implements ICh
     public void enter ()
     {
         // Intentionally empty
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void addColorObserver (final IValueObserver<ColorEx> observer)
+    {
+        this.deviceChain.color ().addValueObserver ( (red, green, blue) -> observer.update (new ColorEx (red, green, blue)));
     }
 
 

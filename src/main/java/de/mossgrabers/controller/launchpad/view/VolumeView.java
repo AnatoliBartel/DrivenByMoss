@@ -4,7 +4,9 @@
 
 package de.mossgrabers.controller.launchpad.view;
 
+import de.mossgrabers.controller.launchpad.controller.LaunchpadColorManager;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IModel;
@@ -68,18 +70,19 @@ public class VolumeView extends AbstractFaderView
         }
     }
 
-    // TODO
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // final ColorManager cm = this.model.getColorManager ();
-    // final IMasterTrack track = this.model.getMasterTrack ();
-    // final int sceneMax = 9 * track.getVolume () / this.model.getValueChanger ().getUpperBound ();
-    // final int color = cm.getColor (DAWColors.getColorIndex (track.getColor ()));
-    // this.surface.setTrigger (this.surface.getSceneTrigger (scene), scene < sceneMax ? color :
-    // LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-    // }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getButtonColor (final ButtonID buttonID)
+    {
+        final int scene = 7 - (buttonID.ordinal () - ButtonID.SCENE1.ordinal ());
+
+        final ColorManager cm = this.model.getColorManager ();
+        final IMasterTrack track = this.model.getMasterTrack ();
+        final int sceneMax = 9 * track.getVolume () / this.model.getValueChanger ().getUpperBound ();
+        final int color = cm.getColorIndex (DAWColor.getColorIndex (track.getColor ()));
+        return scene < sceneMax ? color : LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK;
+    }
 
 
     /** {@inheritDoc} */

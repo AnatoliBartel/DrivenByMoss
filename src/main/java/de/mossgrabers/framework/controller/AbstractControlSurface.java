@@ -170,7 +170,7 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
 
                 final ButtonID buttonID = ButtonID.get (ButtonID.PAD1, i);
                 final IHwButton pad = this.createButton (buttonID, "P " + (i + 1));
-                pad.addLight (this.surfaceFactory.createLight (this.surfaceID, null, () -> this.pads.getLightInfo (note).getEncoded (), state -> this.pads.sendState (note), colorIndex -> this.colorManager.getColor (colorIndex, buttonID), null));
+                pad.addLight (this.surfaceFactory.createLight (this.surfaceID, null, () -> this.pads.getLightInfo (note).getEncoded (), state -> this.pads.sendState (note), colorIndex -> this.colorManager.getColor (colorIndex, buttonID), pad));
                 final int [] translated = this.pads.translateToController (note);
                 pad.bind (input, BindType.NOTE, translated[0], translated[1]);
                 pad.bind ( (event, velocity) -> this.handleGridNote (event, note, velocity));
@@ -370,6 +370,14 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
         final INoteInput defaultNoteInput = this.input.getDefaultNoteInput ();
         if (defaultNoteInput != null)
             defaultNoteInput.setVelocityTranslationTable (t);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public Map<ButtonID, IHwButton> getButtons ()
+    {
+        return new EnumMap<> (this.buttons);
     }
 
 
@@ -607,6 +615,14 @@ public abstract class AbstractControlSurface<C extends Configuration> implements
                 this.host.error ("Crash during flush.", ex);
             }
         });
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void clearCache ()
+    {
+        this.surfaceFactory.clearCache ();
     }
 
 

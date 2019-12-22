@@ -98,7 +98,7 @@ public class HwRelativeKnobImpl extends AbstractHwContinuousControl implements I
     {
         // Convert the value back from the default 2s relative matcher, because we do the conversion
         // our own way
-        double a = value * 61.0;
+        final double a = value * 61.0;
         final int v = (int) (a > 0 ? Math.ceil (a) : Math.floor (a));
         this.command.execute (v < 0 ? v + 128 : v);
     }

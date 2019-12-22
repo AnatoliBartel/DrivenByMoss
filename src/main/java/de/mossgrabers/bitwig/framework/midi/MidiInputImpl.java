@@ -207,12 +207,12 @@ public class MidiInputImpl implements IMidiInput
     }
 
 
-    private void bind (final BindType type, final int channel, final int value, final AbsoluteHardwareControl hardwareControl)
+    private void bind (final BindType type, final int channel, final int control, final AbsoluteHardwareControl hardwareControl)
     {
         switch (type)
         {
             case CC:
-                hardwareControl.setAdjustValueMatcher (this.port.createAbsoluteCCValueMatcher (channel, value));
+                hardwareControl.setAdjustValueMatcher (this.port.createAbsoluteCCValueMatcher (channel, control));
                 break;
             case PITCHBEND:
                 hardwareControl.setAdjustValueMatcher (this.port.createAbsolutePitchBendValueMatcher (channel));

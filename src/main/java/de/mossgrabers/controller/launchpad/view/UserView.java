@@ -6,7 +6,7 @@ package de.mossgrabers.controller.launchpad.view;
 
 import de.mossgrabers.controller.launchpad.controller.LaunchpadColorManager;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
-import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.daw.IModel;
 import de.mossgrabers.framework.daw.IParameterBank;
 import de.mossgrabers.framework.utils.ButtonEvent;
@@ -28,21 +28,6 @@ public class UserView extends AbstractFaderView
     public UserView (final LaunchpadControlSurface surface, final IModel model)
     {
         super (surface, model);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    protected void delayedUpdateArrowButtons ()
-    {
-        // TODO
-        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.SESSION),
-        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.NOTE),
-        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.DEVICE),
-        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        this.surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER, this.model.getHost ().hasUserParameters () ? LaunchpadColorManager.LAUNCHPAD_COLOR_MAGENTA : LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
     }
 
 
@@ -90,14 +75,14 @@ public class UserView extends AbstractFaderView
         userParameterBank.scrollTo (scene * userParameterBank.getPageSize ());
     }
 
-    // TODO
-    // /** {@inheritDoc} */
-    // @Override
-    // public void updateSceneButton (final int scene)
-    // {
-    // final IParameterBank userParameterBank = this.model.getUserParameterBank ();
-    // final int page = userParameterBank.getScrollPosition () / userParameterBank.getPageSize ();
-    // this.surface.setTrigger (this.surface.getSceneTrigger (scene), page == scene ?
-    // LaunchpadColors.LAUNCHPAD_COLOR_MAGENTA : LaunchpadColors.LAUNCHPAD_COLOR_BLACK);
-    // }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getButtonColor (final ButtonID buttonID)
+    {
+        final int scene = buttonID.ordinal () - ButtonID.SCENE1.ordinal ();
+        final IParameterBank userParameterBank = this.model.getUserParameterBank ();
+        final int page = userParameterBank.getScrollPosition () / userParameterBank.getPageSize ();
+        return page == scene ? LaunchpadColorManager.LAUNCHPAD_COLOR_MAGENTA : LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK;
+    }
 }

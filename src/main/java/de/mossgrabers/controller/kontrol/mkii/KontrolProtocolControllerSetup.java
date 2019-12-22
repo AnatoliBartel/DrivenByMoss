@@ -313,7 +313,7 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
             final KnobRowModeCommand<KontrolProtocolControlSurface, KontrolProtocolConfiguration> knobCommand = new KnobRowModeCommand<> (index, this.model, surface);
             final int knobMidi1 = KontrolProtocolControlSurface.KONTROL_TRACK_VOLUME + i;
             final IHwRelativeKnob knob1 = this.addRelativeKnob (ContinuousID.get (ContinuousID.KNOB1, i), "Knob " + (i + 1), knobCommand, BindType.CC, 15, knobMidi1);
-            knob1.addOutput ( () -> getKnobValue (knobMidi1), value -> surface.setTrigger (15, knobMidi1, value));
+            knob1.addOutput ( () -> this.getKnobValue (knobMidi1), value -> surface.setTrigger (15, knobMidi1, value));
 
             final int knobMidi2 = KontrolProtocolControlSurface.KONTROL_TRACK_PAN + i;
             final IHwRelativeKnob knob2 = this.addRelativeKnob (ContinuousID.get (ContinuousID.FADER1, i), "Fader " + (i + 1), value -> {
@@ -322,7 +322,7 @@ public class KontrolProtocolControllerSetup extends AbstractControllerSetup<Kont
                 else
                     knobCommand.execute (value);
             }, BindType.CC, 15, KontrolProtocolControlSurface.KONTROL_TRACK_PAN + i);
-            knob2.addOutput ( () -> getKnobValue (knobMidi2), value -> surface.setTrigger (15, knobMidi2, value));
+            knob2.addOutput ( () -> this.getKnobValue (knobMidi2), value -> surface.setTrigger (15, knobMidi2, value));
         }
     }
 

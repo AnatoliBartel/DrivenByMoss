@@ -7,6 +7,7 @@ package de.mossgrabers.controller.launchkey.controller;
 import de.mossgrabers.controller.launchkey.LaunchkeyMiniMk3Configuration;
 import de.mossgrabers.framework.command.core.ContinuousCommand;
 import de.mossgrabers.framework.controller.AbstractControlSurface;
+import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.color.ColorManager;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.midi.DeviceInquiry;
@@ -73,7 +74,22 @@ public class LaunchkeyMiniMk3ControlSurface extends AbstractControlSurface<Launc
      */
     public LaunchkeyMiniMk3ControlSurface (final IHost host, final ColorManager colorManager, final LaunchkeyMiniMk3Configuration configuration, final IMidiOutput output, final IMidiInput input, final IMidiInput inputKeys, final ContinuousCommand pageAdjuster)
     {
-        super (host, configuration, colorManager, output, input, new LaunchkeyPadGrid (colorManager, output), 800, 400);
+        super (host, configuration, colorManager, output, input, new LaunchkeyPadGrid (colorManager, output), 800, 600);
+
+        // TODO
+        // final int size = this.pads.getRows () * this.pads.getCols ();
+        // for (int i = 0; i < size; i++)
+        // {
+        // final int note = this.pads.getStartNote () + i;
+        //
+        // final ButtonID buttonID = ButtonID.get (ButtonID.PAD17, i);
+        // final IHwButton pad = this.createButton (buttonID, "D " + (i + 1));
+        // pad.addLight (this.surfaceFactory.createLight (this.surfaceID, null, () ->
+        // this.pads.getLightInfo (note).getEncoded (), state -> this.pads.sendState (note),
+        // colorIndex -> this.colorManager.getColor (colorIndex, buttonID), null));
+        // final int [] translated = LaunchkeyPadGrid.translateToController (Views.DRUM, note);
+        // pad.bind (input, BindType.NOTE, translated[0], translated[1]);
+        // }
 
         this.pageAdjuster = pageAdjuster;
 
@@ -91,9 +107,7 @@ public class LaunchkeyMiniMk3ControlSurface extends AbstractControlSurface<Launc
     @Override
     public boolean isShiftPressed ()
     {
-        return false;
-        // TODO super.isShiftPressed () && !this.isPressed (0x0F, LAUNCHKEY_LEFT) && !this.isPressed
-        // (0x0F, LAUNCHKEY_RIGHT);
+        return super.isShiftPressed () && !this.isPressed (ButtonID.MOVE_TRACK_LEFT) && !this.isPressed (ButtonID.MOVE_TRACK_RIGHT);
     }
 
 

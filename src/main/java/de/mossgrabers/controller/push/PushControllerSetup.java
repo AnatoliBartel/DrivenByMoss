@@ -468,10 +468,7 @@ public class PushControllerSetup extends AbstractControllerSetup<PushControlSurf
             final ButtonID row2ButtonID = ButtonID.get (ButtonID.ROW2_1, i);
             this.addButton (row2ButtonID, "Row 2: " + (i + 1), new ButtonRowModeCommand<> (1, i, this.model, surface), PushControlSurface.PUSH_BUTTON_ROW2_1 + i, () -> this.getModeColor (row2ButtonID));
             final ButtonID sceneButtonID = ButtonID.get (ButtonID.SCENE1, i);
-            this.addButton (sceneButtonID, "Scene " + (i + 1), new SceneCommand<> (i, this.model, surface), PushControlSurface.PUSH_BUTTON_SCENE1 + 7 - i, () -> {
-                final View activeView = viewManager.getActiveView ();
-                return activeView != null ? activeView.getButtonColor (sceneButtonID) : 0;
-            });
+            this.addButton (sceneButtonID, "Scene " + (i + 1), new SceneCommand<> (i, this.model, surface), PushControlSurface.PUSH_BUTTON_SCENE1 + 7 - i, () -> this.getViewColor (sceneButtonID));
         }
 
         this.addButton (ButtonID.SHIFT, "Shift", new ShiftCommand (this.model, surface), PushControlSurface.PUSH_BUTTON_SHIFT);

@@ -24,6 +24,7 @@ import de.mossgrabers.framework.daw.midi.IMidiOutput;
 import de.mossgrabers.framework.mode.ModeManager;
 import de.mossgrabers.framework.view.ViewManager;
 
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
@@ -334,6 +335,14 @@ public interface IControlSurface<C extends Configuration>
 
 
     /**
+     * Get all buttons.
+     *
+     * @return The buttons
+     */
+    Map<ButtonID, IHwButton> getButtons ();
+
+
+    /**
      * Get a button the was created with the given ID.
      *
      * @param buttonID The button ID
@@ -456,6 +465,12 @@ public interface IControlSurface<C extends Configuration>
      * Flush all displays and grids.
      */
     void flush ();
+
+
+    /**
+     * Clear all hardware output caches.
+     */
+    void clearCache ();
 
 
     /**

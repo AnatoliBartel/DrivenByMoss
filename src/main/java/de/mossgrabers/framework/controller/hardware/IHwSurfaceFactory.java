@@ -145,4 +145,10 @@ public interface IHwSurfaceFactory
      * Flush the state to the hardware device.
      */
     void flush ();
+
+
+    /**
+     * Clear all hardware caches.
+     */
+    void clearCache ();
 }

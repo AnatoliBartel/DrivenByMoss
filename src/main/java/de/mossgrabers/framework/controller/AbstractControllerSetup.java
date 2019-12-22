@@ -1069,7 +1069,7 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
 
 
     /**
-     * Get the color for a button, which is controlled by the mode.
+     * Get the color for a button, which is controlled by the active mode.
      *
      * @param buttonID The ID of the button
      * @return A color index
@@ -1078,5 +1078,18 @@ public abstract class AbstractControllerSetup<S extends IControlSurface<C>, C ex
     {
         final Mode mode = this.getSurface ().getModeManager ().getActiveOrTempMode ();
         return mode == null ? 0 : mode.getButtonColor (buttonID);
+    }
+
+
+    /**
+     * Get the color for a button, which is controlled by the active view.
+     *
+     * @param buttonID The ID of the button
+     * @return A color index
+     */
+    protected int getViewColor (final ButtonID buttonID)
+    {
+        final View view = this.getSurface ().getViewManager ().getActiveView ();
+        return view == null ? 0 : view.getButtonColor (buttonID);
     }
 }

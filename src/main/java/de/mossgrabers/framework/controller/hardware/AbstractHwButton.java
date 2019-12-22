@@ -8,6 +8,9 @@ import de.mossgrabers.framework.command.core.TriggerCommand;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.utils.ButtonEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Abstract implementation of a proxy to a button on a hardware controller.
@@ -16,14 +19,17 @@ import de.mossgrabers.framework.utils.ButtonEvent;
  */
 public abstract class AbstractHwButton extends AbstractHwInputControl implements IHwButton
 {
-    private static final int BUTTON_STATE_INTERVAL = 400;
+    private static final int               BUTTON_STATE_INTERVAL = 400;
 
-    protected TriggerCommand command;
-    protected IHwLight       light;
+    protected TriggerCommand               command;
+    protected IHwLight                     light;
 
-    private ButtonEvent      state;
-    private boolean          isConsumed;
-    private int              pressedVelocity       = 0;
+    private ButtonEvent                    state;
+    private boolean                        isConsumed;
+    private int                            pressedVelocity       = 0;
+
+    private final List<ButtonEventHandler> downEventHandlers     = new ArrayList<> ();
+    private final List<ButtonEventHandler> upEventHandlers       = new ArrayList<> ();
 
 
     /**
@@ -53,6 +59,8 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
         this.host.scheduleTask (this::checkButtonState, BUTTON_STATE_INTERVAL);
         this.pressedVelocity = (int) (value * 127.0);
         this.command.execute (ButtonEvent.DOWN, this.pressedVelocity);
+
+        this.downEventHandlers.forEach (handler -> handler.handle (ButtonEvent.DOWN));
     }
 
 
@@ -64,6 +72,8 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
         this.state = ButtonEvent.UP;
         if (!this.isConsumed)
             this.command.execute (ButtonEvent.UP, 0);
+
+        this.upEventHandlers.forEach (handler -> handler.handle (ButtonEvent.UP));
     }
 
 
@@ -101,6 +111,17 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
 
     /** {@inheritDoc} */
     @Override
+    public void addEventHandler (final ButtonEvent event, final ButtonEventHandler eventHandler)
+    {
+        if (event == ButtonEvent.DOWN)
+            this.downEventHandlers.add (eventHandler);
+        else if (event == ButtonEvent.UP)
+            this.upEventHandlers.add (eventHandler);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
     public void setConsumed ()
     {
         this.isConsumed = true;
@@ -120,7 +141,7 @@ public abstract class AbstractHwButton extends AbstractHwInputControl implements
     public void trigger (final ButtonEvent event)
     {
         if (event == ButtonEvent.DOWN)
-            this.handleButtonPressed (1.0); // TODO
+            this.handleButtonPressed (1.0);
         else if (event == ButtonEvent.UP)
             this.handleButtonRelease ();
     }

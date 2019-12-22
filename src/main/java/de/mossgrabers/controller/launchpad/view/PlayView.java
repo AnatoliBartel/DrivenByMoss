@@ -7,7 +7,6 @@ package de.mossgrabers.controller.launchpad.view;
 import de.mossgrabers.controller.launchpad.LaunchpadConfiguration;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadColorManager;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
-import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
 import de.mossgrabers.framework.configuration.AbstractConfiguration;
 import de.mossgrabers.framework.configuration.Configuration;
 import de.mossgrabers.framework.controller.ButtonID;
@@ -62,21 +61,6 @@ public class PlayView extends AbstractPlayView<LaunchpadControlSurface, Launchpa
         super.onActivate ();
         this.initMaxVelocity ();
         this.surface.setLaunchpadToPrgMode ();
-        this.surface.scheduleTask (this::delayedUpdateArrowButtons, 150);
-    }
-
-
-    private void delayedUpdateArrowButtons ()
-    {
-        // TODO
-        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.SESSION),
-        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.NOTE),
-        // LaunchpadColors.LAUNCHPAD_COLOR_OCEAN_HI);
-        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.DEVICE),
-        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        if (this.surface.isPro ())
-            this.surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER, this.model.getHost ().hasUserParameters () ? LaunchpadColorManager.LAUNCHPAD_COLOR_GREY_LO : LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
     }
 
 

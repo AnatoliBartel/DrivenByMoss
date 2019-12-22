@@ -14,6 +14,7 @@ import de.mossgrabers.framework.daw.DAWColor;
 import de.mossgrabers.framework.daw.IHost;
 import de.mossgrabers.framework.daw.ITrackBank;
 import de.mossgrabers.framework.daw.ModelSetup;
+import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.mode.Modes;
 import de.mossgrabers.framework.scale.Scales;
 
@@ -115,7 +116,17 @@ public class AutoColorSetup extends AbstractControllerSetup<IControlSurface<Auto
         }
 
         // Add name observers to all tracks
-        this.model.getTrackBank ().addNameObserver (this.autoColor::matchTrackName);
+        final ITrackBank tb = this.model.getTrackBank ();
+
+        for (int index = 0; index < tb.getPageSize (); index++)
+        {
+            final int i = index;
+            final ITrack track = tb.getItem (index);
+            track.addNameObserver (name -> this.autoColor.matchTrackName (i, name));
+            track.addColorObserver (name -> {
+                this.autoColor.matchTrackName (i, track.getName ());
+            });
+        }
     }
 
 

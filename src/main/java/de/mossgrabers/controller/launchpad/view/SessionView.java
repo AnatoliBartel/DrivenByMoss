@@ -7,7 +7,6 @@ package de.mossgrabers.controller.launchpad.view;
 import de.mossgrabers.controller.launchpad.LaunchpadConfiguration;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadColorManager;
 import de.mossgrabers.controller.launchpad.controller.LaunchpadControlSurface;
-import de.mossgrabers.controller.launchpad.definition.LaunchpadProControllerDefinition;
 import de.mossgrabers.framework.controller.ButtonID;
 import de.mossgrabers.framework.controller.grid.IPadGrid;
 import de.mossgrabers.framework.daw.DAWColor;
@@ -68,22 +67,6 @@ public class SessionView extends AbstractSessionView<LaunchpadControlSurface, La
         this.switchLaunchpadMode ();
 
         super.onActivate ();
-
-        this.surface.scheduleTask (this::delayedUpdateArrowButtons, 150);
-    }
-
-
-    protected void delayedUpdateArrowButtons ()
-    {
-        // TODO
-        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.SESSION),
-        // LaunchpadColors.LAUNCHPAD_COLOR_LIME);
-        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.NOTE),
-        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        // this.surface.setTrigger (this.surface.getTriggerId (ButtonID.DEVICE),
-        // LaunchpadColors.LAUNCHPAD_COLOR_GREY_LO);
-        if (this.surface.isPro ())
-            this.surface.setTrigger (LaunchpadProControllerDefinition.LAUNCHPAD_BUTTON_USER, this.model.getHost ().hasUserParameters () ? LaunchpadColorManager.LAUNCHPAD_COLOR_GREY_LO : LaunchpadColorManager.LAUNCHPAD_COLOR_BLACK);
     }
 
 
@@ -202,6 +185,16 @@ public class SessionView extends AbstractSessionView<LaunchpadControlSurface, La
         }
 
         return AbstractMode.BUTTON_COLOR_OFF;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public int getButtonColor (final ButtonID buttonID)
+    {
+        if (this.surface.getButton (buttonID).isPressed ())
+            return LaunchpadColorManager.LAUNCHPAD_COLOR_WHITE;
+        return super.getButtonColor (buttonID);
     }
 
 

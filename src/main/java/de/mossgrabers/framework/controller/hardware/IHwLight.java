@@ -15,4 +15,10 @@ public interface IHwLight extends IHwControl
      * Switch off the light.
      */
     void turnOff ();
+
+
+    /**
+     * Clear the button cache state.
+     */
+    void clearCache ();
 }
