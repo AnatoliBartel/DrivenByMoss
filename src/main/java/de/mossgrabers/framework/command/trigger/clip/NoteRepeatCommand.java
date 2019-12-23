@@ -42,22 +42,8 @@ public class NoteRepeatCommand<S extends IControlSurface<C>, C extends Configura
     @Override
     public void execute (final ButtonEvent event, final int velocity)
     {
-        final ModeManager modeManager = this.surface.getModeManager ();
-        if (event == ButtonEvent.LONG || event == ButtonEvent.DOWN && this.surface.isShiftPressed ())
-        {
-            modeManager.setActiveMode (Modes.REPEAT_NOTE);
-            this.surface.setTriggerConsumed (ButtonID.REPEAT);
+        if (this.handleEditModeActivation (event))
             return;
-        }
-
-        if (event != ButtonEvent.UP)
-            return;
-
-        if (Modes.REPEAT_NOTE.equals (modeManager.getActiveOrTempModeId ()))
-        {
-            modeManager.restoreMode ();
-            return;
-        }
 
         final INoteInput defaultNoteInput = this.surface.getMidiInput ().getDefaultNoteInput ();
         if (defaultNoteInput == null)
@@ -66,5 +52,34 @@ public class NoteRepeatCommand<S extends IControlSurface<C>, C extends Configura
         final INoteRepeat noteRepeat = defaultNoteInput.getNoteRepeat ();
         noteRepeat.toggleActive ();
         this.model.getHost ().scheduleTask ( () -> this.surface.getConfiguration ().setNoteRepeatActive (noteRepeat.isActive ()), 300);
+    }
+
+
+    /**
+     * Handle the de-/activation of the edit mode.
+     *
+     * @param event The event
+     * @return True to cancel further processing
+     */
+    protected boolean handleEditModeActivation (final ButtonEvent event)
+    {
+        final ModeManager modeManager = this.surface.getModeManager ();
+        if (event == ButtonEvent.LONG || event == ButtonEvent.DOWN && this.surface.isShiftPressed ())
+        {
+            modeManager.setActiveMode (Modes.REPEAT_NOTE);
+            this.surface.setTriggerConsumed (ButtonID.REPEAT);
+            return true;
+        }
+
+        if (event != ButtonEvent.UP)
+            return true;
+
+        if (Modes.REPEAT_NOTE.equals (modeManager.getActiveOrTempModeId ()))
+        {
+            modeManager.restoreMode ();
+            return true;
+        }
+
+        return false;
     }
 }

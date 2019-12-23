@@ -223,7 +223,8 @@ public abstract class AbstractDrumView<S extends IControlSurface<C>, C extends C
             }
         }
 
-        this.drawSequencer ();
+        if (this.sequencerLines > 0)
+            this.drawSequencer ();
     }
 
 

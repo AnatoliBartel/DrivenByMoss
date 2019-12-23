@@ -32,7 +32,6 @@ import de.mossgrabers.framework.command.trigger.application.UndoCommand;
 import de.mossgrabers.framework.command.trigger.clip.NewCommand;
 import de.mossgrabers.framework.command.trigger.clip.NoteRepeatCommand;
 import de.mossgrabers.framework.command.trigger.clip.QuantizeCommand;
-import de.mossgrabers.framework.command.trigger.mode.KnobRowTouchModeCommand;
 import de.mossgrabers.framework.command.trigger.mode.ModeSelectCommand;
 import de.mossgrabers.framework.command.trigger.transport.MetronomeCommand;
 import de.mossgrabers.framework.command.trigger.transport.PlayCommand;
@@ -57,6 +56,7 @@ import de.mossgrabers.framework.daw.ISendBank;
 import de.mossgrabers.framework.daw.ITrackBank;
 import de.mossgrabers.framework.daw.ITransport;
 import de.mossgrabers.framework.daw.ModelSetup;
+import de.mossgrabers.framework.daw.data.IParameter;
 import de.mossgrabers.framework.daw.data.ITrack;
 import de.mossgrabers.framework.daw.midi.IMidiAccess;
 import de.mossgrabers.framework.daw.midi.IMidiInput;
@@ -69,6 +69,7 @@ import de.mossgrabers.framework.mode.track.SelectedPanMode;
 import de.mossgrabers.framework.mode.track.SelectedSendMode;
 import de.mossgrabers.framework.mode.track.SelectedVolumeMode;
 import de.mossgrabers.framework.scale.Scales;
+import de.mossgrabers.framework.utils.ButtonEvent;
 import de.mossgrabers.framework.view.ViewManager;
 import de.mossgrabers.framework.view.Views;
 
@@ -229,7 +230,7 @@ public class MaschineMikroMk3ControllerSetup extends AbstractControllerSetup<Mas
         this.addButton (ButtonID.RECORD, "Record", new RecordCommand<> (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_REC, t::isRecording);
         this.addButton (ButtonID.STOP, "Stop", new StopCommand<> (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_STOP, () -> !t.isPlaying ());
         this.addButton (ButtonID.LOOP, "Loop", new ToggleLoopCommand<> (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_RESTART, t::isLoop);
-        this.addButton (ButtonID.UNDO, "Undo", new UndoCommand<> (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_ERASE);
+        this.addButton (ButtonID.DELETE, "Erase", new UndoCommand<> (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_ERASE);
         this.addButton (ButtonID.METRONOME, "Metronome", new MetronomeCommand<> (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_TAP_METRO, t::isMetronomeOn);
         this.addButton (ButtonID.QUANTIZE, "Quantize", new QuantizeCommand<> (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_FOLLOW);
 
@@ -237,7 +238,21 @@ public class MaschineMikroMk3ControllerSetup extends AbstractControllerSetup<Mas
         this.addButton (ButtonID.NEW, "New", new NewCommand<> (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_GROUP);
         this.addButton (ButtonID.AUTOMATION, "Automation", new WriteClipLauncherAutomationCommand<> (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_AUTO, t::isWritingClipLauncherAutomation);
         this.addButton (ButtonID.AUTOMATION_WRITE, "Write", new WriteArrangerAutomationCommand<> (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_LOCK, t::isWritingArrangerAutomation);
-        this.addButton (ButtonID.REPEAT, "Repeat", new NoteRepeatCommand<> (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_NOTE_REPEAT, surface.getMidiInput ().getDefaultNoteInput ().getNoteRepeat ()::isActive);
+
+        final NoteRepeatCommand<?, ?> cmd = new NoteRepeatCommand<> (this.model, surface)
+        {
+            /** {@inheritDoc} */
+            @Override
+            protected boolean handleEditModeActivation (final ButtonEvent event)
+            {
+                if (event != ButtonEvent.UP)
+                    return true;
+                // TODO add an edit mode, like on Launchpad
+
+                return false;
+            }
+        };
+        this.addButton (ButtonID.REPEAT, "Repeat", cmd, MaschineMikroMk3ControlSurface.MIKRO_3_NOTE_REPEAT, surface.getMidiInput ().getDefaultNoteInput ().getNoteRepeat ()::isActive);
 
         // Ribbon
         this.addButton (ButtonID.F1, "Pitch", new RibbonCommand (this.model, surface, MaschineMikroMk3Configuration.RIBBON_MODE_PITCH_DOWN, MaschineMikroMk3Configuration.RIBBON_MODE_PITCH_UP, MaschineMikroMk3Configuration.RIBBON_MODE_PITCH_DOWN_UP), MaschineMikroMk3ControlSurface.MIKRO_3_PITCH, () -> surface.getConfiguration ().getRibbonMode () <= MaschineMikroMk3Configuration.RIBBON_MODE_PITCH_DOWN_UP);
@@ -245,7 +260,59 @@ public class MaschineMikroMk3ControllerSetup extends AbstractControllerSetup<Mas
         this.addButton (ButtonID.F3, "Perform", new RibbonCommand (this.model, surface, MaschineMikroMk3Configuration.RIBBON_MODE_CC_11), MaschineMikroMk3ControlSurface.MIKRO_3_PERFORM, () -> surface.getConfiguration ().getRibbonMode () == MaschineMikroMk3Configuration.RIBBON_MODE_CC_11);
         this.addButton (ButtonID.F4, "Notes", new RibbonCommand (this.model, surface, MaschineMikroMk3Configuration.RIBBON_MODE_MASTER_VOLUME), MaschineMikroMk3ControlSurface.MIKRO_3_NOTES, () -> surface.getConfiguration ().getRibbonMode () == MaschineMikroMk3Configuration.RIBBON_MODE_MASTER_VOLUME);
 
-        this.addButton (ButtonID.FADER_TOUCH_1, "Encoder Push", new KnobRowTouchModeCommand<> (0, this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_ENCODER_PUSH);
+        this.addButton (ButtonID.FADER_TOUCH_1, "Encoder Push", (event, velocity) -> {
+
+            if (event != ButtonEvent.DOWN)
+                return;
+
+            final ITrack selectedTrack = this.model.getCurrentTrackBank ().getSelectedItem ();
+            final Modes activeModeID = modeManager.getActiveModeId ();
+            switch (modeManager.getActiveOrTempModeId ())
+            {
+                case VOLUME:
+                    if (selectedTrack != null)
+                        selectedTrack.resetVolume ();
+                    break;
+                case PAN:
+                    if (selectedTrack != null)
+                        selectedTrack.resetPan ();
+                    break;
+                case SEND1:
+                    if (selectedTrack == null)
+                        return;
+                    final int sendIndex = activeModeID.ordinal () - Modes.SEND1.ordinal ();
+                    selectedTrack.getSendBank ().getItem (sendIndex).resetValue ();
+                    break;
+
+                case DEVICE_PARAMS:
+                    final ICursorDevice cursorDevice = this.model.getCursorDevice ();
+                    if (cursorDevice == null)
+                        return;
+                    final int selectedParameter = ((SelectedDeviceMode<?, ?>) modeManager.getMode (Modes.DEVICE_PARAMS)).getSelectedParameter ();
+                    final IParameter item = cursorDevice.getParameterBank ().getItem (selectedParameter);
+                    if (item.doesExist ())
+                        item.resetValue ();
+                    break;
+
+                case POSITION:
+                    ((PositionMode) modeManager.getMode (Modes.POSITION)).toggleSpeed ();
+                    break;
+
+                case TEMPO:
+                    t.tapTempo ();
+                    break;
+
+                case BROWSER:
+                    this.model.getBrowser ().stopBrowsing (true);
+                    modeManager.restoreMode ();
+                    break;
+
+                default:
+                    // Intentionally empty
+                    break;
+            }
+
+        }, MaschineMikroMk3ControlSurface.MIKRO_3_ENCODER_PUSH);
 
         // Encoder Modes
         this.addButton (ButtonID.VOLUME, "Volume", new VolumePanSendCommand (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_VOLUME, () -> Modes.isTrackMode (modeManager.getActiveOrTempModeId ()));
@@ -257,7 +324,16 @@ public class MaschineMikroMk3ControllerSetup extends AbstractControllerSetup<Mas
         // Browser
         this.addButton (ButtonID.ADD_TRACK, "Project", new ProjectButtonCommand (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_PROJECT);
         this.addButton (ButtonID.ADD_EFFECT, "Favorites", new AddDeviceCommand (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_FAVORITES);
-        this.addButton (ButtonID.BROWSE, "Browser", new BrowserCommand<> (Modes.BROWSER, this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_BROWSER, this.model.getBrowser ()::isActive);
+        this.addButton (ButtonID.BROWSE, "Browser", new BrowserCommand<> (Modes.BROWSER, this.model, surface)
+        {
+            /** {@inheritDoc} */
+            @Override
+            protected boolean getCommit ()
+            {
+                // Discard browser, confirmation is via encoder
+                return false;
+            }
+        }, MaschineMikroMk3ControlSurface.MIKRO_3_BROWSER, this.model.getBrowser ()::isActive);
 
         // Pad modes
         this.addButton (ButtonID.ACCENT, "Accent", new ToggleFixedVelCommand (this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_FIXED_VEL, this.configuration::isAccentActive);
@@ -285,17 +361,7 @@ public class MaschineMikroMk3ControllerSetup extends AbstractControllerSetup<Mas
     {
         final MaschineMikroMk3ControlSurface surface = this.getSurface ();
 
-        final KnobRowModeCommand<MaschineMikroMk3ControlSurface, MaschineMikroMk3Configuration> command = new KnobRowModeCommand<> (0, this.model, surface);
-        this.addAbsoluteKnob (ContinuousID.KNOB1, "Encoder", value -> {
-
-            // Change absolute into relative value
-            surface.getMidiOutput ().sendCC (MaschineMikroMk3ControlSurface.MIKRO_3_ENCODER, 63);
-            int relValue = value - 63;
-            final int sign = relValue < 0 ? -1 : 1;
-            relValue = relValue * relValue * sign;
-            command.execute (relValue);
-
-        }, MaschineMikroMk3ControlSurface.MIKRO_3_ENCODER);
+        this.addRelativeKnob (ContinuousID.KNOB1, "Encoder", new KnobRowModeCommand<> (0, this.model, surface), MaschineMikroMk3ControlSurface.MIKRO_3_ENCODER);
         this.addFader (ContinuousID.CROSSFADER, "Touchstrip", new TouchstripCommand (this.model, surface), BindType.CC, MaschineMikroMk3ControlSurface.MIKRO_3_TOUCHSTRIP, false);
     }
 
@@ -326,7 +392,7 @@ public class MaschineMikroMk3ControllerSetup extends AbstractControllerSetup<Mas
         surface.getButton (ButtonID.RECORD).setBounds (98.25, 381.5, 55.75, 32.0);
         surface.getButton (ButtonID.STOP).setBounds (167.75, 381.5, 55.75, 32.0);
         surface.getButton (ButtonID.LOOP).setBounds (26.25, 350.5, 56.0, 18.0);
-        surface.getButton (ButtonID.UNDO).setBounds (98.25, 350.5, 56.0, 18.0);
+        surface.getButton (ButtonID.DELETE).setBounds (98.25, 350.5, 56.0, 18.0);
         surface.getButton (ButtonID.METRONOME).setBounds (167.75, 350.5, 56.0, 18.0);
         surface.getButton (ButtonID.QUANTIZE).setBounds (238.0, 350.5, 56.0, 18.0);
         surface.getButton (ButtonID.NEW).setBounds (26.25, 280.5, 55.75, 32.0);
