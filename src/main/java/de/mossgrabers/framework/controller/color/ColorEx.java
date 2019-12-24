@@ -55,6 +55,8 @@ public class ColorEx
     public static final ColorEx SKY_BLUE    = ColorEx.fromRGB (97, 238, 255);
     /** Color purple. */
     public static final ColorEx PURPLE      = ColorEx.fromRGB (116, 80, 164);
+    /** Color dark purple. */
+    public static final ColorEx DARK_PURPLE = ColorEx.evenDarker (PURPLE);
     /** Color red wine. */
     public static final ColorEx RED_WINE    = ColorEx.fromRGB (123, 42, 57);
 

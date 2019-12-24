@@ -55,7 +55,7 @@ public class MaschineMikroMk3ColorManager extends ColorManager
 
 
     /**
-     * Private due to utility class.
+     * Constructor.
      */
     public MaschineMikroMk3ColorManager ()
     {
@@ -112,6 +112,37 @@ public class MaschineMikroMk3ColorManager extends ColorManager
         this.registerColorIndex (DAWColor.DAW_COLOR_BLUISH_GREEN, COLOR_LIME);
         this.registerColorIndex (DAWColor.DAW_COLOR_GREEN_BLUE, COLOR_TURQUOISE_LO);
         this.registerColorIndex (DAWColor.DAW_COLOR_LIGHT_BLUE, COLOR_SKY);
+
+        this.registerColor (COLOR_BLACK, ColorEx.BLACK);
+        this.registerColor (COLOR_GREY, ColorEx.GRAY);
+        this.registerColor (COLOR_WHITE, ColorEx.WHITE);
+        this.registerColor (COLOR_ROSE, DAWColor.DAW_COLOR_SKIN.getColor ());
+        this.registerColor (COLOR_RED, DAWColor.DAW_COLOR_REDDISH_BROWN.getColor ());
+        this.registerColor (COLOR_RED_LO, ColorEx.fromRGB (39, 4, 1));
+        this.registerColor (COLOR_AMBER, DAWColor.DAW_COLOR_REDDISH_BROWN.getColor ());
+        this.registerColor (COLOR_AMBER_LO, DAWColor.DAW_COLOR_DARK_BROWN.getColor ());
+        this.registerColor (COLOR_YELLOW, ColorEx.fromRGB (107, 105, 1));
+        this.registerColor (COLOR_LIME, ColorEx.fromRGB (29, 104, 1));
+        this.registerColor (COLOR_LIME_LO, DAWColor.DAW_COLOR_MOSS_GREEN.getColor ());
+        this.registerColor (COLOR_GREEN, ColorEx.fromRGB (1, 104, 1));
+        this.registerColor (COLOR_GREEN_LO, ColorEx.fromRGB (1, 36, 1));
+        this.registerColor (COLOR_SPRING, DAWColor.DAW_COLOR_GREEN.getColor ());
+        this.registerColor (COLOR_SPRING_LO, ColorEx.fromRGB (1, 36, 1));
+        this.registerColor (COLOR_TURQUOISE_LO, ColorEx.fromRGB (1, 248, 75));
+        this.registerColor (COLOR_TURQUOISE, DAWColor.DAW_COLOR_COLD_GREEN.getColor ());
+        this.registerColor (COLOR_SKY, ColorEx.fromRGB (1, 82, 100));
+        this.registerColor (COLOR_SKY_LO, ColorEx.fromRGB (1, 26, 37));
+        this.registerColor (COLOR_BLUE, ColorEx.fromRGB (4, 23, 110));
+        this.registerColor (COLOR_BLUE_LO, ColorEx.fromRGB (1, 8, 38));
+        this.registerColor (COLOR_MAGENTA, ColorEx.fromRGB (110, 28, 109));
+        this.registerColor (COLOR_MAGENTA_LO, ColorEx.fromRGB (39, 9, 38));
+        this.registerColor (COLOR_PINK, ColorEx.fromRGB (110, 20, 40));
+        this.registerColor (COLOR_PINK_LO, ColorEx.fromRGB (48, 9, 26));
+        this.registerColor (COLOR_ORANGE, DAWColor.DAW_COLOR_ORANGE.getColor ());
+        this.registerColor (COLOR_ORANGE_LO, ColorEx.DARK_ORANGE);
+        this.registerColor (COLOR_PURPLE, ColorEx.PURPLE);
+        this.registerColor (COLOR_PURPLE_LO, ColorEx.PURPLE);
+        this.registerColor (COLOR_SKIN, ColorEx.SKIN);
     }
 
 
@@ -131,6 +162,23 @@ public class MaschineMikroMk3ColorManager extends ColorManager
                 return colorIndex > 0 ? ColorEx.GREEN : ColorEx.DARK_GREEN;
             case RECORD:
                 return colorIndex > 0 ? ColorEx.RED : ColorEx.DARK_RED;
+            case PAD1:
+            case PAD2:
+            case PAD3:
+            case PAD4:
+            case PAD5:
+            case PAD6:
+            case PAD7:
+            case PAD8:
+            case PAD9:
+            case PAD10:
+            case PAD11:
+            case PAD12:
+            case PAD13:
+            case PAD14:
+            case PAD15:
+            case PAD16:
+                return super.getColor (colorIndex, buttonID);
             default:
                 return colorIndex > 0 ? ColorEx.WHITE : ColorEx.GRAY;
         }
