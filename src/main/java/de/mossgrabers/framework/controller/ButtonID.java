@@ -45,6 +45,8 @@ public enum ButtonID
     METRONOME,
     /** Toggle scrubbing. */
     SCRUB,
+    /** Move cursor to start of arranger. */
+    RETURN_TO_ZERO,
 
     /** The automation button. */
     AUTOMATION,
@@ -207,6 +209,9 @@ public enum ButtonID
     GROOVE,
     /** The Flip channels button. */
     FLIP,
+
+    /** Toggle the audio engine on/off. */
+    AUDIO_ENGINE,
 
     /** Button 1 of row 1 button. */
     ROW1_1,

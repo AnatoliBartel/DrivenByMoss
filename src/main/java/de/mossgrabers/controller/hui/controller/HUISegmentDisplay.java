@@ -93,6 +93,6 @@ public class HUISegmentDisplay extends AbstractTextDisplay
     @Override
     public void shutdown ()
     {
-        // TODO Test with Behringer?
+        // Intentionally empty
     }
 }
